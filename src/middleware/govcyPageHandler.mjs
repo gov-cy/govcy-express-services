@@ -30,8 +30,8 @@ export function govcyPageHandler() {
       const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
 
       //if user is logged in add he user bane section in the page template
-      if (req.session.user) {
-        pageTemplateCopy.sections.push(govcyResources.userNameSection(req.session.user.name)); // Add user name section
+      if (dataLayer.getUser(req.session)) {
+        pageTemplateCopy.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
       }
       //⚙️ Process forms before rendering
       pageTemplateCopy.sections.forEach(section => {

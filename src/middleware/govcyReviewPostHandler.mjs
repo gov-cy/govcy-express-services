@@ -31,7 +31,6 @@ export function govcyReviewPostHandler() {
                 if (!formElement) continue; // Skip pages without forms
 
                 // Get stored form data for this page (or default to empty)
-                // const formData = req.session.siteData[siteId]?.submission?.[pageUrl]?.formData || {};
                 const formData = dataLayer.getPageData(req.session, siteId, pageUrl) || {};
                 
                 // Run validations
@@ -44,16 +43,6 @@ export function govcyReviewPostHandler() {
             // ❌ Return validation errors if any exist
             if (Object.keys(validationErrors).length > 0) {
                 console.log("🚨 Validation errors:", validationErrors);
-                // Ensure session structure exists
-                // if (!req.session.siteData) req.session.siteData = {};
-                // if (!req.session.siteData[siteId]) req.session.siteData[siteId] = {};
-                // dataLayer.initializeSiteData(req.session, siteId);
-
-                //store in session the validation errors
-                // req.session.siteData[siteId]["submissionErrors"] = {
-                //     errors: validationErrors,
-                //     errorSummary: []
-                // };
                 dataLayer.storeSiteValidationErrors(req.session, siteId, validationErrors);
                 //redirect to the same page with error summary
                 return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));

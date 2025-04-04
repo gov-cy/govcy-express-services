@@ -142,7 +142,17 @@ export function getFormDataValue(store, siteId, pageUrl, elementName) {
     return store?.siteData?.[siteId]?.submission?.[pageUrl]?.formData?.[elementName] || "";
 }
 
+/**
+ * Get the user object from the session store
+ * 
+ * @param {object} store The session store 
+ * @returns The user object from the store or null if it doesn't exist.
+ */
+export function getUser(store){
+    return store.user || null;
+}
+
 export function clearSiteData(store, siteId) {
-    delete store.siteData[siteId];
+    delete store?.siteData[siteId];
 }
 

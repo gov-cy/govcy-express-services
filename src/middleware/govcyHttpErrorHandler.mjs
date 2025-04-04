@@ -1,5 +1,6 @@
 import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
+import * as dataLayer from "../utils/govcyDataLayer.mjs";
 
 /**
  * Middleware function to handle HTTP errors and render appropriate error pages.
@@ -51,8 +52,8 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     let pageTemplate = govcyResources.errorPageTemplate(pageData.pageData.title, pageData.pageData.text);
     pageData.site.lang = req.globalLang; //use lang from middleware
     //if user is logged in add he user bane section in the page template
-    if (req.session.user) {
-        pageTemplate.sections.push(govcyResources.userNameSection(req.session.user.name)); // Add user name section
+    if (dataLayer.getUser(req.session)) {
+        pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
     }
     const html = renderer.renderFromJSON(pageTemplate, pageData);
     res.send(html);

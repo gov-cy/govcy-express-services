@@ -77,8 +77,8 @@ export function govcyReviewPageHandler() {
             pageTemplate.sections.push({ name: "main", elements: mainElements });
             
             //if user is logged in add he user bane section in the page template
-            if (req.session.user) {
-                pageTemplate.sections.push(govcyResources.userNameSection(req.session.user.name)); // Add user name section
+            if (dataLayer.getUser(req.session)) {
+                pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
             }
             
             //prepare pageData

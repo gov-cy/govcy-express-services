@@ -47,7 +47,7 @@ export function govcyFormsPostHandler() {
             //⤴️ Store validated form data in session
             dataLayer.storePageData(req.session, siteId, pageUrl, formData);
 
-            console.log("✅ Form submitted successfully:", req.session);
+            console.log("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl));
     
             // 🔍 Determine next page (if applicable)
             let nextPage = null;

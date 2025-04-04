@@ -29,7 +29,6 @@ export function govcyGenerateReviewSummary(req, siteId, service) {
      * @returns {string} the session value or an empty string if not found
      */
     function getSessionValue(pageUrl, elementName) {
-        // return req.session.siteData?.[siteId]?.submission?.[pageUrl]?.formData?.[elementName] || "";
         return dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName) || ""; // Use the utility function to get the value
     }
 
