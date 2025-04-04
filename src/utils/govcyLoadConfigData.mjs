@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { whatsIsMyEnvironment } from './govcyEnvVariables.mjs';
+import { logger } from "./govcyLogger.mjs";
 
 
 /**
@@ -22,13 +23,14 @@ function loadConfigDataById(siteId) {
 
   try {
       if (!fs.existsSync(filePath)) {
-          console.error(`Service data for '${siteId}' not found.`);
+          logger.debug(`Service data for '${siteId}' not found.`);
           return null; // Return null so caller can handle 404 response
       }
 
       return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   } catch (error) {
-      console.error(`Error loading ${siteId}.json:`, error.message);
+      logger.error(`Error loading ${siteId}.json:`, error.message);
+      logger.debug(`Error loading ${siteId}.json:`, error);
       return null;
   }
 }

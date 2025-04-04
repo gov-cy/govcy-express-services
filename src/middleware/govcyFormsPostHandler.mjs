@@ -2,6 +2,7 @@ import { getPageConfigData } from "../utils/govcyLoadConfigData.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware to handle page form submission
@@ -37,7 +38,8 @@ export function govcyFormsPostHandler() {
     
             // ❌ Return validation errors if any exist
             if (Object.keys(validationErrors).length > 0) {
-                console.log("🚨 Validation errors:", validationErrors);
+                logger.debug("🚨 Validation errors:", validationErrors, req);
+                logger.info("🚨 Validation errors on:", req.originalUrl);
                 // store the validation errors
                 dataLayer.storePageValidationErrors(req.session, siteId, pageUrl, validationErrors, formData);
                 //redirect to the same page with error summary
@@ -47,8 +49,10 @@ export function govcyFormsPostHandler() {
             //⤴️ Store validated form data in session
             dataLayer.storePageData(req.session, siteId, pageUrl, formData);
 
-            console.log("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl));
-    
+            
+            logger.debug("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl), req);
+            logger.info("✅ Form submitted successfully:", req.originalUrl);
+            
             // 🔍 Determine next page (if applicable)
             let nextPage = null;
             for (const section of page.pageTemplate.sections) {
@@ -62,10 +66,10 @@ export function govcyFormsPostHandler() {
                     }
                 }
             }
-    
+            
             // ➡️ Redirect to the next page if defined, otherwise return success
             if (nextPage) {
-                console.log(`🔄 Redirecting to next page: ${nextPage}`);
+                logger.debug("🔄 Redirecting to next page:", nextPage, req);
                 // 🛠 Fix relative paths
                 return res.redirect(govcyResources.constructPageUrl(siteId, `${nextPage.split('/').pop()}`));
             }

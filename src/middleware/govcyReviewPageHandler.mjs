@@ -1,6 +1,7 @@
 import { govcyGenerateReviewSummary } from "../utils/govcyReviewSummary.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware to handle the review page for the service.
@@ -90,7 +91,7 @@ export function govcyReviewPageHandler() {
                 pageData: pageData,
                 pageTemplate: pageTemplate
             };
-    
+            logger.debug("Processed review page data:", req.processedPage, req);
             next();
         } catch (error) {
             return next(error); // Pass error to govcyHttpErrorHandler

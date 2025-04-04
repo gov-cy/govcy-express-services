@@ -1,6 +1,7 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 
 /**
@@ -42,13 +43,12 @@ export function govcyReviewPostHandler() {
 
             // ❌ Return validation errors if any exist
             if (Object.keys(validationErrors).length > 0) {
-                console.log("🚨 Validation errors:", validationErrors);
+                logger.debug("🚨 Validation errors:", validationErrors, req);
+                logger.info("🚨 Validation errors:", req.originalUrl);
                 dataLayer.storeSiteValidationErrors(req.session, siteId, validationErrors);
                 //redirect to the same page with error summary
                 return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
-            } else {
-                console.log('No Errors');
-            }
+            } 
 
             // Proceed to final submission if no errors
             return next();

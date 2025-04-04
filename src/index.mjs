@@ -22,6 +22,7 @@ import { govcyLanguageMiddleware } from './middleware/govcyLanguageMiddleware.mj
 import { requireAuth, naturalPersonPolicy,handleLoginRoute, handleSigninOidc, handleLogout } from './middleware/cyLoginAuth.mjs';
 import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
+import { logger } from "./utils/govcyLogger.mjs";
 
 import fs from 'fs';
 
@@ -141,10 +142,10 @@ if (USE_HTTPS) {
     cert: fs.readFileSync(certPath + '.cert'),
   };
   https.createServer(options, app).listen(PORT, () => {
-    console.log(`🔒 Server running at https://localhost:${PORT} (${ENV})`);
+    logger.info(`🔒 Server running at https://localhost:${PORT} (${ENV})`);
   });
 } else {
   app.listen(PORT, () => {
-    console.log(`⚡ Server running at http://localhost:${PORT} (${ENV})`);
+    logger.info(`⚡ Server running at http://localhost:${PORT} (${ENV})`);
   });
 }

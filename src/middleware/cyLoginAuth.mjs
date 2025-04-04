@@ -5,6 +5,7 @@
  * @module cyLoginAuth
  */
 import { getLoginUrl, handleCallback, getLogoutUrl } from '../auth/cyLoginAuth.mjs';
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware to check if the user is authenticated. If not, redirect to the login page.
@@ -84,7 +85,7 @@ export function handleSigninOidc() {
             // Redirect to the stored URL
             res.redirect(redirectUrl);
         } catch (error) {
-            console.error('Token exchange failed:', error);
+            logger.debug('Token exchange failed:', error,req);
             res.status(500).send('Authentication failed');
         }
     }

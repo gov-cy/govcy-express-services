@@ -1,5 +1,6 @@
 import * as client from 'openid-client';
 import { getEnvVariable } from '../utils/govcyEnvVariables.mjs';
+import { logger } from "../utils/govcyLogger.mjs";
 
 
 // OpenID Configuration
@@ -55,15 +56,15 @@ export async function handleCallback(req) {
 
     delete req.session.pkce;  // Clear PKCE data after successful login
 
-    console.log('Token Endpoint Response', tokens);
+    logger.debug('Token Endpoint Response', tokens);
 
     let { access_token } = tokens;
     let claims = tokens.claims();
-    console.log('ID Token Claims', claims);
+    logger.debug('ID Token Claims', claims);
 
     let { sub } = claims;
     let userInfo = await client.fetchUserInfo(config, access_token, sub);
-    console.log('UserInfo Response', userInfo);
+    logger.debug('UserInfo Response', userInfo);
 
     return { tokens, claims, userInfo };
 }

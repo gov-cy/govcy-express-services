@@ -2,6 +2,7 @@ import { getPageConfigData } from "../utils/govcyLoadConfigData.mjs";
 import { populateFormData } from "../utils/govcyFormHandling.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware to handle page rendering and form processing
@@ -18,7 +19,7 @@ export function govcyPageHandler() {
       
       // 🏠 Handle index page: If pageUrl is undefined (meaning the user accessed `/:siteId`), set a default value or handle accordingly
       if (!pageUrl) {
-        console.log(`No pageUrl provided for siteId: ${siteId}`);
+        logger.debug(`No pageUrl provided for siteId: ${siteId}`, req);
         // Example: Redirect to a default page or load a homepage
         pageUrl = "index"; // Change "index" to whatever makes sense for your service
       }
@@ -37,6 +38,7 @@ export function govcyPageHandler() {
       pageTemplateCopy.sections.forEach(section => {
         section.elements.forEach(element => {
           if (element.element === "form") {
+            logger.debug("Processing form element:", element, req);
             element.params.action = govcyResources.constructPageUrl(siteId, page.pageData.url, (req.query.route === "review" ? "review" : ""));
             // Set form method to POST
             element.params.method = "POST";
@@ -57,10 +59,8 @@ export function govcyPageHandler() {
               delete button.params.prototypeNavigate;
               // Set `type` to "submit"
               button.params.type = "submit";
-              console.log(`Modified button - prototypeNavigate: ${prototypeNavigateValue}`);
             }
 
-            // console.log("Processed form element:", element);
             // Handle form data
             let theData = {};
 
@@ -81,7 +81,7 @@ export function govcyPageHandler() {
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));
             }
-
+            logger.debug("Processed form element:", element, req);
           }
         });
       });
@@ -98,6 +98,7 @@ export function govcyPageHandler() {
         },
         pageTemplate: pageTemplateCopy
       };
+      logger.debug("Processed page data:", req.processedPage, req);
       next(); // Pass control to the next middleware or route
     } catch (error) {
         return next(error);  // Pass error to govcyHttpErrorHandler

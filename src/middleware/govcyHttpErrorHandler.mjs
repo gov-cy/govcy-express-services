@@ -1,6 +1,7 @@
 import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware function to handle HTTP errors and render appropriate error pages.
@@ -8,8 +9,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
  */
 export function govcyHttpErrorHandler(err, req, res, next) {
 
-    console.error("HTTP Error:", err.message); // Log the error
-
+    logger.debug("HTTP Error details:", err, req); // Log the error details
     // Set default status and message
     let statusCode = err.status || 500;
     let message = err.message || "Internal Server Error";
@@ -20,11 +20,13 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     // Handle specific HTTP errors
     switch (statusCode) {
         case 404:
+            logger.info("404 - Page not found.", err.message, req.originalUrl); // Log the error
             pageData.pageData.title = govcyResources.staticResources.text.errorPage404Title;
             pageData.pageData.text = govcyResources.staticResources.text.errorPage404Body;
             message = "404 - Page not found.";
             break;
         case 403:
+            logger.warn("HTTP Error:", err.message, req.originalUrl); // Log the error
             pageData.pageData.title = govcyResources.staticResources.text.errorPage403Title;
             if (err.message === "Access Denied: natural person policy not met.") {
                 pageData.pageData.text = govcyResources.staticResources.text.errorPage403NaturalOnlyPolicyBody;
@@ -34,6 +36,7 @@ export function govcyHttpErrorHandler(err, req, res, next) {
             message = "403 - Forbidden access.";
             break;
         case 500:
+            logger.error("HTTP Error:", err.message, req.originalUrl); // Log the error
             pageData.pageData.title = govcyResources.staticResources.text.errorPage500Title;
             pageData.pageData.text = govcyResources.staticResources.text.errorPage500Body;
             message = "500 - Something went wrong on our end.";
