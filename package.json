@@ -1,0 +1,46 @@
+{
+  "name": "govcy-express-forms",
+  "version": "0.1.0",
+  "description": "An Express-based service that dynamically renders forms using @gov-cy/govcy-frontend-renderer",
+  "author": "DMRID - DSF Team",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "keywords": [
+    "govcy",
+    "cyprus",
+    "unified design system",
+    "uds",
+    "dsf",
+    "digital service framework",
+    "forms",
+    "dynamic-rendering",
+    "service",
+    "renderer",
+    "frontend",
+    "builder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gov-cy/govcy-express-forms.git"
+  },
+  "homepage": "https://github.com/gov-cy/govcy-express-forms",
+  "scripts": {
+    "dev": "nodemon src/index.mjs",
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "@gov-cy/govcy-frontend-renderer": "^1.14.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "openid-client": "^6.3.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

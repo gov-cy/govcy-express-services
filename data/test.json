@@ -1,0 +1,626 @@
+
+{
+  "site": {
+    "id": "test",
+    "lang": "el",
+    "languages": [
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      },
+      {
+        "code": "en",
+        "label": "EN",
+        "alt": "English language",
+        "href": "?lang=en"
+      }
+    ],
+    "footerLinks": [
+      {
+        "label": {
+          "el": "Δήλωση απορρήτου",
+          "en": "Privacy statement",
+          "tr": ""
+        },
+        "href": "#"
+      },
+      {
+        "label": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": ""
+        },
+        "href": "#"
+      },
+      {
+        "label": {
+          "el": "Προσβασιμότητα",
+          "en": "Accessibility",
+          "tr": ""
+        },
+        "href": "#"
+      },
+      {
+        "label": {
+          "el": "Βοηθήστε μας να βελτιώσουμε αυτή την υπηρεσία",
+          "en": "Help us improve this service",
+          "tr": ""
+        },
+        "href": "#"
+      }
+    ],
+    "menu": {
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {
+      "el": "Υπηρεσία τεστ",
+      "en": "Test service",
+      "tr": ""
+    },
+    "headerTitle": {
+      "el": "[Το ΟΝΟΜΑ της υπηρεσίας που θα φαίνεται στις φόρμες]",
+      "en": "[The NAME of the service as it will appear on forms]",
+      "tr": ""
+    },
+    "description": {
+      "el": "[Υποβάλετε αίτηση για ...]",
+      "en": "[Submit an application ...]",
+      "tr": ""
+    },
+    "url": "https://gov.cy",
+    "isTesting": true,
+    "cdn": {
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
+      "cssIntegrity": "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
+      "jsIntegrity": "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
+    }
+  },
+  "pages": [
+    {
+      "pageData": {
+        "url": "index",
+        "title": {
+          "el": "Επιλογή Εγγάφου",
+          "en": "Document selection",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "1",
+                        "total": "3",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Επιλογή Εγγάφου",
+                              "en": "Document selection",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Στοιχεία επικοινωνίας ",
+                              "en": "Contact details",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step3",
+                            "text": {
+                              "el": "Σταθερό τηλέφωνο",
+                              "en": "Landline number",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "certificate_select",
+                        "name": "certificate_select",
+                        "legend": {
+                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+                          "en": "What documents do you wish to issue?"
+                        },
+                        "items": [
+                          {
+                            "value": "birth",
+                            "text": {
+                              "el": "Πιστοποιητικό γέννησης​ ",
+                              "en": "Birth certificate",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Αν η γέννηση έγινε στην Κύπρο ή στο εξωτερικό και έχει ενημερωθεί το μητρώο του Αρχείου Πληθυσμού ",
+                              "en": "For a birth in Cyprus or abroad which Civil Registry is updated with "
+                            }
+                          },
+                          {
+                            "value": "permanent_residence",
+                            "text": {
+                              "el": "Βεβαίωση μόνιμης διαμονής​",
+                              "en": "Certificate of permanent residence",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για όσους είναι εγγεγραμμένοι στον εκλογικό κατάλογο",
+                              "en": "For those registered in the electoral list"
+                            }
+                          },
+                          {
+                            "value": "student_proof_of_origin",
+                            "text": {
+                              "el": "Βεβαίωση καταγωγής",
+                              "en": "Certificate of origin",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για αίτηση σε πανεπιστήμια στην Ελλάδα",
+                              "en": "To apply to a university in Greece"
+                            }
+                          }
+                        ],
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Επιλέξτε ένα ή περισσότερα έγγραφα",
+                          "en": "Select one or more documents",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε ένα ή περισσότερα έγγραφα",
+                              "en": "Select one or more documents",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../data-entry-radios"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "data-entry-radios",
+        "title": {
+          "el": "Στοιχεία επικοινωνίας ",
+          "en": "Contact details",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "2",
+                        "total": "3",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Επιλογή Εγγάφου",
+                              "en": "Document selection",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Στοιχεία επικοινωνίας ",
+                              "en": "Contact details",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step3",
+                            "text": {
+                              "el": "Σταθερό τηλέφωνο",
+                              "en": "Landline number",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "mobile_select",
+                        "name": "mobile_select",
+                        "legend": {
+                          "el": "Σε ποιο κινητό μπορούμε να επικοινωνήσουμε μαζί σας;",
+                          "en": "What mobile number can we use to contact you?"
+                        },
+                        "items": [
+                          {
+                            "value": "mobile",
+                            "text": {
+                              "el": "Στο [99 123456]",
+                              "en": "You can use [99 123456]",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "other",
+                            "text": {
+                              "el": "Θα δώσω άλλο αριθμό",
+                              "en": "I will give a different number",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "mobileTxt",
+                                  "name": "mobileTxt",
+                                  "label": {
+                                    "el": "Αριθμός τηελφώνου",
+                                    "en": "Telephone number"
+                                  },
+                                  "isPageHeading": false,
+                                  "fixedWidth": "20",
+                                  "type": "tel"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε τον αριθμό του κινητού σας",
+                                        "en": "Enter your mobile phone number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "isPageHeading": true
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε αν θέλετε να χρησιμοποιήσετε το τηλέφωνο που φαίνεται εδώ, ή κάποιο άλλο",
+                              "en": "Choose if you'd like to use the phone number shown here, or a different one",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../data-entry-textinput"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "data-entry-textinput",
+        "title": {
+          "el": "Σταθερό τηλέφωνο",
+          "en": "Landline number",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "3",
+                        "total": "3",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Επιλογή Εγγάφου",
+                              "en": "Document selection",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Στοιχεία επικοινωνίας ",
+                              "en": "Contact details",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step4",
+                            "text": {
+                              "el": "Σταθερό τηλέφωνο",
+                              "en": "Landline number",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "mobile",
+                        "name": "mobile",
+                        "label": {
+                          "el": "Ποιος είναι ο αριθμός του σταθερού σας;",
+                          "en": "What is your landline number?"
+                        },
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Μόνο για αριθμούς εκτός Κύπρου χρειάζεται ο κωδικός χώρας",
+                          "en": "Country code only needed for numbers outside of Cyprus"
+                        },
+                        "fixedWidth": "20",
+                        "type": "tel"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό του σταθερού σας",
+                              "en": "Enter your landline phone number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "telCY",
+                            "message": {
+                              "el": "Ο αριθμό του κινητού σας πρέπει να είναι Κυπριακός αριθμός κινητού",
+                              "en": "Your mobile number must be a Cypriot mobile number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "30",
+                            "message": {
+                              "el": "[ό,τι κι αν είναι] πρέπει να είναι [30] χαρακτήρες ή λιγότεροι",
+                              "en": "[whatever it is] must be [30] characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "dateGot",
+                        "name": "dateGot",
+                        "legend": {
+                          "el": "Ημερομηνία απόκτησης",
+                          "en": "Date got"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Πρέπει να είναι ημερομηνία",
+                              "en": "Must be a date",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "datePicker",
+                      "params": {
+                        "id": "appointment",
+                        "name": "appointment",
+                        "label": {
+                          "el": "Ραντεβού",
+                          "en": "Appointment"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateDMY",
+                            "message": {
+                              "el": "Πρέπει να είναι ημερομηνία",
+                              "en": "Must be a date",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../review"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    }
+  ],
+  "routes": [],
+  "localizations": {
+    "index.certificate_select": {
+      "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+      "en": "What documents do you wish to issue?",
+      "tr": ""
+    },
+    "data-entry-radios.mobile_select": {
+      "el": "Σε ποιο κινητό μπορούμε να επικοινωνήσουμε μαζί σας;",
+      "en": "What mobile number can we use to contact you?",
+      "tr": ""
+    },
+    "data-entry-radios.mobileTxt": {
+      "el": "Αριθμός τηελφώνου",
+      "en": "Telephone number",
+      "tr": ""
+    },
+    "data-entry-textinput.mobile": {
+      "el": "Ποιος είναι ο αριθμός του σταθερού σας;",
+      "en": "What is your landline number?",
+      "tr": ""
+    },
+    "data-entry-textinput.dateGot": {
+      "el": "Ημερομηνία απόκτησης",
+      "en": "Date got",
+      "tr": ""
+    },
+    "data-entry-textinput.appointment": {
+      "el": "Ραντεβού",
+      "en": "Appointment",
+      "tr": ""
+    }
+  }
+}
