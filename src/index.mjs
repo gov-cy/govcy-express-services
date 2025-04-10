@@ -11,9 +11,11 @@ import https from 'https';
 import { noCache } from "./middleware/govcyCacheControl.mjs";
 import { renderGovcyPage } from "./middleware/govcyPageRender.mjs";
 import { govcyPageHandler } from './middleware/govcyPageHandler.mjs';
+import { govcyPDFRender } from './middleware/govcyPDFRender.mjs';
 import { govcyFormsPostHandler } from './middleware/govcyFormsPostHandler.mjs';
 import { govcyReviewPostHandler } from './middleware/govcyReviewPostHandler.mjs';
 import { govcyReviewPageHandler } from './middleware/govcyReviewPageHandler.mjs';
+import { govcySuccessPageHandler } from './middleware/govcySuccessPageHandler.mjs';
 import { requestLogger } from './middleware/govcyLogger.mjs';
 import { govcyCsrfMiddleware } from './middleware/govcyCsrf.mjs';
 import { govcySessionData } from './middleware/govcySessionData.mjs';
@@ -52,7 +54,7 @@ app.use(
     secret: getEnvVariable('SESSION_SECRET'), // Use environment variable or fallback for dev. To generate a secret, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
     resave: false,  // Prevents unnecessary session updates
     saveUninitialized: false, // Don't save empty sessions
-    cookie: { secure: process.env.NODE_ENV === 'production',// Secure cookies only in production
+    cookie: { 
       secure: USE_HTTPS, // Secure cookies only if HTTPS is used
       httpOnly: true,   // Prevents XSS attacks
       maxAge: 3600000,  // Session expires after 1 hour
@@ -114,6 +116,12 @@ app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolic
 
 // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
 app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyReviewPageHandler(), renderGovcyPage());
+
+// ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
+app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcySuccessPageHandler(true), govcyPDFRender());
+
+// ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
+app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcySuccessPageHandler(), renderGovcyPage());
 
 // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
 app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyPageHandler(), renderGovcyPage());

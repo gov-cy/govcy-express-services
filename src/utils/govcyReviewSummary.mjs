@@ -46,7 +46,7 @@ export function govcyGenerateReviewSummary(req, siteId, service) {
 
         if (!day || !month || !year) return "";
 
-        return `${day}/${month}/${year}`; // Greek format: DD/MM/YYYY
+        return `${day}/${month}/${year}`; // EU format: DD/MM/YYYY
     }
 
     /**

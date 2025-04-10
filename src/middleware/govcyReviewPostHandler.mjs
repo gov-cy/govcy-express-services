@@ -2,7 +2,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-
+import {prepareSubmissionData , generateReviewSummary , generateSubmitEmail } from "../utils/govcySubmitData.mjs";
 
 /**
  * Middleware to handle review page form submission
@@ -48,10 +48,43 @@ export function govcyReviewPostHandler() {
                 dataLayer.storeSiteValidationErrors(req.session, siteId, validationErrors);
                 //redirect to the same page with error summary
                 return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
-            } 
+            } else {
+                // ------------ DO SUBMISSION ---------------------
+                let referenceNo = `12345678`;
+                // logger.debug("The site config:", service.site);
+                // let siteInputData = dataLayer.getSiteInputData(req.session, siteId);
+                // logger.debug("The site's data:", siteInputData);
+                logger.info("✅ Data submitted", siteId, referenceNo, req);
+                let printFriendlyData = prepareSubmissionData(req, siteId, service);
+                logger.debug("Submission print friendly data:", referenceNo, printFriendlyData,  req);
+                // handle data layer submission
+                dataLayer.storeSiteSubmissionData(
+                    req.session, 
+                    siteId, 
+                    service, 
+                    referenceNo, 
+                    new Date().toISOString(), 
+                    printFriendlyData);
+                    
+                logger.debug("🔄 Redirecting to success page:",  req);
+                // redirect to success
+                return res.redirect(govcyResources.constructPageUrl(siteId, `success`));
+                
+                // logger.debug("The submission data prepared:", printFriendlyData);
+                // let reviewSummary = generateReviewSummary(printFriendlyData,req, siteId, false);
+                // logger.debug("The review summary generated:", reviewSummary);
+                // let emailBody = generateSubmitEmail(service,printFriendlyData,'xxxx xxxx xxxx 1234', req);
+                // logger.debug("Email generated:", emailBody);
+                // res.send(emailBody);
+                
+                // // Clear any existing submission errors from the session
+                // dataLayer.clearSiteSubmissionErrors(req.session, siteId);
+            }
 
             // Proceed to final submission if no errors
-            return next();
+            // return next();
+            // print the submission data to the page
+
         } catch (error) {
             return next(error);
         }

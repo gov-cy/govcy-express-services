@@ -18,10 +18,10 @@ const config = await client.discovery(new URL(issuerUrl), clientId, clientSecret
  * Generate login URL
  */
 export async function getLoginUrl(req) {
-    let code_verifier = client.randomPKCECodeVerifier();  // Generate per request
-    let code_challenge = await client.calculatePKCECodeChallenge(code_verifier); // ✅ Ensure `await` is here
+    let code_verifier = client.randomPKCECodeVerifier();  // Generate random PKCE per request
+    let code_challenge = await client.calculatePKCECodeChallenge(code_verifier); // Ensure `await` is here
 
-    let nonce = client.randomNonce();  // Generate per request
+    let nonce = client.randomNonce();  // Generate per request 
 
     // Store these in session
     req.session.pkce = { code_verifier, nonce };

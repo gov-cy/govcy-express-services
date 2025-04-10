@@ -1,4 +1,3 @@
-
 {
   "site": {
     "id": "test",
@@ -151,14 +150,14 @@
                         "id": "certificate_select",
                         "name": "certificate_select",
                         "legend": {
-                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε----;",
                           "en": "What documents do you wish to issue?"
                         },
                         "items": [
                           {
                             "value": "birth",
                             "text": {
-                              "el": "Πιστοποιητικό γέννησης​ ",
+                              "el": "Πιστοποιητικό γέννησης​",
                               "en": "Birth certificate",
                               "tr": ""
                             },
@@ -491,8 +490,8 @@
                           "params": {
                             "checkValue": "telCY",
                             "message": {
-                              "el": "Ο αριθμό του κινητού σας πρέπει να είναι Κυπριακός αριθμός κινητού",
-                              "en": "Your mobile number must be a Cypriot mobile number",
+                              "el": "[ό,τι κι αν είναι] πρέπει να είναι Κυπριακος αριθμός τηλεφώνου [προαιρετικό παράδειγμα]",
+                              "en": "[whatever it is] must be a Cypriot telephone number [optional example]",
                               "tr": ""
                             }
                           }
@@ -531,8 +530,8 @@
                           "params": {
                             "checkValue": "dateISO",
                             "message": {
-                              "el": "Πρέπει να είναι ημερομηνία",
-                              "en": "Must be a date",
+                              "el": "[ό,τι κι αν είναι] πρέπει να είναι ημερομηνία [προαιρετικό παράδειγμα]",
+                              "en": "[whatever it is] must be an date [optional example]",
                               "tr": ""
                             }
                           }
@@ -545,8 +544,8 @@
                         "id": "appointment",
                         "name": "appointment",
                         "label": {
-                          "el": "Ραντεβού",
-                          "en": "Appointment"
+                          "el": "Επιλογή Ημερομηνίας",
+                          "en": "Date Picker"
                         },
                         "isPageHeading": false,
                         "hint": {
@@ -560,13 +559,152 @@
                           "params": {
                             "checkValue": "dateDMY",
                             "message": {
-                              "el": "Πρέπει να είναι ημερομηνία",
-                              "en": "Must be a date",
+                              "el": "[ό,τι κι αν είναι] πρέπει να είναι ημερομηνία [προαιρετικό παράδειγμα]",
+                              "en": "[whatever it is] must be an date [optional example]",
                               "tr": ""
                             }
                           }
                         }
                       ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../data-entry-all"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "data-entry-all",
+        "title": {
+          "el": "Όλα τα inputs",
+          "en": "All inputs",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtMobile",
+                        "name": "txtMobile",
+                        "label": {
+                          "el": "Όλα τα inputs",
+                          "en": "All inputs"
+                        },
+                        "isPageHeading": true,
+                        "fixedWidth": "20",
+                        "type": "tel",
+                        "hint": {
+                          "en": "Country code only needed for numbers outside of Cyprus"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtName",
+                        "name": "txtName",
+                        "label": {
+                          "el": "Όνομα",
+                          "en": "Name"
+                        },
+                        "isPageHeading": false,
+                        "type": "name"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtEmail",
+                        "name": "txtEmail",
+                        "label": {
+                          "el": "Email",
+                          "en": "Email"
+                        },
+                        "isPageHeading": false,
+                        "type": "email"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtNumeric",
+                        "name": "txtNumeric",
+                        "label": {
+                          "el": "Αριθμός",
+                          "en": "Number"
+                        },
+                        "isPageHeading": false,
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "dateInput",
+                        "name": "dateInput",
+                        "legend": {
+                          "el": "Ημερομηνία απόκτησης",
+                          "en": "Date got"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      }
+                    },
+                    {
+                      "element": "datePicker",
+                      "params": {
+                        "id": "datePicker",
+                        "name": "datePicker",
+                        "label": {
+                          "el": "Επιλογή Ημερομηνίας",
+                          "en": "Date Picker"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      }
                     },
                     {
                       "element": "button",
@@ -593,7 +731,7 @@
   "routes": [],
   "localizations": {
     "index.certificate_select": {
-      "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+      "el": "Τι έγγραφα επιθυμείτε να εκδώσετε----;",
       "en": "What documents do you wish to issue?",
       "tr": ""
     },
@@ -618,8 +756,38 @@
       "tr": ""
     },
     "data-entry-textinput.appointment": {
-      "el": "Ραντεβού",
-      "en": "Appointment",
+      "el": "Επιλογή Ημερομηνίας",
+      "en": "Date Picker",
+      "tr": ""
+    },
+    "data-entry-all.txtMobile": {
+      "el": "Όλα τα inputs",
+      "en": "All inputs",
+      "tr": ""
+    },
+    "data-entry-all.txtName": {
+      "el": "Όνομα",
+      "en": "Name",
+      "tr": ""
+    },
+    "data-entry-all.txtEmail": {
+      "el": "Email",
+      "en": "Email",
+      "tr": ""
+    },
+    "data-entry-all.txtNumeric": {
+      "el": "Αριθμός",
+      "en": "Number",
+      "tr": ""
+    },
+    "data-entry-all.dateInput": {
+      "el": "Ημερομηνία απόκτησης",
+      "en": "Date got",
+      "tr": ""
+    },
+    "data-entry-all.datePicker": {
+      "el": "Επιλογή Ημερομηνίας",
+      "en": "Date Picker",
       "tr": ""
     }
   }

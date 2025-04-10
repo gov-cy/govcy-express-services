@@ -75,6 +75,31 @@ export const staticResources = {
             en: "Select one of the available options",
             el: "Επιλέξτε μία από τις διαθέσιμες επιλογές",
             tr: "Mevcut seçeneklerden birini seçin"
+        },
+        submissionSuccessTitle : {
+            en: "We have received your request",
+            el: "Έχουμε λάβει την αίτησή σας",
+            tr: "We have received your request"
+        },
+        yourSubmissionId : {
+            en: "Your reference number: ",
+            el: "Ο αριθμός αναφοράς: ",
+            tr: "Your reference number: "
+        },
+        weHaveSendYouAnEmail : {
+            en: "We have sent you a confirmation email.",
+            el: "Έχουμε εσταλει email επιβεβαιωσης.",
+            tr: "We have sent you a confirmation email."
+        },
+        theDataFromYourRequest : {
+            en: "The data from your request: ",
+            el: "Τα δεδομένα της αίτησής σας: ",
+            tr: "The data from your request: "
+        },
+        emailSubmissionPreHeader : {
+            en: "We have received your request. ",
+            el: "Έχουμε λάβει την αίτησή σας. ",
+            tr: "We have received your request. "
         }
     },
     //remderer sections
@@ -246,4 +271,98 @@ export function userNameSection(userName) {
             }
         ]
     };
+}
+
+/**
+ * Get the localized content for a given language
+ * 
+ * @param {object} content The contnent object. For example `{"en": "Hello", "el": "Γειά σας"}`
+ * @param {string} lang The desired language code. For example `en`, `el`, `tr`
+ * @returns {string|undefined} Localized string or empty string if nothing available.
+ */
+export function getLocalizeContent(content,lang){
+    if (!content || typeof content !== 'object') return "";
+
+    return content[lang] || content["el"] || content["en"] || content["tr"] || "";
+}
+
+/**
+ * Get the html for the submission pdf link
+ * 
+ * @param {string} siteId 
+ * @returns The html for the submission pdf link
+ */
+export function getSubmissionPDFLinkHtml (siteId = "") {
+    return getMultilingualObject(
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+            <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
+            Λήψη αίτησης
+        </a></p>`,
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+            <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
+            Download application
+        </a></p>`,
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+            <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
+            Download application
+        </a></p>`
+    )
+}
+
+/**
+ * Returns a multilingual object with the text in all languages
+ * 
+ * @param {string} el The Greek text
+ * @param {string} en The English text
+ * @param {string} tr The Turkish text
+ * @returns {object} The multilingual object with the text in all languages 
+ */
+export function getMultilingualObject(el, en, tr) {
+    return {el: el || "", en: en || "", tr: tr || ""};
+}
+
+/**
+ * Returns a multilingual object with the same text in all languages 
+ * 
+ * @param {array} languages The site's language object 
+ * @param {string} value The value to be set for all languages. If not provided, it will be set to an empty string. 
+ * @returns {object} The multilingual object with the value set for all languages
+ */
+export function getSameMultilingualObject(languages, value) {
+    const obj = {};
+    for (const lang of languages) {
+        obj[lang.code] = value || "";
+    }
+    return obj;
+}
+
+/**
+ * Get the email object with the subject, preHeader, header, username and footer in the desired language
+ * 
+ * @param {object} subject The subject object. For example `{"en": "Hello", "el": "Γειά σας"}`
+ * @param {object} preHeader The preHeader object. For example `{"en": "Hello", "el": "Γειά σας"}`
+ * @param {object} header The header object. For example `{"en": "Hello", "el": "Γειά σας"}`
+ * @param {string} username The username. For example `"User1"`
+ * @param {array} body The body array. 
+ * @param {object} footer The footer object. For example `{"en": "Hello", "el": "Γειά σας"}`
+ * @param {string} lang The desired language code. For example `en`, `el`, `tr`
+ * @returns {object} The email object with the subject, preHeader, header, username and footer in the desired language 
+ */
+export function getEmailObject( subject, preHeader, header, username, body, footer, lang) {
+
+    const usedLang = lang || "el";
+
+    return {
+        lang: usedLang,
+        subject: getLocalizeContent(subject, usedLang),
+        pre: getLocalizeContent(preHeader, usedLang),
+        header: {
+            serviceName: getLocalizeContent(header, usedLang), 
+            name: username || ""
+        },
+        body: body || [],
+        footer: {
+            footerText: getLocalizeContent(footer, usedLang)
+        }
+    }
 }

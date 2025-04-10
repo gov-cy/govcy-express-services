@@ -2,6 +2,8 @@ import { govcyGenerateReviewSummary } from "../utils/govcyReviewSummary.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import {prepareSubmissionData , generateReviewSummary  } from "../utils/govcySubmitData.mjs";
+
 
 /**
  * Middleware to handle the review page for the service.
@@ -55,7 +57,9 @@ export function govcyReviewPageHandler() {
                 }
             }
             // Generate the summary list using the utility function
-            const summaryList = govcyGenerateReviewSummary(req, siteId, serviceCopy);
+            //const summaryList = govcyGenerateReviewSummary(req, siteId, serviceCopy);
+            let submissionData = prepareSubmissionData(req, siteId, serviceCopy);
+            let summaryList = generateReviewSummary(submissionData,req, siteId);
             
             //--------- Handle Validation Errors ---------
             // Check if validation errors exist in the session
