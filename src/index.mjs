@@ -8,7 +8,8 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser'; // Required to read cookies
 import https from 'https';
-import { noCache } from "./middleware/govcyCacheControl.mjs";
+import { requestTimer } from './middleware/govcyRequestTimer.mjs';
+import { noCacheAndSecurityHeaders } from "./middleware/govcyHeadersControl.mjs";
 import { renderGovcyPage } from "./middleware/govcyPageRender.mjs";
 import { govcyPageHandler } from './middleware/govcyPageHandler.mjs';
 import { govcyPDFRender } from './middleware/govcyPDFRender.mjs';
@@ -66,20 +67,23 @@ app.use(
 app.use(cookieParser()); 
 // Apply language middleware
 app.use(govcyLanguageMiddleware); 
+// Add request timing middleware
+app.use(requestTimer);
 // add csrf middleware
 app.use(govcyCsrfMiddleware);
-
+// Enable security headers
+app.use(noCacheAndSecurityHeaders);
 
 // 🔒 cyLogin ----------------------------------------
 
 // 🔒 -- ROUTE: Redirect to Login
-app.get('/login', noCache, handleLoginRoute() );
+app.get('/login', handleLoginRoute() );
 
 // 🔒 -- ROUTE: Handle login Callback
-app.get('/signin-oidc', noCache, handleSigninOidc() );
+app.get('/signin-oidc', handleSigninOidc() );
 
 // 🔒 -- ROUTE: Handle Logout
-app.get('/logout', noCache, handleLogout() );
+app.get('/logout', handleLogout() );
 
 //----------------------------------------------------------------------
 
@@ -87,7 +91,7 @@ app.get('/logout', noCache, handleLogout() );
 // 🛠️ Debugging routes -----------------------------------------------------
 // 🙍🏻‍♂️ -- ROUTE: Debugging route Protected Route
 if (!isProdOrStaging()) {
-  app.get('/user', requireAuth, naturalPersonPolicy, noCache, (req, res) => {
+  app.get('/user', requireAuth, naturalPersonPolicy, (req, res) => {
     res.send(`
       User name: ${req.session.user.name}
       <br> Sub: ${req.session.user.sub}
@@ -112,25 +116,25 @@ const publicPath = join(__dirname, 'public');
 app.use(express.static(publicPath));
 
 // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
-app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyPageHandler(), renderGovcyPage());
+app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyPageHandler(), renderGovcyPage());
 
 // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
-app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyReviewPageHandler(), renderGovcyPage());
+app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyReviewPageHandler(), renderGovcyPage());
 
 // ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
-app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcySuccessPageHandler(true), govcyPDFRender());
+app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcySuccessPageHandler(true), govcyPDFRender());
 
 // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
-app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcySuccessPageHandler(), renderGovcyPage());
+app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcySuccessPageHandler(), renderGovcyPage());
 
 // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
-app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyPageHandler(), renderGovcyPage());
+app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyPageHandler(), renderGovcyPage());
 
 // 📥 -- ROUTE: Handle POST requests for review page
-app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyReviewPostHandler());
+app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyReviewPostHandler());
 
-// 📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
-app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, noCache, govcyFormsPostHandler());
+// 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
+app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyFormsPostHandler());
 
 
 // post for /:siteId/review
