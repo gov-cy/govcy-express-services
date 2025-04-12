@@ -150,7 +150,7 @@
                         "id": "certificate_select",
                         "name": "certificate_select",
                         "legend": {
-                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε----;",
+                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
                           "en": "What documents do you wish to issue?"
                         },
                         "items": [
@@ -619,20 +619,38 @@
                 "params": {
                   "elements": [
                     {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Όλα τα inputs",
+                          "en": "All inputs"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "html",
+                        "text": {
+                          "el": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraph</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>",
+                          "en": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraph</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>"
+                        }
+                      }
+                    },
+                    {
                       "element": "textInput",
                       "params": {
                         "id": "txtMobile",
                         "name": "txtMobile",
                         "label": {
-                          "el": "Όλα τα inputs",
-                          "en": "All inputs"
+                          "el": "Τηλέφωνο",
+                          "en": "Phone"
                         },
-                        "isPageHeading": true,
+                        "isPageHeading": false,
                         "fixedWidth": "20",
-                        "type": "tel",
-                        "hint": {
-                          "en": "Country code only needed for numbers outside of Cyprus"
-                        }
+                        "type": "tel"
                       }
                     },
                     {
@@ -707,6 +725,141 @@
                       }
                     },
                     {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "checkboxes",
+                        "name": "checkboxes",
+                        "legend": {
+                          "el": "Checkboxes List (Ελληνικά)",
+                          "en": "Checkboxes List"
+                        },
+                        "items": [
+                          {
+                            "value": "checkbox1",
+                            "text": {
+                              "el": "Option 1 Ελληνικά",
+                              "en": "Option 1",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "checkbox2",
+                            "text": {
+                              "el": "Option 2 Ελληνικά",
+                              "en": "Option 2",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "checkbox3",
+                            "text": {
+                              "el": "Option 3 Ελληνικά",
+                              "en": "Option 3",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "checkbox4",
+                            "text": {
+                              "el": "Option 4 Ελληνικά",
+                              "en": "Option 4",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "This is a hint text.",
+                          "en": "This is a hint text.",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "radios",
+                        "name": "radios",
+                        "legend": {
+                          "el": "Radios List (Ελληνικά)",
+                          "en": "Radios List"
+                        },
+                        "items": [
+                          {
+                            "value": "option1",
+                            "text": {
+                              "el": "Option 1 Ελληνικά",
+                              "en": "Option 1",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "option2",
+                            "text": {
+                              "el": "Option 2 Ελληνικά",
+                              "en": "Option 2",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "option3",
+                            "text": {
+                              "el": "Option 3 Ελληνικά",
+                              "en": "Option 3",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "option4",
+                            "text": {
+                              "el": "Option 4 Ελληνικά",
+                              "en": "Option 4",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "This is a hint text.",
+                          "en": "This is a hint text.",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "textArea",
+                        "name": "textArea",
+                        "rows": 7,
+                        "label": {
+                          "el": "Text area label Ελληνικά",
+                          "en": "Text area label"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        }
+                      }
+                    },
+                    {
                       "element": "button",
                       "params": {
                         "id": "continue",
@@ -731,7 +884,7 @@
   "routes": [],
   "localizations": {
     "index.certificate_select": {
-      "el": "Τι έγγραφα επιθυμείτε να εκδώσετε----;",
+      "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
       "en": "What documents do you wish to issue?",
       "tr": ""
     },
@@ -761,8 +914,8 @@
       "tr": ""
     },
     "data-entry-all.txtMobile": {
-      "el": "Όλα τα inputs",
-      "en": "All inputs",
+      "el": "Τηλέφωνο",
+      "en": "Phone",
       "tr": ""
     },
     "data-entry-all.txtName": {
@@ -788,6 +941,21 @@
     "data-entry-all.datePicker": {
       "el": "Επιλογή Ημερομηνίας",
       "en": "Date Picker",
+      "tr": ""
+    },
+    "data-entry-all.checkboxes": {
+      "el": "Checkboxes List (Ελληνικά)",
+      "en": "Checkboxes List",
+      "tr": ""
+    },
+    "data-entry-all.radios": {
+      "el": "Radios List (Ελληνικά)",
+      "en": "Radios List",
+      "tr": ""
+    },
+    "data-entry-all.textArea": {
+      "el": "Text area label Ελληνικά",
+      "en": "Text area label",
       "tr": ""
     }
   }
