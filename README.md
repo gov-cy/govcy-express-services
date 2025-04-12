@@ -790,6 +790,8 @@ The project uses express.js to serve the following routes:
 - **`/:siteId`**: Requires **cyLogin** authentication for **authorized individual users**. Redirects to `/:siteId/index`.
 - **`/:siteId/:pageUrl`**: Requires **cyLogin** authentication for **authorized individual users**. Based on `/data/:siteId.json`, Renders the specified page template.
 - **`/:siteId/review`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the check your answers page template.
+- **`/:siteId/success`**: Requires **cyLogin** authentication for **authorized individual users**. Renders latest successful submission.
+- **`/:siteId/success/pdf`**: Requires **cyLogin** authentication for **authorized individual users**. Downloads the PDF of the latest successful submission.
 
 #### Authentication routes:
 - **`/signin-oidc`**: CY Login authentication endpoint.
