@@ -1,0 +1,985 @@
+import { expect } from 'chai';
+import { validateFormElements } from '../../src/utils/govcyValidator.mjs';
+
+describe('govcyValidator', () => {
+    let contElements = [
+        {
+            element: 'radios',
+            params: {
+                name: 'contField1',
+                id: 'contField1',
+                items: [
+                    {
+                        value: 'yes',
+                        conditionalElements: []
+                    }
+                ]
+            },
+        },
+    ];
+    //----------- required validation --------------------
+    it('1. should validate `required` fields correctly', () => {
+        // Test with required field
+        const elements = [
+            {
+                element: 'textInput',
+                params: {
+                    name: 'field1',
+                    id: 'field1'
+                },
+                validations: [
+                    {
+                        check: 'required',
+                        params: {
+                            checkValue: "",
+                            message: 'Field is required'
+                        }
+                    }
+                ]
+            },
+        ];
+        const formData = {contField1: 'yes', field1: '' };
+
+        //test without conditional
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Field is required',
+                pageUrl: 'page1',
+            },
+        });
+        //test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Field is required',
+                pageUrl: 'page1',
+            },
+        });
+    });
+
+    it('2. should pass `required` validation for valid fields', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: {
+                    name: 'field1',
+                    id: 'field1'
+                },
+                validations: [
+                    {
+                        check: 'required',
+                        params: {
+                            checkValue: "",
+                            message: 'Field is required'
+                        }
+                    }
+                ]
+            },
+        ];
+        const formData = { contField1: 'yes', field1: 'value' };
+
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        //test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+    //------------- valid validation ---------------------
+    it('3. should validate `valid` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: {
+                    name: 'field1',
+                    id: 'field1',
+                },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'numeric',
+                            message: 'Must be numeric',
+                        },
+                    },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '123' };
+    
+        // Test without conditional
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid numeric
+        formData.field1 = 'abc';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must be numeric',
+                pageUrl: 'page1',
+            },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must be numeric',
+                pageUrl: 'page1',
+            },
+        });
+    });
+
+    //------------- valid alpha validation ---------------------
+    it('4. should validate `alpha` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: {
+                    name: 'field1',
+                    id: 'field1',
+                },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'alpha',
+                            message: 'Must contain only alphabetic characters',
+                        },
+                    },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'Hello' };
+    
+        // Test without conditional
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid alpha
+        formData.field1 = '123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must contain only alphabetic characters',
+                pageUrl: 'page1',
+            },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must contain only alphabetic characters',
+                pageUrl: 'page1',
+            },
+        });
+    });
+
+    //------------- valid alphaNum validation ---------------------
+    it('5. should validate `alphaNum` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: {
+                    name: 'field1',
+                    id: 'field1',
+                },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'alphaNum',
+                            message: 'Must contain only alphanumeric characters',
+                        },
+                    },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'Hello123' };
+    
+        // Test without conditional
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid alphaNum
+        formData.field1 = 'Hello@123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must contain only alphanumeric characters',
+                pageUrl: 'page1',
+            },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must contain only alphanumeric characters',
+                pageUrl: 'page1',
+            },
+        });
+    });
+
+    //------------- valid numDecimal validation ---------------------
+    it('6. should validate `numDecimal` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'numDecimal', message: 'Must be a valid decimal number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '123,45' };
+    
+        // Test valid numDecimal
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid numDecimal
+        formData.field1 = '123.45';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid decimal number', pageUrl: 'page1' },
+        });
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: {
+                id: 'field1',
+                message: 'Must be a valid decimal number',
+                pageUrl: 'page1',
+            },
+        });
+    });
+
+    //------------- valid currency validation ---------------------
+    it('7. should validate `currency` fields correctly with conditionals', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'currency', message: 'Must be a valid currency format' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '123,45' };
+    
+        // Test valid currency without conditional
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid currency without conditional
+        formData.field1 = '123,456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid currency format', pageUrl: 'page1' },
+        });
+    
+        // Test valid currency with conditional
+        formData.field1 = '123,45';
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid currency with conditional
+        formData.field1 = '123,456';
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid currency format', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid noSpecialChars validation ---------------------
+    it('8. should validate `noSpecialChars` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'noSpecialChars', message: 'Contains invalid characters' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'Hello, world!' };
+    
+        // Test valid noSpecialChars
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid noSpecialChars
+        formData.field1 = 'Hello@world';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Contains invalid characters', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Contains invalid characters', pageUrl: 'page1' },
+        });
+    });
+    
+    //------------- valid name validation ---------------------
+    it('9. should validate `name` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'name', message: 'Must be a valid name' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: "O'Connor" };
+    
+        // Test valid name
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid name
+        formData.field1 = '123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid tel validation ---------------------
+    it('10. should validate `tel` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'tel', message: 'Must be a valid phone number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '(123) 456-7890' };
+    
+        // Test valid tel
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid tel
+        formData.field1 = '123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid phone number', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid phone number', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid mobile validation ---------------------
+    it('11. should validate `mobile` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'mobile', message: 'Must be a valid mobile number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '12345678' };
+    
+        // Test valid mobile
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid mobile
+        formData.field1 = '123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid telCY validation ---------------------
+    it('12. should validate `telCY` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'telCY', message: 'Must be a valid Cypriot phone number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '+357 22 123456' };
+    
+        // Test valid telCY
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid telCY
+        formData.field1 = '+357 12 123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid Cypriot phone number', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid Cypriot phone number', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid mobileCY validation ---------------------
+    it('13. should validate `mobileCY` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'mobileCY', message: 'Must be a valid Cypriot mobile number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '+357 99 123456' };
+    
+        // Test valid mobileCY
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid mobileCY
+        formData.field1 = '+357 22 123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid Cypriot mobile number', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid Cypriot mobile number', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid iban validation ---------------------
+    it('14. should validate `iban` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'iban', message: 'Must be a valid IBAN' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'CY17002001280000001200527600' };
+    
+        // Test valid iban
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid iban
+        formData.field1 = 'CY17002001280000001200527601';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid IBAN', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid IBAN', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid email validation ---------------------
+    it('15. should validate `email` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'email', message: 'Must be a valid email address' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'test@example.com' };
+    
+        // Test valid email
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid email
+        formData.field1 = 'invalid-email';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid email address', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid email address', pageUrl: 'page1' },
+        });
+    });
+
+    it('16. should validate `date` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'date', message: 'Must be a valid date' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '2023-04-15' };
+    
+        // Test valid date
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid date
+        formData.field1 = 'invalid-date';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid date', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid date', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid dateISO validation ---------------------
+    it('17. should validate `dateISO` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'dateISO', message: 'Must be a valid ISO date' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '2023-04-15' };
+    
+        // Test valid dateISO
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid dateISO
+        formData.field1 = '15/04/2023';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid ISO date', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid ISO date', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid dateDMY validation ---------------------
+    it('18. should validate `dateDMY` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'dateDMY', message: 'Must be a valid DMY date' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '15/04/2023' };
+    
+        // Test valid dateDMY
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid dateDMY
+        formData.field1 = '2023-04-15';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid DMY date', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid DMY date', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid numeric validation ---------------------
+    it('19. should validate `numeric` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'numeric', message: 'Must be a numeric value' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '12345' };
+    
+        // Test valid numeric
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid numeric
+        formData.field1 = 'abc123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a numeric value', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a numeric value', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- valid currency validation ---------------------
+    it('20. should validate `currency` fields correctly with standard rules', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'currency', message: 'Must be a valid currency format' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '123456' };
+    
+        // Test valid currency inputs
+        const validInputs = ['123456', '123456,12', '1234567', '12', '123,2', '125'];
+        validInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
+    
+        // Test invalid currency inputs
+        const invalidInputs = ['123,123', '123,1234', '123.45', 'abc'];
+        invalidInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid currency format', pageUrl: 'page1' },
+            });
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '123456,12';
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- valid tel validation ---------------------
+    it('21. should validate `tel` fields correctly with normalization', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'tel', message: 'Must be a valid phone number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '99 123456' };
+    
+        // Test valid tel inputs
+        const validInputs = ['99 123456', '+44-1234 567', '001 1234 567', '00357 99123456'];
+        validInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
+    
+        // Test invalid tel inputs
+        const invalidInputs = ['123', 'abc', '+123456789012345678901']; // Too short, non-numeric, too long
+        invalidInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid phone number', pageUrl: 'page1' },
+            });
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '+44-1234 567';
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- valid mobile validation ---------------------
+    it('22. should validate `mobile` fields correctly with normalization', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'mobile', message: 'Must be a valid mobile number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '00357 99123456' };
+    
+        // Test valid mobile inputs
+        const validInputs = ['99 123456', '+44-1234 567', '00357 99123456'];
+        validInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
+    
+        // Test invalid mobile inputs
+        const invalidInputs = ['123', 'abc', '+123456789012345678901']; // Too short, non-numeric, too long
+        invalidInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+            });
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '00357 99123456';
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- valid telCY validation ---------------------
+    it('23. should validate `telCY` fields correctly with normalization', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'telCY', message: 'Must be a valid Cypriot phone number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '00357 22 123456' };
+    
+        // Test valid telCY inputs
+        const validInputs = ['00357 22 123456', '+357 22 123456', '22 123456', '+(357)-99-123456'];
+        validInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
+    
+        // Test invalid telCY inputs
+        const invalidInputs = ['123', 'abc', '+1234567890123456', ' 22 1234561', '+357 22 1234561', '+358 22 123456']; // Too short, non-numeric, too long
+        invalidInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid Cypriot phone number', pageUrl: 'page1' },
+            });
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '00357 22 123456';
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- valid mobileCY validation ---------------------
+    it('24. should validate `mobileCY` fields correctly with normalization', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'mobileCY', message: 'Must be a valid Cypriot mobile number' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '00357 99 123456' };
+    
+        // Test valid mobileCY inputs
+        const validInputs = ['00357 99 123456', '+357 99 123456', '99 123456', '+(357)-99-123456'];
+        validInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
+    
+        // Test invalid mobileCY inputs
+        const invalidInputs = ['123', 'abc','+1234567890123456', ' 99 1234561', '+357 99 1234561', '+358 99 123456']; // Too short, non-numeric, too long
+        invalidInputs.forEach(input => {
+            formData.field1 = input;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid Cypriot mobile number', pageUrl: 'page1' },
+            });
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '00357 99 123456';
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- length validation ---------------------
+    it('25. should validate `length` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'length', params: { checkValue: 5, message: 'Input is too long' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '12345' };
+    
+        // Test valid length
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid length (too long)
+        formData.field1 = '123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too long', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '12345';
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid length with conditional
+        formData.field1 = '123456';
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too long', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- minLength validation ---------------------
+    it('26. should validate `minLength` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'minLength', params: { checkValue: 5, message: 'Input is too short' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '12345' };
+    
+        // Test valid minLength
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid minLength (too short)
+        formData.field1 = '1234';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
+        });
+    
+        // Test conditional
+        contElements[0].params.items[0].conditionalElements = elements;
+        formData.field1 = '12345';
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid minLength with conditional
+        formData.field1 = '1234';
+        validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
+        });
+    });
+    //TODO: test more validation rules
+});

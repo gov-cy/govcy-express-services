@@ -27,7 +27,9 @@
   "homepage": "https://github.com/gov-cy/govcy-express-forms",
   "scripts": {
     "dev": "nodemon src/index.mjs",
-    "start": "node src/index.mjs"
+    "start": "node src/index.mjs",
+    "test": "mocha --timeout 60000 tests/**/*.test.mjs",
+    "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs"
   },
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.0",
@@ -40,7 +42,10 @@
     "puppeteer": "^24.6.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.0.2",
+    "sinon": "^20.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

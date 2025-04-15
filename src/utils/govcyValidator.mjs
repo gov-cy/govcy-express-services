@@ -24,45 +24,94 @@ function validateValue(value, rules) {
     numeric: (val) => /^\d+$/.test(val),
     numDecimal: (val) => /^\d+(,\d+)?$/.test(val),
     currency: (val) => /^\d+(,\d{1,2})?$/.test(val),
-    alpha: (val) => /^[A-Za-z]+$/.test(val),
-    alphaNum: (val) => /^[A-Za-z0-9]+$/.test(val),
-    name: (val) => /^[A-Za-z\s]+$/.test(val),
-    tel: (val) => /^\d{6,15}$/.test(val),
-    mobile: (val) => /^\d{8,15}$/.test(val),
-    telCY: (val) => /^(?:\+|00)?357[-\s]?(2|9)\d{7}$/.test(val.replace(/[\s-]/g, '')),
-    mobileCY: (val) => /^(?:\+|00)?357[-\s]?9\d{7}$/.test(val.replace(/[\s-]/g, '')),
-    iban: (val) => /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(val.replace(/[\s-]/g, '')),
+    alpha: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff\s]+$/.test(val),
+    alphaNum: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff0-9\s]+$/.test(val),
+    noSpecialChars: (val) => /^([0-9]|[A-Z]|[a-z]|[α-ω]|[Α-Ω]|[,]|[.]|[-]|[(]|[)]|[?]|[!]|[;]|[:]|[\n]|[\r]|[ _]|[\u0370-\u03ff\u1f00-\u1fff])+$/.test(val),
+    name: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff\s'-]+$/.test(val),
+    tel: (val) => /^(?:\+|00)?[\d\s\-()]{8,20}$/.test(val.replace(/[\s\-()]/g, '')),
+    mobile: (val) => /^(?:\+|00)?[\d\s\-()]{8,20}$/.test(val.replace(/[\s\-()]/g, '')),
+    // telCY: (val) => /^(?:\+|00)?357[-\s]?(2|9)\d{7}$/.test(val.replace(/[\s\-()]/g, '')),
+    // telCY: (val) => /^(?:\+|00)?357?(2|9)\d{7}$/.test(val.replace(/[\s\-()]/g, '')),
+    telCY: (val) => {
+      const normalized = val.replace(/[\s\-()]/g, '');
+      const isValid = /^(?:\+357|00357)?(2|9)\d{7}$/.test(normalized);
+      return isValid;
+    },
+    // mobileCY: (val) => /^(?:\+|00)?357[-\s]?9\d{7}$/.test(val.replace(/[\s\-()]/g, '')),
+    mobileCY: (val) => {
+      const normalized = val.replace(/[\s\-()]/g, ''); // Remove spaces, hyphens, and parentheses
+      return /^(?:\+357|00357)?9\d{7}$/.test(normalized); // Match Cypriot mobile numbers
+  },
+    iban: (val) => {
+      const cleanedIBAN = val.replace(/[\s-]/g, '').toUpperCase(); // Remove spaces/hyphens and convert to uppercase
+      const regex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/;
+
+      // Validate structure and checksum
+      return regex.test(cleanedIBAN) && validateIBANChecksum(cleanedIBAN);
+    },
     email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
     date: (val) => !isNaN(Date.parse(val)),
     dateISO: (val) => {
       if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(val)) return false; // Basic format check
-  
-        const [year, month, day] = val.split("-").map(Number);
-        const date = new Date(year, month - 1, day); // JavaScript months are 0-based
-    
-        return (
-            date.getFullYear() === year &&
-            date.getMonth() === month - 1 &&
-            date.getDate() === day
-        );
+
+      const [year, month, day] = val.split("-").map(Number);
+      const date = new Date(year, month - 1, day); // JavaScript months are 0-based
+
+      return (
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
+      );
     },
     dateDMY: (val) => {
-      if  (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(val)) return false; // First check format
+      if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(val)) return false; // First check format
 
       const [day, month, year] = val.split('/').map(Number); // Convert to numbers
       const date = new Date(year, month - 1, day); // Month is zero-based in JS
 
       // Validate actual date parts
       return (
-          date.getFullYear() === year &&
-          date.getMonth() === month - 1 &&
-          date.getDate() === day
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day
       );
     },
     // Other validation rules
     length: (val, length) => val.length <= length,
     required: (val) => !(val === null || val === undefined || (typeof val === 'string' && val.trim() === "")),
     regCheck: (val, regex) => new RegExp(regex).test(val),
+    //Min and Max
+    minValue: (val, min) => {
+      const normalizedVal = normalizeNumber(val); // Normalize the input
+      if (isNaN(normalizedVal)) {
+        return false; // Return false if val cannot be converted to a number
+      }
+      return normalizedVal >= min;
+    },
+    maxValue: (val, max) => {
+      const normalizedVal = normalizeNumber(val); // Normalize the input
+      if (isNaN(normalizedVal)) {
+        return false; // Return false if val cannot be converted to a number
+      }
+      return normalizedVal <= max;
+    },
+    minValueDate: (val, minDate) => {
+      const valueDate = parseDate(val); // Parse the input date
+      const min = parseDate(minDate); // Parse the minimum date
+      if (isNaN(valueDate) || isNaN(min)) {
+        return false; // Return false if either date is invalid
+      }
+      return valueDate >= min;
+    },
+    maxValueDate: (val, maxDate) => {
+      const valueDate = parseDate(val); // Parse the input date
+      const max = parseDate(maxDate); // Parse the maximum date
+      if (isNaN(valueDate) || isNaN(max)) {
+        return false; // Return false if either date is invalid
+      }
+      return valueDate <= max;
+    },
+    minLength: (val, min) => val.length >= min
   };
 
   for (const rule of rules) {
@@ -71,8 +120,8 @@ function validateValue(value, rules) {
     // Extract rule parameters
     const { checkValue, message } = params;
 
-     // Handle "required" rules (check if value is not empty, null, or undefined)
-     if (check === "required") {
+    // Handle "required" rules (check if value is not empty, null, or undefined)
+    if (check === "required") {
       const isValid = validationRules.required(value);
       if (!isValid) {
         return message;
@@ -102,9 +151,96 @@ function validateValue(value, rules) {
         return message;
       }
     }
+
+    // Check for "minValue"
+    if (check === 'minValue' && !validationRules.minValue(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "maxValue"
+    if (check === 'maxValue' && !validationRules.maxValue(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "minValueDate"
+    if (check === 'minValueDate' && !validationRules.minValueDate(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "maxValueDate"
+    if (check === 'maxValueDate' && !validationRules.maxValueDate(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "minLength"
+    if (check === 'minLength' && !validationRules.minLength(value, checkValue)) {
+      return message;
+    }
+
   }
 
   return null;
+}
+
+// Helper function to validate IBAN
+function validateIBANChecksum(iban) {
+  // Move the first four characters to the end
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
+
+  // Replace letters with numbers (A=10, B=11, ..., Z=35)
+  const numericIBAN = rearranged.replace(/[A-Z]/g, (char) => char.charCodeAt(0) - 55);
+
+  // Perform modulo 97 operation
+  let remainder = numericIBAN;
+  while (remainder.length > 2) {
+    const chunk = remainder.slice(0, 9); // Process in chunks of up to 9 digits
+    remainder = (parseInt(chunk, 10) % 97) + remainder.slice(chunk.length);
+  }
+
+  return parseInt(remainder, 10) % 97 === 1;
+}
+
+// Helper function to normalize numbers
+function normalizeNumber(value) {
+  if (typeof value !== 'string') {
+    return NaN; // Ensure the input is a string
+  }
+  // Remove thousands separators (.)
+  const withoutThousandsSeparator = value.replace(/\./g, '');
+  // Replace the decimal separator (,) with a dot (.)
+  const normalizedValue = withoutThousandsSeparator.replace(',', '.');
+  return parseFloat(normalizedValue); // Convert to a number
+}
+
+
+function parseDate(value) {
+  // Check for ISO format (yyyy-mm-dd)
+  if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(value)) {
+    const [year, month, day] = value.split('-').map(Number);
+    const parsedDate = new Date(year, month - 1, day); // JavaScript months are 0-based
+    if (
+      parsedDate.getFullYear() === year &&
+      parsedDate.getMonth() === month - 1 &&
+      parsedDate.getDate() === day
+    ) {
+      return parsedDate;
+    }
+  }
+
+  // Check for DMY format (d/m/yyyy)
+  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(value)) {
+    const [day, month, year] = value.split('/').map(Number);
+    const parsedDate = new Date(year, month - 1, day); // JavaScript months are 0-based
+    if (
+      parsedDate.getFullYear() === year &&
+      parsedDate.getMonth() === month - 1 &&
+      parsedDate.getDate() === day
+    ) {
+      return parsedDate;
+    }
+  }
+
+  return NaN; // Return NaN if the format is invalid
 }
 
 /**
@@ -117,99 +253,99 @@ function validateValue(value, rules) {
 export function validateFormElements(elements, formData, pageUrl) {
   const validationErrors = {};
   elements.forEach(field => {
-      const inputElements = ["textInput", "textArea", "select", "radios", "checkboxes", "datePicker", "dateInput"];
-      //only validate input elements
-      if (inputElements.includes(field.element)) {
-        const fieldValue = (field.element === "dateInput")
-          ? [formData[`${field.params.name}_year`], 
-            formData[`${field.params.name}_month`], 
-            formData[`${field.params.name}_day`]]
-            .filter(Boolean) // Remove empty values
-            .join("-") // Join remaining parts
-          : formData[field.params.name] || ""; // Get submitted value
+    const inputElements = ["textInput", "textArea", "select", "radios", "checkboxes", "datePicker", "dateInput"];
+    //only validate input elements
+    if (inputElements.includes(field.element)) {
+      const fieldValue = (field.element === "dateInput")
+        ? [formData[`${field.params.name}_year`],
+        formData[`${field.params.name}_month`],
+        formData[`${field.params.name}_day`]]
+          .filter(Boolean) // Remove empty values
+          .join("-") // Join remaining parts
+        : formData[field.params.name] || ""; // Get submitted value
 
-        //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items
-        if (["checkboxes", "radios", "select"].includes(field.element) && fieldValue !== "") {
-          const valuesToCheck = Array.isArray(fieldValue) ? fieldValue : [fieldValue]; // Ensure it's always an array
-          const isMatch = valuesToCheck.every(value => 
-            field.params.items.some(item => item.value === value)
-          );
+      //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items
+      if (["checkboxes", "radios", "select"].includes(field.element) && fieldValue !== "") {
+        const valuesToCheck = Array.isArray(fieldValue) ? fieldValue : [fieldValue]; // Ensure it's always an array
+        const isMatch = valuesToCheck.every(value =>
+          field.params.items.some(item => item.value === value)
+        );
 
-          if (!isMatch) {
-            validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {
-              id: field.params.id, 
-              message: govcyResources.staticResources.text.valueNotOnList,
-              pageUrl: pageUrl || "", 
-            };
-          }
+        if (!isMatch) {
+          validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {
+            id: field.params.id,
+            message: govcyResources.staticResources.text.valueNotOnList,
+            pageUrl: pageUrl || "",
+          };
         }
-        
-        if (field.validations) {
-            // 🔍 Validate the field using all its validation rules
-            const errorMessage = validateValue(fieldValue, field.validations);
-               if (errorMessage) {
-                    if (!validationErrors[field.params.name]) {
-                        validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {};
+      }
+
+      if (field.validations) {
+        // 🔍 Validate the field using all its validation rules
+        const errorMessage = validateValue(fieldValue, field.validations);
+        if (errorMessage) {
+          if (!validationErrors[field.params.name]) {
+            validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {};
+          }
+          validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {
+            id: field.params.id,
+            message: errorMessage,
+            pageUrl: pageUrl || "",
+          };
+        }
+      }
+
+      // 🔹 Handle conditional fields (only validate them if the parent condition is met)
+      // Handle conditional elements inside radios
+      if (field.element === "radios" && field.params.items) {
+        field.params.items.forEach(item => {
+          if (item.conditionalElements && fieldValue === item.value) {
+            if (Array.isArray(item.conditionalElements)) {
+              item.conditionalElements.forEach(conditionalElement => {
+
+                const conditionalFieldValue = (conditionalElement.element === "dateInput")
+                  ? [formData[`${conditionalElement.params.name}_year`],
+                  formData[`${conditionalElement.params.name}_month`],
+                  formData[`${conditionalElement.params.name}_day`]]
+                    .filter(Boolean) // Remove empty values
+                    .join("-") // Join remaining parts
+                  : formData[conditionalElement.params.name] || ""; // Get submitted value
+
+                //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items`
+                if (["checkboxes", "radios", "select"].includes(conditionalElement.element) && conditionalFieldValue !== "") {
+                  const valuesToCheck = Array.isArray(conditionalFieldValue) ? conditionalFieldValue : [conditionalFieldValue]; // Ensure it's always an array
+                  const isMatch = valuesToCheck.every(value =>
+                    conditionalElement.params.items.some(item => item.value === value)
+                  );
+
+                  if (!isMatch) {
+                    validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {
+                      id: conditionalElement.params.id,
+                      message: govcyResources.staticResources.text.valueNotOnList,
+                      pageUrl: pageUrl || "",
+                    };
+                  }
+                }
+                //if conditional element has validations
+                if (conditionalElement.validations) {
+                  const errorMessage = validateValue(conditionalFieldValue, conditionalElement.validations);
+                  if (errorMessage) {
+                    if (!validationErrors[conditionalElement.params.name]) {
+                      validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {};
                     }
-                    validationErrors[(pageUrl ? pageUrl : "") + field.params.name] = {
-                      id: field.params.id, 
+                    validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {
+                      id: conditionalElement.params.id,
                       message: errorMessage,
                       pageUrl: pageUrl || "",
                     };
+                  }
                 }
-        } 
-    
-        // 🔹 Handle conditional fields (only validate them if the parent condition is met)
-        // Handle conditional elements inside radios
-        if (field.element === "radios" && field.params.items) {
-            field.params.items.forEach(item => {
-            if (item.conditionalElements  && fieldValue === item.value) {
-                if (Array.isArray(item.conditionalElements)){
-                    item.conditionalElements.forEach(conditionalElement => {
-
-                      const conditionalFieldValue = (conditionalElement.element === "dateInput")
-                        ? [formData[`${conditionalElement.params.name}_year`], 
-                          formData[`${conditionalElement.params.name}_month`], 
-                          formData[`${conditionalElement.params.name}_day`]]
-                          .filter(Boolean) // Remove empty values
-                          .join("-") // Join remaining parts
-                        : formData[conditionalElement.params.name] || ""; // Get submitted value
-
-                        //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items`
-                        if (["checkboxes", "radios", "select"].includes(conditionalElement.element) && conditionalFieldValue !== "") {
-                          const valuesToCheck = Array.isArray(conditionalFieldValue) ? conditionalFieldValue : [conditionalFieldValue]; // Ensure it's always an array
-                          const isMatch = valuesToCheck.every(value => 
-                            conditionalElement.params.items.some(item => item.value === value)
-                          );
-
-                          if (!isMatch) {
-                            validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {
-                              id: conditionalElement.params.id, 
-                              message: govcyResources.staticResources.text.valueNotOnList,
-                              pageUrl: pageUrl || "",
-                            };
-                          }
-                        }
-                        //if conditional element has validations
-                        if (conditionalElement.validations) {
-                            const errorMessage = validateValue(conditionalFieldValue, conditionalElement.validations);
-                            if (errorMessage) {
-                                if (!validationErrors[conditionalElement.params.name]) {
-                                    validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {};
-                                }
-                                validationErrors[(pageUrl ? pageUrl : "") + conditionalElement.params.name] = {
-                                  id: conditionalElement.params.id, 
-                                  message: errorMessage,
-                                  pageUrl: pageUrl || "",
-                                };
-                            }
-                        }
-                    });
-                }
+              });
             }
-            });
-        }
+          }
+        });
       }
+    }
   });
   return validationErrors;
 }
