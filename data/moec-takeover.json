@@ -1,0 +1,1994 @@
+
+{
+    "site": {
+      "id": "moec-takeover",
+      "lang": "el",
+      "languages": [
+        {
+          "code": "el",
+          "label": "EL",
+          "alt": "Ελληνική γλώσσα",
+          "href": "?lang=el"
+        },
+        {
+          "code": "en",
+          "label": "EN",
+          "alt": "English language",
+          "href": "?lang=en"
+        }
+      ],
+      "footerLinks": [
+        {
+          "label": {
+            "el": "Δήλωση απορρήτου",
+            "en": "Privacy statement",
+            "tr": ""
+          },
+          "href": "#"
+        },
+        {
+          "label": {
+            "el": "Cookies",
+            "en": "Cookies",
+            "tr": ""
+          },
+          "href": "#"
+        },
+        {
+          "label": {
+            "el": "Προσβασιμότητα",
+            "en": "Accessibility",
+            "tr": ""
+          },
+          "href": "#"
+        },
+        {
+          "label": {
+            "el": "Βοηθήστε μας να βελτιώσουμε αυτή την υπηρεσία",
+            "en": "Help us improve this service",
+            "tr": ""
+          },
+          "href": "#"
+        }
+      ],
+      "menu": {
+        "el": "Μενού",
+        "en": "Menu",
+        "tr": "Menu"
+      },
+      "title": {
+        "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
+        "en": "Certificate of teachers takeover",
+        "tr": ""
+      },
+      "headerTitle": {
+        "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
+        "en": "Certificate of teachers takeover",
+        "tr": ""
+      },
+      "description": {
+        "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
+        "en": "Certificate of teachers takeover",
+        "tr": ""
+      },
+      "url": "https://gov.cy",
+      "isTesting": true,
+      "cdn": {
+        "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
+        "cssIntegrity": "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
+        "jsIntegrity": "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
+      }
+    },
+    "pages": [
+      {
+        "pageData": {
+          "url": "success",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "panel",
+                        "params": {
+                          "id": "panel",
+                          "header": {
+                            "el": "Η ανάληψη εκπαιδευτικού έχει υποβληθεί",
+                            "en": "The educator’s assumption of duties has been submitted",
+                            "tr": ""
+                          },
+                          "body": {
+                            "el": "",
+                            "en": "",
+                            "tr": ""
+                          },
+                          "referenceNumber": {
+                            "el": "",
+                            "en": "",
+                            "tr": ""
+                          },
+                          "elements": [
+                            {
+                              "element": "htmlElement",
+                              "params": {
+                                "id": "Body",
+                                "text": {
+                                  "el": "<p>Αριθμός αναφοράς [3108618]</p>",
+                                  "en": "<p>Reference number [3108618]</p>",
+                                  "tr": ""
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<p>Τα στοιχεία ανάληψης που δηλώσατε έχουν ταυτοποιηθεί και ο εκπαιδευτικός έχει καταχωρηθεί.</p><p>Σας έχουμε στείλει αντίγραφο της ανάληψης και με email.</p><p>Καταχώριση νέου εκπαιδευτικού από την <a href=\"../index\">αρχική οθόνη</a>.</p>",
+                            "en": "<p>The assumption of duties details you provided have been verified, and the educator has been registered.</p><p>We have also sent you a copy of the confirmation via email.</p><p>Register a new educator from the <a href=\"../index\">home screen</a>.</p>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "review",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Έλεγχος και υποβολή στοιχείων εκπαιδευτικού ",
+                            "en": "Review and submit educator Information"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "info",
+                          "text": {
+                            "el": "<p>Ελέγξετε ότι οι πιο κάτω πληροφορίες είναι σωστές</p>",
+                            "en": "<p>Please check that the following information is correct</p>"
+                          }
+                        }
+                      },
+                      {
+                        "element": "summaryList",
+                        "params": {
+                          "id": "table",
+                          "items": [
+                            {
+                              "id": "table_teacher",
+                              "key": {
+                                "el": "Πληροφορίες εκπαιδευτικού",
+                                "en": "Educator Information",
+                                "tr": ""
+                              },
+                              "value": [
+                                {
+                                  "element": "summaryList",
+                                  "params": {
+                                    "id": "table_date-select_summaryList",
+                                    "items": [
+                                      {
+                                        "id": "table_date-select_identification",
+                                        "key": {
+                                          "el": "Είδος ταυτοποίησης",
+                                          "en": "Identification type",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[Α.Π.Τ. 112233]",
+                                                "en": "[Α.Π.Τ. 112233]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_aka",
+                                        "key": {
+                                          "el": "Αριθμός κοινωνικών ασφαλίσεων",
+                                          "en": "Social insurance number",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[112233]",
+                                                "en": "[112233]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      }
+                                    ]
+                                  }
+                                }
+                              ],
+                              "actions": [
+                                {
+                                  "text": {
+                                    "el": "Αλλαγή",
+                                    "en": "Change",
+                                    "tr": ""
+                                  },
+                                  "id": "CHANGE",
+                                  "href": "../applicant"
+                                }
+                              ]
+                            },
+                            {
+                              "id": "table_diorismos",
+                              "key": {
+                                "el": "Διορισμός εκπαιδευτικού",
+                                "en": "Teacher Appointment",
+                                "tr": ""
+                              },
+                              "value": [
+                                {
+                                  "element": "summaryList",
+                                  "params": {
+                                    "id": "table_date-select_summaryList",
+                                    "items": [
+                                      {
+                                        "id": "table_date-select_fileno",
+                                        "key": {
+                                          "el": "Αριθμός φακέλου",
+                                          "en": "",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[ΠΜΠ 123456]",
+                                                "en": "",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_eidikotita",
+                                        "key": {
+                                          "el": "Ειδικότητα",
+                                          "en": "Specialty",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[Καθηγητής]",
+                                                "en": "[Καθηγητής]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_program",
+                                        "key": {
+                                          "el": "Πρόγραμμα",
+                                          "en": "Program",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[ΔΡΑΣΕ]",
+                                                "en": "[ΔΡΑΣΕ]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      }
+                                    ]
+                                  }
+                                }
+                              ],
+                              "actions": [
+                                {
+                                  "text": {
+                                    "el": "Αλλαγή",
+                                    "en": "Change",
+                                    "tr": ""
+                                  },
+                                  "id": "CHANGE",
+                                  "href": "review.table.diorismos.CHANGE_URL"
+                                }
+                              ]
+                            },
+                            {
+                              "id": "table_date-select",
+                              "key": {
+                                "el": "Πότε ανάλαβε;",
+                                "en": "When did he/she assume duties?",
+                                "tr": ""
+                              },
+                              "value": [
+                                {
+                                  "element": "summaryList",
+                                  "params": {
+                                    "id": "table_date-select_summaryList",
+                                    "items": [
+                                      {
+                                        "id": "table_date-select_date_start",
+                                        "key": {
+                                          "el": "Ημερομηνία ανάληψης",
+                                          "en": "Date of assumption",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[2/9/2025]",
+                                                "en": "[2/9/2025]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_date_contract",
+                                        "key": {
+                                          "el": "Ημερομηνία συμβολαίου",
+                                          "en": "Contract Date",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[2/9/2025]",
+                                                "en": "[2/9/2025]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_reason",
+                                        "key": {
+                                          "el": "Αιτιολόγηση καθυστέρησης",
+                                          "en": "",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "[Ανάλαβε κανονικά]",
+                                                "en": "",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      },
+                                      {
+                                        "id": "table_date-select_date_reason",
+                                        "key": {
+                                          "el": "",
+                                          "en": "Justification for delay",
+                                          "tr": ""
+                                        },
+                                        "value": [
+                                          {
+                                            "element": "htmlElement",
+                                            "params": {
+                                              "text": {
+                                                "el": "",
+                                                "en": "[Assumed duties as normal]",
+                                                "tr": ""
+                                              }
+                                            },
+                                            "id": "Value"
+                                          }
+                                        ],
+                                        "actions": []
+                                      }
+                                    ]
+                                  }
+                                }
+                              ],
+                              "actions": [
+                                {
+                                  "text": {
+                                    "el": "Αλλαγή",
+                                    "en": "Change",
+                                    "tr": ""
+                                  },
+                                  "id": "CHANGE",
+                                  "href": "../takeover"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "element": "button",
+                        "params": {
+                          "id": "submit",
+                          "variant": "success",
+                          "text": {
+                            "el": "Υποβολή",
+                            "en": "Submit"
+                          },
+                          "prototypeNavigate": "../success"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "index",
+          "title": {
+            "el": "Στοιχεία του  εκπαιδευτικού",
+            "en": "Educator's details",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Ποιά είναι τα στοιχεία του  εκπαιδευτικού;",
+                            "en": "What are the educator's details?"
+                          }
+                        }
+                      },
+                      {
+                        "element": "radios",
+                        "params": {
+                          "id": "id_select",
+                          "name": "id_select",
+                          "legend": {
+                            "el": "Ταυτοποίηση",
+                            "en": "Identification"
+                          },
+                          "items": [
+                            {
+                              "value": "id",
+                              "text": {
+                                "el": "Ταυτότητα",
+                                "en": "ID Card",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "id_number",
+                                    "name": "id_number",
+                                    "label": {
+                                      "el": "Εισαγάγετε αριθμό ταυτότητας",
+                                      "en": "Enter ID number"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "Κυπριακή",
+                                      "en": "Cypriot"
+                                    },
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε ταυτότητα",
+                                          "en": "Enter id number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "8",
+                                        "message": {
+                                          "el": "Εισαγάγετε έγκυρο αριθμό ταυτότητας",
+                                          "en": "Enter a valid ID number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "value": "arc",
+                              "text": {
+                                "el": "Δελτίο Εγγραφής Αλλοδαπού (ARC)",
+                                "en": "Alien Registration Certificate (ARC)",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "arc_number",
+                                    "name": "arc_number",
+                                    "label": {
+                                      "el": "Εισαγάγετε αριθμό ARC",
+                                      "en": "Enter ARC number"
+                                    },
+                                    "isPageHeading": false,
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε αριθμό ARC",
+                                          "en": "Enter ARC number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "10",
+                                        "message": {
+                                          "el": "Εισαγάγετε έγκυρο αριθμό ARC όπως 51234567. Ξεκινά με 5",
+                                          "en": "Enter a valid ARC number like 51234567. It starts with 5",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "isPageHeading": false,
+                          "hint": {
+                            "el": "Επιλέξτε τρόπο ταυτοποίησης",
+                            "en": "Select identification method",
+                            "tr": ""
+                          }
+                        },
+                        "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Επιλέξετε τρόπο ταυτοποίησης",
+                                "en": "Choose identification type",
+                                "tr": ""
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "element": "textInput",
+                        "params": {
+                          "id": "aka",
+                          "name": "aka",
+                          "label": {
+                            "el": "Αριθμός κοινωνικών ασφαλίσεων",
+                            "en": "Social Insurance Number"
+                          },
+                          "isPageHeading": false,
+                          "fixedWidth": "10",
+                          "type": "text"
+                        },
+                        "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Εισαγάγετε τον αριθμό κοινωνικών ασφαλίσεων σας",
+                                "en": "Enter your social insurancve number",
+                                "tr": ""
+                              }
+                            }
+                          },
+                          {
+                            "check": "valid",
+                            "params": {
+                              "checkValue": "numeric",
+                              "message": {
+                                "el": "Ο αριθμός κοινωνικών ασφαλίσεων πρέπει να αποτελείται από αριθμητικά ψηφία (πχ 123456)",
+                                "en": "The social security number must consist of numeric digits (e.g. 123456)",
+                                "tr": ""
+                              }
+                            }
+                          },
+                          {
+                            "check": "length",
+                            "params": {
+                              "checkValue": "7",
+                              "message": {
+                                "el": "Ο αριθμός κοινωνικών ασφαλίσεων δεν μπορεί πρέπει να υπερβαίνει τα 7 αριθμητικά ψηφία",
+                                "en": "The social security number may not exceed 7 digits",
+                                "tr": ""
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "element": "button",
+                        "params": {
+                          "id": "continue",
+                          "variant": "primary",
+                          "text": {
+                            "el": "Συνέχεια",
+                            "en": "Continue"
+                          },
+                          "prototypeNavigate": "../appointment"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "appointment",
+          "title": {
+            "el": "Διορισμός εκπαιδευτικού",
+            "en": "Teachers appointment",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "radios",
+                        "params": {
+                          "id": "diorismos",
+                          "name": "diorismos",
+                          "legend": {
+                            "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+                            "en": "What type of appointment does the teacher have?"
+                          },
+                          "items": [
+                            {
+                              "value": "monimos",
+                              "text": {
+                                "el": "Μόνιμος επί δοκιμασία",
+                                "en": "Permanent on probation",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "fileno_monimos",
+                                    "name": "fileno_monimos",
+                                    "label": {
+                                      "el": "Αριθμός φακέλου (ΠΜΠ)",
+                                      "en": "File Number"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "Από Επιτροπή Εκπαιδευτικής Υπηρεσίας (ΕΕΥ)",
+                                      "en": "From the Education Service Commission (ESC)"
+                                    },
+                                    "fixedWidth": "10",
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε τον αριθμό φακέλου",
+                                          "en": "Enter your file number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "valid",
+                                      "params": {
+                                        "checkValue": "numeric",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου σας πρέπει να αποτελείται από αριθμητικά ψηφία (πχ 123456)",
+                                          "en": "Your file number must consist of numeric digits (e.g. 123456)",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "7",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου δεν μπορεί πρέπει να υπερβαίνει τα 7 αριθμητικά ψηφία",
+                                          "en": "Your file number may not exceed 7 digits",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "element": "select",
+                                  "params": {
+                                    "id": "eidikotita_monimos",
+                                    "name": "eidikotita_monimos",
+                                    "label": {
+                                      "el": "Ειδικότητα",
+                                      "en": "Specialty"
+                                    },
+                                    "items": [
+                                      {
+                                        "value": "",
+                                        "text": {
+                                          "el": "",
+                                          "en": "",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "1",
+                                        "text": {
+                                          "el": "Δάσκαλος",
+                                          "en": "Elementary teacher",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "2",
+                                        "text": {
+                                          "el": "Καθηγητής",
+                                          "en": "Professor",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "3",
+                                        "text": {
+                                          "el": "Ειδικός εκπαιδευτικός",
+                                          "en": "Ειδικός εκπαιδευτικός",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "4",
+                                        "text": {
+                                          "el": "Νηπιαγωγός",
+                                          "en": "Νηπιαγωγός",
+                                          "tr": ""
+                                        }
+                                      }
+                                    ],
+                                    "isPageHeading": false
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε την ειδικότητα του εκπαιδευτικού",
+                                          "en": "Enter the specialty of the teacher",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "value": "sumvasiouxos",
+                              "text": {
+                                "el": "Συμβασιούχος",
+                                "en": "Contract",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "fileno_sumvasiouxos",
+                                    "name": "fileno_sumvasiouxos",
+                                    "label": {
+                                      "el": "Αριθμός φακέλου (ΠΜΠ)",
+                                      "en": "File Number"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "Από Επιτροπή Εκπαιδευτικής Υπηρεσίας (ΕΕΥ)",
+                                      "en": "From the Education Service Commission (ESC)"
+                                    },
+                                    "fixedWidth": "10",
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε τον αριθμό φακέλου",
+                                          "en": "Enter your file number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "valid",
+                                      "params": {
+                                        "checkValue": "numeric",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου σας πρέπει να αποτελείται από αριθμητικά ψηφία (πχ 123456)",
+                                          "en": "Your file number must consist of numeric digits (e.g. 123456)",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "7",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου δεν μπορεί πρέπει να υπερβαίνει τα 7 αριθμητικά ψηφία",
+                                          "en": "Your file number may not exceed 7 digits",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "element": "select",
+                                  "params": {
+                                    "id": "eidikotita_sumvasiouxos",
+                                    "name": "eidikotita_sumvasiouxos",
+                                    "label": {
+                                      "el": "Ειδικότητα",
+                                      "en": "Specialty"
+                                    },
+                                    "items": [
+                                      {
+                                        "value": "",
+                                        "text": {
+                                          "el": "",
+                                          "en": "",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "1",
+                                        "text": {
+                                          "el": "Δάσκαλος",
+                                          "en": "Elementary teacher",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "2",
+                                        "text": {
+                                          "el": "Καθηγητής",
+                                          "en": "Professor",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "3",
+                                        "text": {
+                                          "el": "Ειδικός εκπαιδευτικός",
+                                          "en": "Ειδικός εκπαιδευτικός",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "4",
+                                        "text": {
+                                          "el": "Νηπιαγωγός",
+                                          "en": "Νηπιαγωγός",
+                                          "tr": ""
+                                        }
+                                      }
+                                    ],
+                                    "isPageHeading": false
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε την ειδικότητα του εκπαιδευτικού",
+                                          "en": "Enter the specialty of the teacher",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "value": "aoristou",
+                              "text": {
+                                "el": "Εργοδοτούμενος αορίστου χρόνου (ΕΑΧ)",
+                                "en": "Indefinite-term employee",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "fileno_aoristou",
+                                    "name": "fileno_aoristou",
+                                    "label": {
+                                      "el": "Αριθμός φακέλου (ΠΜΠ)",
+                                      "en": "File Number"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "Από Επιτροπή Εκπαιδευτικής Υπηρεσίας (ΕΕΥ)",
+                                      "en": "From the Education Service Commission (ESC)"
+                                    },
+                                    "fixedWidth": "10",
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε τον αριθμό φακέλου",
+                                          "en": "Enter your file number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "valid",
+                                      "params": {
+                                        "checkValue": "numeric",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου σας πρέπει να αποτελείται από αριθμητικά ψηφία (πχ 123456)",
+                                          "en": "Your file number must consist of numeric digits (e.g. 123456)",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "7",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου δεν μπορεί πρέπει να υπερβαίνει τα 7 αριθμητικά ψηφία",
+                                          "en": "Your file number may not exceed 7 digits",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "element": "select",
+                                  "params": {
+                                    "id": "eidikotita_aoristou",
+                                    "name": "eidikotita_aoristou",
+                                    "label": {
+                                      "el": "Ειδικότητα",
+                                      "en": "Specialty"
+                                    },
+                                    "items": [
+                                      {
+                                        "value": "",
+                                        "text": {
+                                          "el": "",
+                                          "en": "",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "1",
+                                        "text": {
+                                          "el": "Δάσκαλος",
+                                          "en": "Elementary teacher",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "2",
+                                        "text": {
+                                          "el": "Καθηγητής",
+                                          "en": "Professor",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "3",
+                                        "text": {
+                                          "el": "Ειδικός εκπαιδευτικός",
+                                          "en": "Ειδικός εκπαιδευτικός",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "4",
+                                        "text": {
+                                          "el": "Νηπιαγωγός",
+                                          "en": "Νηπιαγωγός",
+                                          "tr": ""
+                                        }
+                                      }
+                                    ],
+                                    "isPageHeading": false
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε την ειδικότητα του εκπαιδευτικού",
+                                          "en": "Enter the specialty of the teacher",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "value": "orismenou",
+                              "text": {
+                                "el": "Εργοδοτούμενος ορισμένου χρόνου (ΕΟΧ)",
+                                "en": "Fixed-term employee",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "select",
+                                  "params": {
+                                    "id": "program",
+                                    "name": "program",
+                                    "label": {
+                                      "el": "Πρόγραμμα",
+                                      "en": "Program"
+                                    },
+                                    "items": [
+                                      {
+                                        "value": "",
+                                        "text": {
+                                          "el": "",
+                                          "en": "",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "1",
+                                        "text": {
+                                          "el": "ΠΟΣ",
+                                          "en": "ΠΟΣ",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "2",
+                                        "text": {
+                                          "el": "ΕΟΣ",
+                                          "en": "ΕΟΣ",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "3",
+                                        "text": {
+                                          "el": "ΚΙΕ",
+                                          "en": "ΚΙΕ",
+                                          "tr": ""
+                                        }
+                                      },
+                                      {
+                                        "value": "4",
+                                        "text": {
+                                          "el": "ΔΡΑΣΕ",
+                                          "en": "ΔΡΑΣΕ",
+                                          "tr": ""
+                                        }
+                                      }
+                                    ],
+                                    "isPageHeading": false
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε το πρόγραμμα στο οποίο συμμετέχει ο εκπαιδευτικός",
+                                          "en": "Enter the program in which the teacher is participating",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "element": "textInput",
+                                  "params": {
+                                    "id": "fileno_orismenou",
+                                    "name": "fileno_orismenou",
+                                    "label": {
+                                      "el": "Αριθμός φακέλου (ΠΜΠ) (Προαιρετικό)",
+                                      "en": "File Number"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "Από Επιτροπή Εκπαιδευτικής Υπηρεσίας (ΕΕΥ)",
+                                      "en": "From the Education Service Commission (ESC)"
+                                    },
+                                    "fixedWidth": "10",
+                                    "type": "text"
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε τον αριθμό φακέλου",
+                                          "en": "Enter your file number",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "valid",
+                                      "params": {
+                                        "checkValue": "numeric",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου σας πρέπει να αποτελείται από αριθμητικά ψηφία (πχ 123456)",
+                                          "en": "Your file number must consist of numeric digits (e.g. 123456)",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "length",
+                                      "params": {
+                                        "checkValue": "7",
+                                        "message": {
+                                          "el": "Ο αριθμός φακέλου δεν μπορεί πρέπει να υπερβαίνει τα 7 αριθμητικά ψηφία",
+                                          "en": "Your file number may not exceed 7 digits",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "isPageHeading": true,
+                          "hint": {
+                            "el": "Επιλέξτε είδος διορισμού",
+                            "en": "Select appointment type",
+                            "tr": ""
+                          }
+                        },
+                        "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Επιλέξετε είδος διορισμού",
+                                "en": "Select type of appointment",
+                                "tr": ""
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "element": "button",
+                        "params": {
+                          "id": "continue",
+                          "variant": "primary",
+                          "text": {
+                            "el": "Συνέχεια",
+                            "en": "Continue"
+                          },
+                          "prototypeNavigate": "../takeover"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "takeover",
+          "title": {
+            "el": "Ημερομηνία ανάληψης",
+            "en": "Takeover date",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Πότε ανάλαβε ο εκπαιδευτικός;",
+                            "en": "When did the teacher assume their duties?"
+                          }
+                        }
+                      },
+                      {
+                        "element": "datePicker",
+                        "params": {
+                          "id": "date_start",
+                          "name": "date_start",
+                          "label": {
+                            "el": "Ημερομηνία ανάληψης",
+                            "en": "Start Date"
+                          },
+                          "isPageHeading": false
+                        },
+                        "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Επιλέξετε ημερομηνία ανάληψης καθηκόντων",
+                                "en": "Select date of taking up",
+                                "tr": ""
+                              }
+                            }
+                          },
+                          {
+                            "check": "valid",
+                            "params": {
+                              "checkValue": "dateDMY",
+                              "message": {
+                                "el": "Επιλέξετε έγκυρη ημερομηνία ανάληψης καθηκόντων",
+                                "en": "Select valid date of taking up",
+                                "tr": ""
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "element": "radios",
+                        "params": {
+                          "id": "date_on_contract",
+                          "name": "date_on_contract",
+                          "legend": {
+                            "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+                            "en": "Is this date the same as the contract date?"
+                          },
+                          "items": [
+                            {
+                              "value": "date_same",
+                              "text": {
+                                "el": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
+                                "en": "Yes, it is the same as the contract date",
+                                "tr": ""
+                              }
+                            },
+                            {
+                              "value": "date_other",
+                              "text": {
+                                "el": "Όχι, αυτή είναι διαφορετική",
+                                "en": "No, this is different",
+                                "tr": ""
+                              },
+                              "conditionalElements": [
+                                {
+                                  "element": "datePicker",
+                                  "params": {
+                                    "id": "date_contract",
+                                    "name": "date_contract",
+                                    "label": {
+                                      "el": "Ημερομηνία συμβολαίου",
+                                      "en": "Contract Date"
+                                    },
+                                    "isPageHeading": false
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Επιλέξετε ημερομηνία συμβολαίου",
+                                          "en": "Select date of contract",
+                                          "tr": ""
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "check": "valid",
+                                      "params": {
+                                        "checkValue": "dateDMY",
+                                        "message": {
+                                          "el": "Επιλέξετε έγκυρη ημερομηνία συμβολαίου",
+                                          "en": "Select valid date of contract",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "element": "textArea",
+                                  "params": {
+                                    "id": "reason",
+                                    "name": "reason",
+                                    "rows": 7,
+                                    "label": {
+                                      "el": "Αιτιολόγηση καθυστέρησης στην ανάληψη καθηκόντων",
+                                      "en": "Reason for delay in assuming duties"
+                                    },
+                                    "isPageHeading": false,
+                                    "hint": {
+                                      "el": "(πχ Άδεια ασθενείας κτλ)",
+                                      "en": "(e.g., Sick leave, etc.)"
+                                    }
+                                  },
+                                  "validations": [
+                                    {
+                                      "check": "required",
+                                      "params": {
+                                        "checkValue": "",
+                                        "message": {
+                                          "el": "Εισαγάγετε τον λόγο που ανάλαβε καθήκοντα σε άλλη μέρα από αυτή του συμβολαίου",
+                                          "en": "Enter the reason for taking up duties on a day other than the day of the contract",
+                                          "tr": ""
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "isPageHeading": false
+                        },
+                        "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Δηλώστε αν η ημερομηνία ανάληψης είναι η ίδια με αυτή του συμβολαίου;",
+                                "en": "Indicate if the start date is the same as the contract date?",
+                                "tr": ""
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "element": "button",
+                        "params": {
+                          "id": "continue",
+                          "variant": "primary",
+                          "text": {
+                            "el": "Συνέχεια",
+                            "en": "Continue"
+                          },
+                          "prototypeNavigate": "../review"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "accessibility-statement",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Δήλωση προσβασιμότητας ",
+                            "en": "Accessibility statement"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<h2>Κατάσταση συμμόρφωσης</h2><p>Οι <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Οδηγίες Προσβασιμότητας Περιεχομένου</a> (WCAG) καθορίζουν απαιτήσεις για σχεδιαστές και προγραμματιστές για τη βελτίωση της προσβασιμότητας για τα άτομα με αναπηρίες. Καθορίζουν τρία επίπεδα συμμόρφωσης: Επίπεδο A, Επίπεδο AA, και Επίπεδο AAA.</p><p>Η SERVICE_NAME συμμορφώνεται πλήρως με τις Οδηγίες του WCAG 2.1 επίπεδο AA.</p><h2>Προσέγγιση αξιολόγησης</h2><p>Η TEAM_NAME αξιολόγησε την προσβασιμότητα της υπηρεσίας χρησιμοποιώντας τα εξής εργαλεία:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Συμβατότητα με τους φυλλομετρητές</h2><p>Η υπηρεσία είναι συμβατή με τους πιο κάτω φυλλομετρητές:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Περιορισμοί και εναλλακτικές λύσεις</h2><p>Παρά τις προσπάθειές μας να διασφαλίσουμε την προσβασιμότητα της υπηρεσίας, πιθανόν να υπάρχουν ορισμένοι περιορισμοί. Ακολουθεί περιγραφή γνωστών περιορισμών και πιθανών λύσεων. Επικοινωνήστε μαζί μας εάν παρατηρήσετε κάποιο πρόβλημα που δεν αναφέρεται πιο κάτω.</p><p>Τα tabs δεν λειτουργούν καλά με πλοήγηση πληκτρολoγίου. Συγκεκριμένα, δεν εμφανίζει την κατάσταση εστίασης. Αυτό είναι ένα γνωστό ζήτημα του συστήματος σχεδιασμού gov.cy και θα αντιμετωπιστεί στην προσεχή ενημέρωση.</p><p>Για να λειτουργεί κανονικά η υπηρεσία απαιτείται JavaScript.</p><h2>Ανατροφοδότηση και παράπονα</h2><p>Τα σχόλιά σας σχετικά με την προσβασιμότητα της υπηρεσίας είναι ευπρόσδεκτα. Παρακαλούμε να μας ενημερώσετε εάν συναντήσετε εμπόδια προσβασιμότητας:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:test@email.com\" target=\"_blank\">test@email.com</a></li></ul><p>Προσπαθούμε να ανταποκριθούμε στα σχόλια εντός 30 εργάσιμων ημερών.</p><p>Εάν δεν απαντήσουμε ή δεν επιλύσουμε το πρόβλημα, μπορείτε να στείλετε ένα παράπονο στο:</p><ul class=\"govcy-list-unstyled\"><li>Υφυπουργείο Έρευνας, Καινοτομίας και Ψηφιακής Πολιτικής<br/>Λεωφόρος Λεμεσού 134<br/>2015 Στρόβολος, Λευκωσία<br/>Κύπρος</li></ul><p>Ή μπορείτε να στείλετε email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>Εάν δεν σας ικανοποιήσει η απάντηση, μπορείτε να <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_gr/complaintformombudsman_gr?OpenForm\" target=\"_blank\">υποβάλετε παράπονο στο Γραφείο Επιτρόπου Διοικήσεως και Προστασίας των Ανθρωπίνων Δικαιωμάτων</a>.</p><h2>Ημερομηνία</h2><p>Η δήλωση αυτή δημιουργήθηκε στις TEST_DATE.</p>",
+                            "en": "<h2>Conformance status</h2><p>The <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Web Content Accessibility Guidelines</a> (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p><p>The SERVICE_NAME is fully conformant with WCAG 2.1 level AA.</p><h2>Assessment approach</h2><p>The TEAM_NAME assessed the accessibility of the service using:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Compatibility with browsers</h2><p>The service is designed to be compatible with the following browsers:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Limitations and alternatives</h2><p>Despite our best efforts to ensure the accessibility of the service, there may be some limitations. Below is a description of known limitations, and potential solutions. Please contact us if you observe an issue not listed below.</p><p>The tabs do not work well with keyboard navigation. Specifically tabs do not display the focus state. This is a known issue of the gov.cy design system and will be addressed in its upcoming update.</p><p>Javascript is required for the service to function properly.</p><h2>Feedback and complaints</h2><p>We welcome your feedback on the accessibility of the service. Please let us know if you encounter accessibility barriers when using it:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:test@email.com\" target=\"_blank\">test@email.com</a></li></ul><p>We try to respond to feedback within 30 working days.</p><p>If we do not reply, or do not fix the issue, you can send a complaint to:</p><ul class=\"govcy-list-unstyled\"><li>Deputy Ministry of Research, Innovation, and Digital Policy<br/>134 Lemesos Avenue\r</li><li>2015 Strovolos, Lefkosia\r</li><li>Cyprus</li></ul><p>Or you can email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>If you are not satisfied with the response, you can <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_en/complaintformombudsman_en?OpenForm\" target=\"_blank\">send a complaint to the Commissioner for Administration and the Protection of Human Rights (Ombudsman)</a>.</p><h2>Date</h2><p>This statement was created on TEST_DATE.</p>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "privacy-statement",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Πολιτική απορρήτου – οι προσωπικές σας πληροφορίες",
+                            "en": "Privacy policy – your personal information"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς SERVICE_OWNER χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας για έκδοση εγγράφου.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>διεύθυνση επικοινωνίας</li><li>διεύθυνση email</li><li>αριθμός τηλεφώνου</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>ημερομηνία γέννησης, φύλο, εθνικότητα και κοινότητα στην οποία ανήκετε\r</li><li>διεύθυνση επικοινωνίας και email\r(αν ισχύει)</li><li>αριθμός τηλεφώνου\r(αν ισχύει)</li><li>ημερομηνία θανάτου\r(αν ισχύει)</li><li>ονοματεπώνυμο, πατρικό επώνυμο, υπηκοότητα, τόπος και ημερομηνία γέννησης, φύλο, σχέση με αιτητή και ημερομηνία θανάτου για: παιδιά, γονείς, παππούδες, γιαγιάδες και εάν ο αιτητής είναι άρρενας, εγγόνια (αν ισχύει).</li></ul><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, συλλέγουμε επίσης αυτές τις πληροφορίες:</p><ul><li>ο βαθμός ικανοποίησής σας με τη χρήση της υπηρεσίας</li><li>η γνώμη και οι εισηγήσεις σας για το πώς μπορούμε να βελτιώσουμε την υπηρεσία.</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την έκδοση του εγγράφου που επιλέξατε. Στην περίπτωση αίτησης, οι εξεταστές μας τις χρησιμοποιούν για να επεξεργαστούν την αίτησή σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να εκδώόσουμε το έγγραφο που επιλέξατε ή να επεξεργαστούμε την αίτησή σας.</p><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, θα τα χρησιμοποιήσουμε για να αξιολογήσουμε πώς αισθάνονται οι χρήστες για την εμπειρία τους από τη χρήση της υπηρεσίας. Αυτό γίνεται για να βρούμε και να προτεραιοποιήσουμε τομείς βελτίωσης και να πάρουμε ιδέες για νέες εξελίξεις.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
+                            "en": "<p>This privacy policy explains how SERVICE_OWNER uses information about you, in order to process your application to issue a document.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>postal address</li><li>email address</li><li>phone number</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>date of birth, gender, nationality and community where you belong\r</li><li>postal and email address\r(if it applies)\r</li><li>phone number (if it applies)\r</li><li>date of death (if it applies)</li><li>full name, paternal surname, citizenship, place and date of birth, gender, relation to applicant and date of death for: children, parents, grandparents, and if the applicant is male, grandchildren (if it applies).</li></ul><p>If you leave feedback in Help us improve this service, we also collect this information:</p><ul><li>the degree of your satisfaction while using the service\r</li><li>your opinion and suggestions on how we could improve the service.</li></ul><h2>Why we use your information</h2><p>We collect and use this information to issue the document you selected. In case of an application, our examiners use it to process your application.</p><p>Without access to this information, we cannot issue the document you selected or process your application.</p><p>If you leave feedback in Help us improve this service, we will use it to evaluate how users feel about their experience using the service. This is so that we can identify and prioritize areas for improvement, and get ideas for new developments.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "cookie-policy",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Cookies",
+                            "en": "Cookies"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions_top",
+                          "text": {
+                            "el": "<p>Η υπηρεσία SERVICE_NAME (SERVICE_URL) χρησιμοποιεί μόνο cookies που είναι απολύτως απαραίτητα για τη σωστή λειτουργία της.</p><h2>Απαραίτητα cookies</h2><p>Όλα τα πιο κάτω cookies διαγράφονται 30 λεπτά μετά το κλείσιμο του φυλλομετρητή (browser) σας.</p>",
+                            "en": "<p>The service SERVICE_NAME (SERVICE_URL) uses cookies that are strictly essential for it to function correctly.</p><h2>Essential cookies</h2><p>All of the following cookies are deleted 30 minutes after you close your browser.</p>"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "essentials",
+                          "text": {
+                            "el": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Όνομα</th><th scope='col'>Σκοπός</th></tr></thead><tbody><tr><th scope='col'>AppDataSessionCookie</th><td scope='col'>Αυτό το cookie αποθηκεύει ένα μοναδικό αναγνωριστικό (session id) για τη διαδικασία περιήγησής σας (browser session).</td></tr><tr><th scope='col'>AspNetCore.Antiforgery</th><td scope='col'>Αυτο το cookie διασφαλίζει ότι η πληροφορία που αποστέλλεται στον διακομιστή (server) του DSF προέρχεται από τη φόρμα μας και όχι από αλλού.</td></tr><tr><th scope='col'>AspNetCore.Culture</th><td scope='col'>Αυτό το cookie αποθηκεύει τη γλώσσα της επιλογής σας.</td></tr></tbody></table>",
+                            "en": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Name</th><th scope='col'>Purpose</th></tr></thead><tbody><tr><th scope='col'>AppDataSessionCookie</th><td scope='col'>This cookie stores a ‘session ID’ which is used to identify your browser session.</td></tr><tr><th scope='col'>AspNetCore.Antiforgery</th><td scope='col'>This cookie makes sure that information sent to the server comes from our form, and not elsewhere.</td></tr><tr><th scope='col'>AspNetCore.Culture</th><td scope='col'>This cookie stores your language preference.</td></tr></tbody></table>"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Τηλέφωνο: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Δευτέρα έως Παρασκευή, 9 π.μ. έως 5 μ.μ. (εκτός επίσημων αργιών)</li></ul>",
+                            "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Telephone: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Monday to Friday, 9am to 5pm (except public holidays)</li></ul>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "error-response-1",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Αποτυχία υποβολής ανάληψης",
+                            "en": "Submission of assumption failed"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<p>Δεν σας έχουμε εντοπίσει στην λίστα των διευθυντών για να μπορέσετε να υποβάλετε ανάληψη καυθηκόντων εκπαιδευτικού.</p><p>Αν πιστεύετε ότι υπάρχει πρόβλημα με την υπηρεσία αυτή, μπορείτε να επικοινωνήσετε με την Υπηρεσία Προσωπικού.</p>",
+                            "en": "<p>We could not find you in the list of principals, so you are not able to submit an assumption of teaching duties.</p><p>If you believe there is an issue with this service, you can contact the Personnel Department.</p>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      },
+      {
+        "pageData": {
+          "url": "error-response-2",
+          "title": {
+            "el": "Τίτλος σελίδας",
+            "en": "Page title",
+            "tr": ""
+          },
+          "layout": "layouts/govcyBase.njk",
+          "mainLayout": "two-third"
+        },
+        "pageTemplate": {
+          "sections": [
+            {
+              "name": "beforeMain",
+              "elements": [
+                {
+                  "element": "backLink",
+                  "params": {}
+                }
+              ],
+              "params": {}
+            },
+            {
+              "name": "main",
+              "elements": [
+                {
+                  "element": "form",
+                  "params": {
+                    "elements": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "id": "title",
+                          "type": "h1",
+                          "text": {
+                            "el": "Αποτυχία υποβολής ανάληψης",
+                            "en": "Submission of assumption failed"
+                          }
+                        }
+                      },
+                      {
+                        "element": "htmlElement",
+                        "params": {
+                          "id": "instructions",
+                          "text": {
+                            "el": "<p>Ο εκπαιδευτικός που δηλώσατε δεν μπόρεσε να εντοπιστεί. Παρακαλώ ελέγξετε τα στοιχεία του εκπαιδευτικού και δοκιμάστε ξανά.</p><p>Αν πιστεύετε ότι υπάρχει πρόβλημα με την υπηρεσία αυτή, μπορείτε να επικοινωνήσετε με την Υπηρεσία Προσωπικού.</p>",
+                            "en": "<p>The teacher you entered could not be found. Please check the teacher's details and try again.</p><p>If you believe there is an issue with this service, you can contact the Personnel Department.</p>"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "params": {}
+            }
+          ]
+        }
+      }
+    ],
+    "routes": [],
+    "localizations": {
+      "index.id_select": {
+        "el": "Ταυτοποίηση",
+        "en": "Identification",
+        "tr": ""
+      },
+      "index.id_number": {
+        "el": "Εισαγάγετε αριθμό ταυτότητας",
+        "en": "Enter ID number",
+        "tr": ""
+      },
+      "index.arc_number": {
+        "el": "Εισαγάγετε αριθμό ARC",
+        "en": "Enter ARC number",
+        "tr": ""
+      },
+      "index.aka": {
+        "el": "Αριθμός κοινωνικών ασφαλίσεων",
+        "en": "Social Insurance Number",
+        "tr": ""
+      },
+      "appointment.diorismos": {
+        "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+        "en": "What type of appointment does the teacher have?",
+        "tr": ""
+      },
+      "appointment.fileno_monimos": {
+        "el": "Αριθμός φακέλου (ΠΜΠ)",
+        "en": "File Number",
+        "tr": ""
+      },
+      "appointment.eidikotita_monimos": {
+        "el": "Ειδικότητα",
+        "en": "Specialty",
+        "tr": ""
+      },
+      "appointment.fileno_sumvasiouxos": {
+        "el": "Αριθμός φακέλου (ΠΜΠ)",
+        "en": "File Number",
+        "tr": ""
+      },
+      "appointment.eidikotita_sumvasiouxos": {
+        "el": "Ειδικότητα",
+        "en": "Specialty",
+        "tr": ""
+      },
+      "appointment.fileno_aoristou": {
+        "el": "Αριθμός φακέλου (ΠΜΠ)",
+        "en": "File Number",
+        "tr": ""
+      },
+      "appointment.eidikotita_aoristou": {
+        "el": "Ειδικότητα",
+        "en": "Specialty",
+        "tr": ""
+      },
+      "appointment.program": {
+        "el": "Πρόγραμμα",
+        "en": "Program",
+        "tr": ""
+      },
+      "appointment.fileno_orismenou": {
+        "el": "Αριθμός φακέλου (ΠΜΠ) (Προαιρετικό)",
+        "en": "File Number",
+        "tr": ""
+      },
+      "takeover.date_start": {
+        "el": "Ημερομηνία ανάληψης",
+        "en": "Start Date",
+        "tr": ""
+      },
+      "takeover.date_on_contract": {
+        "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+        "en": "Is this date the same as the contract date?",
+        "tr": ""
+      },
+      "takeover.date_contract": {
+        "el": "Ημερομηνία συμβολαίου",
+        "en": "Contract Date",
+        "tr": ""
+      },
+      "takeover.reason": {
+        "el": "Αιτιολόγηση καθυστέρησης στην ανάληψη καθηκόντων",
+        "en": "Reason for delay in assuming duties",
+        "tr": ""
+      }
+    }
+  }
+  
