@@ -272,29 +272,31 @@ export function storeSiteValidationErrors(store, siteId, validationErrors) {
  * @param {string} referenceNumber The reference number
  * @param {string} timestamp The timestamp as ISO 8601 strings in UTC
  * @param {Array} printFriendlyData The print friendly data prepared for printing 
+ * @param {Array} reviewSummaryList The review summary list ready for renderer
  */
-export function storeSiteSubmissionData(store, siteId, service, referenceNumber, timestamp,  printFriendlyData) {
+export function storeSiteSubmissionData(store, siteId, service, referenceNumber, timestamp,  printFriendlyData, reviewSummaryList) {
     initializeSiteData(store, siteId); // Ensure the structure exists
 
     let rawData = getSiteInputData(store, siteId);
     // Store the submission data
     store.siteData[siteId].submissionData = {
-        service: {  // Service info
+      submission_username : getUser(store).name,
+      submission_email : getUser(store).email,
+      submission_data: rawData, // Raw data as submitted by the user in each page
+      submission_data_version: service.site?.submission_data_version || "", // The submission data version
+      printFriendlyData: printFriendlyData, // Print friendly data
+      renderer_data : reviewSummaryList, // Renderer data of the summary list
+      renderer_version: service.site?.renderer_version || "", // The renderer version
+      design_systems_version: service.site?.design_systems_version || "", // The design systems version
+      service: {  // Service info
             id: service.site.id, // Service id
             title: service.site.title // Service title multilingual object
         },
-        referenceNumber: referenceNumber, // Reference number
-        timestamp: timestamp, // Timestamp `new Date().toISOString();`
-        user: { // User info
-            unique_identifier: getUser(store).unique_identifier, // User unique identifier 
-            name: getUser(store).name, // User name
-            email: getUser(store).email // User email
-        },
-        rawData: rawData, // Raw data as submitted by the user in each page
-        printFriendlyData: printFriendlyData // Print friendly data
-    }
-
-    // Clear validation errors from the session
+      referenceNumber: referenceNumber, // Reference number
+      timestamp: timestamp, // Timestamp `new Date().toISOString();`
+      }
+      
+      // Clear validation errors from the session
     store.siteData[siteId].inputData = {};
 }
 

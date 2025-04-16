@@ -1,4 +1,3 @@
-import { govcyGenerateReviewSummary } from "../utils/govcyReviewSummary.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
@@ -57,7 +56,6 @@ export function govcyReviewPageHandler() {
                 }
             }
             // Generate the summary list using the utility function
-            //const summaryList = govcyGenerateReviewSummary(req, siteId, serviceCopy);
             let submissionData = prepareSubmissionData(req, siteId, serviceCopy);
             let summaryList = generateReviewSummary(submissionData,req, siteId);
             

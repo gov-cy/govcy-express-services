@@ -77,33 +77,55 @@ describe('govcyDataLayer', () => {
     // Test the `storeSiteSubmissionData` and `getSiteSubmissionData` function
     it('5. should store site submission data and clear input data', () => {
         dataLayer.initializeSiteData(session, 'site1');
-
+    
         session.siteData.site1.inputData = {
             page1: { formData: { field1: 'value1' } },
             page2: { formData: { field2: 'value2' } },
         };
-
+    
         session.user = { name: 'John Doe', unique_identifier: 'user123', email: 'HtYyj@example.com' };
-        const service = { site: { id: 'service1', title: 'Test Service' } };
+        const service = {
+            site: {
+                id: 'service1',
+                title: 'Test Service',
+                submission_data_version: '1.0',
+                renderer_version: '2.0',
+                design_systems_version: '3.0',
+            },
+        };
         const referenceNumber = 'REF12345';
         const timestamp = new Date().toISOString();
         const printFriendlyData = [{ pageUrl: 'page1', fields: [] }];
-
-        dataLayer.storeSiteSubmissionData(session, 'site1', service, referenceNumber, timestamp, printFriendlyData);
-
+        const reviewSummaryList = [{ pageUrl: 'page1', summary: 'Summary data' }];
+    
+        dataLayer.storeSiteSubmissionData(
+            session,
+            'site1',
+            service,
+            referenceNumber,
+            timestamp,
+            printFriendlyData,
+            reviewSummaryList
+        );
+    
         const submissionData = dataLayer.getSiteSubmissionData(session, 'site1');
         expect(submissionData).to.deep.equal({
-            service: { id: 'service1', title: 'Test Service' },
-            referenceNumber: 'REF12345',
-            timestamp: timestamp,
-            user: session.user,
-            rawData: {
+            submission_username: 'John Doe',
+            submission_email: 'HtYyj@example.com',
+            submission_data: {
                 page1: { formData: { field1: 'value1' } },
                 page2: { formData: { field2: 'value2' } },
             },
+            submission_data_version: '1.0',
+            renderer_data: reviewSummaryList,
+            renderer_version: '2.0',
+            design_systems_version: '3.0',
+            service: { id: 'service1', title: 'Test Service' },
+            referenceNumber: 'REF12345',
+            timestamp: timestamp,
             printFriendlyData: printFriendlyData,
         });
-
+    
         // Ensure input data is cleared after submission
         expect(dataLayer.getSiteInputData(session, 'site1')).to.deep.equal({});
     });

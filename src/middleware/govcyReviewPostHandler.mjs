@@ -51,12 +51,11 @@ export function govcyReviewPostHandler() {
             } else {
                 // ------------ DO SUBMISSION ---------------------
                 let referenceNo = `12345678`;
-                // logger.debug("The site config:", service.site);
-                // let siteInputData = dataLayer.getSiteInputData(req.session, siteId);
                 // logger.debug("The site's data:", siteInputData);
                 logger.info("✅ Data submitted", siteId, referenceNo, req);
                 let printFriendlyData = prepareSubmissionData(req, siteId, service);
                 logger.debug("Submission print friendly data:", referenceNo, printFriendlyData,  req);
+                let reviewSummaryList = generateReviewSummary(printFriendlyData,req, siteId,false);
                 // handle data layer submission
                 dataLayer.storeSiteSubmissionData(
                     req.session, 
@@ -64,7 +63,8 @@ export function govcyReviewPostHandler() {
                     service, 
                     referenceNo, 
                     new Date().toISOString(), 
-                    printFriendlyData);
+                    printFriendlyData,
+                    reviewSummaryList);
                     
                 logger.debug("🔄 Redirecting to success page:",  req);
                 // redirect to success
