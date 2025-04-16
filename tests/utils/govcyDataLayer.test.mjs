@@ -123,7 +123,7 @@ describe('govcyDataLayer', () => {
             service: { id: 'service1', title: 'Test Service' },
             referenceNumber: 'REF12345',
             timestamp: timestamp,
-            printFriendlyData: printFriendlyData,
+            print_friendly_data: printFriendlyData,
         });
     
         // Ensure input data is cleared after submission

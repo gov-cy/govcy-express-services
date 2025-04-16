@@ -103,16 +103,451 @@ This is an overview of the data stored in the session:
         "errorSummary": []
       },
       "submissionData": {           // Site level successful submission data
-        "service": {},
-        "referenceNumber": "",
-        "timestamp": "",
-        "user": {},
-        "rawData": {},
-        "printFriendlyData": []
+        "submission_username" : "", // User's username
+        "submission_email" : "",    // User's email
+        "submission_data": {},      // Raw data as submitted by the user in each page
+        "submission_data_version": "", // The submission data version
+        "print_friendly_data": [],  // Print friendly data
+        "renderer_data" :{},        // Renderer data of the summary list
+        "renderer_version": "",     // The renderer version
+        "design_systems_version": "", // The design systems version
+        "service": {                // Service info
+              "id": "",             // Service id
+              "title": {}           // Service title multilingual object
+          },
+        "referenceNumber": "",      // Reference number
+        "timestamp": "",            // Timestamp `new Date().toISOString();`
       }
     }
   }
 }
+```
+
+Sample of submission data:
+
+```json
+{
+  "submission_username": "username",        // User's username
+  "submission_email": "email@example.com",  // User's email
+  "submission_data_version": "0.1",         // Submission data version
+  "submission_data": {                      // Submission raw data
+    "index": {                              // Page level
+      "formData": {
+        "id_select": ["id", "arc"],         // field level. Could be string or array
+        "id_number": "654654",
+        "arc_number": "",
+        "aka": "232323",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    },
+    "appointment": {
+      "formData": {
+        "diorismos": "monimos",
+        "fileno_monimos": "3233",
+        "eidikotita_monimos": "1",
+        "fileno_sumvasiouxos": "",
+        "eidikotita_sumvasiouxos": "",
+        "fileno_aoristou": "",
+        "eidikotita_aoristou": "",
+        "program": "",
+        "fileno_orismenou": "",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    },
+    "takeover": {
+      "formData": {
+        "date_start": "16/04/2025",
+        "date_on_contract": "date_other",
+        "date_contract": "16/04/2025",
+        "reason": "24324dssf",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    }
+  },
+  "submission_data_version": "1",           // Submission data version
+  "renderer_data": {                        // Summary list renderer data ready for rendering
+    "element": "summaryList",
+    "params": {
+      "items": [
+        {
+          "key": {
+            "el": "Στοιχεία του  εκπαιδευτικού",
+            "en": "Educator's details",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Ταυτοποίηση",
+                      "en": "Identification"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Ταυτότητα, ARC",
+                            "el": "Ταυτότητα, ARC",
+                            "tr": "Ταυτότητα, ARC"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Εισαγάγετε αριθμό ταυτότητας",
+                      "en": "Enter ID number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "121212",
+                            "el": "121212",
+                            "tr": "121212"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Αριθμός κοινωνικών ασφαλίσεων",
+                      "en": "Social Insurance Number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "112121",
+                            "el": "112121",
+                            "tr": "112121"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "el": "Διορισμός εκπαιδευτικού",
+            "en": "Teachers appointment",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+                      "en": "What type of appointment does the teacher have?"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Συμβασιούχος",
+                            "el": "Συμβασιούχος",
+                            "tr": "Συμβασιούχος"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Αριθμός φακέλου (ΠΜΠ)",
+                      "en": "File Number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "1212",
+                            "el": "1212",
+                            "tr": "1212"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Ειδικότητα",
+                      "en": "Specialty"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Καθηγητής",
+                            "el": "Καθηγητής",
+                            "tr": "Καθηγητής"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "el": "Ημερομηνία ανάληψης",
+            "en": "Takeover date",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Ημερομηνία ανάληψης",
+                      "en": "Start Date"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "16/04/2025",
+                            "el": "16/04/2025",
+                            "tr": "16/04/2025"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+                      "en": "Is this date the same as the contract date?"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
+                            "el": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
+                            "tr": "Ναι, είναι η ίδια με αυτή του συμβολαίου"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "print_friendly_data": [                  // Print friendly data
+    {
+      "pageUrl": "index",                     // Page URL
+      "pageTitle": {                          // Page title
+        "el": "Στοιχεία του  εκπαιδευτικού",
+        "en": "Educator's details",
+        "tr": ""
+      },
+      "fields": [                             // Fields
+        {
+          "id": "id_select",                    // Field ID
+          "label": {                            // Field label
+            "el": "Ταυτοποίηση",
+            "en": "Identification"
+          },
+          "value": ["id", "arc"],          // Field value. Could be string or array
+          "valueLabel": [                       // Field value label. Could be string or array
+            {
+              "el": "Ταυτότητα",
+              "en": "ID",
+              "tr": ""
+            },
+            {
+              "el": "ARC",
+              "en": "ARC",
+              "tr": ""
+            }
+          ]
+        },
+        {
+          "id": "id_number",
+          "label": {
+            "el": "Εισαγάγετε αριθμό ταυτότητας",
+            "en": "Enter ID number"
+          },
+          "value": "654654",
+          "valueLabel": {
+            "el": "654654",
+            "en": "654654"
+          }
+        },
+        {
+          "id": "aka",
+          "label": {
+            "el": "Αριθμός κοινωνικών ασφαλίσεων",
+            "en": "Social Insurance Number"
+          },
+          "value": "232323",
+          "valueLabel": {
+            "el": "232323",
+            "en": "232323"
+          }
+        }
+      ]
+    },
+    {
+      "pageUrl": "appointment",
+      "pageTitle": {
+        "el": "Διορισμός εκπαιδευτικού",
+        "en": "Teachers appointment",
+        "tr": ""
+      },
+      "fields": [
+        {
+          "id": "diorismos",
+          "label": {
+            "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+            "en": "What type of appointment does the teacher have?"
+          },
+          "value": "monimos",
+          "valueLabel": {
+            "el": "Μόνιμος επί δοκιμασία",
+            "en": "Permanent on probation",
+            "tr": ""
+          }
+        },
+        {
+          "id": "fileno_monimos",
+          "label": {
+            "el": "Αριθμός φακέλου (ΠΜΠ)",
+            "en": "File Number"
+          },
+          "value": "3233",
+          "valueLabel": {
+            "el": "3233",
+            "en": "3233"
+          }
+        },
+        {
+          "id": "eidikotita_monimos",
+          "label": {
+            "el": "Ειδικότητα",
+            "en": "Specialty"
+          },
+          "value": "1",
+          "valueLabel": {
+            "el": "Δάσκαλος",
+            "en": "Elementary teacher",
+            "tr": ""
+          }
+        }
+      ]
+    },
+    {
+      "pageUrl": "takeover",
+      "pageTitle": {
+        "el": "Ημερομηνία ανάληψης",
+        "en": "Takeover date",
+        "tr": ""
+      },
+      "fields": [
+        {
+          "id": "date_start",
+          "label": {
+            "el": "Ημερομηνία ανάληψης",
+            "en": "Start Date"
+          },
+          "value": "16/04/2025",
+          "valueLabel": {
+            "el": "16/04/2025",
+            "en": "16/04/2025"
+          }
+        },
+        {
+          "id": "date_on_contract",
+          "label": {
+            "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+            "en": "Is this date the same as the contract date?"
+          },
+          "value": "date_other",
+          "valueLabel": {
+            "el": "Όχι, αυτή είναι διαφορετική",
+            "en": "No, this is different",
+            "tr": ""
+          }
+        },
+        {
+          "id": "date_contract",
+          "label": {
+            "el": "Ημερομηνία συμβολαίου",
+            "en": "Contract Date"
+          },
+          "value": "16/04/2025",
+          "valueLabel": {
+            "el": "16/04/2025",
+            "en": "16/04/2025"
+          }
+        },
+        {
+          "id": "reason",
+          "label": {
+            "el": "Αιτιολόγηση καθυστέρησης στην ανάληψη καθηκόντων",
+            "en": "Reason for delay in assuming duties"
+          },
+          "value": "24324dssf",
+          "valueLabel": {
+            "el": "24324dssf",
+            "en": "24324dssf"
+          }
+        }
+      ]
+    }
+  ],
+  "renderer_version": "1.14.1",              // Renderer version
+  "design_systems_version": "3.1.0",          // Design systems version
+  "service": {                                // Service metadata
+    "id": "takeover",
+    "title": {
+      "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
+      "en": "Certificate of teachers takeover"
+    }
+  },
+  "referenceNumber": "12345",                 // Reference number
+  "timestamp": "2023-04-20T14:30:00.000Z"     // Submission time
+}
+
 ```
 
 #### 4. User Data
@@ -262,124 +697,7 @@ For example:
       "inputData": {},
       // SITE LEVEL SUBMISSION ERRORS
       "submissionErrors": {},
-      "submissionData": {
-        "service": {
-          "id": "example-service-id",
-          "title": {
-            "en": "Example Service",
-            "el": "Παράδειγμα υπηρεσίας"
-          }
-        },
-        "referenceNumber": "12345",
-        "timestamp": "2023-08-31T12:34:56Z",
-        "user": {
-          "unique_identifier": "0000123456",
-          "name": "User Name",
-          "email": "test@example.com",
-          
-        },
-        "rawData": {
-          "page1": {
-            "formData": {
-              "field1": [
-                "value1",
-                "value2"
-              ],
-              "field2": "value2",
-              "_csrf": "1234567890"
-            }
-          },
-          "page2": {
-            "formData": {
-              "field3": "value3",
-              "field4": "value4",
-              "_csrf": "1234567890"
-            }
-          }
-        },
-        "printFriendlyData": [
-          {
-            "pageUrl": "page1",
-            "pageTitle": {
-              "el": "Σελίδα 1",
-              "en": "Page 1",
-              "tr": ""
-            },
-            "fields": [
-              {
-                "id": "field1",
-                "label": {
-                  "el": "Ετικέτα για το πεδιο ένα",
-                  "en": "Field one label",
-                  
-                },
-                "value": [
-                  "value1",
-                  "value2"
-                ],
-                "valueLabel": [
-                  {
-                    "el": "Ετικέτα για value1",
-                    "en": "Label for value1"
-                  },
-                  {
-                    "el": "Ετικέτα για value2",
-                    "en": "Label for value2"
-                  }
-                ]
-              },
-              {
-                "id": "field2",
-                "label": {
-                  "el": "Ετικέτα για το πεδιο δυο",
-                  "en": "Field two label",
-                  
-                },
-                "value": "value2",
-                "valueLabel": {
-                  "el": "Ετικέτα για value2",
-                  "en": "Label for value2"
-                }
-              }
-            ]
-          },
-          {
-            "pageUrl": "page2",
-            "pageTitle": {
-              "el": "Σελίδα 2",
-              "en": "Page 2"
-            },
-            "fields": [
-              {
-                "id": "field3",
-                "label": {
-                  "el": "Ετικέτα για το πεδιο 3",
-                  "en": "Field 3 label",
-                  
-                },
-                "value": "value2",
-                "valueLabel": {
-                  "el": "Ετικέτα για value3",
-                  "en": "Label for value3"
-                }
-              },
-              {
-                "id": "field4",
-                "label": {
-                  "el": "Ετικέτα για το πεδιο 4",
-                  "en": "Field 4 label",
-                  
-                },
-                "value": "value2",
-                "valueLabel": {
-                  "el": "Ετικέτα για value4",
-                  "en": "Label for value4"
-                }
-              }
-            ]
-          }
-        ]
-      } 
+      "submissionData": { } //see sample above
     }
   },
   // USER DATA
@@ -478,17 +796,7 @@ More examples in the [govcyDataLayer.mjs](./src/utils/govcyDataLayer.mjs) file.
    - Prepares submission data
    - Generates reference number
    - Creates print-friendly data format
-   - Stores submission in session under:
-     ```javascript
-     siteData[siteId].submissionData = {
-       service: {},           // Service metadata
-       referenceNumber: "",   // Generated reference
-       timestamp: "",         // Submission time
-       user: {},             // User details
-       rawData: {},          // Raw form data
-       printFriendlyData: [] // Formatted for display
-     }
-     ```
+   - Stores submission in session under ` siteData[siteId].submissionData`
    - Clears the pages data from session. 
    - Redirects to success page
 
@@ -512,3 +820,4 @@ logger.info("404 - Page not found.", err.message, req.originalUrl); // Log the e
 ```
 
 You can set the `DEBUG` environment variable to `true` to enable debug logging.
+

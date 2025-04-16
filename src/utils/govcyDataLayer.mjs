@@ -105,26 +105,26 @@ export function storePageData(store, siteId, pageUrl, formData) {
  * 
 ```json 
 {
-    "errors": {
-      "bank-detailsIban": {
-        "id": "Iban",
-        "message": {
-          "en": "Enter your IBAN",
-          "el": "Εισαγάγετε το IBAN σας"
-        },
-        "pageUrl": "bank-details"
+  "errors": {
+    "bank-detailsIban": {
+      "id": "Iban",
+      "message": {
+        "en": "Enter your IBAN",
+        "el": "Εισαγάγετε το IBAN σας"
       },
-      "bank-detailsSwift": {
-        "id": "Swift",
-        "message": {
-          "en": "Enter your SWIFT",
-          "el": "Εισαγάγετε το SWIFT σας"
-        },
-        "pageUrl": "bank-details"
-      }
+      "pageUrl": "bank-details"
     },
-    "errorSummary": []
-  }
+    "bank-detailsSwift": {
+      "id": "Swift",
+      "message": {
+        "en": "Enter your SWIFT",
+        "el": "Εισαγάγετε το SWIFT σας"
+      },
+      "pageUrl": "bank-details"
+    }
+  },
+  "errorSummary": []
+}
 ```
  * @param {object} store The session store
  * @param {string} siteId The site id
@@ -143,128 +143,7 @@ export function storeSiteValidationErrors(store, siteId, validationErrors) {
 /**
  * Stores the submitted site's input data in the data layer and clears the input data 
  * 
- * The following is an example of the data that will be stored:
- * 
-```json
-{
-  service: {
-    id: "example-service-id",
-    title: {
-      en: "Example Service",
-      el: "Παράδειγμα υπηρεσίας"
-    }
-  },
-  referenceNumber: "12345",
-  timestamp: "2023-08-31T12:34:56Z",
-  user: {
-    unique_identifier: "0000123456",
-    name: "User Name",
-    email: "test@example.com",
-    
-  },
-  rawData: {
-    page1: {
-      formData: {
-        field1: [
-          "value1",
-          "value2"
-        ],
-        field2: "value2",
-        _csrf: "1234567890"
-      }
-    },
-    page2: {
-      formData: {
-        field3: "value3",
-        field4: "value4",
-        _csrf: "1234567890"
-      }
-    }
-  },
-  printFriendlyData: [
-    {
-      "pageUrl": "page1",
-      "pageTitle": {
-        "el": "Σελίδα 1",
-        "en": "Page 1",
-        "tr": ""
-      },
-      "fields": [
-        {
-          "id": "field1",
-          "label": {
-            "el": "Ετικέτα για το πεδιο ένα",
-            "en": "Field one label",
-            
-          },
-          "value": [
-            "value1",
-            "value2"
-          ],
-          "valueLabel": [
-            {
-              "el": "Ετικέτα για value1",
-              "en": "Label for value1"
-            },
-            {
-              "el": "Ετικέτα για value2",
-              "en": "Label for value2"
-            }
-          ]
-        },
-        {
-          "id": "field2",
-          "label": {
-            "el": "Ετικέτα για το πεδιο δυο",
-            "en": "Field two label",
-            
-          },
-          "value": "value2",
-          "valueLabel": {
-            "el": "Ετικέτα για value2",
-            "en": "Label for value2"
-          }
-        }
-      ]
-    },
-    {
-      "pageUrl": "page2",
-      "pageTitle": {
-        "el": "Σελίδα 2",
-        "en": "Page 2"
-      },
-      "fields": [
-        {
-          "id": "field3",
-          "label": {
-            "el": "Ετικέτα για το πεδιο 3",
-            "en": "Field 3 label",
-            
-          },
-          "value": "value2",
-          "valueLabel": {
-            "el": "Ετικέτα για value3",
-            "en": "Label for value3"
-          }
-        },
-        {
-          "id": "field4",
-          "label": {
-            "el": "Ετικέτα για το πεδιο 4",
-            "en": "Field 4 label",
-            
-          },
-          "value": "value2",
-          "valueLabel": {
-            "el": "Ετικέτα για value4",
-            "en": "Label for value4"
-          }
-        }
-      ]
-    }
-  ]
-}
-  ```
+ * Check NOTES.md for sample of the data
  * 
  * @param {object} store The session store
  * @param {string} siteId The site id
@@ -284,7 +163,7 @@ export function storeSiteSubmissionData(store, siteId, service, referenceNumber,
       submission_email : getUser(store).email,
       submission_data: rawData, // Raw data as submitted by the user in each page
       submission_data_version: service.site?.submission_data_version || "", // The submission data version
-      printFriendlyData: printFriendlyData, // Print friendly data
+      print_friendly_data: printFriendlyData, // Print friendly data
       renderer_data : reviewSummaryList, // Renderer data of the summary list
       renderer_version: service.site?.renderer_version || "", // The renderer version
       design_systems_version: service.site?.design_systems_version || "", // The design systems version
