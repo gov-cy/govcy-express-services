@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { validateFormElements } from '../../src/utils/govcyValidator.mjs';
 
 describe('govcyValidator', () => {
+    // define a conditional radio element for testing
     let contElements = [
         {
             element: 'radios',
@@ -979,6 +980,142 @@ describe('govcyValidator', () => {
         validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- range validation ---------------------
+    it('27. should validate `minValue` and `maxValue` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'minValue', params: { checkValue: 10, message: 'Value is too small' } },
+                    { check: 'maxValue', params: { checkValue: 100, message: 'Value is too large' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '50' };
+    
+        // Test valid range
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test below minValue
+        formData.field1 = '5';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Value is too small', pageUrl: 'page1' },
+        });
+    
+        // Test above maxValue
+        formData.field1 = '150';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Value is too large', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- regex validation ---------------------
+    it('28. should validate `regCheck` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'regCheck', params: { checkValue: '^[A-Z]{3}\\d{3}$', message: 'Invalid format' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: 'ABC123' };
+    
+        // Test valid regex
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test invalid regex
+        formData.field1 = 'abc123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Invalid format', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- date validation ---------------------
+    it('29. should validate `minValueDate` and `maxValueDate` fields correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'minValueDate', params: { checkValue: '2023-01-01', message: 'Date is too early' } },
+                    { check: 'maxValueDate', params: { checkValue: '2023-12-31', message: 'Date is too late' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '2023-06-15' };
+    
+        // Test valid date range
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test below minValueDate
+        formData.field1 = '2022-12-31';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Date is too early', pageUrl: 'page1' },
+        });
+    
+        // Test above maxValueDate
+        formData.field1 = '2024-01-01';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Date is too late', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- multiple rules validation ---------------------
+    it('31. should validate fields with multiple rules correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'required', params: { checkValue: '', message: 'Field is required' } },
+                    { check: 'minLength', params: { checkValue: 5, message: 'Input is too short' } },
+                    { check: 'length', params: { checkValue: 10, message: 'Input is too long' } },
+                ],
+            },
+        ];
+    
+        const formData = { contField1: 'yes', field1: '12345' };
+    
+        // Test valid input
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    
+        // Test missing input
+        formData.field1 = '';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Field is required', pageUrl: 'page1' },
+        });
+    
+        // Test too short
+        formData.field1 = '1234';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
+        });
+    
+        // Test too long
+        formData.field1 = '12345678901';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Input is too long', pageUrl: 'page1' },
         });
     });
     //TODO: test more validation rules
