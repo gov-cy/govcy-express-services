@@ -8,7 +8,10 @@ export function govcyLanguageMiddleware(req, res, next) {
     // let lang = req.query.lang 
     
     if (req.query.lang) {
-        res.cookie('lang', lang, { maxAge: 900000, httpOnly: true, sameSite: 'lax' });
+        res.cookie('lang', lang, { 
+            maxAge: 365 * 24 * 60 * 60 * 1000, 
+            httpOnly: true, 
+            sameSite: 'lax' });
     }
 
     req.globalLang = lang; // Store language for request lifecycle

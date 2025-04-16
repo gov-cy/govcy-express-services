@@ -55,10 +55,21 @@ export function getServiceConfigData(siteId,lang) {
     let serviceCopy = JSON.parse(JSON.stringify(service));
 
     //Handle lang: Set language based on provided `lang` parameter
-    if (serviceCopy.site.languages.some(l => l.code === lang)) {
-        serviceCopy.site.lang = lang;
+    if (Array.isArray(serviceCopy.site.languages)) {
+        if (serviceCopy.site.languages.length === 1) {
+            // If there's only one language, set it to that language
+            serviceCopy.site.lang = serviceCopy.site.languages[0].code;
+            serviceCopy.site.languages = undefined;
+        } else if (serviceCopy.site.languages.some(l => l.code === lang)) {
+            // If the provided lang exists in the languages array, set it
+            serviceCopy.site.lang = lang;
+        } else if (!serviceCopy.site.lang) {
+            // Default to 'el' if no language is set
+            serviceCopy.site.lang = "el";
+        }
     } else if (!serviceCopy.site.lang) {
-        serviceCopy.site.lang = "el"; // Default to 'el' if no language is set
+        // Default to 'el' if languages is not defined and no language is set
+        serviceCopy.site.lang = "el";
     }
     
     //Handle TESTING banner: check if staging and set isTesting
