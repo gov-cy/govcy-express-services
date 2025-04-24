@@ -544,6 +544,73 @@ describe('govcyValidator', () => {
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid IBAN', pageUrl: 'page1' },
         });
+
+        const IBANList = [
+            "CY83007116100000000030071776", 
+            "CY31007116100000000040036843", 
+            "CY20005001080001080107738801",
+            "CY62002001110000000010012700",
+            "CY15009002020002021010017791",
+            "CY61005000100000100103440201",
+            "CY65005001210001210139761001",
+            "CY83002001990000001100550900",
+            "CY23002003390000000101685800",
+            "CY70002004440000000101605500",
+            "CY16002001940000001200653700",
+            "CY25005001210001210101392401",
+            "CY15002001950000357021195044",
+            "CY14007044300000000043021187",
+            "CY16002001950000357020009298",
+            "CY17002001950000357013502132",
+            "CY980050012500012510E0086801",
+            "CY980050018100018110E1700801",
+            "CY300050014700014710E2883201",
+            "CY37007028400000000040074232",
+            "CY17009006510006511000410215",
+            "CY30007116100000000021049014",
+            "CY77007028400000000027248075",
+            "CY51002001950000357003852348",
+            "CY57002001950000357023016627",
+            "CY87002005950000000100727100",
+            "CY26002001950000357016021836",
+            "CY64007030200000000022259303",
+            "CY18002003890000000101355900",
+            "CY85002001770000000106387200",
+            "CY22007101100000000020350832",
+            "CY09002001950000357020150365",
+            "CY56002003600000000100749600",
+            "CY63007028400000000027080420",
+            "CY02007055300000000024054402",
+            "CY28002001360000000101682000",
+            "CY06002001450000000100658100",
+            "CY23007028400000000027360403",
+            "CY25002003590000000100463100",
+            "CY91007049300000000020605566",
+            "CY38005001210001210171486501",
+            "CY62007047100000000021221613",
+            "CY69007056200000000040147967",
+            "CY63007056200000000020935770",
+            "CY72007116100000000020139853",
+            "CY74005002510002511047311001",
+            "CY46002001780000000100856900",
+            "CY24002004560000000000505200",
+            "CY29002001950000357016579047",
+            "CY75002001950000357023508384",
+            "CY50007062100000000024018556",
+            "CY66002006630000000100621800",
+            "CY76007030200000000021042707",
+            "CY96005004780004781061143701",
+            "CY51007028400000000027362421",
+            "CY86007030200000000021989150",
+            "CY52005002550002551028139000",
+            "CY16001000010000000006001010"
+        ]
+
+        IBANList.forEach(iban => {
+            formData.field1 = iban;
+            const validationErrors = validateFormElements(elements, formData, 'page1');
+            expect(validationErrors).to.deep.equal({});
+        });
     });
 
     //------------- valid email validation ---------------------
@@ -1068,9 +1135,28 @@ describe('govcyValidator', () => {
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Date is too early', pageUrl: 'page1' },
         });
-    
+        
+        // Test valid dd/mm/yyyy format
+        formData.field1 = '15/6/2023';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        
+        // Test below minValueDate with dd/mm/yyyy format
+        formData.field1 = '31/12/2022';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Date is too early', pageUrl: 'page1' },
+        });
+        
         // Test above maxValueDate
         formData.field1 = '2024-01-01';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Date is too late', pageUrl: 'page1' },
+        });
+        
+        // Test above maxValueDate with dd/mm/yyyy format
+        formData.field1 = '1/1/2024';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Date is too late', pageUrl: 'page1' },

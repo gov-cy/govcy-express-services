@@ -14,7 +14,7 @@ This project is an Express-based project that dynamically renders online service
 - Input validation
 - CSRF protection
 - cyLogin Single Sign-On (SSO)
-- Pre-filling submitted values
+- Pre-filling posted values (in the same session)
 - ~~API integration~~
 - ~~PDF generation and email support~~
 
@@ -27,12 +27,12 @@ This project is an Express-based project that dynamically renders online service
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/your-project-path.git
+   git clone git@github.com:gov-cy/govcy-express-services.git
    ```
 2. Navigate to the project directory:
 
    ```sh
-   cd your-project-path
+   cd govcy-express-services
    ```
 3. Install dependencies:
 
@@ -45,7 +45,7 @@ This project is an Express-based project that dynamically renders online service
 ```sh
 npm start
 ```
-The server will start on `http://localhost:3000` (or the configured port).
+The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#local-development) for more details on this).
 
 ### Environment Variables
 Create a `.env` file and configure the following variables:
@@ -141,7 +141,10 @@ Forms are rendered dynamically using JSON templates stored in the `/data` folder
       "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
       "cssIntegrity": "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
       "jsIntegrity": "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
-    }
+    },
+    "submission_data_version" : "1",
+    "renderer_version" : "1.14.1",
+    "design_systems_version" : "3.1.1",
   },
   "pages": [
     {
@@ -717,7 +720,10 @@ Forms are rendered dynamically using JSON templates stored in the `/data` folder
 }
 ```
 
-- `site` object: Contains information about the site, including the site ID, language, and footer links. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
+- `site` object: Contains information about the site, including the site ID, language, and footer links. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details. Some fields that are only specific to the govcy-express-forms project are the following:
+  - `submission_data_version` : The submission data version,
+  - `renderer_version` : The govcy-frontend-renderer version,
+  - `design_systems_version` : The govcy-design-system version,
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
@@ -756,6 +762,11 @@ The validation rules for each element are defined in the `"validations` array fo
 - `required`: Checks if the value is not null, undefined, or an empty string (after trimming).
 - `length`: Checks if the value has a maximum length passed in the `checkValue` parameter.
 - `regCheck`: Checks if the value matches the specified regular expression passed in the `checkValue` parameter.
+- `minValue`: Checks if the value is greater than or equal to the specified minimum value passed in the `checkValue` parameter.
+- `maxValue`: Checks if the value is less than or equal to the specified maximum value passed in the `checkValue` parameter.
+- `minValueDate`: Checks if the value is greater than or equal to the specified minimum date passed in the `checkValue` parameter.
+- `maxValueDate`: Checks if the value is less than or equal to the specified maximum date passed in the `checkValue` parameter.
+- `minLength`: Checks if the value has a minimum length passed in the `checkValue` parameter.
 
 Example:
 

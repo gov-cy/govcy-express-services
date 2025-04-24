@@ -143,9 +143,9 @@ export const staticResources = {
             },
             url: "https://gov.cy",
             cdn: {
-                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
-                cssIntegrity: "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
-                jsIntegrity: "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
+                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+                cssIntegrity: "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+                jsIntegrity: "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
             }
         },
         pageData: {

@@ -1,6 +1,8 @@
 # Dev notes
 
-## How to create certs for local development
+## Local development
+
+### How to create certs for local development
 1. open `Git Bash`and run:
 
 ```sh
@@ -25,7 +27,7 @@ Save server.cert and server.key in the root of your project folder.
 
 ---
 
-## How ro create a .env file
+### How to create a .env file for local development
 
 Create a .env file in the root of your project folder (see example below): 
 

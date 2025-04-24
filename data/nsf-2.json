@@ -64,9 +64,7 @@
     "url": "https://gov.cy",
     "isTesting": true,
     "cdn": {
-      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
-      "cssIntegrity": "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
-      "jsIntegrity": "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3/dist"
     }
   },
   "pages": [
