@@ -16,9 +16,10 @@ import { logger } from "./govcyLogger.mjs";
  * @returns {Array} services - Array of JSON data
  */
 function loadConfigDataById(siteId) {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const dataPath = path.join(__dirname, '..', '..', 'data'); // Adjust if needed
+//   const __filename = fileURLToPath(import.meta.url);
+//   const __dirname = path.dirname(__filename);
+//   const dataPath = path.join(__dirname, '..', '..', 'data'); // Adjust if needed
+  const dataPath = path.join(process.cwd(), 'data'); // Adjust if needed
   const filePath = path.join(dataPath, `${siteId}.json`);
 
   try {

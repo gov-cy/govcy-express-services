@@ -1,5 +1,5 @@
 {
-  "name": "govcy-express-services",
+  "name": "@gov-cy/govcy-express-services",
   "version": "0.1.0",
   "description": "An Express-based service that dynamically renders forms using @gov-cy/govcy-frontend-renderer",
   "author": "DMRID - DSF Team",
@@ -10,6 +10,9 @@
   "exports": {
     "import": "./src/index.mjs"
   },
+  "files": [
+    "src"
+  ],
   "keywords": [
     "govcy",
     "cyprus",
@@ -32,9 +35,9 @@
   },
   "homepage": "https://github.com/gov-cy/govcy-express-services",
   "scripts": {
-    "dev": "nodemon src/index.mjs",
-    "start": "node src/index.mjs",
-    "test": "mocha --timeout 60000 tests/**/*.test.mjs",
+    "dev": "nodemon src/standalone.mjs",
+    "start": "node src/standalone.mjs",
+    "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
     "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs"
   },
   "dependencies": {
@@ -49,6 +52,7 @@
   },
   "devDependencies": {
     "chai": "^5.2.0",
+    "chai-http": "^5.1.1",
     "mocha": "^11.1.0",
     "nodemon": "^3.0.2",
     "sinon": "^20.0.0"
