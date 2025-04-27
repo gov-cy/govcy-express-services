@@ -2,11 +2,12 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
+import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 
 export function prepareSubmissionData(req, siteId, service) {
     const submissionData = [];
 
-    const allowedElements = ["textInput", "textArea", "select", "radios", "checkboxes", "datePicker", "dateInput"];
+    const allowedElements = ALLOWED_FORM_ELEMENTS;
 
     /**
      * Helper function to retrieve date raw input.

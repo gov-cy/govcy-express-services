@@ -4,6 +4,7 @@
  * It includes functions to populate form data with session data, handle conditional elements,
  * and show error summary when there are validation errors.
  */
+import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 
 
 /**
@@ -12,7 +13,7 @@
  * @param {*} theData The data either from session or request
  */
 export function populateFormData(formElements, theData, validationErrors) {
-    const inputElements = ["textInput", "textArea", "select", "radios", "checkboxes", "datePicker", "dateInput"];
+    const inputElements = ALLOWED_FORM_ELEMENTS;
 
     // Recursively populate form data with session data
     formElements.forEach(element => {

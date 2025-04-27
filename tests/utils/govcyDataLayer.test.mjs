@@ -139,4 +139,33 @@ describe('govcyDataLayer', () => {
 
         expect(session.siteData.site1).to.be.undefined;
     });
+
+    it('7. should return empty objects for non-existent data', () => {
+        expect(dataLayer.getPageData(session, 'nonExistentSite', 'nonExistentPage')).to.deep.equal({});
+        expect(dataLayer.getSiteInputData(session, 'nonExistentSite')).to.deep.equal({});
+        expect(dataLayer.getSiteSubmissionData(session, 'nonExistentSite')).to.deep.equal({});
+    });
+
+    it('8. should retrieve user data from the session', () => {
+        session.user = { name: 'John Doe', email: 'john@example.com' };
+        const user = dataLayer.getUser(session);
+        expect(user).to.deep.equal({ name: 'John Doe', email: 'john@example.com' });
+    });
+    
+    it('9. should return null if user data is missing', () => {
+        expect(dataLayer.getUser(session)).to.be.null;
+    });
+
+    it('10. should handle simultaneous updates correctly', () => {
+        dataLayer.initializeSiteData(session, 'site1', 'page1');
+        dataLayer.storePageData(session, 'site1', 'page1', { field1: 'value1' });
+    
+        dataLayer.storePageData(session, 'site1', 'page1', { field2: 'value2' });
+    
+        expect(dataLayer.getPageData(session, 'site1', 'page1')).to.deep.equal({
+            field2: 'value2',
+        });
+    });
+
+    
 });

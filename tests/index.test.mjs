@@ -11,7 +11,9 @@ describe('GovCy Express Service', () => {
     let service;
   
 
-  before(() => {
+  before(() => {  
+    // Suppress console.log during tests
+    console.debug = () => {};
     // Initialize the service
     service = initializeGovCyExpressService();
     app = service.app;

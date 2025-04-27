@@ -5,6 +5,7 @@
 
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "./govcyDataLayer.mjs";
+import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 /**
  * Generate a review summary list based on the user's input.
  * 
@@ -19,7 +20,7 @@ export function govcyGenerateReviewSummary(req, siteId, service) {
 
     // Define allowed form elements
     //TODO: Handle textInput
-    const allowedElements = ["textInput", "textArea", "select", "radios", "checkboxes","datePicker","dateInput"];
+    const allowedElements = ALLOWED_FORM_ELEMENTS;
 
     /**
      * Helper function to retrieve user input from session.
