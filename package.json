@@ -38,6 +38,10 @@
     "dev": "nodemon src/standalone.mjs",
     "start": "node src/standalone.mjs",
     "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
+    "test:unit": "mocha --recursive tests/unit/**/*.test.mjs",
+    "test:integration": "mocha --recursive tests/integration/**/*.test.mjs",
+    "test:package": "mocha --recursive tests/package/**/*.test.mjs",
+    "test:functional": "mocha --timeout 30000 --recursive tests/functional/**/*.test.mjs",
     "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs"
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import { request, default as chaiHttp } from 'chai-http';
-import initializeGovCyExpressService from '../src/index.mjs';
+import initializeGovCyExpressService from '../../src/index.mjs';
 
 const { expect } = chai;
 
@@ -14,6 +14,10 @@ describe('GovCy Express Service', () => {
   before(() => {  
     // Suppress console.log during tests
     console.debug = () => {};
+
+    // Set a different port for this test suite
+    process.env.PORT = '44318'; // Use a different port (e.g., 3001)
+
     // Initialize the service
     service = initializeGovCyExpressService();
     app = service.app;
