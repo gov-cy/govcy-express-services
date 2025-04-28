@@ -1,33 +1,26 @@
 # Dev notes
+This is a development guide for the govcy-express-services project.
 
 ## Local development
 
-### How to create certs for local development
-1. open `Git Bash`and run:
+### Installation
+1. Clone the repository:
 
-```sh
-openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -days 365 -nodes
-```
+   ```sh
+   git clone git@github.com:gov-cy/govcy-express-services.git
+   ```
+2. Navigate to the project directory:
 
-2. Answer the Certificate Questions
-You'll be prompted to enter some details. You can fill them out or leave them blank:
-```pqsql
-Country Name (2 letter code) [XX]: CY
-State or Province Name (full name) []: Nicosia
-Locality Name (eg, city) []: Nicosia
-Organization Name (eg, company) []: govCy
-Organizational Unit Name (eg, section) []: DigitalServicesFactory
-Common Name (eg, server FQDN or YOUR name) []: localhost
-Email Address []: your-email@example.com
-```
-Common Name (CN): **Make sure** this is localhost for local development.
+   ```sh
+   cd govcy-express-services
+   ```
+3. Install dependencies:
 
-3. Where to Save the Files?
-Save server.cert and server.key in the root of your project folder.
+   ```sh
+   npm install
+   ```
 
----
-
-### How to create a .env file for local development
+### .env sample for local development
 
 Create a .env file in the root of your project folder (see example below): 
 
@@ -46,6 +39,9 @@ DEBUG=true
 ```
 
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
+
+#### Create certs for local development
+Make sure to have certs for local development in the root of your project folder (see [README](./README.md#create-certs-for-local-development))
 
 ---
 
@@ -823,3 +819,8 @@ logger.info("404 - Page not found.", err.message, req.originalUrl); // Log the e
 
 You can set the `DEBUG` environment variable to `true` to enable debug logging.
 
+## Testing
+
+To run tests, use the `npm test` command.
+
+To add new tests, create a new test file in the `test` directory, using the naming convention `testName.test.mjs`. See examples in the [tests](./test) directory.

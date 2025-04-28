@@ -23,54 +23,148 @@ This project is an Express-based project that dynamically renders online service
 - npm 
 - A CY Login client ID and secret
 
+
 ## Installation
-1. Clone the repository:
+The project acts as an npm package and you need to install it as a dependency in your npm project. Here's a step-by-step guide:
 
-   ```sh
-   git clone git@github.com:gov-cy/govcy-express-services.git
-   ```
-2. Navigate to the project directory:
+### 1. Initialization
 
-   ```sh
-   cd govcy-express-services
-   ```
-3. Install dependencies:
+Initialize your npm project:
 
-   ```sh
-   npm install
-   ```
-
-## Usage
-### Starting the Server
 ```sh
-npm start
+npm init -y
 ```
-The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#local-development) for more details on this).
 
-### Environment Variables
-Create a `.env` file and configure the following variables:
-```env
+### 2. Install the Package
+
+Install the express services package:
+
+```sh
+npm install ../govcy-express-services
+```
+
+### 3. Prepare for local development
+Add .env file and create certs for local development.
+
+#### Create certs for local development
+1. open `Git Bash`and run:
+
+```sh
+openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -days 365 -nodes
+```
+
+2. Answer the Certificate Questions
+You'll be prompted to enter some details. You can fill them out or leave them blank:
+```pqsql
+Country Name (2 letter code) [XX]: CY
+State or Province Name (full name) []: Nicosia
+Locality Name (eg, city) []: Nicosia
+Organization Name (eg, company) []: govCy
+Organizational Unit Name (eg, section) []: DigitalServicesFactory
+Common Name (eg, server FQDN or YOUR name) []: localhost
+Email Address []: your-email@example.com
+```
+Common Name (CN): **Make sure** this is localhost for local development.
+
+3. Where to Save the Files?
+Save server.cert and server.key in the root of your project folder.
+
+#### Create a .env file for local development
+
+Create a .env file in the root of your project folder.
+
+```sh
+SESSION_SECRET=session_secret
+PORT=44319
 CYLOGIN_ISSUER_URL=your-issuer-url
 CYLOGIN_CLIENT_ID=your-client-id
 CYLOGIN_CLIENT_SECRET=your-client-secret
-CYLOGIN_SCOPE=openid profile email
-CYLOGIN_REDIRECT_URI=http://localhost:3000/signin-oidc
-CYLOGIN_POST_LOGOUT_REDIRECT_URI=http://localhost:3000/
+CYLOGIN_SCOPE=openid cegg_profile dsf.submission
+CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
+CYLOGIN_CODE_CHALLENGE_METHOD=S256
+CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 NODE_ENV=development
+DEBUG=true
 ```
 
-#### Node Environments
 Set the environment in the `NODE_ENV` variable: 
 - **development**: For local development and testing.
 - **staging**: For staging environments.
 - **production**: For production deployments.
 
+Details about cyLogin can be found at the [CY Login documentation](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/14/CY-Login)
+
+To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
+
+### 4. Create data files for services
+
+Create data files in the `/data` folder (see more in [Dynamic Services Rendering](#dynamic-services-rendering))
+
+### 5. Use the package in your project
+
+Create an `index.mjs` file in your project to import and use the package as follows:
+
+```js
+import initializeGovCyExpressService from '@gov-cy/govcy-express-services';
+
+// Initialize the service
+const service = initializeGovCyExpressService();
+
+// Start the server
+service.startServer();
+```
+
+### 6. Enable debugging with VS Code
+
+To enable debugging with VS Code, add a file `.vscode/launch.json` to your project root as follows:
+
+```json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/index.mjs",
+            "env": {
+                "NODE_ENV": "development"
+            }
+        }
+    ]
+}
+
+```
+
+## Usage
+### Starting the Server
+Add in your `package.json`:
+
+```json
+"scripts": {
+    "start": "node index.mjs"
+}
+```
+
+Then run the server using `npm start`.
+
+```sh
+npm start
+```
+The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#local-development) for more details on this).
 
 ### Authentication Middleware
-Authentication is handled via OpenID Connect using CY Login. The middleware ensures users have valid sessions before accessing protected routes.
+Authentication is handled via OpenID Connect using CY Login and is configured using environment variables. The middleware ensures users have valid sessions before accessing protected routes. 
 
-### Dynamic Form Rendering
-Forms are rendered dynamically using JSON templates stored in the `/data` folder. Service routes load `data/:siteId.json` to get the form data. Example structure:
+### Dynamic Services Rendering
+Services are rendered dynamically using JSON templates stored in the `/data` folder. Service routes load `data/:siteId.json` to get the form data. Example structure:
 ```json
 {
   "site": {
