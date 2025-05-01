@@ -4,7 +4,52 @@ import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 
+/**
+ * Prepares the submission data for the service, including raw data, print-friendly data, and renderer data.
+ * 
+ * @param {object} req The request object containing session data
+ * @param {string} siteId The site ID
+ * @param {object} service The service object containing site and page data
+ * @returns {object} The submission data object containing raw data, print-friendly data, and renderer data
+ */
 export function prepareSubmissionData(req, siteId, service) {
+    // Get the raw data from the session store
+    const rawData = dataLayer.getSiteInputData(req.session, siteId);
+
+    // Get the print-friendly data from the session store
+    const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
+
+    // Get the renderer data from the session store
+    const reviewSummaryList = generateReviewSummary(printFriendlyData, req, siteId, false);
+
+    // Prepare the submission data object
+    return {
+        submission_username: dataLayer.getUser(req.session).name,
+        submission_email: dataLayer.getUser(req.session).email,
+        submission_data: rawData, // Raw data as submitted by the user in each page
+        submission_data_version: service.site?.submission_data_version || "", // The submission data version
+        print_friendly_data: printFriendlyData, // Print-friendly data
+        renderer_data: reviewSummaryList, // Renderer data of the summary list
+        renderer_version: service.site?.renderer_version || "", // The renderer version
+        design_systems_version: service.site?.design_systems_version || "", // The design systems version
+        service: { // Service info
+            id: service.site.id, // Service ID
+            title: service.site.title // Service title multilingual object
+        },
+        referenceNumber: "", // Reference number
+        // timestamp: new Date().toISOString(), // Timestamp `new Date().toISOString();`
+    };
+}
+
+/**
+ * Prepares the print-friendly data for the service, including page data and field labels.
+ * 
+ * @param {object} req The request object containing session data
+ * @param {string} siteId The site ID
+ * @param {object} service The service object containing site and page data
+ * @returns The print-friendly data for the service, including page data and field labels.
+ */
+export function preparePrintFriendlyData(req, siteId, service) {
     const submissionData = [];
 
     const allowedElements = ALLOWED_FORM_ELEMENTS;
@@ -54,7 +99,8 @@ export function prepareSubmissionData(req, siteId, service) {
      */
     function createFieldObject(formElement, value, valueLabel) {
         return {
-            id: formElement.params.name,
+            id: formElement.params?.id || "",
+            name: formElement.params?.name || "",
             label: formElement.params.label
                 || formElement.params.legend
                 || govcyResources.getSameMultilingualObject(service.site.languages, formElement.params.name),

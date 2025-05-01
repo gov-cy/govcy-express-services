@@ -2,14 +2,17 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {prepareSubmissionData , generateReviewSummary , generateSubmitEmail } from "../utils/govcySubmitData.mjs";
+import {prepareSubmissionData } from "../utils/govcySubmitData.mjs";
+import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
+import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 
 /**
  * Middleware to handle review page form submission
  * This middleware processes the review page, validates form data, and shows validation errors.
  */
 export function govcyReviewPostHandler() {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         try {
             const { siteId } = req.params;
     
@@ -50,35 +53,56 @@ export function govcyReviewPostHandler() {
                 return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
             } else {
                 // ------------ DO SUBMISSION ---------------------
-                let referenceNo = `12345678`;
-                // logger.debug("The site's data:", siteInputData);
-                logger.info("✅ Data submitted", siteId, referenceNo, req);
-                let printFriendlyData = prepareSubmissionData(req, siteId, service);
-                logger.debug("Submission print friendly data:", referenceNo, printFriendlyData,  req);
-                let reviewSummaryList = generateReviewSummary(printFriendlyData,req, siteId,false);
-                // handle data layer submission
-                dataLayer.storeSiteSubmissionData(
-                    req.session, 
-                    siteId, 
-                    service, 
-                    referenceNo, 
-                    new Date().toISOString(), 
-                    printFriendlyData,
-                    reviewSummaryList);
+                // get the submission API endpoint URL from the environment variable
+                const submissionUrl = getEnvVariable(service?.site?.submissionAPIEndpoint?.url || "", false);
+                if (!submissionUrl) {
+                    return handleMiddlewareError("🚨 Submission API endpoint URL is missing", 500, next);
+                }
+                
+                // Prepare submission data
+                const submissionData = prepareSubmissionData(req, siteId, service);
+
+                // Call the API to submit the data
+                const response = await govcyApiRequest("post", submissionUrl, submissionData);
+                
+                // Check if the response is successful
+                if (response.Succeeded) {
+                    let referenceNo = response?.Data?.submission_id || "";
+                    // Add the reference number to the submission data
+                    submissionData.referenceNumber = referenceNo; 
+                    logger.info("✅ Data submitted", siteId, referenceNo);
+                    // handle data layer submission
+                    dataLayer.storeSiteSubmissionData(
+                        req.session,
+                        siteId, 
+                        submissionData);
+                        
+                    logger.debug("🔄 Redirecting to success page:",  req);
+                    // redirect to success
+                    return res.redirect(govcyResources.constructPageUrl(siteId, `success`));
                     
-                logger.debug("🔄 Redirecting to success page:",  req);
-                // redirect to success
-                return res.redirect(govcyResources.constructPageUrl(siteId, `success`));
+                    // logger.debug("The submission data prepared:", printFriendlyData);
+                    // let reviewSummary = generateReviewSummary(printFriendlyData,req, siteId, false);
+                    // logger.debug("The review summary generated:", reviewSummary);
+                    // let emailBody = generateSubmitEmail(service,printFriendlyData,'xxxx xxxx xxxx 1234', req);
+                    // logger.debug("Email generated:", emailBody);
+                    // res.send(emailBody);
+                    
+                    // // Clear any existing submission errors from the session
+                    // dataLayer.clearSiteSubmissionErrors(req.session, siteId);
+                } else {
+                    // Handle submission failure
+                    const errorCode = response.ErrorCode;
+                    const errorPage = service.site?.submissionAPIEndpoint?.response?.errorResponse?.[errorCode]?.page;
+                    
+                    if (errorPage) {
+                        logger.info("🚨 Submission returned failed:", response.ErrorCode);
+                        return res.redirect(errorPage);
+                    } else {
+                        return handleMiddlewareError("🚨 Unknown error code received from API.", 500, next);
+                    }
+                }
                 
-                // logger.debug("The submission data prepared:", printFriendlyData);
-                // let reviewSummary = generateReviewSummary(printFriendlyData,req, siteId, false);
-                // logger.debug("The review summary generated:", reviewSummary);
-                // let emailBody = generateSubmitEmail(service,printFriendlyData,'xxxx xxxx xxxx 1234', req);
-                // logger.debug("Email generated:", emailBody);
-                // res.send(emailBody);
-                
-                // // Clear any existing submission errors from the session
-                // dataLayer.clearSiteSubmissionErrors(req.session, siteId);
             }
 
             // Proceed to final submission if no errors

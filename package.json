@@ -37,6 +37,7 @@
   "scripts": {
     "dev": "nodemon src/standalone.mjs",
     "start": "node src/standalone.mjs",
+    "start:mock": "node tests/mocks/mockApiServer.mjs",
     "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
     "test:unit": "mocha --recursive tests/unit/**/*.test.mjs",
     "test:integration": "mocha --recursive tests/integration/**/*.test.mjs",
@@ -47,6 +48,7 @@
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.0",
     "@gov-cy/govcy-frontend-renderer": "^1.14.2",
+    "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

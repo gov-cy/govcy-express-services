@@ -74,9 +74,111 @@
     "isTesting": true,
     "cdn": {
       "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3/dist"
+    },
+    "submission_data_version": "1.0",
+    "renderer_version": "1.14.2",
+    "design_systems_version" : "3.2.0",
+    "submissionAPIEndpoint": {
+      "url": "TEST_SUBMISSION_API_URL",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "103": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
     }
   },
   "pages": [
+    {
+      "pageData": {
+        "url": "user-not-admin",
+        "title": {
+          "el": "Δεν είστε διαχειριστής",
+          "en": "You are not an administrator",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                "id": "title",
+                "type": "h1",
+                "text": {
+                  "el": "Δεν είστε εγγεγραμμένοι",
+                  "en": "You are not registered"
+                }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                "id": "body",
+                "text": {
+                  "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
+                  "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
+                }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "user-not-registered",
+        "title": {
+          "el": "Δεν είστε εγγεγραμμένοι",
+          "en": "You are not an registered",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                "id": "title",
+                "type": "h1",
+                "text": {
+                  "el": "Δεν είστε εγγεγραμμένοι",
+                  "en": "You are not registered"
+                }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                "id": "body",
+                "text": {
+                  "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε εγγεγραμμένοι στο ΧΥΖ.</p>",
+                  "en": "<p>To submit in this service you need to be registered at XYZ.</p>"
+                }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "pageData": {
         "url": "index",
