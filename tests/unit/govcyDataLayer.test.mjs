@@ -93,19 +93,28 @@ describe('govcyDataLayer', () => {
                 design_systems_version: '3.0',
             },
         };
-        const referenceNumber = 'REF12345';
-        const timestamp = new Date().toISOString();
+        // const referenceNumber = 'REF12345';
+        // const timestamp = new Date().toISOString();
         const printFriendlyData = [{ pageUrl: 'page1', fields: [] }];
         const reviewSummaryList = [{ pageUrl: 'page1', summary: 'Summary data' }];
     
         dataLayer.storeSiteSubmissionData(
             session,
             'site1',
-            service,
-            referenceNumber,
-            timestamp,
-            printFriendlyData,
-            reviewSummaryList
+            {
+                submission_username: "John Doe",
+                submission_email: "HtYyj@example.com",
+                submission_data: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
+                submission_data_version: service.site?.submission_data_version || "", // The submission data version
+                print_friendly_data: printFriendlyData, // Print-friendly data
+                renderer_data: reviewSummaryList, // Renderer data of the summary list
+                renderer_version: service.site?.renderer_version || "", // The renderer version
+                design_systems_version: service.site?.design_systems_version || "", // The design systems version
+                service: { // Service info
+                    id: service.site.id, // Service ID
+                    title: service.site.title // Service title multilingual object
+                }
+            }
         );
     
         const submissionData = dataLayer.getSiteSubmissionData(session, 'site1');
@@ -117,13 +126,11 @@ describe('govcyDataLayer', () => {
                 page2: { formData: { field2: 'value2' } },
             },
             submission_data_version: '1.0',
+            print_friendly_data: printFriendlyData,
             renderer_data: reviewSummaryList,
             renderer_version: '2.0',
-            design_systems_version: '3.0',
-            service: { id: 'service1', title: 'Test Service' },
-            referenceNumber: 'REF12345',
-            timestamp: timestamp,
-            print_friendly_data: printFriendlyData,
+            design_systems_version: "3.0",
+            service: { id: 'service1', title: 'Test Service' }
         });
     
         // Ensure input data is cleared after submission
