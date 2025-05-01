@@ -6,6 +6,7 @@
  */
 import { getLoginUrl, handleCallback, getLogoutUrl } from '../auth/cyLoginAuth.mjs';
 import { logger } from "../utils/govcyLogger.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 
 /**
  * Middleware to check if the user is authenticated. If not, redirect to the login page.
@@ -35,9 +36,7 @@ export function naturalPersonPolicy(req, res, next) {
     if (req.session.user.profile_type == 'Individual' && req.session.user.unique_identifier) {
         next();
     } else {
-        const error = new Error('Access Denied: natural person policy not met.');
-        error.status = 403;
-        return next(error);
+        return handleMiddlewareError("🚨 Access Denied: natural person policy not met.", 403, next);
     }
 }
 

@@ -1,6 +1,7 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { generateReviewSummary  } from "../utils/govcySubmitData.mjs";
 
 
@@ -22,9 +23,7 @@ export function govcySuccessPageHandler(isPDF = false) {
             let submissionData = dataLayer.getSiteSubmissionData(req.session, siteId);
             // ❌ Check if submission data is empty 
             if (!submissionData || Object.keys(submissionData).length === 0) {
-                const error = new Error('Submission data not found');
-                error.status = 404;
-                throw error;  // Let Express catch this
+                return handleMiddlewareError("🚨 Submission data not found.", 404, next);
             }
             // Deep copy renderer pageData from
             let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));

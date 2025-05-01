@@ -3,6 +3,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 
 /**
  * Middleware to handle page form submission
@@ -26,9 +27,7 @@ export function govcyFormsPostHandler() {
             }
     
             if (!formElement) {
-                const error = new Error('Form definition not found');
-                error.status = 500;
-                return next(error);  // Pass error to govcyHttpErrorHandler
+                return handleMiddlewareError("🚨 Form definition not found.", 500, next);
             }
     
             const formData = req.body; // Submitted data

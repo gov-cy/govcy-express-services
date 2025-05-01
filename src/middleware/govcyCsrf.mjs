@@ -1,3 +1,5 @@
+
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 /**
  * Middleware to handle CSRF token generation and validation.
  * 
@@ -17,9 +19,7 @@ export function govcyCsrfMiddleware(req, res, next) {
   if (req.method === 'POST') {
     const tokenFromBody = req.body._csrf;
     if (!tokenFromBody || tokenFromBody !== req.session.csrfToken) {
-      const error = new Error('Invalid CSRF token');
-      error.status = 403;
-      return next(error);  // Pass error to govcyHttpErrorHandler
+      return handleMiddlewareError("🚨 Invalid CSRF token", 403, next); // Pass error to govcyHttpErrorHandler
     }
   }
 

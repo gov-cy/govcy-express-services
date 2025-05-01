@@ -1,7 +1,7 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {prepareSubmissionData , generateReviewSummary  } from "../utils/govcySubmitData.mjs";
+import {preparePrintFriendlyData , generateReviewSummary  } from "../utils/govcySubmitData.mjs";
 
 
 /**
@@ -56,8 +56,8 @@ export function govcyReviewPageHandler() {
                 }
             }
             // Generate the summary list using the utility function
-            let submissionData = prepareSubmissionData(req, siteId, serviceCopy);
-            let summaryList = generateReviewSummary(submissionData,req, siteId);
+            let printFriendlyData = preparePrintFriendlyData(req, siteId, serviceCopy);
+            let summaryList = generateReviewSummary(printFriendlyData,req, siteId);
             
             //--------- Handle Validation Errors ---------
             // Check if validation errors exist in the session
