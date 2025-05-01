@@ -36,6 +36,9 @@ CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 NODE_ENV=development
 DEBUG=true
+TEST_USERNAME=testuser
+TEST_PASSWORD=********
+TEST_SUBMISSION_API_URL=http://localhost:3002/success
 ```
 
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
@@ -114,7 +117,6 @@ This is an overview of the data stored in the session:
               "title": {}           // Service title multilingual object
           },
         "referenceNumber": "",      // Reference number
-        "timestamp": "",            // Timestamp `new Date().toISOString();`
       }
     }
   }
@@ -557,7 +559,7 @@ Sample of submission data:
   "client_ip": "87.228.189.67",       // IP address
   "unique_identifier": "0000808554",  // User ID
   "email": "user@example.com",
-  "phone_number": "99412126",
+  "phone_number": "99XXXXXX",
   "id_token": "xxxxxx",               // CY Login tokens
   "access_token": "xxxxxx",
   "refresh_token": null
@@ -706,7 +708,7 @@ For example:
     "client_ip": "87.228.189.67",
     "unique_identifier": "0000808554",
     "email": "dsftesting1@gmail.com",
-    "phone_number": "99412126",
+    "phone_number": "99XXXXXX",
     "id_token": "xxxxxx",
     "access_token": "xxxxxx",
     "refresh_token": null
@@ -808,7 +810,7 @@ The application logs in the console with the following levels:
 `info`: Request completion, submissions
 `debug`: Form processing, session data
 
-Use the govcyLogger middleware to configure logging levels. For example:
+Use the govcyLogger utility to configure logging levels. For example:
 
 ```js
 import { logger } from "../utils/govcyLogger.mjs";
@@ -819,8 +821,42 @@ logger.info("404 - Page not found.", err.message, req.originalUrl); // Log the e
 
 You can set the `DEBUG` environment variable to `true` to enable debug logging.
 
+----
+
+## API Integration
+
+The project integrates with external APIs for form submissions. The `govcyApiRequest` utility handles API communication with retry logic.
+
+### Example Usage
+```javascript
+import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
+
+const response = await govcyApiRequest("post", "https://api.example.com/submit", submissionData);
+```
+
+----
+
 ## Testing
 
-To run tests, use the `npm test` command.
+To run tests, use the `npm test` command. This will run all the tests. To run all the tests both the mockAPI and the server need to be started. You can run individual tests with:
+- `npm run test:unit`: Runs unit tests
+- `npm run test:integration`: Runs integration tests. Needs mockAPI to be started.
+- `npm run test:package`: Runs package tests and checks the intallability.
+- `npm run test:functional`: Runs functional tests with puppeteer. Needs the server to be started.
 
 To add new tests, create a new test file in the `test` directory, using the naming convention `testName.test.mjs`. See examples in the [tests](./test) directory.
+
+### Mock API Server
+A mock API server is included for testing API integrations. It listens on port `3002` and simulates various API responses based on the request URL. 
+
+To start the mock server:
+```sh
+npm run start:mock
+```
+
+Example endpoints:
+
+- `/success`: Simulates a successful submission.
+- `/error102`: Simulates an error response with code 102.
+- `/error103`: Simulates an error response with code 103.
+- `/invalid-key`: Simulates a bad request.

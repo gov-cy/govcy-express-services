@@ -15,7 +15,7 @@ This project is an Express-based project that dynamically renders online service
 - CSRF protection
 - cyLogin Single Sign-On (SSO)
 - Pre-filling posted values (in the same session)
-- ~~API integration~~
+- ~~- API integration with retry logic for form submissions.~~
 - ~~PDF generation and email support~~
 
 ## Prerequisites
@@ -85,6 +85,8 @@ CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 NODE_ENV=development
 DEBUG=true
+#APIs
+TEST_SUBMISSION_API_URL=http://localhost:3002/success
 ```
 
 Set the environment in the `NODE_ENV` variable: 
@@ -239,6 +241,21 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
     "submission_data_version" : "1",
     "renderer_version" : "1.14.1",
     "design_systems_version" : "3.1.1",
+    "submissionAPIEndpoint": {
+      "url": "TEST_SUBMISSION_API_URL",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "103": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
+    }
   },
   "pages": [
     {
@@ -893,8 +910,8 @@ The project uses express.js to serve the following routes:
 
 #### Service routes:
 - **`/:siteId`**: Requires **cyLogin** authentication for **authorized individual users**. Redirects to `/:siteId/index`.
-- **`/:siteId/:pageUrl`**: Requires **cyLogin** authentication for **authorized individual users**. Based on `/data/:siteId.json`, Renders the specified page template.
-- **`/:siteId/review`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the check your answers page template.
+- **`/:siteId/:pageUrl`**: Requires **cyLogin** authentication for **authorized individual users**. Based on `/data/:siteId.json`, Renders the specified page template. Validates page and saves data to session. If validation fails, errors are displayed with links to the inputs.
+- **`/:siteId/review`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the check your answers page template. Validates all pages in the service and submits the data to the configured API endpoint. If validation fails, errors are displayed with links to the relevant pages.
 - **`/:siteId/success`**: Requires **cyLogin** authentication for **authorized individual users**. Renders latest successful submission.
 - **`/:siteId/success/pdf`**: Requires **cyLogin** authentication for **authorized individual users**. Downloads the PDF of the latest successful submission.
 
