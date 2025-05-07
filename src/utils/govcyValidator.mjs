@@ -10,6 +10,7 @@
  * - `regCheck`: Performs custom regex validation as per the rule's checkValue.
  */
 import * as govcyResources from "../resources/govcyResources.mjs";
+import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 
 /**
  * This function validates a value based on the provided rules.
@@ -253,7 +254,7 @@ function parseDate(value) {
 export function validateFormElements(elements, formData, pageUrl) {
   const validationErrors = {};
   elements.forEach(field => {
-    const inputElements = ["textInput", "textArea", "select", "radios", "checkboxes", "datePicker", "dateInput"];
+    const inputElements = ALLOWED_FORM_ELEMENTS;
     //only validate input elements
     if (inputElements.includes(field.element)) {
       const fieldValue = (field.element === "dateInput")

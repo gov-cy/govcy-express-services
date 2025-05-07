@@ -156,7 +156,9 @@ Sample of submission data:
     },
     "takeover": {
       "formData": {
-        "date_start": "16/04/2025",
+        "date_start_day": "11",
+        "date_start_month": "12",
+        "date_start_year": "2020",
         "date_on_contract": "date_other",
         "date_contract": "16/04/2025",
         "reason": "24324dssf",
@@ -489,10 +491,10 @@ Sample of submission data:
             "el": "Ημερομηνία ανάληψης",
             "en": "Start Date"
           },
-          "value": "16/04/2025",
+          "value": "2020-12-11",
           "valueLabel": {
-            "el": "16/04/2025",
-            "en": "16/04/2025"
+            "el": "11/12/2020",
+            "en": "11/12/2020"
           }
         },
         {
