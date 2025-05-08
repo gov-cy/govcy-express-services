@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { populateFormData } from '../../src/utils/govcyFormHandling.mjs';
+import { populateFormData, getFormData } from '../../src/utils/govcyFormHandling.mjs';
 
 describe('govcyFormHandling', () => {
     it('1. should populate basic input elements with session data', () => {
@@ -114,5 +114,206 @@ describe('govcyFormHandling', () => {
 
         expect(formElements[0].params.items[0].conditionalElements[0].params.error).to.equal('Invalid value');
         expect(formElements[0].params.items[0].conditionalHasErrors).to.be.true;
+    });
+
+    
+});
+
+describe('getFormData', () => {
+    it('1. should filter basic input elements', () => {
+        const elements = [
+            { element: 'textInput', params: { name: 'field1' } },
+            { element: 'textArea', params: { name: 'field2' } },
+        ];
+        const formData = { field1: 'value1', field2: 'value2', extraField: 'unexpected' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            field1: 'value1',
+            field2: 'value2',
+        });
+    });
+
+    it('2. should handle missing or undefined values', () => {
+        const elements = [
+            { element: 'textInput', params: { name: 'field1' } },
+            { element: 'textArea', params: { name: 'field2' } },
+        ];
+        const formData = { field1: undefined };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            field1: '',
+            field2: '',
+        });
+    });
+
+    it('3. should handle dateInput elements', () => {
+        const elements = [
+            { element: 'dateInput', params: { name: 'birthDate' } },
+        ];
+        const formData = { birthDate_day: '15', birthDate_month: '08', birthDate_year: '1990' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            birthDate_day: '15',
+            birthDate_month: '08',
+            birthDate_year: '1990',
+        });
+    });
+
+    it('4. should assign empty strings for incomplete dateInput fields', () => {
+        const elements = [
+            { element: 'dateInput', params: { name: 'birthDate' } },
+        ];
+        const formData = { birthDate_day: '15', birthDate_month: '08' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            birthDate_day: '15',
+            birthDate_month: '08',
+            birthDate_year: '',
+        });
+    });
+
+    it('5. should handle conditional elements inside radios', () => {
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'gender',
+                    items: [
+                        {
+                            value: 'male',
+                            conditionalElements: [
+                                { element: 'textInput', params: { name: 'maleDetails' } },
+                            ],
+                        },
+                        {
+                            value: 'female',
+                            conditionalElements: [
+                                { element: 'textInput', params: { name: 'femaleDetails' } },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ];
+        const formData = { gender: 'male', maleDetails: 'Some details' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            gender: 'male',
+            maleDetails: 'Some details',
+            femaleDetails: '', // Included but empty since "female" is not selected
+        });
+    });
+
+    it('6. should process all conditional elements regardless of selection', () => {
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'gender',
+                    items: [
+                        {
+                            value: 'male',
+                            conditionalElements: [
+                                { element: 'textInput', params: { name: 'maleDetails' } },
+                            ],
+                        },
+                        {
+                            value: 'female',
+                            conditionalElements: [
+                                { element: 'textInput', params: { name: 'femaleDetails' } },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ];
+        const formData = { gender: 'female', femaleDetails: 'Some details' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            gender: 'female',
+            maleDetails: '', // Included but empty since "male" is not selected
+            femaleDetails: 'Some details',
+        });
+    });
+
+    it('7. should handle checkboxes with array values', () => {
+        const elements = [
+            {
+                element: 'checkboxes',
+                params: {
+                    name: 'preferences',
+                    items: [
+                        {
+                            value: 'email',
+                        },
+                        {
+                            value: 'sms',
+                        },
+                    ],
+                },
+            },
+        ];
+        const formData = { preferences: ['email', 'sms'], emailDetails: 'example@example.com', smsDetails: '1234567890' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            preferences: ['email', 'sms']
+        });
+    });
+    // Edge Case Tests
+    it('8. should ignore extra fields not defined in the form', () => {
+        const elements = [
+            { element: 'textInput', params: { name: 'field1' } },
+        ];
+        const formData = { field1: 'value1', extraField: 'unexpected' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            field1: 'value1',
+        });
+    });
+
+    it('9. should include all defined fields even if missing in formData', () => {
+        const elements = [
+            { element: 'textInput', params: { name: 'field1' } },
+            { element: 'textInput', params: { name: 'field2' } },
+        ];
+        const formData = { field1: 'value1' };
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            field1: 'value1',
+            field2: '', // Missing field is included with an empty string
+        });
+    });
+
+    it('10. should handle empty formData gracefully', () => {
+        const elements = [
+            { element: 'textInput', params: { name: 'field1' } },
+            { element: 'textInput', params: { name: 'field2' } },
+        ];
+        const formData = {};
+
+        const result = getFormData(elements, formData);
+
+        expect(result).to.deep.equal({
+            field1: '',
+            field2: '',
+        });
     });
 });

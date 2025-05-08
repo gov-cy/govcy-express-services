@@ -4,7 +4,7 @@ import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import y
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
-import { ALLOWED_FORM_ELEMENTS } from "../utils/govcyConstants.mjs";
+import { getFormData } from "../utils/govcyFormHandling.mjs"
 
 /**
  * Middleware to handle page form submission
@@ -79,60 +79,4 @@ export function govcyFormsPostHandler() {
             return next(error); // Pass error to govcyHttpErrorHandler
         }
     };
-}
-
-/**
- * Filters form data based on the form definition, including conditionals.
- * 
- * @param {Array} elements - The form elements (including conditional ones).
- * @param {Object} formData - The submitted form data.
- * @returns {Object} filteredData - The filtered form data.
- */
-function getFormData(elements, formData) {
-    const filteredData = {};
-    elements.forEach(element => {
-        const { name } = element.params || {};
-
-        // Check if the element is allowed and has a name
-        if (ALLOWED_FORM_ELEMENTS.includes(element.element) && name) {
-            // Handle conditional elements (e.g., checkboxes, radios, select)
-            if (["checkboxes", "radios", "select"].includes(element.element)) {
-                const value = formData[name];
-                filteredData[name] = value !== undefined && value !== null ? value : "";
-                // Process conditional elements inside items
-                if (element.element === "radios" && element.params.items) {
-                    element.params.items.forEach(item => {
-                        if (item.conditionalElements) {
-                            Object.assign(
-                                filteredData,
-                                getFormData(item.conditionalElements, formData)
-                            );
-                        }
-                    });
-                }
-                
-            }
-            // Handle dateInput
-            else if (element.element === "dateInput") {
-                const day = formData[`${name}_day`];
-                const month = formData[`${name}_month`];
-                const year = formData[`${name}_year`];
-                filteredData[`${name}_day`] = day !== undefined && day !== null ? day : "";
-                filteredData[`${name}_month`] = month !== undefined && month !== null ? month : "";
-                filteredData[`${name}_year`] = year !== undefined && year !== null ? year : "";
-            // Handle other elements (e.g., textInput, textArea, datePicker)
-            } else {
-                filteredData[name] = formData[name] !== undefined && formData[name] !== null ? formData[name] : "";
-            }
-
-            // Always process conditional elements directly attached to the current element
-            // if (element.conditionalElements) {
-            //     Object.assign(filteredData, getFormData(element.conditionalElements, formData));
-            // }
-        }
-    
-    });
-    
-
-    return filteredData;
 }
