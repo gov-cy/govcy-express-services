@@ -1,1 +1,6 @@
 tests/mocks/
+node_modules
+mochawesome-report/
+.env
+server.cert
+server.key

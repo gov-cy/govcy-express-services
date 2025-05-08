@@ -39,6 +39,7 @@
     "start": "node src/standalone.mjs",
     "start:mock": "node tests/mocks/mockApiServer.mjs",
     "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
+    "test:report": "mocha --timeout 60000 --reporter mochawesome tests/**/*.test.mjs --exit",
     "test:unit": "mocha --recursive tests/unit/**/*.test.mjs",
     "test:integration": "mocha --recursive tests/integration/**/*.test.mjs",
     "test:package": "mocha --recursive tests/package/**/*.test.mjs",
@@ -60,6 +61,7 @@
     "chai": "^5.2.0",
     "chai-http": "^5.1.1",
     "mocha": "^11.1.0",
+    "mochawesome": "^7.1.3",
     "nodemon": "^3.0.2",
     "pa11y": "^8.0.0",
     "sinon": "^20.0.0"
