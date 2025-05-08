@@ -32,12 +32,30 @@ export function requireAuth(req, res, next) {
  * @param {object} next The next middleware function
  */
 export function naturalPersonPolicy(req, res, next) {
-    // allow only natural persons with approved profiles
-    if (req.session.user.profile_type == 'Individual' && req.session.user.unique_identifier) {
-        next();
-    } else {
-        return handleMiddlewareError("🚨 Access Denied: natural person policy not met.", 403, next);
+    // // allow only natural persons with approved profiles
+    // if (req.session.user.profile_type == 'Individual' && req.session.user.unique_identifier) {
+    //     next();
+    // } else {
+    //     return handleMiddlewareError("🚨 Access Denied: natural person policy not met.", 403, next);
+    // }
+    
+    const { profile_type, unique_identifier } = req.session.user || {};
+     // Allow only natural persons with approved profiles
+     if (profile_type === 'Individual' && unique_identifier) {
+        
+        // Validate Cypriot Citizen (starts with "00" and is 10 characters long)
+        if (unique_identifier.startsWith('00') && unique_identifier.length === 10) {
+            return next();
+        }
+
+        // Validate Foreigner with ARN (starts with "05" and is 10 characters long)
+        if (unique_identifier.startsWith('05') && unique_identifier.length === 10) {
+            return next();
+        }
     }
+
+    // Deny access if validation fails
+    return handleMiddlewareError("🚨 Access Denied: natural person policy not met.", 403, next);
 }
 
 /**
