@@ -38,7 +38,7 @@ export function naturalPersonPolicy(req, res, next) {
     // } else {
     //     return handleMiddlewareError("🚨 Access Denied: natural person policy not met.", 403, next);
     // }
-    
+    // https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/42/For-Cyprus-Natural-or-Legal-person
     const { profile_type, unique_identifier } = req.session.user || {};
      // Allow only natural persons with approved profiles
      if (profile_type === 'Individual' && unique_identifier) {
