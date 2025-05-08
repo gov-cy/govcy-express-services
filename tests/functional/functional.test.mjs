@@ -1,10 +1,16 @@
 import puppeteer from 'puppeteer';
 import { expect } from 'chai';
 import dotenv from 'dotenv';
+import pa11y from 'pa11y';
 
 // Load environment variables from .env
 dotenv.config();
 const baseUrl = 'https://localhost:44319/test';
+let resultsArray = [];
+const pa11yIgnoreErrors = [
+  'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent'
+];
+const pa11yStandard = 'WCAG2AA';
 
 async function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,7 +21,8 @@ describe('Functional Test - Login and Navigate', function () {
   
     let browser;
     let page;
-  
+    let pa11yResults; // Declare a variable to store pa11y results
+
     before(async () => {
       // Launch Puppeteer and create a new incognito context
       browser = await puppeteer.launch({
@@ -54,6 +61,7 @@ describe('Functional Test - Login and Navigate', function () {
   
     it('1. should verify the initial page after login', async () => {
       // Step 3: Verify redirection to the test service
+      await page.waitForSelector('h1', { visible: true }); // Wait for the main heading to be visible
       const serviceTitle = await page.title();
       expect(serviceTitle).to.equal('Επιλογή Εγγάφου - Υπηρεσία τεστ - gov.cy'); // Verify the title of the first page
     });
@@ -74,6 +82,21 @@ describe('Functional Test - Login and Navigate', function () {
       // Step 4: Verify the page title has changed to the English version
       const englishTitle = await page.title();
       expect(englishTitle).to.equal('Document selection - Test service - gov.cy'); // Verify the English title
+      // run pa11y on the page and get results;
+      pa11yResults = await pa11y(page.url(), {
+        standard: pa11yStandard,
+        ignoreUrl: true,
+        page: page,
+        browser: browser,
+        ignore: pa11yIgnoreErrors
+      });
+      // push results in an array
+      resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+    });
+    
+    it('2.1. should have no accessibility issues on the English page', () => {
+      // Assert that there are no accessibility issues
+      expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
     });
 
     it('3. should submit the form and display an error summary', async () => {
@@ -97,6 +120,22 @@ describe('Functional Test - Login and Navigate', function () {
         const certificateError = await page.$eval('#certificate_select-error', (el) => el.textContent.trim());
         expect(certificateError).to.include('Error:'); // Verify the error prefix
         expect(certificateError).to.include('Select one or more documents'); // Verify the error message content
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+      });
+
+      
+      it('3.1. should have no accessibility issues on the form displaying an error summary', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
       });
 
       it('4. should select a certificate and navigate to the contact details page', async () => {
@@ -122,7 +161,24 @@ describe('Functional Test - Login and Navigate', function () {
         // Step 6: Verify the heading on the contact details page
         const heading = await page.$eval('h1', (el) => el.textContent.trim());
         expect(heading).to.equal('What mobile number can we use to contact you?'); // Verify the heading
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
       });
+
+      
+      it('4.1. should have no accessibility issues on contact details page', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
+      });
+
       it('5. should select a mobile option and display an error for missing conditional input', async () => {
         // Step 1: Ensure the radio button is visible
         await page.waitForSelector('#mobile_select-option-2', { visible: true });
@@ -147,6 +203,22 @@ describe('Functional Test - Login and Navigate', function () {
         const mobileError = await page.$eval('#mobileTxt-error', (el) => el.textContent.trim());
         expect(mobileError).to.include('Error:'); // Verify the error prefix
         expect(mobileError).to.include('Enter your mobile phone number'); // Verify the error message content
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+      });
+
+      
+      it('5.1. should have no accessibility issues on contact details page with error', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
       });
 
       it('6. should accept a valid mobile number and navigate to the landline number page', async () => {
@@ -176,12 +248,27 @@ describe('Functional Test - Login and Navigate', function () {
 
         // Step 7: Verify the page title
         const landlinePageTitle = await page.title();
-        console.log('Current page title:', landlinePageTitle); // Debugging log
         expect(landlinePageTitle).to.equal('Landline number - Test service - gov.cy'); // Verify the title
 
         // Step 8: Verify the label on the landline number page
         const landlineLabel = await page.$eval('#mobile-label', (el) => el.textContent.trim());
         expect(landlineLabel).to.equal('What is your landline number?'); // Verify the label text
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+      });
+
+      
+      it('6.1. should have no accessibility issues on contact landline page', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
       });
 
       it('7. should display an error for an invalid appointment date', async () => {
@@ -218,6 +305,22 @@ describe('Functional Test - Login and Navigate', function () {
         const appointmentError = await page.$eval('#appointment-error', (el) => el.textContent.trim());
         // expect(appointmentError).to.include('Error:'); // Verify the error prefix
         expect(appointmentError).to.include('must be'); // Verify the error message content
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+      });
+
+      
+      it('7.1. should have no accessibility issues on contact landline page with error', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
       });
 
       it('8. should accept a valid appointment date and navigate to the all inputs page', async () => {
@@ -265,6 +368,23 @@ describe('Functional Test - Login and Navigate', function () {
         const txtEmailAutocomplete = await page.$eval('#txtEmail', (el) => el.getAttribute('autocomplete'));
         expect(txtEmailType).to.equal('email'); // Verify the type attribute
         expect(txtEmailAutocomplete).to.equal('email'); // Verify the autocomplete attribute
+        // run pa11y on the page and get results;
+        pa11yResults = await pa11y(page.url(), {
+          standard: pa11yStandard,
+          ignoreUrl: true,
+          page: page,
+          browser: browser,
+          ignore: pa11yIgnoreErrors
+        });
+        // push results in an array
+        resultsArray.push({ url: page.url(), issues: pa11yResults.issues });
+      });
+
+      
+      it('8.1. should have no accessibility issues on all inputs page', () => {
+        // Assert that there are no accessibility issues
+        expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
+        console.log('Pa11y results:', JSON.stringify(resultsArray,null,2)); // Log the results for debugging
       });
       
   });
