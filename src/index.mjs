@@ -24,6 +24,7 @@ import { govcyHttpErrorHandler } from './middleware/govcyHttpErrorHandler.mjs';
 import { govcyLanguageMiddleware } from './middleware/govcyLanguageMiddleware.mjs';
 import { requireAuth, naturalPersonPolicy,handleLoginRoute, handleSigninOidc, handleLogout } from './middleware/cyLoginAuth.mjs';
 import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mjs';
+import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 import fs from 'fs';
@@ -116,6 +117,9 @@ export default function initializeGovCyExpressService(){
   const publicPath = join(__dirname, 'public');
   // 🌐 -- ROUTE: Serve static files in the public directory. Route for `/js/`
   app.use(express.static(publicPath));
+  
+  // 📝 -- ROUTE: Serve manifest.json dynamically for each site
+  app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
   
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
   app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyPageHandler(), renderGovcyPage());

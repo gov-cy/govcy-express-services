@@ -76,6 +76,9 @@ export function getServiceConfigData(siteId,lang) {
     //Handle TESTING banner: check if staging and set isTesting
     serviceCopy.site.isTesting = (whatsIsMyEnvironment() === "staging");
 
+    // Add manifest path
+    serviceCopy.site.manifest = `/${siteId}/manifest.json`;
+
     return serviceCopy; 
 }
 

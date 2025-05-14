@@ -386,5 +386,34 @@ describe('Functional Test - Login and Navigate', function () {
         expect(pa11yResults.issues).to.be.an('array').that.is.empty; // Assert that issues array is empty
         console.log('Pa11y results:', JSON.stringify(resultsArray,null,2)); // Log the results for debugging
       });
+
+      it('9.1 should fetch the manifest.json and verify its content', async () => {
+        // Step 1: Navigate to the manifest.json URL
+        const manifestUrl = `${baseUrl}/manifest.json`;
+        await page.goto(manifestUrl, { waitUntil: 'networkidle0' });
+        // Step 2: Fetch the manifest JSON directly
+        const manifestResponse = await page.evaluate(async (url) => {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return await response.json();
+        }, manifestUrl);
+
+        // Step 3: Verify the manifest properties
+        expect(manifestResponse).to.have.property('short_name').that.is.a('string');
+        expect(manifestResponse).to.have.property('name').that.is.a('string');
+        expect(manifestResponse).to.have.property('description').that.is.a('string');
+        expect(manifestResponse).to.have.property('icons').that.is.an('array').with.lengthOf(3);
+        expect(manifestResponse.icons[0]).to.have.property('src').that.includes('icons-128.png');
+        expect(manifestResponse.icons[0]).to.have.property('type', 'image/png');
+        expect(manifestResponse.icons[0]).to.have.property('sizes', '128x128');
+        expect(manifestResponse).to.have.property('start_url').that.includes('/test/index');
+        expect(manifestResponse).to.have.property('scope').that.includes('/test/');
+        expect(manifestResponse).to.have.property('background_color', '#31576F');
+        expect(manifestResponse).to.have.property('theme_color', '#31576F');
+        expect(manifestResponse).to.have.property('display', 'standalone');
+        expect(manifestResponse).to.have.property('dir', 'ltr');
+      });
       
   });
