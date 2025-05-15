@@ -72,6 +72,10 @@
         "tr": ""
       },
       "url": "https://gov.cy",
+      "matomo": {
+        "url": "//wp.matomo.dits.dmrid.gov.cy/",
+        "siteId": "50"
+      },
       "isTesting": true,
       "cdn": {
         "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3/dist",
