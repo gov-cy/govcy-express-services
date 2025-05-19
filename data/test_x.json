@@ -1,3 +1,4 @@
+
 {
   "site": {
     "id": "test",
@@ -21,7 +22,7 @@
         "label": {
           "el": "Δήλωση απορρήτου",
           "en": "Privacy statement",
-          "tr": ""
+          "tr": "Privacy statement"
         },
         "href": "#"
       },
@@ -29,7 +30,7 @@
         "label": {
           "el": "Cookies",
           "en": "Cookies",
-          "tr": ""
+          "tr": "Cookies"
         },
         "href": "#"
       },
@@ -37,7 +38,7 @@
         "label": {
           "el": "Προσβασιμότητα",
           "en": "Accessibility",
-          "tr": ""
+          "tr": "Accessibility"
         },
         "href": "#"
       },
@@ -45,7 +46,7 @@
         "label": {
           "el": "Βοηθήστε μας να βελτιώσουμε αυτή την υπηρεσία",
           "en": "Help us improve this service",
-          "tr": ""
+          "tr": "Help us improve this service"
         },
         "href": "#"
       }
@@ -73,112 +74,15 @@
     "url": "https://gov.cy",
     "isTesting": true,
     "cdn": {
-      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3/dist"
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+      "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+      "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
     },
-    "submission_data_version": "1.0",
-    "renderer_version": "1.14.2",
-    "design_systems_version" : "3.2.0",
-    "submissionAPIEndpoint": {
-      "url": "TEST_SUBMISSION_API_URL",
-      "response": {
-        "errorResponse": {
-          "102": {
-            "error": "user not administrator",
-            "page": "/test/user-not-admin"
-          },
-          "103": {
-            "error": "user not registration",
-            "page": "/test/user-not-registered"
-          }
-        }
-      }
-    }
+    "submission_data_version": "1",
+    "renderer_version": "1.14.3",
+    "design_systems_version": "3.2.0"
   },
   "pages": [
-    {
-      "pageData": {
-        "url": "user-not-admin",
-        "title": {
-          "el": "Δεν είστε διαχειριστής",
-          "en": "You are not an administrator",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
-      },
-      "pageTemplate": {
-        "sections": [
-          {
-            "name": "main",
-            "elements": [
-              {
-                "element": "textElement",
-                "params": {
-                "id": "title",
-                "type": "h1",
-                "text": {
-                  "el": "Δεν είστε εγγεγραμμένοι",
-                  "en": "You are not registered"
-                }
-                }
-              },
-              {
-                "element": "htmlElement",
-                "params": {
-                "id": "body",
-                "text": {
-                  "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
-                  "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
-                }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "pageData": {
-        "url": "user-not-registered",
-        "title": {
-          "el": "Δεν είστε εγγεγραμμένοι",
-          "en": "You are not an registered",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
-      },
-      "pageTemplate": {
-        "sections": [
-          {
-            "name": "main",
-            "elements": [
-              {
-                "element": "textElement",
-                "params": {
-                "id": "title",
-                "type": "h1",
-                "text": {
-                  "el": "Δεν είστε εγγεγραμμένοι",
-                  "en": "You are not registered"
-                }
-                }
-              },
-              {
-                "element": "htmlElement",
-                "params": {
-                "id": "body",
-                "text": {
-                  "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε εγγεγραμμένοι στο ΧΥΖ.</p>",
-                  "en": "<p>To submit in this service you need to be registered at XYZ.</p>"
-                }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
     {
       "pageData": {
         "url": "index",
@@ -188,7 +92,8 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "data-entry-radios"
       },
       "pageTemplate": {
         "sections": [
@@ -342,7 +247,8 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "data-entry-textinput"
       },
       "pageTemplate": {
         "sections": [
@@ -500,7 +406,8 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "data-entry-all"
       },
       "pageTemplate": {
         "sections": [
@@ -697,7 +604,8 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "radios-conditions"
       },
       "pageTemplate": {
         "sections": [
@@ -734,7 +642,7 @@
                       "params": {
                         "id": "html",
                         "text": {
-                          "el": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraph</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>",
+                          "el": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraphddd</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>",
                           "en": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraph</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>"
                         }
                       }
@@ -960,6 +868,469 @@
                       }
                     },
                     {
+                      "element": "select",
+                      "params": {
+                        "id": "select1",
+                        "name": "select1",
+                        "label": {
+                          "el": "Choose an item Ελληνικά",
+                          "en": "Choose an item"
+                        },
+                        "items": [
+                          {
+                            "value": "",
+                            "text": {
+                              "en": "Select",
+                              "el": "Επιλέξτε"
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../radios-conditions"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "user-not-admin",
+        "title": {
+          "el": "Δεν είστε διαχειριστής ",
+          "en": "You are not an administrator",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": ""
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε διαχειριστής ",
+                    "en": "You are not an administrator"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "user-not-registered",
+        "title": {
+          "el": "Δεν είστε εγγεγραμμένοι ",
+          "en": "You are not an registered",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": ""
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε εγγεγραμμένοι",
+                    "en": "You are not registered"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε εγγεγραμμένοι στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be registered at XYZ.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "radios-conditions",
+        "title": {
+          "el": "Τίτλος σελίδας",
+          "en": "Page title",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "id_select",
+                        "name": "id_select",
+                        "legend": {
+                          "el": "Πως θέλετε να σας ταυτοποιήσουμε;",
+                          "en": "What type of identification  can we use?"
+                        },
+                        "items": [
+                          {
+                            "value": "id",
+                            "text": {
+                              "el": "Ταυτότητα",
+                              "en": "ID card",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "id_number",
+                                  "name": "id_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό ταυτότητας",
+                                    "en": "Enter ID card number"
+                                  },
+                                  "isPageHeading": false,
+                                  "hint": {
+                                    "el": "Κυπριακή ή άλλη",
+                                    "en": "Cypriot or other"
+                                  },
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "empty",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξετε τρόπο ταυτοποίησης",
+                                        "en": "Choose identification type",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ταυτότητας",
+                                        "en": "Enter a valid ID number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ταυτότητας",
+                                        "en": "Enter a valid ID number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "element": "select",
+                                "params": {
+                                  "id": "id_country",
+                                  "name": "id_country",
+                                  "label": {
+                                    "el": "Επιλέξτε χώρα έκδοσης",
+                                    "en": "Choose issuing country"
+                                  },
+                                  "items": [
+                                    {
+                                      "value": "",
+                                      "text": {
+                                        "en": "Select",
+                                        "el": "Choose country"
+                                      }
+                                    }
+                                  ],
+                                  "isPageHeading": false
+                                },
+                                "validations": [
+                                  {
+                                    "check": "empty",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξτε τη χώρα που εξέδωσε την ταυτότητα",
+                                        "en": "Choose the country that issued the ID",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "value": "arc",
+                            "text": {
+                              "el": "Δελτίο Εγγραφής Αλλοδαπού (ARC)",
+                              "en": "Alien Registration Certificate (ARC)",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "arc_number",
+                                  "name": "arc_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό ARC",
+                                    "en": "Enter ARC number"
+                                  },
+                                  "isPageHeading": false,
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "empty",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε αριθμό ARC",
+                                        "en": "Enter ARC number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ARC όπως 51234567. Ξεκινά με 5",
+                                        "en": "Enter a valid ARC number like 51234567. It starts with 5",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ARC όπως 51234567. Ξεκινά με 5",
+                                        "en": "Enter a valid ARC number like 51234567. It starts with 5",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "value": "passport",
+                            "text": {
+                              "el": "Διαβατήριο",
+                              "en": "Passport",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "passport_number",
+                                  "name": "passport_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό διαβατηρίου",
+                                    "en": "Enter passport number"
+                                  },
+                                  "isPageHeading": false,
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "empty",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε αριθμό διαβατηρίου",
+                                        "en": "Enter passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό διαβατηρίου",
+                                        "en": "Enter a valid passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό διαβατηρίου",
+                                        "en": "Enter a valid passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "element": "select",
+                                "params": {
+                                  "id": "passport_country",
+                                  "name": "passport_country",
+                                  "label": {
+                                    "el": "Επιλέξτε χώρα έκδοσης",
+                                    "en": "Choose issuing country"
+                                  },
+                                  "items": [
+                                    {
+                                      "value": "",
+                                      "text": {
+                                        "en": "Select",
+                                        "el": "Choose country"
+                                      }
+                                    }
+                                  ],
+                                  "isPageHeading": false
+                                },
+                                "validations": [
+                                  {
+                                    "check": "empty",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξτε τη χώρα που εξέδωσε το διαβατήριο",
+                                        "en": "Choose the country that issued the passport",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Επιλέξτε τρόπο ταυτοποίησης",
+                          "en": "Select identification type",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "empty",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε τρόπο ταυτοποίησης",
+                              "en": "Choose identification type",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
                       "element": "button",
                       "params": {
                         "id": "continue",
@@ -1056,6 +1427,41 @@
     "data-entry-all.textArea": {
       "el": "Text area label Ελληνικά",
       "en": "Text area label",
+      "tr": ""
+    },
+    "data-entry-all.select1": {
+      "el": "Choose an item Ελληνικά",
+      "en": "Choose an item",
+      "tr": ""
+    },
+    "radios-conditions.id_select": {
+      "el": "Πως θέλετε να σας ταυτοποιήσουμε;",
+      "en": "What type of identification  can we use?",
+      "tr": ""
+    },
+    "radios-conditions.id_number": {
+      "el": "Εισαγάγετε αριθμό ταυτότητας",
+      "en": "Enter ID card number",
+      "tr": ""
+    },
+    "radios-conditions.id_country": {
+      "el": "Επιλέξτε χώρα έκδοσης",
+      "en": "Choose issuing country",
+      "tr": ""
+    },
+    "radios-conditions.arc_number": {
+      "el": "Εισαγάγετε αριθμό ARC",
+      "en": "Enter ARC number",
+      "tr": ""
+    },
+    "radios-conditions.passport_number": {
+      "el": "Εισαγάγετε αριθμό διαβατηρίου",
+      "en": "Enter passport number",
+      "tr": ""
+    },
+    "radios-conditions.passport_country": {
+      "el": "Επιλέξτε χώρα έκδοσης",
+      "en": "Choose issuing country",
       "tr": ""
     }
   }

@@ -48,15 +48,18 @@ export function govcyPageHandler() {
 
             // 🔍 Find the first button with `prototypeNavigate`
             const button = element.params.elements.find(subElement =>
-              subElement.element === "button" && subElement.params.prototypeNavigate
+              // subElement.element === "button" && subElement.params.prototypeNavigate
+              subElement.element === "button"
             );
 
             // ⚙️ Modify the button if it exists
             if (button) {
               // Store the value of `prototypeNavigate`
-              const prototypeNavigateValue = button.params.prototypeNavigate;
+              //const prototypeNavigateValue = button.params.prototypeNavigate;
               // Remove `prototypeNavigate`
-              delete button.params.prototypeNavigate;
+              if (button.params.prototypeNavigate) {
+                delete button.params.prototypeNavigate;
+              }
               // Set `type` to "submit"
               button.params.type = "submit";
             }

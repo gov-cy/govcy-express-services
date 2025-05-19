@@ -3,6 +3,8 @@
 ## Description
 This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner.
 
+![govcy-express-services](express-services.png)
+
 ## Features
 - Dynamic form rendering from JSON templates
     - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`
@@ -267,7 +269,8 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "answer-bank-boc"
       },
       "pageTemplate": {
         "sections": [
@@ -444,7 +447,8 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "bank-settlement"
       },
       "pageTemplate": {
         "sections": [
@@ -680,7 +684,8 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-third",
+        "nextPage": "review"
       },
       "pageTemplate": {
         "sections": [

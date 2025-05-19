@@ -63,7 +63,8 @@ export function govcyFormsPostHandler() {
                     if (req.query.route === "review") {
                         nextPage = govcyResources.constructPageUrl(siteId, "review");
                     } else {
-                        nextPage = form.params.elements.find(el => el.element === "button" && el.params?.prototypeNavigate)?.params.prototypeNavigate;
+                        nextPage = page.pageData.nextPage;
+                        //nextPage = form.params.elements.find(el => el.element === "button" && el.params?.prototypeNavigate)?.params.prototypeNavigate;
                     }
                 }
             }
