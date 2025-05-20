@@ -86,8 +86,16 @@ CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
 CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 NODE_ENV=development
+# Debug or not  -------------------------------
 DEBUG=true
-#APIs
+# DSF Gateway ---------------------------
+DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
+DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
+DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
+# Notification API URL
+DSF_API_GTW_NOTIFICATION_API_URL=https://10.61.11.10:5443/DsfApi/api/v1/NotificationEngine/simple-message
+# SERVICES stuf-------------------------------
+#APIs 
 TEST_SUBMISSION_API_URL=http://localhost:3002/success
 ```
 

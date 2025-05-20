@@ -2,10 +2,11 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {prepareSubmissionData } from "../utils/govcySubmitData.mjs";
+import {prepareSubmissionData, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import { sendEmail } from "../utils/govcyNotification.mjs"
 
 /**
  * Middleware to handle review page form submission
@@ -77,15 +78,20 @@ export function govcyReviewPostHandler() {
                         siteId, 
                         submissionData);
                         
+                    //-- Send email to user
+                    // Generate the email body
+                    let emailBody = generateSubmitEmail(service, submissionData.print_friendly_data, referenceNo, req);
+                    logger.debug("Email generated:", emailBody);
+                    // Send the email
+                    sendEmail(service.site.title[service.site.lang],emailBody,[dataLayer.getUser(req.session).email], "eMail");
+                    // --- End of email sending
+                    
                     logger.debug("🔄 Redirecting to success page:",  req);
                     // redirect to success
                     return res.redirect(govcyResources.constructPageUrl(siteId, `success`));
                     
                     // logger.debug("The submission data prepared:", printFriendlyData);
                     // let reviewSummary = generateReviewSummary(printFriendlyData,req, siteId, false);
-                    // logger.debug("The review summary generated:", reviewSummary);
-                    // let emailBody = generateSubmitEmail(service,printFriendlyData,'xxxx xxxx xxxx 1234', req);
-                    // logger.debug("Email generated:", emailBody);
                     // res.send(emailBody);
                     
                     // // Clear any existing submission errors from the session
