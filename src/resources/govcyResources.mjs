@@ -132,20 +132,23 @@ export const staticResources = {
                 tr: "govcy Express Services" 
             },
             headerTitle: { 
-                en: "govcy Express Services", 
-                el: "govcy Express Services",
-                tr: "govcy Express Services"
+                en: "", 
+                el: "",
+                tr: ""
             },
             description: { 
                 en: "govcy Express Services", 
                 el: "govcy Express Services",
                 tr: "govcy Express Services" 
             },
+            copyrightText :{
+                en:"Republic of Cyprus, 2025", 
+                el:"Κυπριακή Δημοκρατία, 2025",
+                tr:"Kıbrıs Cumhuriyeti, 2025"
+            },
             url: "https://gov.cy",
             cdn: {
-                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
-                cssIntegrity: "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
-                jsIntegrity: "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
+                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist"
             }
         },
         pageData: {
@@ -193,7 +196,7 @@ export function csrfTokenInput(csrfToken) {
  * @param {object} body the body html element 
  * @returns {object} error page template
  */
-export function errorPageTemplate(title, body) {
+export function simpleHtmlPageTemplate(title, body) {
     return {
         sections: [
             {
@@ -308,6 +311,65 @@ export function getSubmissionPDFLinkHtml (siteId = "") {
         </a></p>`
     )
 }
+
+/**
+ * Generate a localized page template listing available services.
+ * @param {Array} listOfAvailableSites - Array of site objects with filename and title.
+ * @param {string} lang - Language code ('el', 'en', 'tr').
+ * @returns {object} Page template object.
+ */
+export function availableServicesPageTemplate(listOfAvailableSites, lang = "el") {
+    // Supported languages
+    const supportedLangs = ["el", "en", "tr"];
+    const usedLang = supportedLangs.includes(lang) ? lang : "el";
+    
+    // Localized titles
+    const titles = {
+        el: "Διαθέσιμες Υπηρεσίες",
+        en: "Available Services",
+        tr: "Available Services"
+    };
+
+    // Localized intro text
+    const intros = {
+        el: "<p>Από εδώ μπορείτε να επισκεφτείτε τις πιο κάτω υπηρεσίες:</p>",
+        en: "<p>From here you can visit the following services:</p>",
+        tr: "<p>From here you can visit the following services:</p>",
+    };
+
+    let siteLinks = "";
+    if (Array.isArray(listOfAvailableSites) && listOfAvailableSites.length > 0) {
+        siteLinks = `<ul>` + listOfAvailableSites.map(site =>
+        `<li><a href="/${site.filename}">${site.title?.[usedLang] || site.filename}</a></li>`
+        ).join('') + `</ul>`;
+    } else {
+        // No services available
+        siteLinks = {
+            el: `<div class="govcy-warning-text"><span class="govcy-warning-text-icon" aria-hidden="true">!</span><span class="govcy-warning-text-message">Δεν υπάρχουν διαθέσιμες υπηρεσίες αυτή τη στιγμή.</span></div>`,
+            en: `<div class="govcy-warning-text"><span class="govcy-warning-text-icon" aria-hidden="true">!</span><span class="govcy-warning-text-message"><p>No services are currently available.</span></div>`,
+            tr: `<div class="govcy-warning-text"><span class="govcy-warning-text-icon" aria-hidden="true">!</span><span class="govcy-warning-text-message"><p>Şu anda mevcut hizmet yok.</span></div>`
+        }[usedLang];
+    }
+    
+    // Localized footer
+    const footers = {
+        el: `<p>Για περισσότερες υπηρεσίες επισκεφτείτε το <a href="https://gov.cy">gov.cy</a></p>`,
+        en: `<p>For more services visit <a href="https://gov.cy">gov.cy</a></p>`,
+        tr: `<p>For more services visit <a href="https://gov.cy">gov.cy</a></p>`
+    };
+
+    // Compose the body
+    const body = `${intros[lang] || intros.el}
+${siteLinks}
+${footers[lang] || footers.el}`;
+
+    // Use your existing simpleHtmlPageTemplate
+    return simpleHtmlPageTemplate(
+        { el: titles.el, en: titles.en, tr: titles.tr },
+        { el: body, en: body, tr: body }
+    );
+}
+
 
 /**
  * Returns a multilingual object with the text in all languages

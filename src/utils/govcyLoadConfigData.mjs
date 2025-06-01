@@ -102,3 +102,34 @@ export function getPageConfigData(service, pageUrl) {
     
     return page; 
 }
+
+/**
+ * Get a list of available site configs with their titles.
+ * @returns {Array<{filename: string, title: string}>}
+ */
+export function listAvailableSiteConfigs() {
+    const dataPath = path.join(process.cwd(), 'data');
+    let result = [];
+    try {
+        const files = fs.readdirSync(dataPath)
+            .filter(f => f.endsWith('.json'));
+
+        for (const file of files) {
+            const siteId = path.basename(file, '.json');
+            try {
+                const config = getServiceConfigData(siteId);
+                result.push({
+                    filename: siteId,
+                    title: config.site?.title || {el: "Unknown Service", en: "Unknown Service", tr: "Unknown Service"}
+                });
+            } catch (e) {
+                // Skip files that can't be loaded
+                logger.debug(`Skipping ${file}: ${e.message}`);
+            }
+        }
+    } catch (err) {
+        logger.error('Error reading data directory:', err.message);
+        return result; // Return empty array if there's an error
+    }
+    return result;
+}

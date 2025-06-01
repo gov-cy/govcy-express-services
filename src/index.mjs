@@ -1,7 +1,3 @@
-// Import required modules
-// npm link C:\Users\constantinos\Documents\code\DSF\govcy-frontend-renderer
-// npm unlink @gov-cy/govcy-frontend-renderer
-
 import express from 'express';
 import session from 'express-session';
 import { dirname, join } from 'path';
@@ -25,8 +21,10 @@ import { govcyLanguageMiddleware } from './middleware/govcyLanguageMiddleware.mj
 import { requireAuth, naturalPersonPolicy,handleLoginRoute, handleSigninOidc, handleLogout } from './middleware/cyLoginAuth.mjs';
 import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mjs';
 import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
+import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
+
 import fs from 'fs';
 
 export default function initializeGovCyExpressService(){
@@ -61,7 +59,7 @@ export default function initializeGovCyExpressService(){
       cookie: { 
         secure: USE_HTTPS, // Secure cookies only if HTTPS is used
         httpOnly: true,   // Prevents XSS attacks
-        maxAge: 3600000,  // Session expires after 1 hour
+        maxAge: 1800000,  // Session expires after 1 hour
         sameSite:  'lax' // Prevents CSRF by default
       } 
     })
@@ -102,6 +100,8 @@ export default function initializeGovCyExpressService(){
         <br> Clinent ip: ${req.session.user.client_ip}
         <br> Unique Identifier: ${req.session.user.unique_identifier}
         <br> Email: ${req.session.user.email}
+        <br> Id Token: ${req.session.user.id_token}
+        <br> Access Token: ${req.session.user.access_token}
         `);
     });
   }
@@ -118,6 +118,9 @@ export default function initializeGovCyExpressService(){
   // 🌐 -- ROUTE: Serve static files in the public directory. Route for `/js/`
   app.use(express.static(publicPath));
   
+  // 🏡 -- ROUTE: handle the route `/`
+   app.get('/', govcyRoutePageHandler);
+
   // 📝 -- ROUTE: Serve manifest.json dynamically for each site
   app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
   

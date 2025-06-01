@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.0",
-    "@gov-cy/govcy-frontend-renderer": "^1.16.0",
+    "@gov-cy/govcy-frontend-renderer": "^1.17.0",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",

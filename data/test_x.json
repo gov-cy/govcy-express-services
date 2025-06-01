@@ -24,7 +24,7 @@
           "en": "Privacy statement",
           "tr": "Privacy statement"
         },
-        "href": "#"
+        "href": "privacy-statement"
       },
       {
         "label": {
@@ -32,7 +32,7 @@
           "en": "Cookies",
           "tr": "Cookies"
         },
-        "href": "#"
+        "href": "cookie-policy"
       },
       {
         "label": {
@@ -40,7 +40,7 @@
           "en": "Accessibility",
           "tr": "Accessibility"
         },
-        "href": "#"
+        "href": "accessibility-statement"
       },
       {
         "label": {
@@ -51,13 +51,14 @@
         "href": "#"
       }
     ],
+    "copyrightText" : {"en":"Republic of Cyprus, 2025", "el":"Κυπριακή Δημοκρατία, 2025"},
     "menu": {
       "el": "Μενού",
       "en": "Menu",
       "tr": "Menu"
     },
     "title": {
-      "el": "Υπηρεσία τεστ",
+      "el": "Υπηρεσία τεστ x",
       "en": "Test service",
       "tr": ""
     },
@@ -79,8 +80,12 @@
       "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
     },
     "submission_data_version": "1",
-    "renderer_version": "1.14.3",
-    "design_systems_version": "3.2.0"
+    "renderer_version": "1.16.1",
+    "design_systems_version": "3.2.0",
+    "matomo": {
+      "url": "//wp.matomo.dits.dmrid.gov.cy/",
+      "siteId": "50"
+    }
   },
   "pages": [
     {
@@ -99,12 +104,7 @@
         "sections": [
           {
             "name": "beforeMain",
-            "elements": [
-              {
-                "element": "backLink",
-                "params": {}
-              }
-            ],
+            "elements": [],
             "params": {}
           },
           {
@@ -855,7 +855,7 @@
                       "params": {
                         "id": "textArea",
                         "name": "textArea",
-                        "rows": 10,
+                        "rows": 5,
                         "label": {
                           "el": "Char count label ΕΛΛΗΝΙΚΑ",
                           "en": "Char count label ΑΓΓΛΙΚΑ"
@@ -1110,7 +1110,12 @@
         "sections": [
           {
             "name": "beforeMain",
-            "elements": [],
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
             "params": {}
           },
           {
@@ -5397,6 +5402,185 @@
                       }
                     }
                   ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "accessibility-statement",
+        "title": {
+          "el": "Δήλωση προσβασιμότητας ",
+          "en": "Accessibility statement",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δήλωση προσβασιμότητας ",
+                    "en": "Accessibility statement"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Κατάσταση συμμόρφωσης</h2><p>Οι <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Οδηγίες Προσβασιμότητας Περιεχομένου</a> (WCAG) καθορίζουν απαιτήσεις για σχεδιαστές και προγραμματιστές για τη βελτίωση της προσβασιμότητας για τα άτομα με αναπηρίες. Καθορίζουν τρία επίπεδα συμμόρφωσης: Επίπεδο A, Επίπεδο AA, και Επίπεδο AAA.</p><p>Η SERVICE_NAME συμμορφώνεται πλήρως με τις Οδηγίες του WCAG 2.1 επίπεδο AA.</p><h2>Προσέγγιση αξιολόγησης</h2><p>Η ομάδα του DSF αξιολόγησε την προσβασιμότητα της υπηρεσίας χρησιμοποιώντας τα εξής εργαλεία:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Συμβατότητα με τους φυλλομετρητές</h2><p>Η υπηρεσία είναι συμβατή με τους πιο κάτω φυλλομετρητές:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Περιορισμοί και εναλλακτικές λύσεις</h2><p>Παρά τις προσπάθειές μας να διασφαλίσουμε την προσβασιμότητα της υπηρεσίας, πιθανόν να υπάρχουν ορισμένοι περιορισμοί. Ακολουθεί περιγραφή γνωστών περιορισμών και πιθανών λύσεων. Επικοινωνήστε μαζί μας εάν παρατηρήσετε κάποιο πρόβλημα που δεν αναφέρεται πιο κάτω.</p><p>Για να λειτουργεί κανονικά η υπηρεσία απαιτείται JavaScript.</p><h2>Ανατροφοδότηση και παράπονα</h2><p>Τα σχόλιά σας σχετικά με την προσβασιμότητα της υπηρεσίας είναι ευπρόσδεκτα. Παρακαλούμε να μας ενημερώσετε εάν συναντήσετε εμπόδια προσβασιμότητας:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>Προσπαθούμε να ανταποκριθούμε στα σχόλια εντός 30 εργάσιμων ημερών.</p><p>Εάν δεν απαντήσουμε ή δεν επιλύσουμε το πρόβλημα, μπορείτε να στείλετε ένα παράπονο στο:</p><ul class=\"govcy-list-unstyled\"><li>Υφυπουργείο Έρευνας, Καινοτομίας και Ψηφιακής Πολιτικής<br/>Λεωφόρος Λεμεσού 134<br/>2015 Στρόβολος, Λευκωσία<br/>Κύπρος</li></ul><p>Ή μπορείτε να στείλετε email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>Εάν δεν σας ικανοποιήσει η απάντηση, μπορείτε να <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_gr/complaintformombudsman_gr?OpenForm\" target=\"_blank\">υποβάλετε παράπονο στο Γραφείο Επιτρόπου Διοικήσεως και Προστασίας των Ανθρωπίνων Δικαιωμάτων</a>.</p><h2>Ημερομηνία</h2><p>Η δήλωση αυτή δημιουργήθηκε στις TEST_DATE.</p>",
+                    "en": "<h2>Conformance status</h2><p>The <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Web Content Accessibility Guidelines</a> (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p><p>The SERVICE_NAME is fully conformant with WCAG 2.1 level AA.</p><h2>Assessment approach</h2><p>The TEAM_NAME assessed the accessibility of the service using:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Compatibility with browsers</h2><p>The service is designed to be compatible with the following browsers:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Limitations and alternatives</h2><p>Despite our best efforts to ensure the accessibility of the service, there may be some limitations. Below is a description of known limitations, and potential solutions. Please contact us if you observe an issue not listed below.</p><p>Javascript is required for the service to function properly.</p><h2>Feedback and complaints</h2><p>We welcome your feedback on the accessibility of the service. Please let us know if you encounter accessibility barriers when using it:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>We try to respond to feedback within 30 working days.</p><p>If we do not reply, or do not fix the issue, you can send a complaint to:</p><ul class=\"govcy-list-unstyled\"><li>Deputy Ministry of Research, Innovation, and Digital Policy<br/>134 Lemesos Avenue\r</li><li>2015 Strovolos, Lefkosia\r</li><li>Cyprus</li></ul><p>Or you can email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>If you are not satisfied with the response, you can <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_en/complaintformombudsman_en?OpenForm\" target=\"_blank\">send a complaint to the Commissioner for Administration and the Protection of Human Rights (Ombudsman)</a>.</p><h2>Date</h2><p>This statement was created on TEST_DATE.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "cookie-policy",
+        "title": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Cookies",
+                    "en": "Cookies"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions_top",
+                  "text": {
+                    "el": "<p>Η υπηρεσία SERVICE_NAME (SERVICE_URL) χρησιμοποιεί μόνο cookies που είναι απολύτως απαραίτητα για τη σωστή λειτουργία της.</p><h2>Απαραίτητα cookies</h2><p>Όλα τα πιο κάτω cookies διαγράφονται 30 λεπτά μετά το κλείσιμο του φυλλομετρητή (browser) σας.</p>",
+                    "en": "<p>The service SERVICE_NAME (SERVICE_URL) uses cookies that are strictly essential for it to function correctly.</p><h2>Essential cookies</h2><p>All of the following cookies are deleted 30 minutes after you close your browser.</p>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "essentials",
+                  "text": {
+                    "el": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Όνομα</th><th scope='col'>Σκοπός</th></tr></thead><tbody><tr><th scope='col'>AppDataSessionCookie</th><td scope='col'>Αυτό το cookie αποθηκεύει ένα μοναδικό αναγνωριστικό (session id) για τη διαδικασία περιήγησής σας (browser session).</td></tr><tr><th scope='col'>AspNetCore.Antiforgery</th><td scope='col'>Αυτο το cookie διασφαλίζει ότι η πληροφορία που αποστέλλεται στον διακομιστή (server) του DSF προέρχεται από τη φόρμα μας και όχι από αλλού.</td></tr><tr><th scope='col'>AspNetCore.Culture</th><td scope='col'>Αυτό το cookie αποθηκεύει τη γλώσσα της επιλογής σας.</td></tr></tbody></table>",
+                    "en": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Name</th><th scope='col'>Purpose</th></tr></thead><tbody><tr><th scope='col'>AppDataSessionCookie</th><td scope='col'>This cookie stores a ‘session ID’ which is used to identify your browser session.</td></tr><tr><th scope='col'>AspNetCore.Antiforgery</th><td scope='col'>This cookie makes sure that information sent to the server comes from our form, and not elsewhere.</td></tr><tr><th scope='col'>AspNetCore.Culture</th><td scope='col'>This cookie stores your language preference.</td></tr></tbody></table>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Τηλέφωνο: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Δευτέρα έως Παρασκευή, 9 π.μ. έως 5 μ.μ. (εκτός επίσημων αργιών)</li></ul>",
+                    "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Telephone: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Monday to Friday, 9am to 5pm (except public holidays)</li></ul>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "privacy-statement",
+        "title": {
+          "el": "Πολιτική απορρήτου",
+          "en": "Privacy policy",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Πολιτική απορρήτου – οι προσωπικές σας πληροφορίες",
+                    "en": "Privacy policy – your personal information"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς SERVICE_OWNER χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>διεύθυνση επικοινωνίας</li><li>διεύθυνση email</li><li>αριθμός τηλεφώνου</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>ημερομηνία γέννησης, φύλο, εθνικότητα και κοινότητα στην οποία ανήκετε\r</li><li>διεύθυνση επικοινωνίας και email\r(αν ισχύει)</li><li>αριθμός τηλεφώνου\r(αν ισχύει)</li><li>ημερομηνία θανάτου\r(αν ισχύει)</li><li>ονοματεπώνυμο, πατρικό επώνυμο, υπηκοότητα, τόπος και ημερομηνία γέννησης, φύλο, σχέση με αιτητή και ημερομηνία θανάτου για: παιδιά, γονείς, παππούδες, γιαγιάδες και εάν ο αιτητής είναι άρρενας, εγγόνια (αν ισχύει).</li></ul><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, συλλέγουμε επίσης αυτές τις πληροφορίες:</p><ul><li>ο βαθμός ικανοποίησής σας με τη χρήση της υπηρεσίας</li><li>η γνώμη και οι εισηγήσεις σας για το πώς μπορούμε να βελτιώσουμε την υπηρεσία.</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την έκδοση του εγγράφου που επιλέξατε. Στην περίπτωση αίτησης, οι εξεταστές μας τις χρησιμοποιούν για να επεξεργαστούν την αίτησή σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να εκδώόσουμε το έγγραφο που επιλέξατε ή να επεξεργαστούμε την αίτησή σας.</p><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, θα τα χρησιμοποιήσουμε για να αξιολογήσουμε πώς αισθάνονται οι χρήστες για την εμπειρία τους από τη χρήση της υπηρεσίας. Αυτό γίνεται για να βρούμε και να προτεραιοποιήσουμε τομείς βελτίωσης και να πάρουμε ιδέες για νέες εξελίξεις.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
+                    "en": "<p>This privacy policy explains how SERVICE_OWNER uses information about you, in order to process your application.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>postal address</li><li>email address</li><li>phone number</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>date of birth, gender, nationality and community where you belong\r</li><li>postal and email address\r(if it applies)\r</li><li>phone number (if it applies)\r</li><li>date of death (if it applies)</li><li>full name, paternal surname, citizenship, place and date of birth, gender, relation to applicant and date of death for: children, parents, grandparents, and if the applicant is male, grandchildren (if it applies).</li></ul><p>If you leave feedback in Help us improve this service, we also collect this information:</p><ul><li>the degree of your satisfaction while using the service\r</li><li>your opinion and suggestions on how we could improve the service.</li></ul><h2>Why we use your information</h2><p>We collect and use this information to issue the document you selected. In case of an application, our examiners use it to process your application.</p><p>Without access to this information, we cannot issue the document you selected or process your application.</p><p>If you leave feedback in Help us improve this service, we will use it to evaluate how users feel about their experience using the service. This is so that we can identify and prioritize areas for improvement, and get ideas for new developments.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
+                  }
                 }
               }
             ],

@@ -52,7 +52,7 @@ export function govcyHttpErrorHandler(err, req, res, next) {
 
     // Render an error page for non-JSON requests
     const renderer = new govcyFrontendRenderer();
-    let pageTemplate = govcyResources.errorPageTemplate(pageData.pageData.title, pageData.pageData.text);
+    let pageTemplate = govcyResources.simpleHtmlPageTemplate(pageData.pageData.title, pageData.pageData.text);
     pageData.site.lang = req.globalLang; //use lang from middleware
     //if user is logged in add he user bane section in the page template
     if (dataLayer.getUser(req.session)) {
