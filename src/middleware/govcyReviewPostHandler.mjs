@@ -83,7 +83,9 @@ export function govcyReviewPostHandler() {
                     let emailBody = generateSubmitEmail(service, submissionData.print_friendly_data, referenceNo, req);
                     logger.debug("Email generated:", emailBody);
                     // Send the email
-                    sendEmail(service.site.title[service.site.lang],emailBody,[dataLayer.getUser(req.session).email], "eMail");
+                    sendEmail(service.site.title[service.site.lang],emailBody,[dataLayer.getUser(req.session).email], "eMail").catch(err => {
+                        logger.error("Email sending failed (async):", err);
+                    });
                     // --- End of email sending
                     
                     logger.debug("🔄 Redirecting to success page:",  req);
