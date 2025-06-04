@@ -12,6 +12,24 @@ export async function serviceConfigDataMiddleware(req, res, next) {
     try {
         const { siteId } = req.params;
         req.serviceData = await getServiceConfigData(siteId, req.globalLang);
+
+        // Store current service 
+        if (siteId) {
+            //create a cookie for current service
+            res.cookie('cs', siteId, {
+                maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+                httpOnly: true,
+                sameSite: 'lax'
+            });
+            // req.session.logoutRedirectPage = req.serviceData.site.logoutRedirectPage;
+        } else {
+            // delete the cookie if id is not available
+            res.clearCookie('cs', {
+                httpOnly: true,
+                sameSite: 'lax'
+            });
+        }
+
         next();
     } catch (error) {
         return next(error)

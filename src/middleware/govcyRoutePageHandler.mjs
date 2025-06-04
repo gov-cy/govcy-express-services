@@ -1,13 +1,23 @@
 import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
-import {listAvailableSiteConfigs} from "../utils/govcyLoadConfigData.mjs";
+import {listAvailableSiteConfigs, getServiceConfigData} from "../utils/govcyLoadConfigData.mjs";
 
 /**
  * Middleware function to handle the route page.
  * This function renders the available services page with a list of available sites.
  */
 export function govcyRoutePageHandler(req, res, next) {
+
+    // if cs cookie is set redirect to that page
+    if (req.cookies.cs) {
+        const siteId  = req.cookies.cs;
+        const serviceData = getServiceConfigData(siteId, req.globalLang);
+        if (serviceData.site && serviceData.site.logoutRedirectPage) {
+            // redirect to the logoutRedirectPage cookie
+            return res.redirect(serviceData.site.logoutRedirectPage);
+        }
+    }
 
    // Deep copy renderer pageData from
     let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));

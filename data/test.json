@@ -3,6 +3,7 @@
     "site": {
       "id": "test",
       "lang": "el",
+      "logoutRedirectPage": "https://www.gov.cy/service/aitisi-gia-taftotita/",
       "languages": [
         {
           "code": "el",
@@ -51,7 +52,11 @@
           "href": "#"
         }
       ],
-      "copyrightText" : {"en":"Republic of Cyprus, 2025", "el":"Κυπριακή Δημοκρατία, 2025"},
+      "copyrightText" : 
+        {
+          "en":"Republic of Cyprus, 2025", 
+          "el":"Κυπριακή Δημοκρατία, 2025"
+        },
       "menu": {
         "el": "Μενού",
         "en": "Menu",
