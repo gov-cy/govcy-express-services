@@ -3,7 +3,7 @@
     "site": {
       "id": "test",
       "lang": "el",
-      "logoutRedirectPage": "https://www.gov.cy/service/aitisi-gia-taftotita/",
+      "homeRedirectPage": "https://www.gov.cy/service/aitisi-gia-taftotita/",
       "languages": [
         {
           "code": "el",

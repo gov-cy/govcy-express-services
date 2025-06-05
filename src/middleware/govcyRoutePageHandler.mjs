@@ -9,13 +9,13 @@ import {listAvailableSiteConfigs, getServiceConfigData} from "../utils/govcyLoad
  */
 export function govcyRoutePageHandler(req, res, next) {
 
-    // if cs cookie is set redirect to that page
+    // if current service cookie is set redirect to that page
     if (req.cookies.cs) {
         const siteId  = req.cookies.cs;
         const serviceData = getServiceConfigData(siteId, req.globalLang);
-        if (serviceData.site && serviceData.site.logoutRedirectPage) {
-            // redirect to the logoutRedirectPage cookie
-            return res.redirect(serviceData.site.logoutRedirectPage);
+        if (serviceData.site && serviceData.site.homeRedirectPage) {
+            // redirect to the homeRedirectPage cookie
+            return res.redirect(serviceData.site.homeRedirectPage);
         }
     }
 

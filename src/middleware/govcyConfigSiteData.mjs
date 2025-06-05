@@ -21,7 +21,7 @@ export async function serviceConfigDataMiddleware(req, res, next) {
                 httpOnly: true,
                 sameSite: 'lax'
             });
-            // req.session.logoutRedirectPage = req.serviceData.site.logoutRedirectPage;
+            // req.session.homeRedirectPage = req.serviceData.site.homeRedirectPage;
         } else {
             // delete the cookie if id is not available
             res.clearCookie('cs', {
