@@ -182,6 +182,7 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
   "site": {
     "id": "nsf-2",
     "lang": "el",
+    "homeRedirectPage": "https://www.gov.cy/service/aitisi-gia-taftotita/",
     "languages": [
       {
         "code": "el",
@@ -226,6 +227,16 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
         "href": "#"
       }
     ],
+    "copyrightText" : 
+      {
+        "en":"Republic of Cyprus, 2025", 
+        "el":"Κυπριακή Δημοκρατία, 2025"
+      },
+    "menu": {
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
     "title": {
       "el": "Αποτελέσματα αιτησης σχεδίου αναπλήρωσης",
       "en": "Replenishment scheme application results",
@@ -242,6 +253,10 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
       "tr": ""
     },
     "url": "https://gov.cy",
+    "matomo": {
+      "url": "//wp.matomo.dits.dmrid.gov.cy/",
+      "siteId": "50"
+    },
     "isTesting": true,
     "cdn": {
       "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
@@ -848,6 +863,8 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
   - `submission_data_version` : The submission data version,
   - `renderer_version` : The govcy-frontend-renderer version,
   - `design_systems_version` : The govcy-design-system version,
+  - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
+  - `matomo `: The Matomo web analytics configuration
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
