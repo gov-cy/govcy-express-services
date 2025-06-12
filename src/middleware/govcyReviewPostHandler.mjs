@@ -54,17 +54,36 @@ export function govcyReviewPostHandler() {
                 return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
             } else {
                 // ------------ DO SUBMISSION ---------------------
-                // get the submission API endpoint URL from the environment variable
+                // get the submission API endpoint URL, clientKey, serviceId from the environment variable (handle edge cases)
                 const submissionUrl = getEnvVariable(service?.site?.submissionAPIEndpoint?.url || "", false);
+                const clientKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.clientKey || "", false);
+                const serviceId = getEnvVariable(service?.site?.submissionAPIEndpoint?.serviceId || "", false);
                 if (!submissionUrl) {
                     return handleMiddlewareError("🚨 Submission API endpoint URL is missing", 500, next);
+                }
+                if (!clientKey) {
+                    return handleMiddlewareError("🚨 Submission API clientKey is missing", 500, next);
+                }
+                if (!serviceId) {
+                    return handleMiddlewareError("🚨 Submission API serviceId is missing", 500, next);
                 }
                 
                 // Prepare submission data
                 const submissionData = prepareSubmissionData(req, siteId, service);
 
                 // Call the API to submit the data
-                const response = await govcyApiRequest("post", submissionUrl, submissionData);
+                const response = await govcyApiRequest(
+                    "post",                         // Use POST method
+                    submissionUrl,                  // Use the submission URL from the environment variable
+                    submissionData,                 // Pass the prepared submission data
+                    true,                           // Use access token authentication
+                    dataLayer.getUser(req.session), // Get the user from the session
+                    { 
+                        accept: "text/plain",       // Set Accept header to text/plain
+                        "client-key": clientKey,    // Set the client key header
+                        "service-id": serviceId,    // Set the service ID header
+                    }        
+                );
                 
                 // Check if the response is successful
                 if (response.Succeeded) {

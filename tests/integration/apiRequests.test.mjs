@@ -78,4 +78,38 @@ describe("Integration Test - Mock API", () => {
             expect(error.message).to.equal("Bad request");
         }
     });
+
+    it("5. should send Authorization header when useAccessTokenAuth is true", async () => {
+        const dummyData = { test: "auth-header" };
+        const user = { access_token: "test-token-123" };
+        const response = await govcyApiRequest(
+            "post",
+            `${mockApiBaseUrl}/success`,
+            dummyData,
+            true, // useAccessTokenAuth
+            user
+        );
+        expect(response.ReceivedAuthorization).to.equal("Bearer test-token-123");
+    });
+
+    it("6. should send client-key and service-id headers", async () => {
+        const dummyData = { test: "header-check" };
+        const user = { access_token: "test-token-abc" };
+        const headers = {
+            "client-key": "my-client-key-123",
+            "service-id": "my-service-id-456",
+            accept: "text/plain"
+        };
+        const response = await govcyApiRequest(
+            "post",
+            `${mockApiBaseUrl}/success`,
+            dummyData,
+            true, // useAccessTokenAuth
+            user,
+            headers
+        );
+        expect(response.ReceivedClientKey).to.equal("my-client-key-123");
+        expect(response.ReceivedServiceId).to.equal("my-service-id-456");
+        expect(response.ReceivedAuthorization).to.equal("Bearer test-token-abc");
+    });
 });

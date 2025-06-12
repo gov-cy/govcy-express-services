@@ -97,6 +97,7 @@ export async function handleCallback(req) {
 
         return { tokens, claims, userInfo };
     } catch (error) {
+        logger.debug('Error processing login callback:', error);
         throw new Error('Unable to process login callback at this time.');
     }
 }

@@ -8,7 +8,9 @@ app.use(express.json()); // Middleware to parse JSON requests
 // Mock endpoint for submission
 app.post("/:key", (req, res) => {
     const { key } = req.params;
+    const authHeader = req.headers['authorization'] || null;
     console.log(`Received request with key: ${key}`);
+    console.log(`Authorization header: ${authHeader}`);
     console.log(`Request body: ${JSON.stringify(req.body, null, 2)}`);
 
     // Simulate different responses based on input
@@ -18,6 +20,9 @@ app.post("/:key", (req, res) => {
             ErrorCode: 0,
             ErrorMessage: null,
             Data : { submission_id: "12345678-x" },
+            ReceivedAuthorization: authHeader, // This is to test the auth header
+            ReceivedClientKey: req.headers['client-key'] || null,    // For testing client key
+            ReceivedServiceId: req.headers['service-id'] || null     // For testing service ID
         });
     } else if (key === "error102") {
         return res.status(200).json({

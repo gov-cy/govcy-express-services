@@ -91,18 +91,17 @@
       "submission_data_version": "1",
       "renderer_version": "1.14.3",
       "design_systems_version": "3.2.0",
-      
-    "submissionAPIEndpoint": {
+      "submissionAPIEndpoint": {
         "url": "TEST_SUBMISSION_API_URL",
         "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
-        "seviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
         "response": {
           "errorResponse": {
             "102": {
               "error": "user not administrator",
               "page": "/test/user-not-admin"
             },
-            "103": {
+            "105": {
               "error": "user not registration",
               "page": "/test/user-not-registered"
             }

@@ -5,21 +5,45 @@ import { logger } from "./govcyLogger.mjs";
  * Utility to handle API communication with retry logic
  * @param {string} method - HTTP method (e.g., 'post', 'get', etc.)
  * @param {string} url - API endpoint URL
- * @param {object} data - Payload for the request (optional)
+ * @param {object} inputData - Payload for the request (optional)
+ * @param {boolean} useAccessTokenAuth - Whether to use Authorization header with Bearer token
+ * @param {object} user - User object containing access_token (optional)
+ * @param {object} headers - Custom headers (optional)
  * @param {number} retries - Number of retry attempts (default: 3)
  * @returns {Promise<object>} - API response
  */
-export async function govcyApiRequest(method, url, data = {}, retries = 3) {
+export async function govcyApiRequest(
+    method, 
+    url, 
+    inputData = {}, 
+    useAccessTokenAuth = false, 
+    user = null, 
+    headers = {}, 
+    retries = 3
+) {
     let attempt = 0;
+
+    // Clone headers to avoid mutation
+    let requestHeaders = { ...headers };
+
+    // Set authorization header if access token is provided
+    if (
+        useAccessTokenAuth &&
+        typeof user?.access_token === "string" &&
+        user.access_token.trim().length > 0
+    ) {
+        requestHeaders['Authorization'] = `Bearer ${user.access_token}`;
+    }
 
     while (attempt < retries) {
         try {
-            logger.debug(`📤 Sending API request (Attempt ${attempt + 1})`, { method, url, data });
+            logger.debug(`📤 Sending API request (Attempt ${attempt + 1})`, { method, url, inputData, requestHeaders });
 
             const response = await axios({
                 method,
                 url,
-                data,
+                inputData,
+                headers: requestHeaders,
                 timeout: 10000, // 10 seconds timeout
             });
 
@@ -28,19 +52,49 @@ export async function govcyApiRequest(method, url, data = {}, retries = 3) {
             if (response.status !== 200) {
                 throw new Error(`Unexpected HTTP status: ${response.status}`);
             }
+            
+            // const { Succeeded, ErrorCode, ErrorMessage } = response.data;
+            // Normalize to PascalCase regardless of input case
+            const {
+                succeeded,
+                errorCode,
+                errorMessage,
+                data,
+                informationMessage,
+                Succeeded,
+                ErrorCode,
+                ErrorMessage,
+                Data,
+                InformationMessage
+            } = response.data;
 
-            const { Succeeded, ErrorCode, ErrorMessage } = response.data;
+            const normalized = {
+                Succeeded: Succeeded !== undefined ? Succeeded : succeeded,
+                ErrorCode: ErrorCode !== undefined ? ErrorCode : errorCode,
+                ErrorMessage: ErrorMessage !== undefined ? ErrorMessage : errorMessage,
+                Data: Data !== undefined ? Data : data,
+                InformationMessage: InformationMessage !== undefined ? InformationMessage : informationMessage
+            };
 
-            if (typeof Succeeded !== "boolean") {
-                throw new Error("Invalid API response structure: Succeeded must be a boolean");
+            // Merge any extra fields (like ReceivedAuthorization, etc.)
+            for (const key of Object.keys(response.data)) {
+                if (!(key in normalized)) {
+                    normalized[key] = response.data[key];
+                }
             }
 
-            if (!Succeeded && typeof ErrorCode !== "number") {
+            // Validate the normalized response structure
+            if (typeof normalized.Succeeded !== "boolean") {
+                throw new Error("Invalid API response structure: Succeeded must be a boolean");
+            }
+            
+            // Check if ErrorCode is a number when Succeeded is false
+            if (!normalized.Succeeded && typeof normalized.ErrorCode !== "number") {
                 throw new Error("Invalid API response structure: ErrorCode must be a number when Succeeded is false");
             }
 
             logger.info(`✅ API call succeeded: ${url}`, response.data);
-            return response.data; // Return the successful response
+            return normalized; // Return normalized to pascal case the successful response
         } catch (error) {
             attempt++;
             logger.debug(`🚨 API call failed (Attempt ${attempt})`, {

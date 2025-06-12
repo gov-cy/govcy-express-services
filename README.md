@@ -868,7 +868,7 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
-      - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements]https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
+      - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
 
 ### Input Validations
 

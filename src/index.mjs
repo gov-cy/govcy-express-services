@@ -59,7 +59,7 @@ export default function initializeGovCyExpressService(){
       cookie: { 
         secure: USE_HTTPS, // Secure cookies only if HTTPS is used
         httpOnly: true,   // Prevents XSS attacks
-        maxAge: 1800000,  // Session expires after 1 hour
+        maxAge: 1800000,  // Session expires after 30 mins
         sameSite:  'lax' // Prevents CSRF by default
       } 
     })
