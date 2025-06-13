@@ -28,9 +28,9 @@ Create a .env file in the root of your project folder (see example below):
 SESSION_SECRET=f3a8d62dbef1c45a8c3e19a2c873d14c5698a5de12fb7c7bd5d6d3f4b1a6e2d3
 PORT=44319
 CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
-CYLOGIN_CLIENT_ID=Oidc.Client.AuthorizationCode
-CYLOGIN_CLIENT_SECRET=secret
-CYLOGIN_SCOPE=openid cegg_profile dsf.submission
+CYLOGIN_CLIENT_ID=your-CYLOGIN-client-id
+CYLOGIN_CLIENT_SECRET=your-CYLOGIN-client-secret
+CYLOGIN_SCOPE=openid cegg_profile dsf.express
 CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
 CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
@@ -44,8 +44,12 @@ DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
 # Notification API URL
 DSF_API_GTW_NOTIFICATION_API_URL=https://10.61.11.10:5443/DsfApi/api/v1/NotificationEngine/simple-message
 # SERVICES stuf-------------------------------
-#APIs 
+# SERVICE: test
 TEST_SUBMISSION_API_URL=http://localhost:3002/success
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVIVE_ID=123
+TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/success
+TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/success
 # Unit TEST USER
 TEST_USERNAME=testuser
 TEST_PASSWORD=********
@@ -109,6 +113,30 @@ This is an overview of the data stored in the session:
           }
         }
       },
+      "eligibility": {            // Site eligibility cached results
+        "TEST_ELIGIBILITY_1_API_URL": { // Eligibility 1
+          "result": {                   // results
+            "Succeeded": true,
+            "ErrorCode": 0,
+            "ErrorMessage": null,
+            "Data": {
+              "submission_id": "12345678-x"
+            }
+          },
+          "timestamp": 1749755264663  // timestamp
+        },
+        "TEST_ELIGIBILITY_2_API_URL": {
+          "result": {
+            "Succeeded": true,
+            "ErrorCode": 0,
+            "ErrorMessage": null,
+            "Data": {
+              "submission_id": "12345678-x"
+            },
+          },
+          "timestamp": 1749755362834
+        }
+      }
       "submissionErrors": {         // Site-level validation
         "errors": {},
         "errorSummary": []
@@ -656,6 +684,31 @@ For example:
         },
         // SITE: `nsf-2`, PAGE: `answer-bank-boc`
         "answer-bank-boc": {}
+      },
+      // ELIGIBILITY
+      "eligibility": {            // Site eligibility cached results
+        "TEST_ELIGIBILITY_1_API_URL": { // Eligibility 1
+          "result": {                   // results
+            "Succeeded": true,
+            "ErrorCode": 0,
+            "ErrorMessage": null,
+            "Data": {
+              "submission_id": "12345678-x"
+            }
+          },
+          "timestamp": 1749755264663  // timestamp
+        },
+        "TEST_ELIGIBILITY_2_API_URL": {
+          "result": {
+            "Succeeded": true,
+            "ErrorCode": 0,
+            "ErrorMessage": null,
+            "Data": {
+              "submission_id": "12345678-x"
+            },
+          },
+          "timestamp": 1749755362834
+        }
       }
     },
     // SITE: `dsf-plugin-v3`

@@ -78,10 +78,10 @@ Create a .env file in the root of your project folder.
 ```sh
 SESSION_SECRET=session_secret
 PORT=44319
-CYLOGIN_ISSUER_URL=your-issuer-url
-CYLOGIN_CLIENT_ID=your-client-id
-CYLOGIN_CLIENT_SECRET=your-client-secret
-CYLOGIN_SCOPE=openid cegg_profile dsf.submission
+CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
+CYLOGIN_CLIENT_ID=your-CYLOGIN-client-id
+CYLOGIN_CLIENT_SECRET=your-CYLOGIN-client-secret
+CYLOGIN_SCOPE=openid cegg_profile dsf.express
 CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
 CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
@@ -95,8 +95,12 @@ DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
 # Notification API URL
 DSF_API_GTW_NOTIFICATION_API_URL=https://10.61.11.10:5443/DsfApi/api/v1/NotificationEngine/simple-message
 # SERVICES stuf-------------------------------
-#APIs 
+# SERVICE: test
 TEST_SUBMISSION_API_URL=http://localhost:3002/success
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVIVE_ID=123
+TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/success
+TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/success
 ```
 
 Set the environment in the `NODE_ENV` variable: 
@@ -266,15 +270,51 @@ Services are rendered dynamically using JSON templates stored in the `/data` fol
     "submission_data_version" : "1",
     "renderer_version" : "1.14.1",
     "design_systems_version" : "3.1.1",
+    "eligibilityAPIEndpoints" : [
+      {
+        "url": "TEST_ELIGIBILITY_1_API_URL",
+        "method": "POST", 
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "cashingTimeoutMinutes": 2,
+        "params": {
+          "checkFor": "isCitizen,isAdult"
+        },
+        "response": {
+          "errorResponse": {
+            "102": {
+              "error": "user not administrator",
+              "page": "/test/user-not-admin"
+            }
+          }
+        }
+      },
+      {
+        "url": "TEST_ELIGIBILITY_2_API_URL",
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "cashingTimeoutMinutes": 60,
+        "response": {
+          "errorResponse": {
+            "105": {
+              "error": "user not registration",
+              "page": "/test/user-not-registered"
+            }
+          }
+        }
+      }
+    ],
     "submissionAPIEndpoint": {
       "url": "TEST_SUBMISSION_API_URL",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
       "response": {
         "errorResponse": {
           "102": {
             "error": "user not administrator",
             "page": "/test/user-not-admin"
           },
-          "103": {
+          "105": {
             "error": "user not registration",
             "page": "/test/user-not-registered"
           }

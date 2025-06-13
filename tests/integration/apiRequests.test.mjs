@@ -112,4 +112,48 @@ describe("Integration Test - Mock API", () => {
         expect(response.ReceivedServiceId).to.equal("my-service-id-456");
         expect(response.ReceivedAuthorization).to.equal("Bearer test-token-abc");
     });
+
+    it("7. should send query params for GET requests", async () => {
+        const params = { checkFor: "isCitizen,isAdult", foo: "bar" };
+        const response = await govcyApiRequest(
+            "get",
+            "http://localhost:3002/success",
+            params
+        );
+        expect(response.Succeeded).to.be.true;
+        expect(response.ErrorCode).to.equal(0);
+        expect(response.ReceivedQuery).to.deep.equal(params);
+        // You can check the mock server logs to verify params, or enhance the mock to echo them back for assertion
+    });
+
+    it("8. should send params as body for POST requests", async () => {
+        const params = { checkFor: "isCitizen,isAdult", foo: "bar" };
+        const response = await govcyApiRequest(
+            "post",
+            "http://localhost:3002/success",
+            params
+        );
+        expect(response.Succeeded).to.be.true;
+        expect(response.ErrorCode).to.equal(0);
+        // Optionally, enhance mock server to echo req.body for assertion
+    });
+
+    it("9. should send headers for GET eligibility check", async () => {
+        const headers = {
+            "client-key": "my-client-key-123",
+            "service-id": "my-service-id-456",
+            accept: "text/plain"
+        };
+        const response = await govcyApiRequest(
+            "get",
+            "http://localhost:3002/success",
+            {},
+            true,
+            { access_token: "test-token-abc" },
+            headers
+        );
+        expect(response.ReceivedClientKey).to.equal("my-client-key-123");
+        expect(response.ReceivedServiceId).to.equal("my-service-id-456");
+        expect(response.ReceivedAuthorization).to.equal("Bearer test-token-abc");
+    });
 });

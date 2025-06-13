@@ -42,7 +42,7 @@ export async function govcyApiRequest(
             const response = await axios({
                 method,
                 url,
-                inputData,
+                [method?.toLowerCase() === 'get' ? 'params' : 'data']: inputData,
                 headers: requestHeaders,
                 timeout: 10000, // 10 seconds timeout
             });

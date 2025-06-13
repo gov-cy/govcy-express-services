@@ -174,5 +174,22 @@ describe('govcyDataLayer', () => {
         });
     });
 
+    it("11. should cache eligibility results and respect maxAgeMs", () => {
+        const session = {};
+        const siteId = "test";
+        const endpointKey = "http://localhost:3002/success";
+        const result = { Succeeded: true, ErrorCode: 0 };
+
+        dataLayer.storeSiteEligibilityResult(session, siteId, endpointKey, result);
+
+        // Should return cached result
+        let cached = dataLayer.getSiteEligibilityResult(session, siteId, endpointKey, 10000);
+        expect(cached).to.deep.equal(result);
+
+        // Should not return cached result if maxAgeMs is 0
+        cached = dataLayer.getSiteEligibilityResult(session, siteId, endpointKey, 0);
+        expect(cached).to.be.null;
+    });
+
     
 });

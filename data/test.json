@@ -91,6 +91,40 @@
       "submission_data_version": "1",
       "renderer_version": "1.14.3",
       "design_systems_version": "3.2.0",
+      "eligibilityAPIEndpoints" : [
+        {
+          "url": "TEST_ELIGIBILITY_1_API_URL",
+          "method": "POST", 
+          "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+          "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+          "cashingTimeoutMinutes": 2,
+          "params": {
+            "checkFor": "isCitizen,isAdult"
+          },
+          "response": {
+            "errorResponse": {
+              "102": {
+                "error": "user not administrator",
+                "page": "/test/user-not-admin"
+              }
+            }
+          }
+        },
+        {
+          "url": "TEST_ELIGIBILITY_2_API_URL",
+          "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+          "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+          "cashingTimeoutMinutes": 60,
+          "response": {
+            "errorResponse": {
+              "105": {
+                "error": "user not registration",
+                "page": "/test/user-not-registered"
+              }
+            }
+          }
+        }
+      ],
       "submissionAPIEndpoint": {
         "url": "TEST_SUBMISSION_API_URL",
         "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
@@ -956,16 +990,6 @@
         "pageTemplate": {
           "sections": [
             {
-              "name": "beforeMain",
-              "elements": [
-                {
-                  "element": "backLink",
-                  "params": {}
-                }
-              ],
-              "params": {}
-            },
-            {
               "name": "main",
               "elements": [
                 {
@@ -1009,16 +1033,6 @@
         },
         "pageTemplate": {
           "sections": [
-            {
-              "name": "beforeMain",
-              "elements": [
-                {
-                  "element": "backLink",
-                  "params": {}
-                }
-              ],
-              "params": {}
-            },
             {
               "name": "main",
               "elements": [

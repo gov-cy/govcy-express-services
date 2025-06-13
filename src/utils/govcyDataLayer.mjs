@@ -162,6 +162,40 @@ export function storeSiteSubmissionData(store, siteId, submissionData) {
 
 
 /**
+ * Store eligibility result for a site and endpoint
+ * @param {object} store - session store
+ * @param {string} siteId
+ * @param {string} endpointKey - unique key for the eligibility endpoint (e.g. resolved URL)
+ * @param {object} result - API response
+ */
+export function storeSiteEligibilityResult(store, siteId, endpointKey, result) {
+    
+    initializeSiteData(store, siteId); // Ensure the structure exists
+
+    if (!store.siteData[siteId].eligibility) store.siteData[siteId].eligibility = {};
+    store.siteData[siteId].eligibility[endpointKey] = {
+        result,
+        timestamp: Date.now()
+    };
+}
+
+/**
+ * Get eligibility result for a site and endpoint
+ * @param {object} store - session store
+ * @param {string} siteId
+ * @param {string} endpointKey
+ * @param {number} maxAgeMs - max age in ms (optional)
+ * @returns {object|null}
+ */
+export function getSiteEligibilityResult(store, siteId, endpointKey, maxAgeMs = null) {
+    const entry = store?.siteData?.[siteId]?.eligibility?.[endpointKey];
+    if (!entry) return null;
+    if (maxAgeMs === 0) return null; // 0 Never caches
+    if (maxAgeMs && Date.now() - entry.timestamp > maxAgeMs) return null; // Expired
+    return entry.result;
+}
+
+/**
  * Get the page validation errors from the store and clear them
  * 
  * @param {object} store The session store

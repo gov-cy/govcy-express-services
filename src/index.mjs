@@ -22,6 +22,7 @@ import { requireAuth, naturalPersonPolicy,handleLoginRoute, handleSigninOidc, ha
 import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mjs';
 import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
 import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
+import { govcyServiceEligibilityHandler } from './middleware/govcyServiceEligibilityHandler.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -125,25 +126,25 @@ export default function initializeGovCyExpressService(){
   app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
   
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
-  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyPageHandler(), renderGovcyPage());
+  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true),govcyPageHandler(), renderGovcyPage());
   
   // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
-  app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyReviewPageHandler(), renderGovcyPage());
+  app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPageHandler(), renderGovcyPage());
   
   // ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
-  app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcySuccessPageHandler(true), govcyPDFRender());
+  app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(true), govcyPDFRender());
   
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
-  app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcySuccessPageHandler(), renderGovcyPage());
+  app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
   
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
-  app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyPageHandler(), renderGovcyPage());
+  app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyPageHandler(), renderGovcyPage());
   
   // 📥 -- ROUTE: Handle POST requests for review page
-  app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyReviewPostHandler());
+  app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
   
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
-  app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyFormsPostHandler());
+  app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFormsPostHandler());
   
   
   // post for /:siteId/review
