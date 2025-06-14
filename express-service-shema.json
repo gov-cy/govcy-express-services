@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GovCy Express Service Config Schema",
+  "description": "Schema for the configuration of an Express-based service that uses @gov-cy/govcy-frontend-renderer to dynamically render forms.",
+  "type": "object",
+  "properties": {
+    "site": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "lang": { "type": "string" },
+        "homeRedirectPage": { "type": "string" },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "label": { "type": "string" },
+              "alt": { "type": "string" },
+              "href": { "type": "string" }
+            },
+            "required": ["code", "label", "alt", "href"]
+          }
+        },
+        "footerLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "object",
+                "properties": {
+                  "el": { "type": "string" },
+                  "en": { "type": "string" },
+                  "tr": { "type": "string" }
+                }
+              },
+              "href": { "type": "string" }
+            },
+            "required": ["label", "href"]
+          }
+        },
+        "copyrightText": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" }
+          }
+        },
+        "menu": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" },
+            "tr": { "type": "string" }
+          }
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" },
+            "tr": { "type": "string" }
+          }
+        },
+        "headerTitle": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" },
+            "tr": { "type": "string" }
+          }
+        },
+        "description": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" },
+            "tr": { "type": "string" }
+          }
+        },
+        "url": { "type": "string" },
+        "matomo": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string" },
+            "siteId": { "type": "string" }
+          }
+        },
+        "isTesting": { "type": "boolean" },
+        "cdn": {
+          "type": "object",
+          "properties": {
+            "dist": { "type": "string" },
+            "cssIntegrity": { "type": "string" },
+            "jsIntegrity": { "type": "string" }
+          }
+        },
+        "submission_data_version": { "type": "string" },
+        "renderer_version": { "type": "string" },
+        "design_systems_version": { "type": "string" },
+        "eligibilityAPIEndpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "method": { "type": "string", "enum": ["GET", "POST"] },
+              "clientKey": { "type": "string" },
+              "serviceId": { "type": "string" },
+              "cashingTimeoutMinutes": { "type": ["integer", "null"] },
+              "params": { "type": "object" },
+              "response": {
+                "type": "object",
+                "properties": {
+                  "errorResponse": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "error": { "type": "string" },
+                        "page": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["url", "clientKey", "serviceId"]
+          }
+        },
+        "submissionAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string" },
+            "clientKey": { "type": "string" },
+            "serviceId": { "type": "string" },
+            "response": {
+              "type": "object",
+              "properties": {
+                "errorResponse": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "error": { "type": "string" },
+                      "page": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": ["url", "clientKey", "serviceId"]
+        }
+      },
+      "required": ["id", "lang", "languages", "footerLinks", "title", "headerTitle", "description", "url"]
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pageData": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string" },
+              "title": {
+                "type": "object",
+                "properties": {
+                  "el": { "type": "string" },
+                  "en": { "type": "string" },
+                  "tr": { "type": "string" }
+                }
+              },
+              "layout": { "type": "string" },
+              "mainLayout": { "type": "string" },
+              "nextPage": { "type": "string" }
+            }
+          },
+          "pageTemplate": {
+            "type": "object",
+            "properties": {
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "elements": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "element": { "type": "string" },
+                          "params": { "type": "object" },
+                          "validations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "check": { "type": "string" },
+                                "params": { "type": "object" }
+                              }
+                            }
+                          },
+                          "conditionalElements": {
+                            "type": "array",
+                            "items": { "$ref": "#" }
+                          }
+                        }
+                      }
+                    },
+                    "params": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "routes": { "type": "array" },
+    "localizations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "el": { "type": "string" },
+          "en": { "type": "string" },
+          "tr": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["site", "pages"]
+}

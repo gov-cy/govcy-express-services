@@ -15,10 +15,10 @@ This project is an Express-based project that dynamically renders online service
 - Supports routing for dynamic pages
 - Input validation
 - CSRF protection
-- cyLogin Single Sign-On (SSO)
+- cyLogin Single Sign-On (SSO) for physical authorized users
 - Pre-filling posted values (in the same session)
-- ~~- API integration with retry logic for form submissions.~~
-- ~~PDF generation and email support~~
+- Site level API eligibility checks
+- API integration with retry logic for form submissions.
 
 ## Prerequisites
 - Node.js 20+
@@ -42,7 +42,7 @@ npm init -y
 Install the express services package:
 
 ```sh
-npm install ../govcy-express-services
+npm install @gov-cy/govcy-express-services
 ```
 
 ### 3. Prepare for local development
@@ -112,7 +112,7 @@ Details about cyLogin can be found at the [CY Login documentation](https://dev.a
 
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
 
-### 4. Create data files for services
+### 4. Create data config files for services
 
 Create data files in the `/data` folder (see more in [Dynamic Services Rendering](#dynamic-services-rendering))
 
@@ -180,735 +180,738 @@ The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#loca
 Authentication is handled via OpenID Connect using CY Login and is configured using environment variables. The middleware ensures users have valid sessions before accessing protected routes. 
 
 ### Dynamic Services Rendering
-Services are rendered dynamically using JSON templates stored in the `/data` folder. Service routes load `data/:siteId.json` to get the form data. Example structure:
-```json
-{
-  "site": {
-    "id": "nsf-2",
-    "lang": "el",
-    "homeRedirectPage": "https://www.gov.cy/service/aitisi-gia-taftotita/",
-    "languages": [
-      {
-        "code": "el",
-        "label": "EL",
-        "alt": "Ελληνική γλώσσα",
-        "href": "?lang=el"
-      },
-      {
-        "code": "en",
-        "label": "EN",
-        "alt": "English language",
-        "href": "?lang=en"
-      }
-    ],
-    "footerLinks": [
-      {
-        "label": {
-          "en": "Privacy statement",
-          "el": "Δήλωση απορρήτου"
-        },
-        "href": "#"
-      },
-      {
-        "label": {
-          "en": "Cookies",
-          "el": "Cookies"
-        },
-        "href": "#"
-      },
-      {
-        "label": {
-          "en": "Accessibility",
-          "el": "Προσβασιμότητα"
-        },
-        "href": "#"
-      },
-      {
-        "label": {
-          "en": "Help us improve this service",
-          "el": "Βοηθήστε μας να βελτιώσουμε αυτή την υπηρεσία"
-        },
-        "href": "#"
-      }
-    ],
-    "copyrightText" : 
-      {
-        "en":"Republic of Cyprus, 2025", 
-        "el":"Κυπριακή Δημοκρατία, 2025"
-      },
-    "menu": {
-      "el": "Μενού",
-      "en": "Menu",
-      "tr": "Menu"
-    },
-    "title": {
-      "el": "Αποτελέσματα αιτησης σχεδίου αναπλήρωσης",
-      "en": "Replenishment scheme application results",
-      "tr": ""
-    },
-    "headerTitle": {
-      "el": "Αποτελέσματα αιτησης σχεδίου αναπλήρωσης",
-      "en": "Replenishment scheme application results",
-      "tr": ""
-    },
-    "description": {
-      "el": "[Υποβάλετε αίτηση για ...]",
-      "en": "[Submit an application ...]",
-      "tr": ""
-    },
-    "url": "https://gov.cy",
-    "matomo": {
-      "url": "//wp.matomo.dits.dmrid.gov.cy/",
-      "siteId": "50"
-    },
-    "isTesting": true,
-    "cdn": {
-      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.1.0/dist",
-      "cssIntegrity": "sha384-Py9pPShU3OUzcQ3dAfZLkJI0Fgyv9fWKmAdK8f7dS9caBKuKs5z/ZpyERuh0ujm0",
-      "jsIntegrity": "sha384-g1c/YT97MWPoo9pbyFgQcxvB2MYLdsOgI2+ldxkEXAbhTzKfyYXCEjk9EVkOP5hp"
-    },
-    "submission_data_version" : "1",
-    "renderer_version" : "1.14.1",
-    "design_systems_version" : "3.1.1",
-    "eligibilityAPIEndpoints" : [
-      {
-        "url": "TEST_ELIGIBILITY_1_API_URL",
-        "method": "POST", 
-        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
-        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-        "cashingTimeoutMinutes": 2,
-        "params": {
-          "checkFor": "isCitizen,isAdult"
-        },
-        "response": {
-          "errorResponse": {
-            "102": {
-              "error": "user not administrator",
-              "page": "/test/user-not-admin"
-            }
-          }
-        }
-      },
-      {
-        "url": "TEST_ELIGIBILITY_2_API_URL",
-        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
-        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-        "cashingTimeoutMinutes": 60,
-        "response": {
-          "errorResponse": {
-            "105": {
-              "error": "user not registration",
-              "page": "/test/user-not-registered"
-            }
-          }
-        }
-      }
-    ],
-    "submissionAPIEndpoint": {
-      "url": "TEST_SUBMISSION_API_URL",
-      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
-      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-      "response": {
-        "errorResponse": {
-          "102": {
-            "error": "user not administrator",
-            "page": "/test/user-not-admin"
-          },
-          "105": {
-            "error": "user not registration",
-            "page": "/test/user-not-registered"
-          }
-        }
-      }
-    }
-  },
-  "pages": [
-    {
-      "pageData": {
-        "url": "bank-details",
-        "title": {
-          "el": "Εισαγάγετε τα τραπεζικά σας δεδομένα",
-          "en": "Enter your bank details",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
-        "nextPage": "answer-bank-boc"
-      },
-      "pageTemplate": {
-        "sections": [
-          {
-            "name": "beforeMain",
-            "elements": [
-              {
-                "element": "backLink",
-                "params": {}
-              }
-            ]
-          },
-          {
-            "name": "main",
-            "elements": [
-              {
-                "element": "form",
-                "params": {
-                  "elements": [
-                    {
-                      "element": "progressList",
-                      "params": {
-                        "current": 1,
-                        "total": 3,
-                        "showSteps": true,
-                        "steps": [
-                          {
-                            "text": {
-                              "en": "Bank details",
-                              "el": "Τραπεζικά σας δεδομένα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Findings",
-                              "el": "Ευρήματα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Bank settlement",
-                              "el": "Τραπεζικά settlement"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "element": "textElement",
-                      "params": {
-                        "id": "Title",
-                        "type": "h1",
-                        "text": {
-                          "el": "Εισαγάγετε τα τραπεζικά σας δεδομένα",
-                          "en": "Enter your bank details"
-                        }
-                      }
-                    },
-                    {
-                      "element": "htmlElement",
-                      "params": {
-                        "id": "Explanation",
-                        "text": {
-                          "el": "<p>Η κυβέρνηση θα χρησιμοποιήσεις αυτές τις πληροφορίες για να προχωρήσει σε πληρωμή του ποσού αναπλήρωσης σας.</p>",
-                          "en": "<p>The government will use this information to pay you a replenishment amount once it is decided.</p>"
-                        }
-                      }
-                    },
-                    {
-                      "element": "textInput",
-                      "params": {
-                        "id": "AccountName",
-                        "name": "AccountName",
-                        "label": {
-                          "el": "Όνομα λογαριασμού",
-                          "en": "Account name"
-                        },
-                        "isPageHeading": false,
-                        "type": "text"
-                      }
-                    },
-                    {
-                      "element": "textInput",
-                      "params": {
-                        "id": "Iban",
-                        "name": "Iban",
-                        "label": {
-                          "el": "IBAN",
-                          "en": "IBAN"
-                        },
-                        "isPageHeading": false,
-                        "hint": {
-                          "el": "Για παράδειγμα ‘CY12 0020 0123 0000 0001 2345 6789’",
-                          "en": "For example ‘CY12 0020 0123 0000 0001 2345 6789’"
-                        },
-                        "type": "text"
-                      },
-                      "validations": [
-                        {
-                          "check": "required",
-                          "params": {
-                            "message": {
-                              "en": "Enter your IBAN",
-                              "el": "Εισαγάγετε το IBAN σας"
-                            }
-                          }
-                        },
-                        {
-                          "check": "valid",
-                          "params": {
-                            "checkValue": "iban",
-                            "message": {
-                              "en": "IBAN must be a valιd iban, for example",
-                              "el": "To ΙΒΑΝ πρέπει να είναι έχει μορφή iban"
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "element": "textInput",
-                      "params": {
-                        "id": "Swift",
-                        "name": "Swift",
-                        "label": {
-                          "el": "SWIFT",
-                          "en": "SWIFT"
-                        },
-                        "isPageHeading": false,
-                        "hint": {
-                          "el": "For example ‘BANKCY2NXXX’",
-                          "en": "Για πράδειγμα ‘BANKCY2NXXX’"
-                        },
-                        "type": "text"
-                      },
-                      "validations": [
-                        {
-                          "check": "required",
-                          "params": {
-                            "message": {
-                              "en": "Enter your SWIFT",
-                              "el": "Εισαγάγετε το SWIFT σας"
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "element": "button",
-                      "params": {
-                        "id": "continue",
-                        "variant": "primary",
-                        "text": {
-                          "el": "Συνέχεια",
-                          "en": "Continue"
-                        },
-                        "prototypeNavigate": "../answer-bank-boc"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "pageData": {
-        "url": "answer-bank-boc",
-        "title": {
-          "el": "Ευρήματα",
-          "en": "Findings",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
-        "nextPage": "bank-settlement"
-      },
-      "pageTemplate": {
-        "sections": [
-          {
-            "name": "beforeMain",
-            "elements": [
-              {
-                "element": "backLink",
-                "params": {}
-              }
-            ]
-          },
-          {
-            "name": "main",
-            "elements": [
-              {
-                "element": "form",
-                "params": {
-                  "elements": [
-                    {
-                      "element": "progressList",
-                      "params": {
-                        "current": 2,
-                        "total": 3,
-                        "showSteps": true,
-                        "steps": [
-                          {
-                            "text": {
-                              "en": "Bank details",
-                              "el": "Τραπεζικά σας δεδομένα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Findings",
-                              "el": "Ευρήματα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Bank settlement",
-                              "el": "Τραπεζικά settlement"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "element": "textElement",
-                      "params": {
-                        "id": "Title",
-                        "type": "h1",
-                        "text": {
-                          "el": "Δείτε τα ευρήματα και απαντήστε",
-                          "en": "Review findings and respond"
-                        }
-                      }
-                    },
-                    {
-                      "element": "htmlElement",
-                      "params": {
-                        "id": "Body",
-                        "text": {
-                          "el": "<p>Έχουμε εξετάσει την αίτησή σας και βρήκαμε αυτά τα στοιχεία</p><h2>Καταθέσεις στην Τράπεζα Κύπρου</h2>",
-                          "en": "<p>We have reviewed your application and provided the following results</p><h2>Deposits at Bank of Cyprus</h2>"
-                        }
-                      }
-                    },
-                    {
-                      "element": "radios",
-                      "params": {
-                        "id": "Objection",
-                        "name": "Objection",
-                        "legend": {
-                          "el": "Συμφωνείτε;",
-                          "en": "Do you agree?"
-                        },
-                        "items": [
-                          {
-                            "value": "Accept",
-                            "text": {
-                              "el": "Συμφωνώ με τα ευρήματα",
-                              "en": "I agree with the findings",
-                              "tr": ""
-                            }
-                          },
-                          {
-                            "value": "Object",
-                            "text": {
-                              "el": "Διαφωνώ με τα ευρήματα",
-                              "en": "I disagree with the findings",
-                              "tr": ""
-                            },
-                            "conditionalElements": [
-                              {
-                                "element": "checkboxes",
-                                "params": {
-                                  "id": "ObjectionReason",
-                                  "name": "ObjectionReason",
-                                  "legend": {
-                                    "el": "Λόγος διαφωνίας",
-                                    "en": "Select all that apply"
-                                  },
-                                  "items": [
-                                    {
-                                      "value": "ObjectionReasonCode1",
-                                      "text": {
-                                        "el": "Το ποσό δε είναι σωστό",
-                                        "en": "The impaired amount is incorrect",
-                                        "tr": ""
-                                      }
-                                    },
-                                    {
-                                      "value": "ObjectionReasonCode2",
-                                      "text": {
-                                        "el": "Ο αριθμός μετοχών δεν είναι σωστός",
-                                        "en": "The number of shares is incorrect",
-                                        "tr": ""
-                                      }
-                                    },
-                                    {
-                                      "value": "ObjectionReasonCode3",
-                                      "text": {
-                                        "el": "Άλλος λόγος",
-                                        "en": "Other reason",
-                                        "tr": ""
-                                      }
-                                    }
-                                  ],
-                                  "isPageHeading": false,
-                                  "hint": {
-                                    "el": "Επιλέξτε όσα ισχύουν",
-                                    "en": "Select all that apply",
-                                    "tr": ""
-                                  }
-                                },
-                                "validations": [
-                                  {
-                                    "check": "required",
-                                    "params": {
-                                      "message": {
-                                        "en": "Enter your objection reasons",
-                                        "el": "Εισαγάγετε τους λόγους της διαφωνίας σας"
-                                      }
-                                    }
-                                  }
-                                ]
-                              },
-                              {
-                                "element": "textArea",
-                                "params": {
-                                  "id": "ObjectionExplanation",
-                                  "name": "ObjectionExplanation",
-                                  "rows": 7,
-                                  "label": {
-                                    "el": "Περιγραφή διαφωνίας",
-                                    "en": "Provide more details"
-                                  },
-                                  "isPageHeading": false,
-                                  "hint": {
-                                    "el": "Χρησιμοποιήστε το πιο κάτο πεδίο για να εξηγήσετε την διαφωνία σας. Συμπεριλάβετε σχετικές πληροφορίες που αφορούν τη διαφονία σας.",
-                                    "en": "Use the box below to explain why you disagree. Include any relevant details to support your disagreement."
-                                  },
-                                  "characterCount": {
-                                    "type": "char",
-                                    "max": 3000
-                                  }
-                                },
-                                "validations": [
-                                  {
-                                    "check": "required",
-                                    "params": {
-                                      "message": {
-                                        "en": "Enter your objection details",
-                                        "el": "Εισαγάγετε τα objection details"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "check": "valid",
-                                    "params": {
-                                      "checkValue": "alphaNum",
-                                      "message": {
-                                        "en": "Objection details must be an alpanumeric",
-                                        "el": "Objection details πρέπει να είναι αποτελείται από αριθμους και χαρακτήρες"
-                                      }
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      },
-                      "validations": [
-                        {
-                          "check": "required",
-                          "params": {
-                            "message": {
-                              "en": "Select your decision",
-                              "el": "Επιλέξτε την απόφασή σας"
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "element": "button",
-                      "params": {
-                        "id": "continue",
-                        "variant": "primary",
-                        "text": {
-                          "el": "Συνέχεια",
-                          "en": "Continue"
-                        },
-                        "prototypeNavigate": "../bank-settlement"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "pageData": {
-        "url": "bank-settlement",
-        "title": {
-          "el": "Τραπεζικά settlement",
-          "en": "Bank settlement",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
-        "nextPage": "review"
-      },
-      "pageTemplate": {
-        "sections": [
-          {
-            "name": "beforeMain",
-            "elements": [
-              {
-                "element": "backLink",
-                "params": {}
-              }
-            ]
-          },
-          {
-            "name": "main",
-            "elements": [
-              {
-                "element": "form",
-                "params": {
-                  "elements": [
-                    {
-                      "element": "progressList",
-                      "params": {
-                        "current": 3,
-                        "total": 3,
-                        "showSteps": true,
-                        "steps": [
-                          {
-                            "text": {
-                              "en": "Bank details",
-                              "el": "Τραπεζικά σας δεδομένα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Findings",
-                              "el": "Ευρήματα"
-                            }
-                          },
-                          {
-                            "text": {
-                              "en": "Bank settlement",
-                              "el": "Τραπεζικά settlement"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "element": "textElement",
-                      "params": {
-                        "id": "Title",
-                        "type": "h1",
-                        "text": {
-                          "el": "Τραπεζικά settlement",
-                          "en": "Bank settlement"
-                        }
-                      }
-                    },
-                    {
-                      "element": "htmlElement",
-                      "params": {
-                        "id": "Explanation",
-                        "text": {
-                          "el": "<p>Διακανονισμός είναι οποιαδήποτε αποζημίωση, αποπληρωμή ή άλλη οικονομική συμφωνία που λάβατε από την τράπεζα σχετικά με την απομείωση σας. Αυτό θα μπορούσε να περιλαμβάνει:</p><ul><li>άμεση πληρωμή από την τράπεζα</li><li>προσαρμογή δανείου ή συμψηφισμό χρέους</li><li>οποιαδήποτε άλλη μορφή οικονομικής αποζημίωσης</li></ul>",
-                          "en": "<p>A settlement is any compensation, repayment, or other financial arrangement you received from the bank related to your impairment. This could include:</p><ul><li>a direct payment from the bank</li><li>a loan adjustment or debt offset</li><li>any other form of financial compensation</li></ul>"
-                        }
-                      }
-                    },
-                    {
-                      "element": "radios",
-                      "params": {
-                        "id": "ReceiveSettlement",
-                        "name": "ReceiveSettlement",
-                        "legend": {
-                          "el": "Έχετε λάβει διακανονισμό από την τράπεζα;",
-                          "en": "Have you received a settlement from the bank?"
-                        },
-                        "items": [
-                          {
-                            "value": "yes",
-                            "text": {
-                              "el": "Ναι, έχω λάβει διακανονισμό",
-                              "en": "Yes, I have received a settlement",
-                              "tr": ""
-                            },
-                            "conditionalElements": [
-                              {
-                                "element": "textInput",
-                                "params": {
-                                  "id": "ReceiveSettlementExplanation",
-                                  "name": "ReceiveSettlementExplanation",
-                                  "label": {
-                                    "el": "Εξήγηση",
-                                    "en": "Explanation"
-                                  },
-                                  "isPageHeading": false,
-                                  "hint": {
-                                    "el": "Δώστε λεπτομέρειες σχετικά με τον διακανονισμό που λάβατε",
-                                    "en": "Provide details about the settlement you received"
-                                  }
-                                }
-                              },
-                              {
-                                "element": "dateInput",
-                                "params": {
-                                  "id": "ReceiveSettlementDate",
-                                  "name": "ReceiveSettlementDate",
-                                  "legend": {
-                                    "en": "When did you receive your settlement?",
-                                    "el": "Πότε λάβατε τον διακανονισμό σας;"
-                                  }
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "value": "no",
-                            "text": {
-                              "el": "Όχι, δεν έχω λάβει διακανονισμό",
-                              "en": "No, I have not received a settlement",
-                              "tr": ""
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "element": "button",
-                      "params": {
-                        "id": "continue",
-                        "variant": "primary",
-                        "text": {
-                          "el": "Συνέχεια",
-                          "en": "Continue"
-                        },
-                        "prototypeNavigate": "../review"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
-```
+Services are rendered dynamically using JSON templates stored in the `/data` folder. Service routes load `data/:siteId.json` to get the form data. Checkout the [express-service-shema.json](express-service-shema.json) See the example JSON structure of the **[test.json](data/test.json)** file for more details.
+
+Here are some details explaining the JSON structure:
 
 - `site` object: Contains information about the site, including the site ID, language, and footer links. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details. Some fields that are only specific to the govcy-express-forms project are the following:
   - `submission_data_version` : The submission data version,
   - `renderer_version` : The govcy-frontend-renderer version,
   - `design_systems_version` : The govcy-design-system version,
   - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
-  - `matomo `: The Matomo web analytics configuration
+  - `matomo `: The Matomo web analytics configuration details.
+  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#eligibility-api-endpoints) section below.
+  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#submission-api-endpoint) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
       - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
+
+### Eligibility API Endpoints
+
+The project uses an array of API endpoints to check the eligibility of a service/site. To use this feature, you need to configure the following in your JSON file under the `site` object:
+
+```json
+"eligibilityAPIEndpoints" : [
+  {
+    "url": "TEST_ELIGIBILITY_1_API_URL",
+    "method": "POST", 
+    "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+    "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+    "cashingTimeoutMinutes": 2,
+    "params": {
+      "checkFor": "isCitizen,isAdult"
+    },
+    "response": {
+      "errorResponse": {
+        "102": {
+          "error": "user not administrator",
+          "page": "/test/user-not-admin"
+        }
+      }
+    }
+  },
+  {
+    "url": "TEST_ELIGIBILITY_2_API_URL",
+    "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+    "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+    "cashingTimeoutMinutes": 60,
+    "response": {
+      "errorResponse": {
+        "105": {
+          "error": "user not registration",
+          "page": "/test/user-not-registered"
+        }
+      }
+    }
+  }
+]
+```
+
+If no `eligibilityAPIEndpoints` are configured, the system will not check for service eligibility for the specific site.
+
+Lets break the JSON config down:
+
+- `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility.
+  - `url`: The enviromental variable that holds the URL of the API endpoint.
+  - `method`: The HTTP method to use when making the request.
+  - `clientId`: The enviromental variable that holds the client ID to use when making the request.
+  - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
+  - `cashingTimeoutMinutes`: The number of minutes to cache the response from the API endpoint. If set to `0`, the API endpoint will be called every time.
+  - `params`: An object of key-value pairs that will be added to the request body when making the request.
+  - `response`: An object of expected response when `succeeded===false`, to be used for the system to know which error page to show. 
+
+The above config references the following environment variables that need to be set:
+
+```sh
+TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/check1
+TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/check2
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVIVE_ID=123
+```
+
+With the above config, when a user visits a page under the specific site, `/:siteId/*`, the service sends a request to the configured eligibility API endpoints. If any of the API endpoints returns `succeeded: false`, the user is redirected to the error page specified in the `response` object. 
+
+The response is cached to the session storage for the specified number of minutes. If the `cashingTimeoutMinutes` is set to `0`, the API endpoint will be called every time.
+
+#### Eligibility API request and response
+
+For each eligibility API endpoint, the project sends a request to the API endpoint. 
+
+**Eligibility Request**
+
+- **HTTP Method**:
+  - Defined per endpoint in the method property (defaults to GET if not specified).
+- **URL**:
+  - Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: text/plain
+**Parameters**: The params object in your config is sent as query parameters for GET requests and as the request body for POST requests.
+
+**Example GET Request:**
+
+```
+GET /check-eligibility?checkFor=isCitizen,isAdult HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+```
+
+**Example POST Request**:
+
+```
+POST /check-eligibility HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "checkFor": "isCitizen,isAdult"
+}
+```
+
+**Eligibility Response**
+
+The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
+
+**On Success:**
+```json
+{
+  "Succeeded": true,
+  "ErrorCode": 0,
+  "ErrorMessage": null,
+}
+```
+
+**On Failure:**
+```json
+{
+  "Succeeded": false,
+  "ErrorCode": 102,
+  "ErrorMessage": "user not administrator"
+}
+```
+
+
+**Notes**:
+- If no `eligibilityAPIEndpoints` are configured, the system will not check for service eligibility for the specific site.
+- The response is normalized to always use PascalCase keys (`Succeeded`, `ErrorCode`, etc.), regardless of the backend’s casing.
+- If `Succeeded` is false, the system will look up the `ErrorCode` in your config to determine which error page to show.
+
+**Caching**
+- The response from each eligibility endpoint is cached in the session for the number of minutes specified by `cashingTimeoutMinutes`.
+- If `cashingTimeoutMinutes` is set to 0, the API endpoint will be called every time (no caching).
+- If omitted or null, the result is cached indefinitely.
+
+**Error Handling**
+- If the API returns `Succeeded: false`, the user is redirected to the error page specified in your config for that error code.
+- If the API response is invalid or the request fails after retries, a generic error is shown.
+
+**References**
+- Eligibility check logic: See [govcyServiceEligibilityHandler.mjs](src/middleware/govcyServiceEligibilityHandler.mjs)
+- API call, normalization and retries: See [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs)
+
+### Submission API Endpoint
+
+The project uses an API endpoint to submit the form data. To use this feature, you need to configure the following in your JSON file under the `site` object:
+
+```json
+"submissionAPIEndpoint": {
+  "url": "TEST_SUBMISSION_API_URL",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+  "response": {
+    "errorResponse": {
+      "102": {
+        "error": "user not administrator",
+        "page": "/test/user-not-admin"
+      },
+      "105": {
+        "error": "user not registration",
+        "page": "/test/user-not-registered"
+      }
+    }
+  }
+}
+```
+Lets break the JSON config down:
+
+- `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form.
+  - `url`: The enviromental variable that holds the URL of the API endpoint.
+  - `clientId`: The enviromental variable that holds the client ID to use when making the request.
+  - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
+  - `response`: An object of expected response when `Succeeded===false`, to be used for the system to know which error page to show. 
+
+The above config references the following environment variables that need to be set:
+
+```sh
+TEST_SUBMISSION_API_URL=http://localhost:3002/success
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVIVE_ID=123
+```
+
+With the above config, when a user submits the `review` page, the service sends a request to the configured submission API endpoint.
+
+#### Submission API Request and Response
+
+**Submission Request:**
+
+- **HTTP Method**: POST
+- **URL**: Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+- **Body**: The body contains the prepared submission data, which is a JSON object with all the form data collected from the user across all pages.
+
+**Example Request:**
+
+```
+POST /submission-endpoint HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "AccountName": "John Doe",
+  "Iban": "CY12002001230000000123456789",
+  "Swift": "BANKCY2NXXX",
+  "Objection": "Accept",
+  "ReceiveSettlement": "no",
+  ...
+}
+```
+
+**Submission Response**
+
+The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
+
+**On Success:**
+```json
+{
+  "Succeeded": true,
+  "ErrorCode": 0,
+  "ErrorMessage": null,
+  "Data": {
+    "submission_id": "12345678-x"
+  }
+}
+```
+
+**On Failure:**
+```json
+{
+  "Succeeded": false,
+  "ErrorCode": 102,
+  "ErrorMessage": "user not administrator"
+}
+```
+
+**Notes**:
+- The response is normalized to always use PascalCase keys (`Succeeded`, `ErrorCode`, etc.), regardless of the backend’s casing.
+- If `Succeeded` is false, the system will look up the `ErrorCode` in your config to determine which error page to show.
+
+**Error Handling**
+- If the API returns `Succeeded: false`, the user is redirected to the error page specified in your config for that error code.
+- If the API response is invalid or the request fails after retries, a generic error is shown.
+
+**References**
+- Request/response logic: See [govcyReviewPostHandler.mjs](src/middleware/govcyReviewPostHandler.mjs)
+- API call, normalization and retries: See [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs)
+
+#### Submission Data
+
+The data is collected from the form elements and the data layer and are sent via the submission API in the following format:
+
+```jsonc
+"submissionData": {           // Site level successful submission data
+  "submission_username" : "", // User's username
+  "submission_email" : "",    // User's email
+  "submission_data": {},      // Raw data as submitted by the user in each page
+  "submission_data_version": "", // The submission data version
+  "print_friendly_data": [],  // Print friendly data
+  "renderer_data" :{},        // Renderer data of the summary list
+  "renderer_version": "",     // The renderer version
+  "design_systems_version": "", // The design systems version
+  "service": {                // Service info
+        "id": "",             // Service id
+        "title": {}           // Service title multilingual object
+    }
+}
+```
+
+<details>
+  <summary>Here's a sample submission data JSON</summary>
+
+```jsonc
+{
+  "submission_username": "username",        // User's username
+  "submission_email": "email@example.com",  // User's email
+  "submission_data_version": "0.1",         // Submission data version
+  "submission_data": {                      // Submission raw data
+    "index": {                              // Page level
+      "formData": {
+        "id_select": ["id", "arc"],         // field level. Could be string or array
+        "id_number": "654654",
+        "arc_number": "",
+        "aka": "232323",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    },
+    "appointment": {
+      "formData": {
+        "diorismos": "monimos",
+        "fileno_monimos": "3233",
+        "eidikotita_monimos": "1",
+        "fileno_sumvasiouxos": "",
+        "eidikotita_sumvasiouxos": "",
+        "fileno_aoristou": "",
+        "eidikotita_aoristou": "",
+        "program": "",
+        "fileno_orismenou": "",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    },
+    "takeover": {
+      "formData": {
+        "date_start_day": "11",
+        "date_start_month": "12",
+        "date_start_year": "2020",
+        "date_on_contract": "date_other",
+        "date_contract": "16/04/2025",
+        "reason": "24324dssf",
+        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+      }
+    }
+  },
+  "submission_data_version": "1",           // Submission data version
+  "renderer_data": {                        // Summary list renderer data ready for rendering
+    "element": "summaryList",
+    "params": {
+      "items": [
+        {
+          "key": {
+            "el": "Στοιχεία του  εκπαιδευτικού",
+            "en": "Educator's details",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Ταυτοποίηση",
+                      "en": "Identification"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Ταυτότητα, ARC",
+                            "el": "Ταυτότητα, ARC",
+                            "tr": "Ταυτότητα, ARC"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Εισαγάγετε αριθμό ταυτότητας",
+                      "en": "Enter ID number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "121212",
+                            "el": "121212",
+                            "tr": "121212"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Αριθμός κοινωνικών ασφαλίσεων",
+                      "en": "Social Insurance Number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "112121",
+                            "el": "112121",
+                            "tr": "112121"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "el": "Διορισμός εκπαιδευτικού",
+            "en": "Teachers appointment",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+                      "en": "What type of appointment does the teacher have?"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Συμβασιούχος",
+                            "el": "Συμβασιούχος",
+                            "tr": "Συμβασιούχος"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Αριθμός φακέλου (ΠΜΠ)",
+                      "en": "File Number"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "1212",
+                            "el": "1212",
+                            "tr": "1212"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Ειδικότητα",
+                      "en": "Specialty"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Καθηγητής",
+                            "el": "Καθηγητής",
+                            "tr": "Καθηγητής"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "el": "Ημερομηνία ανάληψης",
+            "en": "Takeover date",
+            "tr": ""
+          },
+          "value": [
+            {
+              "element": "summaryList",
+              "params": {
+                "items": [
+                  {
+                    "key": {
+                      "el": "Ημερομηνία ανάληψης",
+                      "en": "Start Date"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "16/04/2025",
+                            "el": "16/04/2025",
+                            "tr": "16/04/2025"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "key": {
+                      "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+                      "en": "Is this date the same as the contract date?"
+                    },
+                    "value": [
+                      {
+                        "element": "textElement",
+                        "params": {
+                          "text": {
+                            "en": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
+                            "el": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
+                            "tr": "Ναι, είναι η ίδια με αυτή του συμβολαίου"
+                          },
+                          "type": "span"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "print_friendly_data": [                  // Print friendly data
+    {
+      "pageUrl": "index",                     // Page URL
+      "pageTitle": {                          // Page title
+        "el": "Στοιχεία του  εκπαιδευτικού",
+        "en": "Educator's details",
+        "tr": ""
+      },
+      "fields": [                             // Fields
+        {
+          "id": "id_select",                    // Field ID
+          "label": {                            // Field label
+            "el": "Ταυτοποίηση",
+            "en": "Identification"
+          },
+          "value": ["id", "arc"],          // Field value. Could be string or array
+          "valueLabel": [                       // Field value label. Could be string or array
+            {
+              "el": "Ταυτότητα",
+              "en": "ID",
+              "tr": ""
+            },
+            {
+              "el": "ARC",
+              "en": "ARC",
+              "tr": ""
+            }
+          ]
+        },
+        {
+          "id": "id_number",
+          "label": {
+            "el": "Εισαγάγετε αριθμό ταυτότητας",
+            "en": "Enter ID number"
+          },
+          "value": "654654",
+          "valueLabel": {
+            "el": "654654",
+            "en": "654654"
+          }
+        },
+        {
+          "id": "aka",
+          "label": {
+            "el": "Αριθμός κοινωνικών ασφαλίσεων",
+            "en": "Social Insurance Number"
+          },
+          "value": "232323",
+          "valueLabel": {
+            "el": "232323",
+            "en": "232323"
+          }
+        }
+      ]
+    },
+    {
+      "pageUrl": "appointment",
+      "pageTitle": {
+        "el": "Διορισμός εκπαιδευτικού",
+        "en": "Teachers appointment",
+        "tr": ""
+      },
+      "fields": [
+        {
+          "id": "diorismos",
+          "label": {
+            "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
+            "en": "What type of appointment does the teacher have?"
+          },
+          "value": "monimos",
+          "valueLabel": {
+            "el": "Μόνιμος επί δοκιμασία",
+            "en": "Permanent on probation",
+            "tr": ""
+          }
+        },
+        {
+          "id": "fileno_monimos",
+          "label": {
+            "el": "Αριθμός φακέλου (ΠΜΠ)",
+            "en": "File Number"
+          },
+          "value": "3233",
+          "valueLabel": {
+            "el": "3233",
+            "en": "3233"
+          }
+        },
+        {
+          "id": "eidikotita_monimos",
+          "label": {
+            "el": "Ειδικότητα",
+            "en": "Specialty"
+          },
+          "value": "1",
+          "valueLabel": {
+            "el": "Δάσκαλος",
+            "en": "Elementary teacher",
+            "tr": ""
+          }
+        }
+      ]
+    },
+    {
+      "pageUrl": "takeover",
+      "pageTitle": {
+        "el": "Ημερομηνία ανάληψης",
+        "en": "Takeover date",
+        "tr": ""
+      },
+      "fields": [
+        {
+          "id": "date_start",
+          "label": {
+            "el": "Ημερομηνία ανάληψης",
+            "en": "Start Date"
+          },
+          "value": "2020-12-11",
+          "valueLabel": {
+            "el": "11/12/2020",
+            "en": "11/12/2020"
+          }
+        },
+        {
+          "id": "date_on_contract",
+          "label": {
+            "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
+            "en": "Is this date the same as the contract date?"
+          },
+          "value": "date_other",
+          "valueLabel": {
+            "el": "Όχι, αυτή είναι διαφορετική",
+            "en": "No, this is different",
+            "tr": ""
+          }
+        },
+        {
+          "id": "date_contract",
+          "label": {
+            "el": "Ημερομηνία συμβολαίου",
+            "en": "Contract Date"
+          },
+          "value": "16/04/2025",
+          "valueLabel": {
+            "el": "16/04/2025",
+            "en": "16/04/2025"
+          }
+        },
+        {
+          "id": "reason",
+          "label": {
+            "el": "Αιτιολόγηση καθυστέρησης στην ανάληψη καθηκόντων",
+            "en": "Reason for delay in assuming duties"
+          },
+          "value": "24324dssf",
+          "valueLabel": {
+            "el": "24324dssf",
+            "en": "24324dssf"
+          }
+        }
+      ]
+    }
+  ],
+  "renderer_version": "1.14.1",              // Renderer version
+  "design_systems_version": "3.1.0",          // Design systems version
+  "service": {                                // Service metadata
+    "id": "takeover",
+    "title": {
+      "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
+      "en": "Certificate of teachers takeover"
+    }
+  },
+  "referenceNumber": "12345",                 // Reference number
+  "timestamp": "2023-04-20T14:30:00.000Z"     // Submission time
+}
+
+```
+</details>
 
 ### Input Validations
 
