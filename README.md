@@ -465,7 +465,7 @@ The API is expected to return a JSON response with the following structure (see 
 
 The data is collected from the form elements and the data layer and are sent via the submission API in the following format:
 
-```jsonc
+```json
 "submissionData": {           // Site level successful submission data
   "submission_username" : "", // User's username
   "submission_email" : "",    // User's email
