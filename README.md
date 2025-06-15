@@ -217,7 +217,7 @@ flowchart TD
 
 Some pages are generated automatically by the project, such as the `review` and `success` pages.
 
-#### `:siteId/pages`
+#### `:siteId/:paheUrl`
 
 Pages defined in the JSON file under the `pages` array are rendered based on the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library. The `pageData.nextPage` field is used to determine the next page to render.
 
@@ -328,7 +328,7 @@ Lets break down the JSON config for this page:
 
 **Forms vs static content**
 
-- If the `pageTemplate` includes a `form` element in the `main` section, the system will treat it as form and will:
+- If the `pageTemplate` includes a `form` element in the `main` section and `button` element, the system will treat it as form and will:
   - Perform the eligibility checks
   - Display the form
   - Collect the form data
