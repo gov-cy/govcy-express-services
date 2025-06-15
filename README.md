@@ -1,11 +1,36 @@
 # govcy Express Services
 
-## Description
+> ⚠️ **Warning:**  
+> This package is under active development and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only.  
+> **No guarantees are provided regarding stability, security, or compliance. Using this package does not imply your product or service will automatically pass any required assessments, audits, or certifications by the Cyprus government or any other authority.**  
+> You are responsible for ensuring your own compliance, security, and quality assurance processes.
+
+## 📝 Description
 This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner.
 
 ![govcy-express-services](express-services.png)
 
-## Features
+## Table of contents
+
+- [📝 Description](#📝-description)
+- [✨ Features](#✨-features)
+- [📋 Prerequisites](#📋-prerequisites)
+- [🚀 Quick start](#🚀-quick-start)
+- [📦 Full installation guide](#📦-full-installation-guide)
+- [🛠️ Usage](#🛠️-usage)
+  - [🧩 Dynamic services rendering](#🧩-dynamic-services-rendering)
+  - [🛡️ Site eligibility checks](#🛡️-site-eligibility-checks)
+  - [📤 Site submissions](#📤-site-submissions)
+  - [✅ Input validations](#✅-input-validations)
+- [🛣️ Routes](#🛣️-routes)
+- [🔒 Security note](#🔒-security-note)
+- [❓ Troubleshooting / FAQ](#❓-troubleshooting--faq)
+- [🙏 Credits](#🙏-credits)
+- [💡 Developer notes](#💡-developer-notes)
+- [📄 License](#📄-license)
+- [📬 Contact](#📬-contact)
+
+## ✨ Features
 - Dynamic form rendering from JSON templates
     - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`
     - Support for `conditional radios`
@@ -20,146 +45,53 @@ This project is an Express-based project that dynamically renders online service
 - Site level API eligibility checks
 - API integration with retry logic for form submissions.
 
-## Prerequisites
+## 📋 Prerequisites
 - Node.js 20+
 - npm 
 - A CY Login client ID and secret
+- An API endpoint for form submissions (through cyConnect)
 
-
-## Installation
-The project acts as an npm package and you need to install it as a dependency in your npm project. Here's a step-by-step guide:
-
-### 1. Initialization
-
-Initialize your npm project:
+## 🚀 Quick start
 
 ```sh
-npm init -y
-```
-
-### 2. Install the Package
-
-Install the express services package:
-
-```sh
+# 1. Install the package
 npm install @gov-cy/govcy-express-services
-```
 
-### 3. Prepare for local development
-Add .env file and create certs for local development.
-
-#### Create certs for local development
-1. open `Git Bash`and run:
-
-```sh
+# 2. Generate SSL certificates for local development
 openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -days 365 -nodes
+
+# 3. Create a .env file in your project root (see below for required variables)
+
+# 4. Add a minimal data config file in /data (see test.json example)
+
+# 5. Create an index.mjs file:
 ```
-
-2. Answer the Certificate Questions
-You'll be prompted to enter some details. You can fill them out or leave them blank:
-```pqsql
-Country Name (2 letter code) [XX]: CY
-State or Province Name (full name) []: Nicosia
-Locality Name (eg, city) []: Nicosia
-Organization Name (eg, company) []: govCy
-Organizational Unit Name (eg, section) []: DigitalServicesFactory
-Common Name (eg, server FQDN or YOUR name) []: localhost
-Email Address []: your-email@example.com
-```
-Common Name (CN): **Make sure** this is localhost for local development.
-
-3. Where to Save the Files?
-Save server.cert and server.key in the root of your project folder.
-
-#### Create a .env file for local development
-
-Create a .env file in the root of your project folder.
-
-```sh
-SESSION_SECRET=session_secret
-PORT=44319
-CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
-CYLOGIN_CLIENT_ID=your-CYLOGIN-client-id
-CYLOGIN_CLIENT_SECRET=your-CYLOGIN-client-secret
-CYLOGIN_SCOPE=openid cegg_profile dsf.express
-CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
-CYLOGIN_CODE_CHALLENGE_METHOD=S256
-CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
-NODE_ENV=development
-# Debug or not  -------------------------------
-DEBUG=true
-# DSF Gateway ---------------------------
-DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
-DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
-DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
-# Notification API URL
-DSF_API_GTW_NOTIFICATION_API_URL=https://10.61.11.10:5443/DsfApi/api/v1/NotificationEngine/simple-message
-# SERVICES stuf-------------------------------
-# SERVICE: test
-TEST_SUBMISSION_API_URL=http://localhost:3002/success
-TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
-TEST_SUBMISSION_API_SERVIVE_ID=123
-TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/success
-TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/success
-```
-
-Set the environment in the `NODE_ENV` variable: 
-- **development**: For local development and testing.
-- **staging**: For staging environments.
-- **production**: For production deployments.
-
-Details about cyLogin can be found at the [CY Login documentation](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/14/CY-Login)
-
-To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
-
-### 4. Create data config files for services
-
-Create data files in the `/data` folder (see more in [Dynamic Services Rendering](#dynamic-services-rendering))
-
-### 5. Use the package in your project
-
-Create an `index.mjs` file in your project to import and use the package as follows:
 
 ```js
+// index.mjs
 import initializeGovCyExpressService from '@gov-cy/govcy-express-services';
 
-// Initialize the service
 const service = initializeGovCyExpressService();
-
-// Start the server
 service.startServer();
 ```
 
-### 6. Enable debugging with VS Code
-
-To enable debugging with VS Code, add a file `.vscode/launch.json` to your project root as follows:
-
-```json
-{
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-    
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/index.mjs",
-            "env": {
-                "NODE_ENV": "development"
-            }
-        }
-    ]
-}
-
+```sh
+# 6. Start the server
+npm start
 ```
 
-## Usage
+- Visit [https://localhost:44319](https://localhost:44319) in your browser.
+- Log in with CY Login and start using your dynamic service!
+
+---
+
+**Tip:**  
+For more details on configuration, environment variables, and advanced features, see the sections below.
+
+## 📦 Full installation guide
+The project acts as an npm package and you need to install it as a dependency in your npm project. Check out the [install notes](INSTALL-NOTES.md) a detailed installation guide.
+
+## 🛠️ Usage
 ### Starting the Server
 Add in your `package.json`:
 
@@ -181,7 +113,7 @@ Authentication is handled via OpenID Connect using CY Login and is configured us
 
 The CY Login tokens are used to also connect with the various APIs through [cyConnect](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/74/CY-Connect), so make sure to include the correct `scope` when requesting for a [cyLogin client registration](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/34/Developer-Guide).
 
-### Dynamic Services Rendering
+### 🧩 Dynamic Services Rendering
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
 
 Here are some details explaining the JSON structure:
@@ -192,8 +124,8 @@ Here are some details explaining the JSON structure:
   - `design_systems_version` : The govcy-design-system version,
   - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
   - `matomo `: The Matomo web analytics configuration details.
-  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#site-eligibility-checks) section below.
-  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#site-submissions) section below.
+  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#🛡️-site-eligibility-check) section below.
+  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#📤-site-submissions) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
@@ -217,9 +149,9 @@ flowchart TD
 
 Some pages are generated automatically by the project, such as the `review` and `success` pages.
 
-#### `:siteId/:paheUrl`
+#### Pages
 
-Pages defined in the JSON file under the `pages` array are rendered based on the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library. The `pageData.nextPage` field is used to determine the next page to render.
+Pages defined in the JSON file under the `pages` array, they rendered based on the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library, and they are served by the `/:siteId/:pageUrl` route. The `pageData.nextPage` field is used to determine the next page to render.
 
 Here's an example of a page defined in the JSON file:
 
@@ -319,7 +251,7 @@ The JSON structure is based on the [govcy-frontend-renderer's JSON template](htt
 Lets break down the JSON config for this page:
 
 - **pageData** are the page's meta data, such as the URL, title, layout, mainLayout, and nextPage.
-  - `pageData.url` is the URL of the page, in this case it's `index`
+  - `pageData.url` is the URL of the page, in this case it's `:siteId/index`
   - `pageData.title` is the title of the page, in this case it's `Your email`. This will be used in the `review`, `success` pages, the PDF, the email, and the submission platform. 
   - `pageData.layout` is the layout used to render the page. The project only supports the default layout `layouts/govcyBase.njk`
   - `pageData.mainLayout` is the layout of the `main` section of the page, in this case it's `two-third`. It can be either `two-third` or `max-width`,
@@ -341,9 +273,9 @@ Lets break down the JSON config for this page:
 
 **Notes**:
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
-- Check out the [input validations section](#input-validations) for more details on how to add validations to the JSON file.
+- Check out the [input validations section](#✅-input-validations) for more details on how to add validations to the JSON file.
 
-#### `review` page
+#### Review page
 
 The `review` page is automatically generated by the project and includes the following sections:
 
@@ -355,7 +287,7 @@ When the user clicks a change link, the user is redirected to the corresponding 
 
 When the user clicks the `Submit` button, all the data gathered from the site's forms within this session are validated based on the validation definition in the JSON file, and if they pass they are submitted to the configured API endpoint.
 
-#### `success` page
+#### Success page
 
 The `success` page is automatically generated by the project, is accessible only when a submission is made successfully, and includes the following sections:
 
@@ -363,7 +295,7 @@ The `success` page is automatically generated by the project, is accessible only
 - **PDF Download link**: A link to download the PDF of the submission's data in a human-readable format.
 - **Summary**: A summary of the data from all the pages in the service.
 
-### Site eligibility checks
+### 🛡️ Site eligibility checks
 
 The project uses an array of API endpoints to check the eligibility of a service/site. To use this feature, you need to configure the following in your JSON file under the `site` object:
 
@@ -515,7 +447,7 @@ The API is expected to return a JSON response with the following structure (see 
 - Eligibility check logic: See [govcyServiceEligibilityHandler.mjs](src/middleware/govcyServiceEligibilityHandler.mjs)
 - API call, normalization and retries: See [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs)
 
-### Site Submissions
+### 📤 Site Submissions
 
 The project uses an API endpoint to submit the form data. The project uses the [CY Connect - OAuth 2.0 (CY Login)](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/122/CY-Connect-OAuth-2.0-(CY-Login)) authentication policy, so the user's `<access_token>` is sent in the `Authorization` header.
 
@@ -1081,7 +1013,7 @@ The data is collected from the form elements and the data layer and are sent via
 ```
 </details>
 
-### Input Validations
+### ✅ Input Validations
 
 The project includes input validation for the following elements:
 
@@ -1146,7 +1078,7 @@ Example:
 ]
 ```
 
-### Routes
+### 🛣️ Routes
 The project uses express.js to serve the following routes:
 
 #### Service routes:
@@ -1161,16 +1093,63 @@ The project uses express.js to serve the following routes:
 - **`/login`**: Redirect to CY Login login page.
 - **`/logout`**: CY Login logout endpoint.
 
-## Credits
+Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
+
+## 🔒 Security note
+- Always set a strong, random `SESSION_SECRET` in your `.env` file. Never commit secrets or credentials to version control.
+- In production, ensure cookies are set with `secure`, `httpOnly`, and `sameSite` attributes to protect against common web vulnerabilities.
+- Make sure your server is running behind HTTPS in production.
+- Regularly rotate secrets and credentials, and restrict access to your `.env` and configuration files.
+- Validate user input to prevent injection attacks.
+- Review and update your dependencies regularly to address security vulnerabilities.
+
+**Tip:**
+This project enables CSRF protection and secure session cookies by default, but it is your responsibility to keep secrets and environment variables safe in production.
+
+## ❓ Troubleshooting / FAQ
+
+### SSL certificate errors on local development
+- **Problem:** Browser shows a warning or refuses to connect to `https://localhost:44319`.
+- **Solution:** Make sure you have generated self-signed certificates as described in the installation guide. You may need to trust the certificate in your browser or OS.
+
+### Session not persisting / users logged out unexpectedly
+- **Problem:** Users are logged out or session data is lost between requests.
+- **Solution:** Ensure your `SESSION_SECRET` is set in .env and is long and random. If running behind a proxy (like nginx), set `trust proxy` in your Express app.
+
+### CY Login authentication not working
+- **Problem:** Users cannot log in or are redirected incorrectly.
+- **Solution:** Double-check your CY Login client ID, secret, scope and redirect URIs in `.env`. Make sure your app is accessible at the correct URL and port.
+
+### API requests fail with 401/403 errors
+- **Problem:** Eligibility or submission API calls fail with authorization errors.
+- **Solution:** Ensure the user's access token is being sent in the `Authorization` header. Check that your API endpoint and credentials are correct. Check that the CY Login you have configured has the correct scope that the API endpoint requires.
+
+### Changes to JSON config not reflected
+- **Problem:** Updates to your `/data/:siteId.json` file don’t show up in the app.
+- **Solution:** Restart the server after making changes to config files, as they are loaded at startup. If the problem persists, check your JSON file syntax and ensure it is valid. Also check if the definition of the elements is as defined in the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library.
+
+### Environment variables not loading
+- **Problem:** The app fails to start or cannot find required configuration values.
+- **Solution:** Make sure your `.env` file exists in the project root and is formatted correctly. Restart the server after making changes to .env.
+
+### Port already in use
+- **Problem:** The server fails to start with an error like `EADDRINUSE: address already in use`.
+- **Solution:** Another process is using the same port. Either stop the other process or change the `PORT` value in your `.env` file.
+
+### Cannot connect to CY Login or API endpoints
+- **Problem:** The app cannot reach CY Login or your API endpoints.
+- **Solution:** Check your network connection, firewall settings, and that the URLs in your `.env` are correct and accessible from your environment.
+
+## 🙏 Credits
 - Cyprus Government Digital Services Factory (DSF) [dsf-admin@dits.dmrid.gov.cy](mailto:dsf-admin@dits.dmrid.gov.cy)
 - Cyprus Connecting Digital Services Team [cds-support@dits.dmrid.gov.cy](mailto:cds-support@dits.dmrid.gov.cy)
 
-## Developer notes
+## 💡 Developer notes
 For local develoment checke the [developer notes](./NOTES.md) document.
 
-## License
+## 📄 License
 This project is released under the [MIT License](LICENSE).
 
-## Contact
+## 📬Contact
 If you have any questions or feedback, please feel free to reach out to us at [dsf-admin@dits.dmrid.gov.cy](mailto:dsf-admin@dits.dmrid.gov.cy)
 

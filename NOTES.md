@@ -58,7 +58,7 @@ TEST_PASSWORD=********
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
 
 #### Create certs for local development
-Make sure to have certs for local development in the root of your project folder (see [README](./README.md#create-certs-for-local-development))
+Make sure to have certs for local development in the root of your project folder (see [install notes](./INSTALL-NOTES.md#create-certs-for-local-development))
 
 ---
 
