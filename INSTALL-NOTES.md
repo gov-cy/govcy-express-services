@@ -85,7 +85,7 @@ To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').ran
 
 ## 4. Create data config files for services
 
-Create data files in the `/data` folder (see more in [Dynamic Services Rendering](README.md#🧩-dynamic-services-rendering))
+Create data files in the `/data` folder (see more in [Dynamic Services Rendering](README.md#-dynamic-services-rendering))
 
 ## 5. Use the package in your project
 

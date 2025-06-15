@@ -12,23 +12,23 @@ This project is an Express-based project that dynamically renders online service
 
 ## Table of contents
 
-- [📝 Description](#📝-description)
-- [✨ Features](#✨-features)
-- [📋 Prerequisites](#📋-prerequisites)
-- [🚀 Quick start](#🚀-quick-start)
-- [📦 Full installation guide](#📦-full-installation-guide)
-- [🛠️ Usage](#🛠️-usage)
-  - [🧩 Dynamic services rendering](#🧩-dynamic-services-rendering)
-  - [🛡️ Site eligibility checks](#🛡️-site-eligibility-checks)
-  - [📤 Site submissions](#📤-site-submissions)
-  - [✅ Input validations](#✅-input-validations)
-- [🛣️ Routes](#🛣️-routes)
-- [🔒 Security note](#🔒-security-note)
-- [❓ Troubleshooting / FAQ](#❓-troubleshooting--faq)
-- [🙏 Credits](#🙏-credits)
-- [💡 Developer notes](#💡-developer-notes)
-- [📄 License](#📄-license)
-- [📬 Contact](#📬-contact)
+- [📝 Description](#-description)
+- [✨ Features](#-features)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Quick start](#-quick-start)
+- [📦 Full installation guide](#-full-installation-guide)
+- [🛠️ Usage](#-usage)
+  - [🧩 Dynamic services rendering](#-dynamic-services-rendering)
+  - [🛡️ Site eligibility checks](#-site-eligibility-checks)
+  - [📤 Site submissions](#-site-submissions)
+  - [✅ Input validations](#-input-validations)
+- [🛣️ Routes](#-routes)
+- [🔒 Security note](#-security-note)
+- [❓ Troubleshooting / FAQ](#-troubleshooting--faq)
+- [🙏 Credits](#-credits)
+- [💡 Developer notes](#-developer-notes)
+- [📄 License](#-license)
+- [📬 Contact](#-contact)
 
 ## ✨ Features
 - Dynamic form rendering from JSON templates
@@ -124,8 +124,8 @@ Here are some details explaining the JSON structure:
   - `design_systems_version` : The govcy-design-system version,
   - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
   - `matomo `: The Matomo web analytics configuration details.
-  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#🛡️-site-eligibility-check) section below.
-  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#📤-site-submissions) section below.
+  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#-site-eligibility-check) section below.
+  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#-site-submissions) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
@@ -273,7 +273,7 @@ Lets break down the JSON config for this page:
 
 **Notes**:
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
-- Check out the [input validations section](#✅-input-validations) for more details on how to add validations to the JSON file.
+- Check out the [input validations section](#-input-validations) for more details on how to add validations to the JSON file.
 
 #### Review page
 
