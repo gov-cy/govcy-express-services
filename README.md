@@ -179,8 +179,10 @@ The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#loca
 ### Authentication Middleware
 Authentication is handled via OpenID Connect using CY Login and is configured using environment variables. The middleware ensures users have valid sessions before accessing protected routes. 
 
+The CY Login tokens are used to also connect with the various APIs through [cyConnect](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/74/CY-Connect), so make sure to include the correct `scope` when requesting for a [cyLogin client registration](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/34/Developer-Guide).
+
 ### Dynamic Services Rendering
-Services are rendered dynamically using JSON templates stored in the `/data` folder. Service routes load `data/:siteId.json` to get the form data. Checkout the [express-service-shema.json](express-service-shema.json) See the example JSON structure of the **[test.json](data/test.json)** file for more details.
+Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
 
 Here are some details explaining the JSON structure:
 
@@ -190,14 +192,178 @@ Here are some details explaining the JSON structure:
   - `design_systems_version` : The govcy-design-system version,
   - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
   - `matomo `: The Matomo web analytics configuration details.
-  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#eligibility-api-endpoints) section below.
-  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#submission-api-endpoint) section below.
+  - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#site-eligibility-checks) section below.
+  - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#site-submissions) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
       - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
 
-### Eligibility API Endpoints
+
+A typical service flow that includes pages `index`, `question-1`, `question-2` under the `pages` array in the JSON file looks like this:
+
+```mermaid
+flowchart TD
+    govcy-page --> isAuth{Is User Authenticated?}
+    isAuth -- Yes<br><br> Eligibility Check --> index([:siteId/index])
+    isAuth -- No --> cyLogin[cyLogin]
+    cyLogin -- Eligibility Check --> index
+    index --  Eligibility Check<br> Validations --> question-1[:siteId/question-1]
+    question-1 --  Eligibility Check<br> Validations --> question-2[:siteId/question-2]
+    question-2 --  Eligibility Check<br> Validations --> review[📄:siteId/review <br> <br> Automatically generated]
+    review --  Eligibility Check<br> All Validations --> success([✅:siteId/success <br> <br> Automatically generated])
+
+```
+
+Some pages are generated automatically by the project, such as the `review` and `success` pages.
+
+#### `:siteId/pages`
+
+Pages defined in the JSON file under the `pages` array are rendered based on the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library. The `pageData.nextPage` field is used to determine the next page to render.
+
+Here's an example of a page defined in the JSON file:
+
+```json
+{
+  "pageData": {
+    "url": "index",
+    "title": {
+      "el": "Your email",
+      "en": "Το email σας"
+    },
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "telephone-number"
+  },
+  "pageTemplate": {
+    "sections": [
+      {
+        "name": "beforeMain",
+        "elements": [
+          {
+            "element": "backLink",
+            "params": {}
+          }
+        ],
+        "params": {}
+      },
+      {
+        "name": "main",
+        "elements": [
+          {
+            "element": "form",   
+            "params": {
+              "elements": [
+                {
+                  "element": "textInput",
+                  "params": {
+                      "label": {
+                          "en": "What is your email?",
+                          "el": "Ποιο είναι το email σας?"
+                      },
+                      "id": "email",
+                      "name": "email",
+                      "hint": {
+                          "en": "We’ll only use this email for this application",
+                          "el": "Θα χρησιμοποιήσουμε το email σας μόνο για αυτήν την υπηρεσία"
+                      },
+                      "type": "email",
+                      "isPageHeading": true,
+                      "fixedWidth": "50"
+                  },
+                  "validations": [
+                    {
+                        "check": "required",
+                        "params": {
+                        "message": {
+                            "en": "Enter your email",
+                            "el": "Εισαγάγετε το email σας"
+                        }
+                        }
+                    },
+                    {
+                        "check": "valid",
+                        "params": {
+                        "checkValue": "email",
+                        "message": {
+                            "en": "Your email must be a valid email address",
+                            "el": "To emial πρέπει να είναι έχει μορφή email address"
+                        }
+                        }
+                    }
+                ]
+                },
+                {
+                  "element": "button",
+                  "params": {
+                    "id": "continue",
+                    "variant": "primary",
+                    "text": {
+                      "el": "Συνέχεια",
+                      "en": "Continue"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The JSON structure is based on the [govcy-frontend-renderer's JSON template](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md#json-template-example).
+
+Lets break down the JSON config for this page:
+
+- **pageData** are the page's meta data, such as the URL, title, layout, mainLayout, and nextPage.
+  - `pageData.url` is the URL of the page, in this case it's `index`
+  - `pageData.title` is the title of the page, in this case it's `Your email`. This will be used in the `review`, `success` pages, the PDF, the email, and the submission platform. 
+  - `pageData.layout` is the layout used to render the page. The project only supports the default layout `layouts/govcyBase.njk`
+  - `pageData.mainLayout` is the layout of the `main` section of the page, in this case it's `two-third`. It can be either `two-third` or `max-width`,
+  - `pageData.nextPage` is the next page to redirect to when the user clicks the `continue` button and all validations pass, in this case it will redirect to `/:siteId/telephone-number`
+- **pageTemplate** is the page's template, which is a JSON object that contains the sections and elements of the page. Check out the [govcy-frontend-renderer's documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md) for more details.
+
+**Forms vs static content**
+
+- If the `pageTemplate` includes a `form` element in the `main` section, the system will treat it as form and will:
+  - Perform the eligibility checks
+  - Display the form
+  - Collect the form data
+  - Validate the form data
+  - Store the form data in the systems data layer
+  - Redirect the user to the next page (or `review` page if the user came from the review page)
+- Else if the `pageTemplate` does not include a `form` element in the `main` section, the system will treat it as static content and will:
+  - Not perform the eligibility checks
+  - Display the static content
+
+**Notes**:
+- Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
+- Check out the [input validations section](#input-validations) for more details on how to add validations to the JSON file.
+
+#### `review` page
+
+The `review` page is automatically generated by the project and includes the following sections:
+
+- **Summary**: A summary of the data from all the pages in the service.
+- **Change links**: A list of links to each page in the service.
+- **Submit button**: A button to submit the form.
+
+When the user clicks a change link, the user is redirected to the corresponding page in the service. After the user clicks on `continue` button the user is redirected back to the `review` page.
+
+When the user clicks the `Submit` button, all the data gathered from the site's forms within this session are validated based on the validation definition in the JSON file, and if they pass they are submitted to the configured API endpoint.
+
+#### `success` page
+
+The `success` page is automatically generated by the project, is accessible only when a submission is made successfully, and includes the following sections:
+
+- **Success banner**: A banner indicating that the form was successfully submitted, with the reference number of the submission.
+- **PDF Download link**: A link to download the PDF of the submission's data in a human-readable format.
+- **Summary**: A summary of the data from all the pages in the service.
+
+### Site eligibility checks
 
 The project uses an array of API endpoints to check the eligibility of a service/site. To use this feature, you need to configure the following in your JSON file under the `site` object:
 
@@ -266,7 +432,7 @@ The response is cached to the session storage for the specified number of minute
 
 #### Eligibility API request and response
 
-For each eligibility API endpoint, the project sends a request to the API endpoint. 
+For each eligibility API endpoint, the project sends a request to the API endpoint. The project uses the [CY Connect - OAuth 2.0 (CY Login)](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/122/CY-Connect-OAuth-2.0-(CY-Login)) authentication policy, so the user's `<access_token>` is sent in the `Authorization` header.
 
 **Eligibility Request**
 
@@ -349,9 +515,11 @@ The API is expected to return a JSON response with the following structure (see 
 - Eligibility check logic: See [govcyServiceEligibilityHandler.mjs](src/middleware/govcyServiceEligibilityHandler.mjs)
 - API call, normalization and retries: See [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs)
 
-### Submission API Endpoint
+### Site Submissions
 
-The project uses an API endpoint to submit the form data. To use this feature, you need to configure the following in your JSON file under the `site` object:
+The project uses an API endpoint to submit the form data. The project uses the [CY Connect - OAuth 2.0 (CY Login)](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/122/CY-Connect-OAuth-2.0-(CY-Login)) authentication policy, so the user's `<access_token>` is sent in the `Authorization` header.
+
+To use this feature, you need to configure the following in your JSON file under the `site` object:
 
 ```json
 "submissionAPIEndpoint": {
