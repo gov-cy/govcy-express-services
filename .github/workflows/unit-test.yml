@@ -20,7 +20,7 @@ jobs:
       run: npm install
     - name: Start server
       env:
-        CYLOGIN_OPENID_URL: ${{ secrets.CYLOGIN_OPENID_URL }}
+        CYLOGIN_CLIENT_ID: ${{ secrets.CYLOGIN_CLIENT_ID }}
         CYLOGIN_CLIENT_SECRET: ${{ secrets.CYLOGIN_CLIENT_SECRET }}
         CYLOGIN_CODE_CHALLENGE_METHOD: ${{ secrets.CYLOGIN_CODE_CHALLENGE_METHOD }}
         CYLOGIN_ISSUER_URL: ${{ secrets.CYLOGIN_ISSUER_URL }}
