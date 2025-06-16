@@ -42,6 +42,21 @@ jobs:
         npm run start:mock &
         echo $! > mock-server.pid
     - name: Test
+      env:
+        CYLOGIN_CLIENT_ID: ${{ secrets.CYLOGIN_CLIENT_ID }}
+        CYLOGIN_CLIENT_SECRET: ${{ secrets.CYLOGIN_CLIENT_SECRET }}
+        CYLOGIN_CODE_CHALLENGE_METHOD: ${{ secrets.CYLOGIN_CODE_CHALLENGE_METHOD }}
+        CYLOGIN_ISSUER_URL: ${{ secrets.CYLOGIN_ISSUER_URL }}
+        CYLOGIN_POST_LOGOUR_REIDRECT_URI: ${{ secrets.CYLOGIN_POST_LOGOUR_REIDRECT_URI }}
+        CYLOGIN_REDIRECT_URI: ${{ secrets.CYLOGIN_REDIRECT_URI }}
+        CYLOGIN_SCOPE: ${{ secrets.CYLOGIN_SCOPE }}
+        PORT: ${{ secrets.PORT }}
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        TEST_SUBMISSION_API_CLIENT_KEY: ${{ secrets.TEST_SUBMISSION_API_CLIENT_KEY }}
+        TEST_SUBMISSION_API_SERVIVE_ID: ${{ secrets.TEST_SUBMISSION_API_SERVIVE_ID }}
+        TEST_SUBMISSION_API_URL: ${{ secrets.TEST_SUBMISSION_API_URL }}
+        TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+        TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
       run: npm test
     - name: Stop server
       run: |
