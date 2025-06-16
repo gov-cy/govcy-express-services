@@ -18,6 +18,11 @@ jobs:
         node-version: 20
     - name: Install dependencies
       run: npm install
+    - name: Generate server certs
+      run: |
+        if [ ! -f server.cert ] || [ ! -f server.key ]; then
+            openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -days 1 -nodes -subj "/CN=localhost"
+        fi
     - name: Start server
       env:
         CYLOGIN_CLIENT_ID: ${{ secrets.CYLOGIN_CLIENT_ID }}
