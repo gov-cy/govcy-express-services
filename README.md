@@ -566,31 +566,33 @@ The API is expected to return a JSON response with the following structure (see 
 The data is collected from the form elements and the data layer and are sent via the submission API in the following format:
 
 ```json
-"submissionData": {           // Site level successful submission data
-  "submission_username" : "", // User's username
-  "submission_email" : "",    // User's email
-  "submission_data": {},      // Raw data as submitted by the user in each page
-  "submission_data_version": "", // The submission data version
-  "print_friendly_data": [],  // Print friendly data
-  "renderer_data" :{},        // Renderer data of the summary list
-  "renderer_version": "",     // The renderer version
+"submissionData": {             // Site level successful submission data
+  "submission_username" : "",   // User's username
+  "submission_email" : "",      // User's email
+  "submission_data": "{}",      // Raw data as submitted by the user in each page
+  "submission_data_version": "",// The submission data version
+  "print_friendly_data": "[]",  // Print friendly data
+  "renderer_data" :"{}",        // Renderer data of the summary list
+  "renderer_version": "",       // The renderer version
   "design_systems_version": "", // The design systems version
-  "service": {                // Service info
-        "id": "",             // Service id
-        "title": {}           // Service title multilingual object
-    }
+  "service": "{}"               // Service info
 }
 ```
+##### Submission Data Sample
 
 <details>
-  <summary>Here's a sample submission data JSON</summary>
+  <summary>Here's a sample submission data JSON (as an object, before stringification)</summary>
 
-```jsonc
+> ℹ️ **Note:**  
+> When sent to the API, the fields `submission_data`, `renderer_data`, `print_friendly_data`, and `service` are stringified using `JSON.stringify()`.  
+> The sample below shows the structure **before** stringification for clarity.
+
+```json
 {
   "submission_username": "username",        // User's username
   "submission_email": "email@example.com",  // User's email
   "submission_data_version": "0.1",         // Submission data version
-  "submission_data": {                      // Submission raw data
+  "submission_data": {                      // Submission raw data. Object, will be stringified
     "index": {                              // Page level
       "formData": {
         "id_select": ["id", "arc"],         // field level. Could be string or array
@@ -627,7 +629,7 @@ The data is collected from the form elements and the data layer and are sent via
     }
   },
   "submission_data_version": "1",           // Submission data version
-  "renderer_data": {                        // Summary list renderer data ready for rendering
+  "renderer_data": {                        // Summary list renderer data ready for rendering . Object, will be stringified
     "element": "summaryList",
     "params": {
       "items": [
@@ -834,7 +836,7 @@ The data is collected from the form elements and the data layer and are sent via
       ]
     }
   },
-  "print_friendly_data": [                  // Print friendly data
+  "print_friendly_data": [                  // Print friendly data. Object, will be stringified
     {
       "pageUrl": "index",                     // Page URL
       "pageTitle": {                          // Page title
@@ -999,15 +1001,13 @@ The data is collected from the form elements and the data layer and are sent via
   ],
   "renderer_version": "1.14.1",              // Renderer version
   "design_systems_version": "3.1.0",          // Design systems version
-  "service": {                                // Service metadata
+  "service": {                                // Service metadata. Object, will be stringified
     "id": "takeover",
     "title": {
       "el": "Βεβαίωση ανάληψης καθηκόντων εκπαιδευτικών",
       "en": "Certificate of teachers takeover"
     }
-  },
-  "referenceNumber": "12345",                 // Reference number
-  "timestamp": "2023-04-20T14:30:00.000Z"     // Submission time
+  }
 }
 
 ```
