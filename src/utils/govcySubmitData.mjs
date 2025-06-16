@@ -42,6 +42,27 @@ export function prepareSubmissionData(req, siteId, service) {
 }
 
 /**
+ * Prepares the submission data for the API, stringifying all relevant fields.
+ * 
+ * @param {object} data data prepared by `prepareSubmissionData`
+ * @returns {object} The API-ready submission data object with all fields as strings
+ */
+export function prepareSubmissionDataAPI(data) {
+
+    return {
+        submission_username: String(data.submission_username ?? ""),
+        submission_email: String(data.submission_email ?? ""),
+        submission_data: JSON.stringify(data.submission_data ?? {}),
+        submission_data_version: String(data.submission_data_version ?? ""),
+        print_friendly_data: JSON.stringify(data.print_friendly_data ?? []),
+        renderer_data: JSON.stringify(data.renderer_data ?? {}),
+        renderer_version: String(data.renderer_version ?? ""),
+        design_systems_version: String(data.design_systems_version ?? ""),
+        service: JSON.stringify(data.service ?? {})
+    };
+}
+
+/**
  * Prepares the print-friendly data for the service, including page data and field labels.
  * 
  * @param {object} req The request object containing session data
