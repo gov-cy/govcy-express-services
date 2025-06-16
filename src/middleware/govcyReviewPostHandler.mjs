@@ -2,7 +2,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {prepareSubmissionData, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
+import {prepareSubmissionData, prepareSubmissionDataAPI, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
@@ -71,11 +71,14 @@ export function govcyReviewPostHandler() {
                 // Prepare submission data
                 const submissionData = prepareSubmissionData(req, siteId, service);
 
+                // Prepare submission data for API
+                const submissionDataAPI = prepareSubmissionDataAPI(submissionData);
+                
                 // Call the API to submit the data
                 const response = await govcyApiRequest(
                     "post",                         // Use POST method
                     submissionUrl,                  // Use the submission URL from the environment variable
-                    submissionData,                 // Pass the prepared submission data
+                    submissionDataAPI,                 // Pass the prepared submission data
                     true,                           // Use access token authentication
                     dataLayer.getUser(req.session), // Get the user from the session
                     { 
