@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { isProdOrStaging } from './govcyEnvVariables.mjs';
 
 /**
  * Generates a PDF from HTML and returns it as a Buffer.
@@ -6,7 +7,18 @@ import puppeteer from 'puppeteer';
  * @returns {Promise<Buffer>} - The generated PDF buffer.
  */
 export async function generatePDF(html) {
-  const browser = await puppeteer.launch({ headless: 'new' });
+  let puppeteerOptions = { headless: 'new' };
+
+  // Only ignore HTTPS errors in non-production/staging environments
+  if (!isProdOrStaging()) {
+    puppeteerOptions.args = [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--ignore-certificate-errors'
+    ];
+    puppeteerOptions.ignoreHTTPSErrors = true;
+  }
+  const browser = await puppeteer.launch(puppeteerOptions);
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: 'networkidle0' });
