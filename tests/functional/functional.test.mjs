@@ -35,6 +35,7 @@ describe('Functional Test - Login and Navigate', function () {
           '--disable-prompt-on-repost', // Disable repost prompts
           '--disable-features=PasswordLeakDetection', // Disable password leak detection
         ],
+        ignoreHTTPSErrors: true 
       });
       const context = await browser.createBrowserContext();
       page = await context.newPage();
