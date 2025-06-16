@@ -2,15 +2,16 @@ import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
 import { getPageConfigData } from "../utils/govcyLoadConfigData.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 
 // Helper to show error page or redirect (reuse your review handler logic)
-function handleEligibilityError(res, errorPage) {
+function handleEligibilityError(res, errorPage,next) {
     if (errorPage) {
         return res.redirect(errorPage);
     }
     // fallback: show generic error
-    return res.status(403).send("Eligibility check failed.");
+    return handleMiddlewareError("Eligibility check failed", 403, next);
 }
 
 export function govcyServiceEligibilityHandler(checkForForm = false) {
@@ -87,7 +88,7 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                     // Try to find a custom error page for this error code
                     const errorPage = endpoint.response?.errorResponse?.[String(response.ErrorCode)]?.page;
                     logger.info(`Eligibility check failed: ${response.ErrorMessage || response.ErrorCode}`);
-                    return handleEligibilityError(res, errorPage);
+                    return handleEligibilityError(res, errorPage, next);
                 }
             }
 
