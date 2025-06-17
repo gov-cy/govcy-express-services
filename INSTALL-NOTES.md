@@ -46,7 +46,7 @@ Save server.cert and server.key in the root of your project folder.
 
 Create a .env file in the root of your project folder.
 
-```sh
+```dotenv
 SESSION_SECRET=session_secret
 PORT=44319
 CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration

@@ -1,4 +1,6 @@
 # govcy Express Services
+![License](https://img.shields.io/github/license/gov-cy/govcy-epxress-services)
+[![Unit test](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml)
 
 > ⚠️ **Warning:**  
 > This package is under active development and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only.  
@@ -351,7 +353,7 @@ Lets break the JSON config down:
 
 The above config references the following environment variables that need to be set:
 
-```sh
+```dotenv
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/check1
 TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/check2
 TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
@@ -482,7 +484,7 @@ Lets break the JSON config down:
 
 The above config references the following environment variables that need to be set:
 
-```sh
+```dotenv
 TEST_SUBMISSION_API_URL=http://localhost:3002/success
 TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
 TEST_SUBMISSION_API_SERVIVE_ID=123

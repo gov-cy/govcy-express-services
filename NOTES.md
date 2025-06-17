@@ -24,7 +24,7 @@ This is a development guide for the govcy-express-services project.
 
 Create a .env file in the root of your project folder (see example below): 
 
-```sh
+```dotenv
 SESSION_SECRET=f3a8d62dbef1c45a8c3e19a2c873d14c5698a5de12fb7c7bd5d6d3f4b1a6e2d3
 PORT=44319
 CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
