@@ -1167,6 +1167,7 @@ Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can 
 
 ## 🔒 Security note
 - Always set a strong, random `SESSION_SECRET` in your `.env` file. Never commit secrets or credentials to version control.
+- Add `.gitignore` & `.npmignore`: Ensure no real `.env`, `server.key`, or other sensitive files are published.
 - In production, ensure cookies are set with `secure`, `httpOnly`, and `sameSite` attributes to protect against common web vulnerabilities.
 - Make sure your server is running behind HTTPS in production.
 - Regularly rotate secrets and credentials, and restrict access to your `.env` and configuration files.
