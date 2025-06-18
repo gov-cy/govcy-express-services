@@ -14,6 +14,8 @@
 ## 📝 Description
 This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner.
 
+The project is designed to support the [Linear structure](https://gov-cy.github.io/govcy-design-system-docs/patterns/service_structure/#variant-1---linear-structure) as described in the [Unified Design System](https://gov-cy.github.io/govcy-design-system-docs/). 
+
 ![govcy-express-services](express-services.png)
 
 ## Table of contents
@@ -22,6 +24,7 @@ This project is an Express-based project that dynamically renders online service
 - [✨ Features](#-features)
 - [📋 Prerequisites](#-prerequisites)
 - [🚀 Quick start](#-quick-start)
+- [✅ Best Practices](#-best-practices)
 - [📦 Full installation guide](#-full-installation-guide)
 - [🛠️ Usage](#%EF%B8%8F-usage)
   - [🧩 Dynamic services rendering](#-dynamic-services-rendering)
@@ -96,6 +99,15 @@ For more details on configuration, environment variables, and advanced features,
 
 ## 📦 Full installation guide
 The project acts as an npm package and you need to install it as a dependency in your npm project. Check out the [install notes](INSTALL-NOTES.md) a detailed installation guide.
+
+## ✅ Best Practices
+
+Before starting your service, please review the [Best Practices guide](BEST-PRACTICES.md) for guidance on:
+
+- Repository structure
+- Environment separation (`dev` / `staging` / `prod`)
+- Secure CY Login client registration
+- Mandatory footer pages (privacy, cookies, accessibility)
 
 ## 🛠️ Usage
 ### Starting the Server
@@ -280,6 +292,11 @@ Lets break down the JSON config for this page:
 - Else if the `pageTemplate` does not include a `form` element in the `main` section, the system will treat it as static content and will:
   - Not perform the eligibility checks
   - Display the static content
+
+When designing form pages, refer to the Unified Design System's [question pages pattern](https://gov-cy.github.io/govcy-design-system-docs/patterns/question_pages/).
+
+**Error pages**
+Pages that can be used to display messages when eligibility or submission fail are simply static content pages. That is pages that do not include a `form` element.
 
 **Notes**:
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.

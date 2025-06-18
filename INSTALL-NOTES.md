@@ -128,3 +128,14 @@ To enable debugging with VS Code, add a file `.vscode/launch.json` to your proje
         }
     ]
 }
+```
+
+---
+
+## 📋 Additional Guidelines
+
+Before deploying your service, make sure to review the [Best Practices guide](./BEST-PRACTICES.md). It includes important information about:
+
+- Repository organization
+- Required footer pages for compliance
+- Proper CY Login client registration per environment
