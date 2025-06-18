@@ -141,7 +141,7 @@ Here are some details explaining the JSON structure:
 A typical service flow that includes pages `index`, `question-1`, `question-2` under the `pages` array in the JSON file looks like this:
 
 ```mermaid
-flowchart TD
+flowchart LR
     govcy-page --> isAuth{Is User Authenticated?}
     isAuth -- Yes<br><br> Eligibility Check --> index([:siteId/index])
     isAuth -- No --> cyLogin[cyLogin]
@@ -380,6 +380,32 @@ With the above config, when a user visits a page under the specific site, `/:sit
 
 The response is cached to the session storage for the specified number of minutes. If the `cashingTimeoutMinutes` is set to `0`, the API endpoint will be called every time.
 
+Here's a flowchart showing how the eligibility checks work:
+
+```mermaid
+flowchart LR
+    A[🧭 User visits /:siteId/* page] --> B{{❓ Are eligibilityAPIEndpoints configured?}}
+    B -- No --> H[✅ Access granted<br>Show page]
+    B -- Yes --> D[🔁 Loop through API endpoints]
+
+    D --> D1{{❓ Is cached response still valid?}}
+    D1 -- Yes --> D2[🗃️ Use cached result]
+    D1 -- No --> E[🔄 Send request with:<br>- Method GET or POST<br>- Auth header<br>- Params or body]
+
+    D2 --> F{{❓ Did cached result<br>have Succeeded: true?}}
+    E --> F
+
+    F -- Yes --> G{{❓ More endpoints to check?}}
+    G -- Yes --> D
+    G -- No --> H
+
+    F -- No --> I[📄 Check ErrorCode<br>in config]
+    I --> J{{❓ Is ErrorCode in config?}}
+    J -- Yes --> K[❌ Redirect to configured error page]
+    J -- No --> L[❌ Show generic error page]
+
+```
+
 #### Eligibility API request and response
 
 For each eligibility API endpoint, the project sends a request to the API endpoint. The project uses the [CY Connect - OAuth 2.0 (CY Login)](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/122/CY-Connect-OAuth-2.0-(CY-Login)) authentication policy, so the user's `<access_token>` is sent in the `Authorization` header.
@@ -508,6 +534,27 @@ TEST_SUBMISSION_API_SERVIVE_ID=123
 
 With the above config, when a user submits the `review` page, the service sends a request to the configured submission API endpoint.
 
+Here's a flowchart showing how the submission work:
+
+```mermaid
+
+flowchart LR
+    A[📤 User submits review page] --> B[🔄 Send POST request]
+
+    B --> C{{❓ Did response have Succeeded: true?}}
+
+    C -- Yes --> D[✅ Show success confirmation with reference code]
+
+    C -- No --> E[📄 Check ErrorCode in config]
+    E --> F{{❓ Is ErrorCode in config?}}
+    F -- Yes --> G[❌ Redirect to configured error page]
+    F -- No --> H[❌ Show generic error page]
+
+    B --> I{{❓ Did request fail or return invalid response?}}
+    I -- Yes --> H
+
+```
+
 #### Submission API Request and Response
 
 **Submission Request:**
@@ -602,7 +649,7 @@ The data is collected from the form elements and the data layer and are sent via
 ##### Submission Data Sample
 
 <details>
-  <summary>Here's a sample submission data JSON (as an object, before stringification)</summary>
+  <summary>Click here for a sample submission data JSON</summary>
 
 > ℹ️ **Note:**  
 >
