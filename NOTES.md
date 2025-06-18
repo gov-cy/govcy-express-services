@@ -25,24 +25,25 @@ This is a development guide for the govcy-express-services project.
 Create a .env file in the root of your project folder (see example below): 
 
 ```dotenv
-SESSION_SECRET=f3a8d62dbef1c45a8c3e19a2c873d14c5698a5de12fb7c7bd5d6d3f4b1a6e2d3
+SESSION_SECRET=12345678901234567890123456789012345678901234567890
 PORT=44319
 CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
 CYLOGIN_CLIENT_ID=your-CYLOGIN-client-id
 CYLOGIN_CLIENT_SECRET=your-CYLOGIN-client-secret
-CYLOGIN_SCOPE=openid cegg_profile dsf.express
+CYLOGIN_SCOPE=openid cegg_profile your.scope
 CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
 CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 NODE_ENV=development
 # Debug or not  -------------------------------
+# In production set this to false
 DEBUG=true
 # DSF Gateway ---------------------------
 DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
 DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
 DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
 # Notification API URL
-DSF_API_GTW_NOTIFICATION_API_URL=https://10.61.11.10:5443/DsfApi/api/v1/NotificationEngine/simple-message
+DSF_API_GTW_NOTIFICATION_API_URL=https://127.0.0.1/api/v1/NotificationEngine/simple-message
 # SERVICES stuf-------------------------------
 # SERVICE: test
 TEST_SUBMISSION_API_URL=http://localhost:3002/success
@@ -163,10 +164,10 @@ For a sample of submission data see at [README's sample submission data](README.
 ```javascript
 "user": {
   "sub": "0000000950496523",          // Subject identifier
-  "name": "Citizen6",                 // Display name
+  "name": "User1",                    // Display name
   "profile_type": "Individual",       // User type
-  "client_ip": "87.228.189.67",       // IP address
-  "unique_identifier": "0000808554",  // User ID
+  "client_ip": "127.0.0.1",           // IP address
+  "unique_identifier": "0000XXXXXX",  // User ID
   "email": "user@example.com",
   "phone_number": "99XXXXXX",
   "id_token": "xxxxxx",               // CY Login tokens
@@ -333,11 +334,11 @@ For example:
   // USER DATA
   "user": {
     "sub": "0000000950496523",
-    "name": "Citizen6",
+    "name": "User1",
     "profile_type": "Individual",
-    "client_ip": "87.228.189.67",
-    "unique_identifier": "0000808554",
-    "email": "dsftesting1@gmail.com",
+    "client_ip": "127.0.0.1",
+    "unique_identifier": "0000XXXXXX",
+    "email": "user@example.com",
     "phone_number": "99XXXXXX",
     "id_token": "xxxxxx",
     "access_token": "xxxxxx",
