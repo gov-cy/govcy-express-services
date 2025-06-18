@@ -19,7 +19,7 @@ app.post("/:key", (req, res) => {
             Succeeded: true,
             ErrorCode: 0,
             ErrorMessage: null,
-            Data : { submission_id: "12345678-x" },
+            Data : { referenceValue: "12345678-x" },
             ReceivedAuthorization: authHeader, // This is to test the auth header
             ReceivedClientKey: req.headers['client-key'] || null,    // For testing client key
             ReceivedServiceId: req.headers['service-id'] || null     // For testing service ID
@@ -60,7 +60,7 @@ app.get("/:key", (req, res) => {
             Succeeded: true,
             ErrorCode: 0,
             ErrorMessage: null,
-            Data : { submission_id: "12345678-x" },
+            Data : { referenceValue: "12345678-x" },
             ReceivedQuery: req.query, // This is to test the query params
             ReceivedAuthorization: authHeader, // This is to test the auth header
             ReceivedClientKey: req.headers['client-key'] || null,    // For testing client key

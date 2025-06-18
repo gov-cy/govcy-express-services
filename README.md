@@ -556,7 +556,7 @@ The API is expected to return a JSON response with the following structure (see 
   "ErrorCode": 0,
   "ErrorMessage": null,
   "Data": {
-    "submission_id": "12345678-x"
+    "referenceValue": "12345678"
   }
 }
 ```

@@ -28,7 +28,7 @@ describe("Integration Test - Mock API", () => {
         // Assert the response
         expect(response.Succeeded).to.be.true;
         expect(response.ErrorCode).to.equal(0);
-        expect(response.Data.submission_id).to.equal("12345678-x");
+        expect(response.Data.referenceValue).to.equal("12345678-x");
     });
 
     it("2. should handle API error responses correctly (error102)", async () => {

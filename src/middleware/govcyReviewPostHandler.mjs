@@ -90,7 +90,7 @@ export function govcyReviewPostHandler() {
                 
                 // Check if the response is successful
                 if (response.Succeeded) {
-                    let referenceNo = response?.Data?.submission_id || "";
+                    let referenceNo = response?.Data?.referenceValue || "";
                     // Add the reference number to the submission data
                     submissionData.referenceNumber = referenceNo; 
                     logger.info("✅ Data submitted", siteId, referenceNo);
