@@ -140,7 +140,13 @@ Here are some details explaining the JSON structure:
   - `submission_data_version` : The submission data version,
   - `renderer_version` : The govcy-frontend-renderer version,
   - `design_systems_version` : The govcy-design-system version,
-  - `homeRedirectPage`: The page to redirect when user visits the route page. Usually this will redirect to gov.cy page. If not provided will show a list of available sites.
+  - `homeRedirectPage`: An object mapping language codes to URLs. When a user visits the root route (e.g., `https://whatever-your-service-is.service.gov.cy/`), the system redirects to the URL for the user's language. If the user's language is not found, it falls back to `"el"` or the first available URL. If not provided, a list of available sites is shown. Example:
+  ```json 
+  "homeRedirectPage": {
+    "el": "https://www.gov.cy/service/aitisi-gia-taftotita/",
+    "en": "https://www.gov.cy/en/service/issue-an-id-card/"
+  }
+  ```
   - `matomo `: The Matomo web analytics configuration details.
   - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#%EF%B8%8F-site-eligibility-checks) section below.
   - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#-site-submissions) section below.
@@ -297,6 +303,9 @@ When designing form pages, refer to the Unified Design System's [question pages 
 
 **Error pages**
 Pages that can be used to display messages when eligibility or submission fail are simply static content pages. That is pages that do not include a `form` element.
+
+**Start page**
+The [start page](https://gov-cy.github.io/govcy-design-system-docs/patterns/service_structure/#start-page) should be created in the gov.cy portal and should be defined in the `site.homeRedirectPage` property in the site config JSON file. All pages within a service are private by default and can only be accessed by authenticated users, so the start page cannot be created in the JSON file.
 
 **Notes**:
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
