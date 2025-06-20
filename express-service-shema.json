@@ -9,7 +9,15 @@
       "properties": {
         "id": { "type": "string" },
         "lang": { "type": "string" },
-        "homeRedirectPage": { "type": "string" },
+        "homeRedirectPage": {
+          "type": "object",
+          "properties": {
+            "el": { "type": "string" },
+            "en": { "type": "string" },
+            "tr": { "type": "string" }
+          },
+          "additionalProperties": { "type": "string" }
+        },
         "languages": {
           "type": "array",
           "items": {

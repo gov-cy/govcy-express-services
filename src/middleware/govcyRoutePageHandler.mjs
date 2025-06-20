@@ -14,6 +14,18 @@ export function govcyRoutePageHandler(req, res, next) {
         const siteId  = req.cookies.cs;
         const serviceData = getServiceConfigData(siteId, req.globalLang);
         if (serviceData.site && serviceData.site.homeRedirectPage) {
+            const homeRedirectPage = serviceData.site.homeRedirectPage;
+            const lang = req.globalLang || 'el'; // fallback to 'en' if not set
+
+            let redirectUrl = null;
+
+            if (homeRedirectPage && typeof homeRedirectPage === 'object') {
+                redirectUrl = homeRedirectPage[lang] || homeRedirectPage['el'] || Object.values(homeRedirectPage)[0];
+            }
+
+            if (redirectUrl) {
+                return res.redirect(redirectUrl);
+            }
             // redirect to the homeRedirectPage cookie
             return res.redirect(serviceData.site.homeRedirectPage);
         }
