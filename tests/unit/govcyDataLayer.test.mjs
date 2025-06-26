@@ -191,5 +191,53 @@ describe('govcyDataLayer', () => {
         expect(cached).to.be.null;
     });
 
+    it('12. should return site data if it exists in the session', () => {
+        const session = {
+            siteData: {
+                site1: {
+                    inputData: {
+                        page1: {
+                            formData: { field1: 'value1' }
+                        }
+                    },
+                    eligibility: {
+                        someCheck: { result: { Succeeded: true } }
+                    }
+                }
+            }
+        };
+
+        const result = dataLayer.getSiteData(session, 'site1');
+        expect(result).to.deep.equal(session.siteData.site1);
+    });
+
+    it('13. should return an empty object if site exists but has no data', () => {
+        const session = {
+            siteData: {
+                site1: {}
+            }
+        };
+
+        const result = dataLayer.getSiteData(session, 'site1');
+        expect(result).to.deep.equal({});
+    });
+
+    it('14. should return null if site does not exist in session', () => {
+        const session = {
+            siteData: {
+                site1: {}
+            }
+        };
+
+        const result = dataLayer.getSiteData(session, 'nonexistent');
+        expect(result).to.deep.equal({});
+    });
+
+    it('15. should return null if siteData is undefined in session', () => {
+        const session = {}; // no siteData
+        const result = dataLayer.getSiteData(session, 'site1');
+        expect(result).to.deep.equal({});
+    });
+
     
 });
