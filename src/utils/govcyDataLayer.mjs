@@ -247,6 +247,23 @@ export function getSiteSubmissionErrors(store, siteId) {
 }
 
 /**
+ * Get the site's data from the store (including input data and eligibility data)
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId |The site id
+ * @returns The site data or null if none exist.
+ */
+export function getSiteData(store, siteId) {
+    const inputData = store?.siteData?.[siteId] || {};
+    
+    if (inputData) {
+        return inputData;
+    }
+
+    return null;
+}
+
+/**
  * Get the site's input data from the store 
  * 
  * @param {object} store The session store
