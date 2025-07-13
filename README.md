@@ -31,6 +31,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
   - [🛡️ Site eligibility checks](#%EF%B8%8F-site-eligibility-checks)
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
+  - [✅ Conditional logic](#-conditional-logic)
 - [🛣️ Routes](#%EF%B8%8F-routes)
 - [🔒 Security note](#-security-note)
 - [❓ Troubleshooting / FAQ](#-troubleshooting--faq)
@@ -164,10 +165,10 @@ flowchart LR
     isAuth -- Yes<br><br> Eligibility Check --> index([:siteId/index])
     isAuth -- No --> cyLogin[cyLogin]
     cyLogin -- Eligibility Check --> index
-    index --  Eligibility Check<br> Validations --> question-1[:siteId/question-1]
-    question-1 --  Eligibility Check<br> Validations --> question-2[:siteId/question-2]
-    question-2 --  Eligibility Check<br> Validations --> review[📄:siteId/review <br> <br> Automatically generated]
-    review --  Eligibility Check<br> All Validations --> success([✅:siteId/success <br> <br> Automatically generated])
+    index --  Eligibility Check<br> Validations<br> Conditionals --> question-1[:siteId/question-1]
+    question-1 --  Eligibility Check<br> Validations<br> Conditionals --> question-2[:siteId/question-2]
+    question-2 --  Eligibility Check<br> Validations<br> Conditionals --> review[📄:siteId/review <br> <br> Automatically generated]
+    review --  Eligibility Check<br> All Validations<br> All Conditionals --> success([✅:siteId/success <br> <br> Automatically generated])
 
 ```
 
@@ -189,7 +190,13 @@ Here's an example of a page defined in the JSON file:
     },
     "layout": "layouts/govcyBase.njk",
     "mainLayout": "two-third",
-    "nextPage": "telephone-number"
+    "nextPage": "telephone-number",
+    "conditions": [
+      {
+        "expression": "dataLayer['test-service.inputData.somePage.formData.showExtra'] != 'yes'",
+        "redirect": "review"
+      }
+    ]
   },
   "pageTemplate": {
     "sections": [
@@ -284,6 +291,7 @@ Lets break down the JSON config for this page:
   - `pageData.layout` is the layout used to render the page. The project only supports the default layout `layouts/govcyBase.njk`
   - `pageData.mainLayout` is the layout of the `main` section of the page, in this case it's `two-third`. It can be either `two-third` or `max-width`,
   - `pageData.nextPage` is the next page to redirect to when the user clicks the `continue` button and all validations pass, in this case it will redirect to `/:siteId/telephone-number`
+  - `pageData.conditions` is the array that defines the [conditional logic](#-conditional-logic)
 - **pageTemplate** is the page's template, which is a JSON object that contains the sections and elements of the page. Check out the [govcy-frontend-renderer's documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md) for more details.
 
 **Forms vs static content**
@@ -694,8 +702,7 @@ The data is collected from the form elements and the data layer and are sent via
         "id_select": ["id", "arc"],         // field level. Could be string or array
         "id_number": "654654",
         "arc_number": "",
-        "aka": "232323",
-        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+        "aka": "232323"
       }
     },
     "appointment": {
@@ -708,8 +715,7 @@ The data is collected from the form elements and the data layer and are sent via
         "fileno_aoristou": "",
         "eidikotita_aoristou": "",
         "program": "",
-        "fileno_orismenou": "",
-        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+        "fileno_orismenou": ""
       }
     },
     "takeover": {
@@ -719,8 +725,7 @@ The data is collected from the form elements and the data layer and are sent via
         "date_start_year": "2020",
         "date_on_contract": "date_other",
         "date_contract": "16/04/2025",
-        "reason": "24324dssf",
-        "_csrf": "o6s80zgvowsmzm3q1djl03etarbd1pnd"
+        "reason": "24324dssf"
       }
     }
   },
@@ -1171,6 +1176,165 @@ Example:
         }
         }
     }
+]
+```
+
+### ✅ Conditional logic
+
+The project supports conditional logic on pages. Conditional logic is evaluated using a custom `govcyExpressions.mjs` module, which executes expressions in a safe and scoped context using `new Function`. Only safe data access through the `dataLayer` is allowed. The system uses expressions and session data from the service's [data layer](NOTES.md#data-layer) to decide if a page will be shown or not.
+
+The conditional logic is defined in the `pageData.conditions` array for each page. The project calculates the `pageData.conditions[i].expression` expression at run time and if the condition is true, the current page is ignored and the user is redirected to the `pageData.conditions[i].redirect` url. The pages whose conditions are true:
+- are skiped from normal flow and user is redirected to the `pageData.conditions[i].redirect` url
+- the pages are ignored from:
+  - the review page summary list, success page summary list and email
+  - when validating all inputs when posting the review page (before submission)
+  - the data submitted via the API
+
+The following diagram shows the logic that runs on every request to a page. If any condition evaluates to true, the page is skipped and the user is redirected.
+```mermaid
+flowchart LR
+    A[⬅️ User navigates to /:siteId/:pageUrl] --> B{{Does pageData.conditions exist?}}
+    B -- No --> C[✅ Render the page]
+    B -- Yes --> D[🔁 Loop through conditions]
+
+    D --> E{{Evaluate condition.expression}}
+    E -- returns true --> F[➡️ Redirect to condition.redirect]
+    E -- returns false --> G{{More conditions?}}
+
+    G -- Yes --> D
+    G -- No --> C[✅ Render the page]
+```
+
+#### Expressions 
+Expressions are written using JavaScript syntax and are evaluated at runtime in a sandboxed environment. You can use:
+- comparison operators (`==`, `===`, `!=`, `<`, `>`, etc.)
+- logical operators (`&&`, `||`, `!`)
+- string methods (`.includes()`, `.toLowerCase()`)
+- safety fallbacks using `||` or optional chaining `?.`.
+
+🔐 Only the `dataLayer` variable is available inside the expression scope, all other variables or globals (like `window`, `document`, etc.) are blocked for safety.
+
+Some supported examples:
+
+```js
+dataLayer['site.inputData.page.formData.agree'] === 'yes'
+(dataLayer['site.inputData.page.formData.age'] || 0) >= 18
+String(dataLayer['site.inputData.page.formData.status'] || '').toLowerCase().includes('inactive')
+```
+
+Expressions should **not**:
+- Try to access external or global variables (they are not available).
+- Attempt to execute unsafe operations like `fetch()`, `eval()`, `alert()`, etc.
+
+Expressions are parsed using `new Function()` inside a restricted evaluator (`govcyExpressions.mjs`), and errors are caught and logged without crashing the application. If an expression returns `true`, the corresponding `redirect` is triggered.
+
+**Best practice note**
+Developers should ensure expressions are resilient to missing or undefined values in the data layer. Since invalid paths like `dataLayer['x.y.z']` will return `undefined` and **will not throw errors**, use fallbacks such as `|| ''` or wrappers like `String(...).toLowerCase()` to avoid unexpected behavior. Silent false positives are possible if expressions do not guard against undefined values.
+
+*Bad Example*:
+```js
+dataLayer['site.inputData.page.formData.status'].toLowerCase().includes('inactive')
+```
+This will throw an error if `status` is undefined.
+
+*Good Example*:
+```js
+String(dataLayer['site.inputData.page.formData.status'] || '').toLowerCase().includes('inactive')
+```
+This ensures the expression works even if the field is missing or undefined.
+
+#### Data used in the expressions with the `dataLayer`
+The expressions can only access `dataLayer` values. The [data layer](NOTES.md#data-layer) is basically a read-only object that contains the data stored within a session, things like values inputed by the user or results from eligibility checks. It's scoped per site and follows a strict structure. Note that you can only use the `dataLayer` array to access [data for the current site](NOTES.md#3-site-data). 
+
+To use data layer values, use the special `dataLayer[]` array. For example `dataLayer['conditional-test-service.inputData.index.formData.showExtra']` will get the value stored in the data store for:
+- site with siteID `conditional-test-service`
+  - input data for that site
+    - page with URL `index`
+      - form data (already inputed data by the user) for that page
+        - field with name `showExtra`
+
+The `dataLayer` typically contains keys such as:
+- `inputData`: **All data submitted by the user through forms**
+- `eligibilityResults`: **Cached results from service eligibility API checks**
+
+Example structure for a service with ID `my-service`:
+
+```js
+dataLayer = {
+  'my-service.inputData.index.formData.fullName': 'John Smith',
+  'my-service.inputData.index.formData.age': '34',
+  'my-service.inputData.contact-details.formData.telephone': '+35712345678',
+  'my-service.inputData.contact-details.formData.email': 'test@example.com',
+  "my-service.inputData.what-do-you-want.formData.certificate-select": [
+    "birth",
+    "permanent_residence"
+  ],
+  'my-service.inputData.want-to-apply.formData.option-radio': 'yes',
+  'my-service.eligibilityResults.check1.succeeded': true,
+  'my-service.eligibilityResults.check2.ErrorCode': 0
+}
+
+```
+
+If any part of the key path is missing (e.g., the page hasn’t been visited yet or a form field was left empty), the expression will safely return `undefined` and **will not throw an error**. This behavior is by design, so that conditional logic expressions can fail silently and fallback gracefully.
+
+For this reason, it's **strongly recommended** to use fallback values using `||`, like:
+
+```js
+String(dataLayer['my-site.inputData.index.formData.status'] || '').toLowerCase()
+```
+
+#### How to define conditional expressions in JSON
+Each page in your JSON config can include a `conditions` array:
+
+```json
+"conditions": [
+  {
+    "expression": "dataLayer['my-service.inputData.step1.formData.showExtra'] == 'no'",
+    "redirect": "review"
+  }
+]
+```
+
+When the condition evaluates to `true`, the page is skipped and the user is redirected to the given `redirect` URL and are excluded from the service. Note that:
+- Multiple conditions are checked in order (first match wins)
+- Conditions can be chained across pages (redirect triggers another check)
+
+See below some examples how to use the conditional logic for pages.  
+
+Simple example:
+
+```json
+"conditions": [
+  {
+    "expression": "dataLayer['conditional-test-service.inputData.index.formData.showExtra'] == 'no'",
+    "redirect": "next-page"
+  }
+]
+```
+
+Complex expression example using JS string functions:
+```json
+"conditions": [
+  {
+    "expression": "dataLayer['conditional-test-service.inputData.index.formData.showExtra'] == 'no' && String(dataLayer['conditional-test-service.inputData.details.formData.info'] || '').toLowerCase().includes('hide')",
+    "redirect": "next-page"
+  }
+]
+```
+
+Multiple conditions example:
+
+```json
+"conditions": [
+  {
+    "expression": "String(dataLayer['conditional-test-service.inputData.index.formData.showExtra'] || '').toLowerCase().includes('no')",
+    "redirect": "next-page"
+  },
+  {
+    "expression": "String(dataLayer['conditional-test-service.inputData.details.formData.info'] || '').toLowerCase().includes('hide')",
+    "redirect": "review"
+  }
 ]
 ```
 

@@ -7,6 +7,7 @@ import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { sendEmail } from "../utils/govcyNotification.mjs"
+import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
  * Middleware to handle review page form submission
@@ -26,6 +27,14 @@ export function govcyReviewPostHandler() {
                 //get page url
                 const pageUrl = page.pageData.url;
                 
+                // ----- Conditional logic comes here
+                // ✅ Skip validation if page is conditionally excluded
+                const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
+                if (conditionResult.result === false) {
+                    logger.debug(`⏩ Skipping validation for conditionally excluded page '${pageUrl}' → Redirects to '${conditionResult.redirect}'`, req);
+                    continue;
+                }
+
                 // Find the form definition inside `pageTemplate.sections`
                 let formElement = null;
                 for (const section of page.pageTemplate.sections) {

@@ -5,6 +5,8 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { getFormData } from "../utils/govcyFormHandling.mjs"
+import { evaluatePageConditions } from "../utils/govcyExpressions.mjs"; 
+
 
 /**
  * Middleware to handle page form submission
@@ -20,6 +22,14 @@ export function govcyFormsPostHandler() {
             // ⤵️ Find the current page based on the URL
             const page = getPageConfigData(service, pageUrl);
     
+            // ----- Conditional logic comes here
+            // ✅ Skip this POST handler if the page's conditions evaluate to true (redirect away)
+            const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
+            if (conditionResult.result === false) {
+                logger.debug("⛔️ Page condition evaluated to true on POST — skipping form save and redirecting:", conditionResult);
+                return res.redirect(govcyResources.constructPageUrl(siteId, conditionResult.redirect));
+            }
+            
             // 🔍 Find the form definition inside `pageTemplate.sections`
             let formElement = null;
             for (const section of page.pageTemplate.sections) {

@@ -172,10 +172,21 @@ export function evaluatePageConditions(page, store, siteKey, req) {
         siteKey
       );
 
+      if (typeof result !== 'boolean') {
+        logger.debug(`Condition expression on page '${page.pageData?.url || page.id}' returned non-boolean:`, result);
+      }
+
       // ✅ If expression is true → trigger redirect
       if (result === true) {                            // Only redirect if explicitly `true`
         // --- Protect against infinite redirects ---
         req._pageRedirectDepth = depth + 1;             // Increment redirect counter only if redirecting
+        logger.debug(`Condition[${i}] matched on page '${page.pageData?.url || page.id}':`, condition.expression, condition.redirect);
+        // Store redirect info in request for later use and traceability 
+        req._redirectedByCondition = {
+          fromPage: page.pageData?.url || page.id,
+          toPage: condition.redirect,
+          expression: condition.expression
+        };
         // return redirect response
         return { result: false, redirect: condition.redirect };
       }
@@ -190,43 +201,10 @@ export function evaluatePageConditions(page, store, siteKey, req) {
   return { result: true };
 }
 
-
-
-// console.log(evaluateExpression(
-//     '(dataLayer["test.inputData.index.formData.certificate_select"] == "permanent_residence") || (dataLayer["test.eligibility.TEST_ELIGIBILITY_2_API_URL.result.Succeeded"] == false)',
-//     flattenContext(req.session.siteData.test,'test')));
-
-
-// console.log(evaluatePageConditions(page, req.session, siteId));
-
-
-      // {
-      //   "pageData": {
-      //     "url": "data-entry-textinput",
-      //     "title": {
-      //       "el": "Σταθερό τηλέφωνο",
-      //       "en": "Landline number",
-      //       "tr": ""
-      //     },
-      //     "layout": "layouts/govcyBase.njk",
-      //     "mainLayout": "two-third",
-      //     "nextPage": "data-entry-all",
-      //     "conditions": [
-      //       {
-      //         "expression": "dataLayer['test.eligibility.TEST_ELIGIBILITY_1_API_URL.result.Succeeded'] == false || dataLayer['test.inputData.data-entry-radios.formData.mobile_select'] == 'mobile'",
-      //         "redirect": "review"
-      //       },
-      //       {
-      //         "expression": "dataLayer['test.eligibility.TEST_ELIGIBILITY_1_API_URL.result.Succeeded'] == false",
-      //         "redirect": "review"
-      //       }
-      //     ]
-      //   },
-
 // Todo:
 // - [X] Add unit tests
-// - [ ] Add page with conditions in JSON
-// - [ ] Add logic on the page handler to evaluate conditions
-// - [ ] Add logic on review and review post page handler to evaluate the conditions
-// - [ ] Add Functional tests for the conditions
-// - [ ] Add documentation for the conditions
+// - [X] Add page with conditions in JSON
+// - [X] Add logic on the page handler to evaluate conditions (search for `// TODO: Conditional logic comes here`)
+// - [X] Add logic on review and review post page handler to evaluate the conditions
+// - [X] Add Functional tests for the conditions
+// - [X] Add documentation for the conditions

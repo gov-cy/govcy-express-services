@@ -1,0 +1,309 @@
+
+{
+  "site": {
+    "id": "conditional-test-service",
+    "lang": "el",
+    "languages": [
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      },
+      {
+        "code": "en",
+        "label": "EN",
+        "alt": "English language",
+        "href": "?lang=en"
+      }
+    ],
+    "menu": {
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {
+      "el": "Υπηρεσία τεστ με συνθήκες",
+      "en": "Test Service with Conditions",
+      "tr": "Test Service with Conditions"
+    },
+    "headerTitle": {
+      "el": "Υπηρεσία τεστ με συνθήκες",
+      "en": "Test Service with Conditions",
+      "tr": ""
+    },
+    "description": {
+      "el": "[Υποβάλετε αίτηση για ...]",
+      "en": "[Submit an application ...]",
+      "tr": ""
+    },
+    "url": "https://gov.cy",
+    "isTesting": true,
+    "cdn": {
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist"
+    },
+    "submission_data_version": "1",
+    "renderer_version": "1.16.1",
+    "design_systems_version": "3.2.0",
+    "copyrightText": {
+      "el": "Κυπριακή Δημοκρατία, 2025",
+      "en": "Republic of Cyprus, 2025",
+      "tr": "Republic of Cyprus, 2025"
+    },
+    "submissionAPIEndpoint": {
+      "url": "TEST_SUBMISSION_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "105": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
+    }
+  },
+  "pages": [
+    {
+      "pageData": {
+        "url": "index",
+        "title": {
+          "el": "Αρχική Σελίδα",
+          "en": "Start Page",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "details"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "showExtra",
+                        "name": "showExtra",
+                        "isPageHeading": true,
+                        "legend": {
+                          "el": "Θέλετε να δείτε την επιπλέον σελίδα;",
+                          "en": "Do you want to see the extra page?"
+                        },
+                        "items": [
+                          {
+                            "value": "yes",
+                            "text": { "el": "Ναι", "en": "Yes" }
+                          },
+                          {
+                            "value": "no",
+                            "text": { "el": "Οχι", "en": "No" }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "details",
+        "title": {
+          "el": "Σελίδα Λεπτομερειών",
+          "en": "Details Page",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "conditional-extra"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "info",
+                        "name": "info",
+                        "isPageHeading": true,
+                        "label": { "el": "Πληροφορίες", "en": "Additional info" }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "conditional-extra",
+        "title": {
+          "el": "Σελίδα Επιπλέον με Συνθήκες `όχι` KAI `hide`",
+          "en": "Conditional Extra Page `no` AND `hide`",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "conditional-extra-2",
+        "conditions": [
+          {
+            "expression": "dataLayer['conditional-test-service.inputData.index.formData.showExtra'] == 'no' && String(dataLayer['conditional-test-service.inputData.details.formData.info'] || '').toLowerCase().includes('hide')",
+            "redirect": "conditional-extra-2"
+          }
+        ]
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "extra",
+                        "name": "extra",
+                        "isPageHeading": true,
+                        "label": { "el": "Επιπλέον πεδιο μόνο με συνθήκες", "en": "Extra field only shown when yes" }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό επιπλέον πεδίο",
+                              "en": "Enter the extra field",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "conditional-extra-2",
+        "title": {
+          "el": "Σελίδα Επιπλέον με Συνθήκες `ναι` Ή `hide`",
+          "en": "Conditional Extra Page `yes` OR `hide`",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review",
+        "conditions": [
+          {
+            "expression": "String(dataLayer['conditional-test-service.inputData.index.formData.showExtra'] || '').toLowerCase().includes('no')",
+            "redirect": "review"
+          },
+          {
+            "expression": "String(dataLayer['conditional-test-service.inputData.details.formData.info'] || '').toLowerCase().includes('hide')",
+            "redirect": "review"
+          }
+        ]
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "extra-2",
+                        "name": "extra-2",
+                        "isPageHeading": true,
+                        "label": { "el": "Επιπλέον πεδιο μόνο με συνθήκες 2", "en": "Extra field only shown when yes 2" }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό επιπλέον πεδίο 2",
+                              "en": "Enter the extra field 2",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

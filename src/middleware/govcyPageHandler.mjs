@@ -3,6 +3,7 @@ import { populateFormData } from "../utils/govcyFormHandling.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 // import {flattenContext, evaluateExpressionWithFlattening, evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
@@ -31,7 +32,13 @@ export function govcyPageHandler() {
       // Deep copy pageTemplate to avoid modifying the original
       const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
 
-      // TODO: Conditional logic comes here
+      // ----- Conditional logic comes here
+      // Check if the page has conditions and apply logic
+      const result = evaluatePageConditions(page, req.session, req.params.siteId, req);
+      if (result.result === false) {
+        return res.redirect(`/${req.params.siteId}/${result.redirect}`);
+      }
+      
       //if user is logged in add the user nane section in the page template
       if (dataLayer.getUser(req.session)) {
         pageTemplateCopy.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
