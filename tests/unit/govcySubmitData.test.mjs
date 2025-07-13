@@ -156,4 +156,87 @@ describe('govcySubmitData', () => {
             });
         });
     });
+
+    it('4. should skip pages with redirecting conditions', () => {
+        // Extend the service to include a conditional page with a redirect
+        service.pages.push({
+            pageData: {
+                url: 'conditionalPage',
+                title: { en: 'Conditional Page', el: 'Σελίδα Συνθηκών' },
+                conditions: [
+                    {
+                        expression: "true", // Always redirect
+                        redirect: "somewhere-else"
+                    }
+                ]
+            },
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        {
+                                            element: 'textInput',
+                                            params: {
+                                                id: 'condField',
+                                                name: 'condField',
+                                                label: { en: 'Conditional Field', el: 'Πεδίο Συνθηκών' }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        // Provide mock data for the new conditional page
+        req.session.siteData.testSite.inputData.conditionalPage = {
+            formData: { condField: 'something' }
+        };
+
+        // Add required mock param for siteId (used in condition evaluation)
+        req.params = { siteId };
+
+        // Run the function
+        const result = prepareSubmissionData(req, siteId, service);
+
+        // Expect only page1 to be included in submission_data
+        expect(result.submission_data).to.have.property('page1');
+        expect(result.submission_data).to.not.have.property('conditionalPage');
+    });
+
+
+    describe('preparePrintFriendlyData with conditionally excluded page', () => {
+        it('5. should not include print-friendly data for excluded page', () => {
+            service.pages[0].pageData.conditions = [
+                {
+                    expression: "true",
+                    redirect: "somewhere"
+                }
+            ];
+
+            const printData = preparePrintFriendlyData(req, siteId, service);
+            expect(printData).to.deep.equal([]);
+        });
+    });
+
+    describe('generateReviewSummary with conditionally excluded page', () => {
+        it('6. should not generate summary for excluded page', () => {
+            service.pages[0].pageData.conditions = [
+                {
+                    expression: "true",
+                    redirect: "somewhere"
+                }
+            ];
+
+            const summary = generateReviewSummary([], req, siteId, false);
+            expect(summary.params.items).to.deep.equal([]);
+        });
+    });
 });

@@ -140,7 +140,7 @@ export default function initializeGovCyExpressService(){
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
   app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyPageHandler(), renderGovcyPage());
   
-  // 📥 -- ROUTE: Handle POST requests for review page
+  // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
   
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware

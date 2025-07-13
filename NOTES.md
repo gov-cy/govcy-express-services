@@ -217,8 +217,7 @@ For example:
           // FORM DATA submitted
           "formData": { 
             "IBAN": "CY12345678900001225",
-            "SWIFT": "12345678",
-            "_csrf": "ld524iof94w6vxifrpvny5i4bc1mo76l"
+            "SWIFT": "12345678"
           },
           // PAGE validation errors
           "validationErrors": {
@@ -246,8 +245,7 @@ For example:
             // Data submitted that produced the error on site: `nsf-2`, page: `bank-details`
             "formData": {
               "IBAN": "",
-              "SWIFT": "",
-              "_csrf": "ld524iof94w6vxifrpvny5i4bc1mo76l"
+              "SWIFT": ""
             },
             "errorSummary": []
           }

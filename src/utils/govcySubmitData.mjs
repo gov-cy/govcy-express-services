@@ -3,6 +3,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
+import { evaluatePageConditions } from "./govcyExpressions.mjs";
 
 /**
  * Prepares the submission data for the service, including raw data, print-friendly data, and renderer data.
@@ -14,14 +15,27 @@ import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
  */
 export function prepareSubmissionData(req, siteId, service) {
     // Get the raw data from the session store
-    const rawData = dataLayer.getSiteInputData(req.session, siteId);
+    // const rawData = dataLayer.getSiteInputData(req.session, siteId);
+    
+    // ----- Conditional logic comes here
+    // Filter site input data based on active pages only
+    const rawData = {};
+    for (const page of service.pages) {
+    const shouldInclude = evaluatePageConditions(page, req.session, siteId, req).result === true;
+    if (shouldInclude) {
+        const pageUrl = page.pageData.url;
+        const formData = dataLayer.getPageData(req.session, siteId, pageUrl);
+        if (formData && Object.keys(formData).length > 0) {
+            rawData[pageUrl] = { formData };
+        }
+    }
+    }
 
     // Get the print-friendly data from the session store
     const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
 
     // Get the renderer data from the session store
     const reviewSummaryList = generateReviewSummary(printFriendlyData, req, siteId, false);
-
     // Prepare the submission data object
     return {
         submission_username: dataLayer.getUser(req.session).name,
@@ -48,7 +62,7 @@ export function prepareSubmissionData(req, siteId, service) {
  * @returns {object} The API-ready submission data object with all fields as strings
  */
 export function prepareSubmissionDataAPI(data) {
-
+    
     return {
         submission_username: String(data.submission_username ?? ""),
         submission_email: String(data.submission_email ?? ""),
@@ -197,6 +211,12 @@ export function preparePrintFriendlyData(req, siteId, service) {
     for (const page of service.pages) {
         const fields = [];
         // const currentPageUrl = page.pageData.url;
+        // ----- Conditional logic comes here
+        // Skip page if conditions indicate it should redirect (i.e. not be shown)
+        const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
+        if (conditionResult.result === false) {
+            continue; // ⛔ Skip this page from print-friendly data
+        }
 
         // find the form element in the page template
         for (const section of page.pageTemplate.sections || []) {
