@@ -1125,12 +1125,18 @@
       "pageData": {
         "url": "radios-conditions",
         "title": {
-          "el": "Κοντίσιοναλ ράδια",
-          "en": "Conditional radios",
+          "el": "Κοντίσιοναλ ράδια (δεν εμφανίζεται αν δεν έχει επιλεγεί το πιστοποιητικό γέννησης)",
+          "en": "Conditional radios (not shown if birth certificate is not selected)",
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
+        "conditions": [
+          {
+            "expression": "[].concat(dataLayer['test.inputData.index.formData.certificate_select'] || []).includes('birth')",
+            "redirect": "review"
+          }
+        ],
         "nextPage": "review"
       },
       "pageTemplate": {
