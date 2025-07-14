@@ -1205,6 +1205,51 @@ flowchart LR
     G -- No --> C[✅ Render the page]
 ```
 
+#### How to define conditional logic
+Each page in your JSON config can optionally include a `conditions` array inside the `pageData` object. The `conditions` array is an array of objects that define the conditions to evaluate and the corresponding redirect URL. For example the following JSON config:
+
+```json
+"conditions": [
+  {
+    "expression": "dataLayer['my-service.inputData.step1.formData.showExtra'] == 'no'",
+    "redirect": "review"
+  }
+]
+```
+
+Here is the same example as part of the page config:
+
+```json
+{
+  "pageData": {
+    "url": "page-1",
+    "title": {
+      "el": "Σελίδα 1",
+      "en": "Page 1",
+      "tr": ""
+    },
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "conditions": [     //---- conditionals start here
+      {
+        "expression": "dataLayer['my-service.inputData.step1.formData.showExtra'] == 'no'",
+        "redirect": "review"
+      }
+    ],                  //---- conditionals end here
+    "nextPage": "page-2"
+  },
+  "pageTemplate": {
+    "sections": [
+    ...
+    ...
+  }
+}
+```
+
+When the condition evaluates to `true`, the page is skipped and the user is redirected to the given `redirect` URL and are excluded from the service. Note that:
+- Multiple conditions are checked in order (first match wins)
+- Conditions can be chained across pages (redirect triggers another check)
+
 #### Expressions 
 Expressions are written using JavaScript syntax and are evaluated at runtime in a sandboxed environment. You can use:
 - comparison operators (`==`, `===`, `!=`, `<`, `>`, etc.)
@@ -1228,30 +1273,15 @@ Expressions should **not**:
 
 Expressions are parsed using `new Function()` inside a restricted evaluator (`govcyExpressions.mjs`), and errors are caught and logged without crashing the application. If an expression returns `true`, the corresponding `redirect` is triggered.
 
-**Best practice note**
-Developers should ensure expressions are resilient to missing or undefined values in the data layer. Since invalid paths like `dataLayer['x.y.z']` will return `undefined` and **will not throw errors**, use fallbacks such as `|| ''` or wrappers like `String(...).toLowerCase()` to avoid unexpected behavior. Silent false positives are possible if expressions do not guard against undefined values.
-
-*Bad Example*:
-```js
-dataLayer['site.inputData.page.formData.status'].toLowerCase().includes('inactive')
-```
-This will throw an error if `status` is undefined.
-
-*Good Example*:
-```js
-String(dataLayer['site.inputData.page.formData.status'] || '').toLowerCase().includes('inactive')
-```
-This ensures the expression works even if the field is missing or undefined.
-
 #### Data used in the expressions with the `dataLayer`
 The expressions can only access `dataLayer` values. The [data layer](NOTES.md#data-layer) is basically a read-only object that contains the data stored within a session, things like values inputed by the user or results from eligibility checks. It's scoped per site and follows a strict structure. Note that you can only use the `dataLayer` array to access [data for the current site](NOTES.md#3-site-data). 
 
 To use data layer values, use the special `dataLayer[]` array. For example `dataLayer['conditional-test-service.inputData.index.formData.showExtra']` will get the value stored in the data store for:
-- site with siteID `conditional-test-service`
-  - input data for that site
-    - page with URL `index`
-      - form data (already inputed data by the user) for that page
-        - field with name `showExtra`
+- `conditional-test-service` refers to the site with that siteID 
+  - `inputData` is a reserved word for the data inputed by the user for that site
+    - `index`refers to the page with that URL 
+      - `formData` is a reserved word for the form data (already inputed data by the user) for that page
+        - `showExtra`refers to a input component with that name 
 
 The `dataLayer` typically contains keys such as:
 - `inputData`: **All data submitted by the user through forms**
@@ -1284,25 +1314,27 @@ For this reason, it's **strongly recommended** to use fallback values using `||`
 String(dataLayer['my-site.inputData.index.formData.status'] || '').toLowerCase()
 ```
 
-#### How to define conditional expressions in JSON
-Each page in your JSON config can include a `conditions` array:
+**Best practice note**
 
-```json
-"conditions": [
-  {
-    "expression": "dataLayer['my-service.inputData.step1.formData.showExtra'] == 'no'",
-    "redirect": "review"
-  }
-]
+Developers should ensure expressions are resilient to missing or undefined values in the data layer. Since invalid paths like `dataLayer['x.y.z']` will return `undefined` and **will not throw errors**, use fallbacks such as `|| ''` or wrappers like `String(...).toLowerCase()` to avoid unexpected behavior. Silent false positives are possible if expressions do not guard against undefined values.
+
+*Bad Example*:
+```js
+dataLayer['site.inputData.page.formData.status'].toLowerCase().includes('inactive')
 ```
+This will throw an error if `status` is undefined.
 
-When the condition evaluates to `true`, the page is skipped and the user is redirected to the given `redirect` URL and are excluded from the service. Note that:
-- Multiple conditions are checked in order (first match wins)
-- Conditions can be chained across pages (redirect triggers another check)
+*Good Example*:
+```js
+String(dataLayer['site.inputData.page.formData.status'] || '').toLowerCase().includes('inactive')
+```
+This ensures the expression works even if the field is missing or undefined.
+
+#### Examples of conditional logic configuration
 
 See below some examples how to use the conditional logic for pages.  
 
-Simple example:
+**1. Simple example**:
 
 ```json
 "conditions": [
@@ -1313,7 +1345,16 @@ Simple example:
 ]
 ```
 
-Complex expression example using JS string functions:
+Explanation:
+- `dataLayer['conditional-test-service.inputData.index.formData.showExtra']`: gets the value stored in the data store for:
+  - site with siteID `conditional-test-service`
+  - input data for that site
+  - page with URL `index`
+  - form data (already inputed data by the user) for that page
+  - field with name `showExtra`
+- `== 'no'`: checks if the value is equal to 'no'
+
+**2. Expression example using JS string functions**:
 ```json
 "conditions": [
   {
@@ -1323,7 +1364,12 @@ Complex expression example using JS string functions:
 ]
 ```
 
-Multiple conditions example:
+Explanation:
+- `String(dataLayer['...'] || '')`: ensures it's always a string, even if the value is `undefined` or `null`.
+- `toLowerCase()`: converts the string to lowercase.
+- `includes('hide')`: checks if the string contains the substring 'hide'.
+
+**3. Multiple conditions example**:
 
 ```json
 "conditions": [
@@ -1337,6 +1383,29 @@ Multiple conditions example:
   }
 ]
 ```
+
+Explanation:
+- Multiple conditions are checked in order (first match wins)
+- `String(dataLayer['...'] || '')`: ensures it's always a string, even if the value is `undefined` or `null`.
+- `toLowerCase()`: converts the string to lowercase.
+- `includes('hide')`: checks if the string contains the substring 'hide'.
+
+**4.Example with select input that can have either `string` or `array` value**:
+
+```json
+"conditions": [
+  {
+    "expression": "[].concat(dataLayer['conditional-test-service.inputData.index.formData.certificate_select'] || []).includes('birth')",
+    "redirect": "next-page"
+  }
+]
+```
+
+Explanation:
+- `dataLayer['...']`: accesses the field from the session data.
+- `|| []`: ensures it's always an array, even if the value is `undefined` or `null`.
+- `[].concat(...)`: safely flattens a string or array into an array.
+- `.includes('value1')`: checks if the value is selected.
 
 ### 🛣️ Routes
 The project uses express.js to serve the following routes:
