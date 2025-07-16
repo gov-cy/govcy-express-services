@@ -130,6 +130,66 @@ To enable debugging with VS Code, add a file `.vscode/launch.json` to your proje
 }
 ```
 
+## 7. Create `Dockerfile` and `.dockerignore` for local development
+
+Create a `Dockerfile` in the root of your project folder.
+
+```dockerfile
+# ---------- Base image ----------
+FROM node:20-slim AS base
+
+# Set working directory inside container
+WORKDIR /app
+
+# Set port (serve on 8080)
+ENV PORT=8080
+EXPOSE 8080
+
+# Create a group and user so we are not running our container and application as root and thus user 0 which is a security issue.
+RUN addgroup --system --gid 1010 appgroup && adduser --system --uid 1010 --ingroup appgroup --shell /bin/sh appuser
+
+# Optional: Add CA certificate if needed (like .NET version)
+# COPY certs/ariadni-test.crt /usr/local/share/ca-certificates/ariadni-test.crt
+# RUN chmod 644 /usr/local/share/ca-certificates/ariadni-test.crt && update-ca-certificates
+
+# ---------- Build stage ----------
+FROM node:20-slim AS build
+
+WORKDIR /app
+
+# Copy dependency definitions first
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of the application
+COPY . .
+
+# ---------- Production stage ----------
+FROM base AS final
+
+# Copy app files and dependencies from build stage
+COPY --from=build /app /app
+
+# Use non-root user
+USER 1010
+
+# Start the app
+CMD ["npm", "start"]
+
+```
+
+Also create a `.dockerignore` file in the root of your project folder:
+
+```
+node_modules
+server.cert
+server.key
+npm-debug.log
+```
+
+
 ---
 
 ## 📋 Additional Guidelines

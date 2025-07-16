@@ -163,7 +163,7 @@ export default function initializeGovCyExpressService(){
     app,
     startServer: () => {
       // Start Server
-      if (USE_HTTPS) {
+      if (!isProdOrStaging()) {
         const options = {
           key: fs.readFileSync(certPath + '.key'),
           cert: fs.readFileSync(certPath + '.cert'),
