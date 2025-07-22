@@ -93,7 +93,6 @@
       "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
       "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
       "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
-      "allowSelfSignedCerts": true,
       "response": {
         "errorResponse": {
           "102": {
@@ -114,7 +113,6 @@
         "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
         "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
         "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
-        "allowSelfSignedCerts": true,
         "cashingTimeoutMinutes": "60",
         "params": {},
         "response": {

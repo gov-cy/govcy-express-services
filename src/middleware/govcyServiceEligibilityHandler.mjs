@@ -1,6 +1,6 @@
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
+import { getEnvVariable, getEnvVariableBool } from "../utils/govcyEnvVariables.mjs";
 import { getPageConfigData } from "../utils/govcyLoadConfigData.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
@@ -50,7 +50,7 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                 const serviceId = getEnvVariable(endpoint?.serviceId || "", false);
                 const dsfGtwApiKey = getEnvVariable(endpoint?.dsfgtwApiKey || "", "");
                 const cashingTimeoutMinutes = endpoint?.cashingTimeoutMinutes ||  0; // Default to 0 if not set
-                const allowSelfSignedCerts = endpoint?.allowSelfSignedCerts ||  false; // Default to false if not set
+                const allowSelfSignedCerts = getEnvVariableBool("ALLOW_SELF_SIGNED_CERTIFICATES",false) ; // Default to false if not set
                 if (!url) {
                     return handleMiddlewareError("🚨 Service eligibility API endpoint URL is missing", 500, next);
                 }

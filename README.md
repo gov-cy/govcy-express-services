@@ -33,6 +33,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
   - [✅ Input validations](#-input-validations)
   - [✅ Conditional logic](#-conditional-logic)
 - [🛣️ Routes](#%EF%B8%8F-routes)
+- [👨‍💻 Enviromental variables](#-enviromental-variables)
 - [🔒 Security note](#-security-note)
 - [❓ Troubleshooting / FAQ](#-troubleshooting--faq)
 - [🙏 Credits](#-credits)
@@ -131,6 +132,8 @@ The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#loca
 Authentication is handled via OpenID Connect using CY Login and is configured using environment variables. The middleware ensures users have valid sessions before accessing protected routes. 
 
 The CY Login tokens are used to also connect with the various APIs through [cyConnect](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/74/CY-Connect), so make sure to include the correct `scope` when requesting for a [cyLogin client registration](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/34/Developer-Guide).
+
+The CY Login settings are configured in the `.env` file.
 
 ### 🧩 Dynamic Services Rendering
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
@@ -358,7 +361,6 @@ The project uses an array of API endpoints to check the eligibility of a service
     "method": "POST", 
     "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
     "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-    "allowSelfSignedCerts": true,
     "cashingTimeoutMinutes": 2,
     "params": {
       "checkFor": "isCitizen,isAdult"
@@ -376,7 +378,6 @@ The project uses an array of API endpoints to check the eligibility of a service
     "url": "TEST_ELIGIBILITY_2_API_URL",
     "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
     "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-    "allowSelfSignedCerts": false,
     "cashingTimeoutMinutes": 60,
     "response": {
       "errorResponse": {
@@ -400,7 +401,6 @@ Lets break the JSON config down:
   - `clientId`: The enviromental variable that holds the client ID to use when making the request.
   - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
   - `dsfgtwApiKey` (optional): To be used only when using APIs through the DSF gateway instead of cyConnect 
-  - `allowSelfSignedCerts` (optional, `false` by default): accepts self-signed certificates on API calls
   - `cashingTimeoutMinutes`: The number of minutes to cache the response from the API endpoint. If set to `0`, the API endpoint will be called every time.
   - `params`: An object of key-value pairs that will be added to the request body when making the request.
   - `response`: An object of expected response when `succeeded===false`, to be used for the system to know which error page to show. 
@@ -540,7 +540,6 @@ To use this feature, you need to configure the following in your JSON file under
   "url": "TEST_SUBMISSION_API_URL",
   "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
   "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
-  "allowSelfSignedCerts": false,
   "response": {
     "errorResponse": {
       "102": {
@@ -562,7 +561,6 @@ Lets break the JSON config down:
   - `clientId`: The enviromental variable that holds the client ID to use when making the request.
   - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
   - `dsfgtwApiKey` (optional): To be used only when using APIs through the DSF gateway instead of cyConnect
-  - `allowSelfSignedCerts` (optional, `false` by default): accepts self-signed certificates on API calls
   - `response`: An object of expected response when `Succeeded===false`, to be used for the system to know which error page to show. 
 
 The above config references the following environment variables that need to be set:
@@ -1430,6 +1428,84 @@ The project uses express.js to serve the following routes:
 - **`/logout`**: CY Login logout endpoint.
 
 Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
+
+### 👨‍💻 Enviromental variables
+The environment variables (that are defined in the `.env` file locally) control the server configuration, authentication, integrations, and development behavior.
+
+#### Server environment variables
+The following environment variables are used to configure the server:
+
+```dotenv
+# 🔐 Session
+SESSION_SECRET=12345678901234567890123456789012345678901234567890
+# Secret used to sign session cookies. Use a long, random string in production.
+
+# 🌐 Server
+PORT=44319
+# The port the Express server runs on.
+
+NODE_ENV=development
+# Set to 'development', 'staging', or 'production'. Enables optimizations and logging behavior.
+
+DEBUG=true
+# Set to false in production to disable debug logging.
+
+ALLOW_SELF_SIGNED_CERTIFICATES=false
+# Allow self-signed SSL certs (e.g. for local development). Set to false in production.
+
+```
+
+#### CY Login environment variables
+The following environment variables are used to configure CY Login authentication:
+
+```dotenv
+CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
+# The OIDC issuer URL for discovery.
+
+CYLOGIN_CLIENT_ID=your-CYLOGIN-client-id
+CYLOGIN_CLIENT_SECRET=your-CYLOGIN-client-secret
+# Your client credentials provided by CY Login.
+
+CYLOGIN_SCOPE=openid cegg_profile your.scope
+# Scopes requested from CY Login. 'openid' is required. Add additional scopes as needed.
+
+CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
+# Redirect URI registered with CY Login. Must match exactly.
+
+CYLOGIN_CODE_CHALLENGE_METHOD=S256
+# Use S256 for PKCE challenge method.
+
+CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
+# Where to redirect users after logout.
+```
+
+#### DSF API Gateway environment variables
+The following environment variables are used to configure the DSF API Gateway. The DSF API Gateway is used to send notifications to the NotificationEngine API.
+
+```dotenv
+DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
+DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
+DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
+# DSF Gateway credentials and registered service ID.
+
+DSF_API_GTW_NOTIFICATION_API_URL=https://127.0.0.1/api/v1/NotificationEngine/simple-message
+# URL for the NotificationEngine API.
+```
+
+#### Service API environmental variables
+The following environment variables are used to configure the services (they are referenced in the JSON config file):
+
+```dotenv
+# Submission endpoint (test service)
+TEST_SUBMISSION_API_URL=http://localhost:3002/submission
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVIVE_ID=123
+TEST_SUBMISSION_DSF_GTW_KEY=12345678901234567890123456789000
+
+# Eligibility checks (optional test APIs)
+TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1
+TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/eligibility2
+```
 
 ## 🔒 Security note
 - Always set a strong, random `SESSION_SECRET` in your `.env` file. Never commit secrets or credentials to version control.
