@@ -10,6 +10,7 @@ import { logger } from "./govcyLogger.mjs";
  * @param {object} user - User object containing access_token (optional)
  * @param {object} headers - Custom headers (optional)
  * @param {number} retries - Number of retry attempts (default: 3)
+ * @param {boolean} allowSelfSignedCerts - Whether to allow self-signed certificates (default: false)
  * @returns {Promise<object>} - API response
  */
 export async function govcyApiRequest(
@@ -19,7 +20,8 @@ export async function govcyApiRequest(
     useAccessTokenAuth = false, 
     user = null, 
     headers = {}, 
-    retries = 3
+    retries = 3,
+    allowSelfSignedCerts = false
 ) {
     let attempt = 0;
 
@@ -39,13 +41,22 @@ export async function govcyApiRequest(
         try {
             logger.debug(`📤 Sending API request (Attempt ${attempt + 1})`, { method, url, inputData, requestHeaders });
 
-            const response = await axios({
+            // Build axios config
+            const axiosConfig = {
                 method,
                 url,
                 [method?.toLowerCase() === 'get' ? 'params' : 'data']: inputData,
                 headers: requestHeaders,
                 timeout: 10000, // 10 seconds timeout
-            });
+            };
+
+            // Add httpsAgent if NOT production to allow self-signed certificates
+            // Use per-call config for self-signed certs
+            if (allowSelfSignedCerts) {
+                axiosConfig.httpsAgent = new (await import('https')).Agent({ rejectUnauthorized: false });
+            }
+            
+            const response = await axios(axiosConfig);
 
             logger.debug(`📥 Received API response`, { status: response.status, data: response.data });
 

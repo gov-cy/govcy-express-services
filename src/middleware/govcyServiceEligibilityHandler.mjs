@@ -48,7 +48,9 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                 const url = getEnvVariable(endpoint?.url || "", false);
                 const clientKey = getEnvVariable(endpoint?.clientKey || "", false);
                 const serviceId = getEnvVariable(endpoint?.serviceId || "", false);
+                const dsfGtwApiKey = getEnvVariable(endpoint?.dsfgtwApiKey || "", "");
                 const cashingTimeoutMinutes = endpoint?.cashingTimeoutMinutes ||  0; // Default to 0 if not set
+                const allowSelfSignedCerts = endpoint?.allowSelfSignedCerts ||  false; // Default to false if not set
                 if (!url) {
                     return handleMiddlewareError("🚨 Service eligibility API endpoint URL is missing", 500, next);
                 }
@@ -77,7 +79,10 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                             accept: "text/plain",       // Set Accept header to text/plain
                             "client-key": clientKey,    // Set the client key header
                             "service-id": serviceId,    // Set the service ID header
-                        }
+                            ...(dsfGtwApiKey !== '' && { "dsfgtw-api-key": dsfGtwApiKey }) // Use the DSF API GTW secret from environment variables
+                        },
+                        3,
+                        allowSelfSignedCerts
                     );
                     // Cache the result
                     dataLayer.storeSiteEligibilityResult(req.session, siteId, endpointKey, response);

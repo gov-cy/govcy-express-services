@@ -358,6 +358,7 @@ The project uses an array of API endpoints to check the eligibility of a service
     "method": "POST", 
     "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
     "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+    "allowSelfSignedCerts": true,
     "cashingTimeoutMinutes": 2,
     "params": {
       "checkFor": "isCitizen,isAdult"
@@ -375,6 +376,7 @@ The project uses an array of API endpoints to check the eligibility of a service
     "url": "TEST_ELIGIBILITY_2_API_URL",
     "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
     "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+    "allowSelfSignedCerts": false,
     "cashingTimeoutMinutes": 60,
     "response": {
       "errorResponse": {
@@ -397,6 +399,8 @@ Lets break the JSON config down:
   - `method`: The HTTP method to use when making the request.
   - `clientId`: The enviromental variable that holds the client ID to use when making the request.
   - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
+  - `dsfgtwApiKey` (optional): To be used only when using APIs through the DSF gateway instead of cyConnect 
+  - `allowSelfSignedCerts` (optional, `false` by default): accepts self-signed certificates on API calls
   - `cashingTimeoutMinutes`: The number of minutes to cache the response from the API endpoint. If set to `0`, the API endpoint will be called every time.
   - `params`: An object of key-value pairs that will be added to the request body when making the request.
   - `response`: An object of expected response when `succeeded===false`, to be used for the system to know which error page to show. 
@@ -536,6 +540,7 @@ To use this feature, you need to configure the following in your JSON file under
   "url": "TEST_SUBMISSION_API_URL",
   "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
   "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+  "allowSelfSignedCerts": false,
   "response": {
     "errorResponse": {
       "102": {
@@ -556,6 +561,8 @@ Lets break the JSON config down:
   - `url`: The enviromental variable that holds the URL of the API endpoint.
   - `clientId`: The enviromental variable that holds the client ID to use when making the request.
   - `clientSecret`: The enviromental variable that holds the client secret to use when making the request.
+  - `dsfgtwApiKey` (optional): To be used only when using APIs through the DSF gateway instead of cyConnect
+  - `allowSelfSignedCerts` (optional, `false` by default): accepts self-signed certificates on API calls
   - `response`: An object of expected response when `Succeeded===false`, to be used for the system to know which error page to show. 
 
 The above config references the following environment variables that need to be set:

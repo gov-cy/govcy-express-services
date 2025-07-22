@@ -13,6 +13,17 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging')
 }
 
 /**
+ * Check if the current environment is production
+ * 
+ * @returns {boolean} true if the environment is production, false otherwise
+ */
+export function isProd() {
+    // Determine environment settings
+    const ENV = whatsIsMyEnvironment();
+    return ENV === 'production';
+}
+
+/**
  * Check if the current environment is production or staging
  * 
  * @returns {boolean} true if the environment is production or staging, false otherwise
