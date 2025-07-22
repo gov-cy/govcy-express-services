@@ -56,6 +56,7 @@ CYLOGIN_SCOPE=openid cegg_profile your.scope
 CYLOGIN_REDIRECT_URI=https://localhost:44319/signin-oidc
 CYLOGIN_CODE_CHALLENGE_METHOD=S256
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
+ALLOW_SELF_SIGNED_CERTIFICATES=false
 NODE_ENV=development
 # Debug or not  -------------------------------
 # In production set this to false
@@ -83,6 +84,8 @@ Set the environment in the `NODE_ENV` variable:
 Details about cyLogin can be found at the [CY Login documentation](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/14/CY-Login)
 
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
+
+See more on the environment variables in the [README Enviromental variables](README.md#-enviromental-variables)
 
 ## 4. Create data config files for services
 

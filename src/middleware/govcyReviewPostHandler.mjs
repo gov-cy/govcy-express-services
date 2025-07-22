@@ -4,7 +4,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import {prepareSubmissionData, prepareSubmissionDataAPI, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
-import { getEnvVariable } from "../utils/govcyEnvVariables.mjs";
+import { getEnvVariable, getEnvVariableBool } from "../utils/govcyEnvVariables.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { sendEmail } from "../utils/govcyNotification.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
@@ -68,7 +68,7 @@ export function govcyReviewPostHandler() {
                 const clientKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.clientKey || "", false);
                 const serviceId = getEnvVariable(service?.site?.submissionAPIEndpoint?.serviceId || "", false);
                 const dsfGtwApiKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.dsfgtwApiKey || "", "");
-                const allowSelfSignedCerts = service?.site?.submissionAPIEndpoint?.allowSelfSignedCerts || false; // Default to false if not set
+                const allowSelfSignedCerts = getEnvVariableBool("ALLOW_SELF_SIGNED_CERTIFICATES",false) ; // Default to false if not set
                 if (!submissionUrl) {
                     return handleMiddlewareError("🚨 Submission API endpoint URL is missing", 500, next);
                 }

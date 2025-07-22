@@ -46,6 +46,19 @@ export function getEnvVariable(key, defaultValue = undefined) {
 }
 
 /**
+ * Get the value of an environment variable as a boolean
+ * 
+ * @param {string} key The environment variable key
+ * @param {boolean} defaultValue The default value to return if the key is not found
+ * @returns {boolean} The boolean value of the environment variable or the default value
+ */
+export function getEnvVariableBool(key, defaultValue = false) {
+    const value = process.env[key];
+    if (value === undefined) return defaultValue;
+    return value === 'true';
+}
+
+/**
  * Return the current environment (development, staging, production)
  * 
  * @returns {string} The current environment (development, staging, production)
