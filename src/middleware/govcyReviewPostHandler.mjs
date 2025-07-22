@@ -67,6 +67,8 @@ export function govcyReviewPostHandler() {
                 const submissionUrl = getEnvVariable(service?.site?.submissionAPIEndpoint?.url || "", false);
                 const clientKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.clientKey || "", false);
                 const serviceId = getEnvVariable(service?.site?.submissionAPIEndpoint?.serviceId || "", false);
+                const dsfGtwApiKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.dsfgtwApiKey || "", "");
+                const allowSelfSignedCerts = service?.site?.submissionAPIEndpoint?.allowSelfSignedCerts || false; // Default to false if not set
                 if (!submissionUrl) {
                     return handleMiddlewareError("🚨 Submission API endpoint URL is missing", 500, next);
                 }
@@ -94,7 +96,10 @@ export function govcyReviewPostHandler() {
                         accept: "text/plain",       // Set Accept header to text/plain
                         "client-key": clientKey,    // Set the client key header
                         "service-id": serviceId,    // Set the service ID header
-                    }        
+                        ...(dsfGtwApiKey !== '' && { "dsfgtw-api-key": dsfGtwApiKey }) // Use the DSF API GTW secret from environment variables
+                    },
+                    3,
+                    allowSelfSignedCerts
                 );
                 
                 // Check if the response is successful
