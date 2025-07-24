@@ -30,6 +30,9 @@ import fs from 'fs';
 
 export default function initializeGovCyExpressService(){
   const app = express();
+
+  // Add this line before session middleware
+  app.set('trust proxy', 1);
   
   // Get the directory name of the current module
   const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -58,7 +61,7 @@ export default function initializeGovCyExpressService(){
       resave: false,  // Prevents unnecessary session updates
       saveUninitialized: false, // Don't save empty sessions
       cookie: { 
-        secure: USE_HTTPS, // Secure cookies only if HTTPS is used
+        secure: false, // Secure cookies only if HTTPS is used
         httpOnly: true,   // Prevents XSS attacks
         maxAge: 1800000,  // Session expires after 30 mins
         sameSite:  'lax' // Prevents CSRF by default
