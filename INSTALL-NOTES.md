@@ -17,7 +17,7 @@ npm install @gov-cy/govcy-express-services
 ```
 
 ## 3. Prepare for local development
-Add .env file and create certs for local development.
+Add `secrets/.env` file and create certs for local development.
 
 ### Create certs for local development
 1. open `Git Bash`and run:
@@ -44,7 +44,7 @@ Save server.cert and server.key in the root of your project folder.
 
 ### Create a .env file for local development
 
-Create a .env file in the root of your project folder.
+Create a `secrets/.env` file in the root of your project folder.
 
 ```dotenv
 SESSION_SECRET=session_secret

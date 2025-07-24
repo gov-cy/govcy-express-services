@@ -6,11 +6,11 @@
  */
 
 import * as dotenv from 'dotenv';
+import { dirname, join } from 'path';
 
-// Load environment variables from .env file only in non-production environments
-if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging') {
-    dotenv.config();
-}
+// Load environment variables from .env file 
+let envFilePath = join(process.cwd(),'secrets', '.env');
+dotenv.config({ path: envFilePath });
 
 /**
  * Check if the current environment is production

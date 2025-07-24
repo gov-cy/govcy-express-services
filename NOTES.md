@@ -22,7 +22,7 @@ This is a development guide for the govcy-express-services project.
 
 ### .env sample for local development
 
-Create a .env file in the root of your project folder (see example below): 
+Create a `secrets/.env` file in the root of your project folder (see example below): 
 
 ```dotenv
 SESSION_SECRET=12345678901234567890123456789012345678901234567890

@@ -1,5 +1,5 @@
 node_modules
 mochawesome-report/
-.env
+secrets/
 server.cert
 server.key
