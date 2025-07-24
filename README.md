@@ -71,7 +71,7 @@ npm install @gov-cy/govcy-express-services
 # 2. Generate SSL certificates for local development
 openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.cert -days 365 -nodes
 
-# 3. Create a .env file in your project root (see below for required variables)
+# 3. Create a `secrets/.env` file in your project (see below for required variables)
 
 # 4. Add a minimal data config file in /data (see test.json example)
 
@@ -133,7 +133,7 @@ Authentication is handled via OpenID Connect using CY Login and is configured us
 
 The CY Login tokens are used to also connect with the various APIs through [cyConnect](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/74/CY-Connect), so make sure to include the correct `scope` when requesting for a [cyLogin client registration](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/34/Developer-Guide).
 
-The CY Login settings are configured in the `.env` file.
+The CY Login settings are configured in the `secrets/.env` file.
 
 ### 🧩 Dynamic Services Rendering
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
@@ -1430,7 +1430,7 @@ The project uses express.js to serve the following routes:
 Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
 
 ### 👨‍💻 Enviromental variables
-The environment variables (that are defined in the `.env` file locally) control the server configuration, authentication, integrations, and development behavior.
+The environment variables (that are defined in the `secrets/.env` file locally) control the server configuration, authentication, integrations, and development behavior.
 
 #### Server environment variables
 The following environment variables are used to configure the server:
@@ -1508,11 +1508,11 @@ TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/eligibility2
 ```
 
 ## 🔒 Security note
-- Always set a strong, random `SESSION_SECRET` in your `.env` file. Never commit secrets or credentials to version control.
-- Add `.gitignore` & `.npmignore`: Ensure no real `.env`, `server.key`, or other sensitive files are published.
+- Always set a strong, random `SESSION_SECRET` in your `secrets/.env` file. Never commit secrets or credentials to version control.
+- Add `.gitignore` & `.npmignore`: Ensure no real `secrets/.env`, `server.key`, or other sensitive files are published.
 - In production, ensure cookies are set with `secure`, `httpOnly`, and `sameSite` attributes to protect against common web vulnerabilities.
 - Make sure your server is running behind HTTPS in production.
-- Regularly rotate secrets and credentials, and restrict access to your `.env` and configuration files.
+- Regularly rotate secrets and credentials, and restrict access to your `secrets/.env` and configuration files.
 - Validate user input to prevent injection attacks.
 - Review and update your dependencies regularly to address security vulnerabilities.
 
@@ -1527,11 +1527,11 @@ This project enables CSRF protection and secure session cookies by default, but 
 
 ### Session not persisting / users logged out unexpectedly
 - **Problem:** Users are logged out or session data is lost between requests.
-- **Solution:** Ensure your `SESSION_SECRET` is set in .env and is long and random. If running behind a proxy (like nginx), set `trust proxy` in your Express app.
+- **Solution:** Ensure your `SESSION_SECRET` is set in `secrets/.env` and is long and random. If running behind a proxy (like nginx), set `trust proxy` in your Express app.
 
 ### CY Login authentication not working
 - **Problem:** Users cannot log in or are redirected incorrectly.
-- **Solution:** Double-check your CY Login client ID, secret, scope and redirect URIs in `.env`. Make sure your app is accessible at the correct URL and port.
+- **Solution:** Double-check your CY Login client ID, secret, scope and redirect URIs in `secrets/.env`. Make sure your app is accessible at the correct URL and port.
 
 ### API requests fail with 401/403 errors
 - **Problem:** Eligibility or submission API calls fail with authorization errors.
@@ -1543,15 +1543,15 @@ This project enables CSRF protection and secure session cookies by default, but 
 
 ### Environment variables not loading
 - **Problem:** The app fails to start or cannot find required configuration values.
-- **Solution:** Make sure your `.env` file exists in the project root and is formatted correctly. Restart the server after making changes to .env.
+- **Solution:** Make sure your `secrets/.env` file exists in the project root and is formatted correctly. Restart the server after making changes to .env.
 
 ### Port already in use
 - **Problem:** The server fails to start with an error like `EADDRINUSE: address already in use`.
-- **Solution:** Another process is using the same port. Either stop the other process or change the `PORT` value in your `.env` file.
+- **Solution:** Another process is using the same port. Either stop the other process or change the `PORT` value in your `secrets/.env` file.
 
 ### Cannot connect to CY Login or API endpoints
 - **Problem:** The app cannot reach CY Login or your API endpoints.
-- **Solution:** Check your network connection, firewall settings, and that the URLs in your `.env` are correct and accessible from your environment.
+- **Solution:** Check your network connection, firewall settings, and that the URLs in your `secrets/.env` are correct and accessible from your environment.
 
 ## 🙏 Credits
 - Cyprus Government Digital Services Factory (DSF) [dsf-admin@dits.dmrid.gov.cy](mailto:dsf-admin@dits.dmrid.gov.cy)
