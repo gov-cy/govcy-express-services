@@ -46,6 +46,10 @@ export async function getLoginUrl(req) {
 
         let nonce = client.randomNonce();  // Generate per request 
 
+        logger.info('Generating login URL with code_verifier:', code_verifier);
+        logger.info('Generating login URL with code_challenge:', code_challenge);
+        logger.info('Generating login URL with nonce:', nonce);
+
         // Store these in session
         req.session.pkce = { code_verifier, nonce };
 
@@ -60,6 +64,7 @@ export async function getLoginUrl(req) {
 
         return client.buildAuthorizationUrl(config, parameters).href;
     } catch (error) {
+        logger.error('Error generating login URL:', error.message);
         throw new Error('Unable to generate login URL at this time.');
     }
 }
@@ -74,6 +79,9 @@ export async function handleCallback(req) {
         if (!config) throw new Error('OpenID configuration is unavailable.');
 
         let currentUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+
+        logger.info('currentUrl:', currentUrl); // debug
+        logger.info('Session PKCE:', req.session.pkce); // debug
 
         let { code_verifier, nonce } = req.session.pkce || {};  // Retrieve from session
 
@@ -98,6 +106,7 @@ export async function handleCallback(req) {
         return { tokens, claims, userInfo };
     } catch (error) {
         logger.debug('Error processing login callback:', error);
+        logger.error('Error processing login callback:', error.message);
         throw new Error('Unable to process login callback at this time.');
     }
 }
@@ -115,6 +124,7 @@ export function getLogoutUrl(id_token_hint = '') {
             id_token_hint, // Send ID token if available
         }).href;
     } catch (error) {
+        logger.error('Error generating logout URL:', error.message);
         throw new Error('Unable to generate logout URL at this time.');
     }
 }
