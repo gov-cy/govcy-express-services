@@ -9,9 +9,9 @@ export function noCacheAndSecurityHeaders(req, res, next) {
     //set security headers
     res.set({
         'X-Content-Type-Options': 'nosniff', //Prevents browsers from MIME-sniffing a response away from the declared Content-Type
-        'X-Frame-Options': 'SAMEORIGIN', //Prevents clickjacking by disallowing the site from being embedded in an <iframe>, unless from the same origin
-        'X-XSS-Protection': '1; mode=block', // Optional - only if you really want to support old IE versions
-        'Content-Security-Policy': "frame-ancestors 'self'", // Modern approach to control what domains are allowed to embed your site in an iframe.
+        // 'X-Frame-Options': 'SAMEORIGIN', //Prevents clickjacking by disallowing the site from being embedded in an <iframe>, unless from the same origin
+        // 'X-XSS-Protection': '1; mode=block', // Optional - only if you really want to support old IE versions
+        'Content-Security-Policy': "frame-ancestors 'self' https://*.gov.cy https://*.cyprus.gov.cy", // Modern approach to control what domains are allowed to embed your site in an iframe.
         'Strict-Transport-Security': 'max-age=31536000; includeSubDomains', // Forces browsers to use HTTPS only, even for future visits.
         'Referrer-Policy': 'strict-origin-when-cross-origin'
     });
