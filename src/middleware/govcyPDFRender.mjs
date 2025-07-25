@@ -1,5 +1,6 @@
 import { govcyFrontendRenderer } from "@gov-cy/govcy-frontend-renderer";
 import { generatePDF } from "../utils/govcyPdfMaker.mjs";
+import { logger } from "../utils/govcyLogger.mjs";
 
 /**
  * Middleware function to render PDFs using the GovCy Frontend Renderer.
@@ -24,6 +25,7 @@ export function govcyPDFRender() {
             });
             res.send(pdfBuffer);
         } catch (error) {
+            logger.error("Error generating PDF:", error);
             res.status(500).send('Unable to generate PDF at this time.');
         }
     };
