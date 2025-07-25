@@ -1134,6 +1134,7 @@ The project includes input validation for the following elements:
 The validation rules for each element are defined in the `"validations` array for each element. The project support the following validations:
 
 - `valid`: Checks the value against the specified rule's `checkValue`. Available rules:
+    - `noSpecialChars`: Consists only of letters, numbers and some other characters
     - `numeric`: Numeri input
     - `numDecimal`: Numeric decimal input
     - `currency`: Currency input (numeric with 2 decimal places)

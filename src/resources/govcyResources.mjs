@@ -88,7 +88,7 @@ export const staticResources = {
         },
         weHaveSendYouAnEmail : {
             en: "We have sent you a confirmation email.",
-            el: "Έχουμε εσταλει email επιβεβαιωσης.",
+            el: "Έχουμε στείλει email επιβεβαιωσης.",
             tr: "We have sent you a confirmation email."
         },
         theDataFromYourRequest : {
@@ -297,17 +297,17 @@ export function getLocalizeContent(content,lang){
  */
 export function getSubmissionPDFLinkHtml (siteId = "") {
     return getMultilingualObject(
-        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="javascript:window.print()">
             <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
-            Λήψη αίτησης
+            Εκτύπωση αίτησης
         </a></p>`,
-        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="javascript:window.print()">
             <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
-            Download application
+            Print application
         </a></p>`,
-        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="/${siteId}/success/pdf">
+        `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="javascript:window.print()">
             <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
-            Download application
+            Print application
         </a></p>`
     )
 }
