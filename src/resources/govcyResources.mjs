@@ -148,14 +148,16 @@ export const staticResources = {
             },
             url: "https://gov.cy",
             cdn: {
-                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist"
+                dist: "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+                cssIntegrity: "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+                jsIntegrity: "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
             }
         },
         pageData: {
             title: { 
-                en: "Page title", 
-                el: "Τιτλός σελιδας",
-                tr: "Sayfa başlığı"
+                en: "govcy Express Services", 
+                el: "govcy Express Services",
+                tr: "govcy Express Services"
             },
             layout: "layouts/govcyBase.njk",
             mainLayout: "two-thirds"

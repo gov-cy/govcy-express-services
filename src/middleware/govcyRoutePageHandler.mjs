@@ -2,6 +2,7 @@ import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import {listAvailableSiteConfigs, getServiceConfigData} from "../utils/govcyLoadConfigData.mjs";
+import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
 
 /**
  * Middleware function to handle the route page.
@@ -34,7 +35,10 @@ export function govcyRoutePageHandler(req, res, next) {
    // Deep copy renderer pageData from
     let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));
     const listOfAvailableSites = listAvailableSiteConfigs();
-
+    
+    // Handle isTesting 
+    pageData.site.isTesting = (whatsIsMyEnvironment() === "staging");
+    
     // Construct the page template
     let pageTemplate = govcyResources.availableServicesPageTemplate(listOfAvailableSites, req.globalLang);
     //use lang from middleware

@@ -3,6 +3,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { generateReviewSummary  } from "../utils/govcySubmitData.mjs";
+import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
 
 
 /**
@@ -28,6 +29,9 @@ export function govcySuccessPageHandler(isPDF = false) {
             // Deep copy renderer pageData from
             let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));
             
+            // Handle isTesting 
+            pageData.site.isTesting = (whatsIsMyEnvironment() === "staging");
+
             if (isPDF) {
                 pageData.pageData.mainLayout = "max-width";
             }

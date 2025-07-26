@@ -2,6 +2,7 @@ import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
 
 /**
  * Middleware function to handle HTTP errors and render appropriate error pages.
@@ -17,6 +18,9 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     // Deep copy renderer pageData from
     let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));
 
+    // Handle isTesting 
+    pageData.site.isTesting = (whatsIsMyEnvironment() === "staging");
+        
     // Handle specific HTTP errors
     switch (statusCode) {
         case 404:

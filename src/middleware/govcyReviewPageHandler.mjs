@@ -2,6 +2,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import {preparePrintFriendlyData , generateReviewSummary  } from "../utils/govcySubmitData.mjs";
+import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
 
 
 /**
@@ -19,6 +20,9 @@ export function govcyReviewPageHandler() {
             // Deep copy renderer pageData from
             let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));
             
+            // Handle isTesting 
+            pageData.site.isTesting = (whatsIsMyEnvironment() === "staging");
+    
             // Base page template structure
             let pageTemplate = {
                 sections: [
