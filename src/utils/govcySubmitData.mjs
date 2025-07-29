@@ -331,7 +331,8 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
                     "element": "textElement",
                     "params": {
                         "text": { "en": value, "el": value, "tr": value },
-                        "type": "span"
+                        "type": "span",
+                        "showNewLine": true
                     }
                 }
             ]
