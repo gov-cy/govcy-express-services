@@ -140,11 +140,11 @@ describe('govcySubmitData', () => {
                                         items: [
                                             {
                                                 key: { en: 'Field 1', el: 'Πεδίο 1' },
-                                                value: [{ element: 'textElement', params: { text: { en: 'value1', el: 'value1' ,tr: 'value1' }, type: 'span' } }],
+                                                value: [{ element: 'textElement', params: { showNewLine: true, text: { en: 'value1', el: 'value1' ,tr: 'value1' }, type: 'span' } }],
                                             },
                                             {
                                                 key: { en: 'Field 2', el: 'Πεδίο 2' },
-                                                value: [{ element: 'textElement', params: { text: { en: 'value2', el: 'value2', tr: 'value2' }, type: 'span' } }],
+                                                value: [{ element: 'textElement', params: { showNewLine: true, text: { en: 'value2', el: 'value2', tr: 'value2' }, type: 'span' } }],
                                             },
                                         ],
                                     },
