@@ -151,7 +151,6 @@ Here are some details explaining the JSON structure:
     "en": "https://www.gov.cy/en/service/issue-an-id-card/"
   }
   ```
-  - `matomo `: The Matomo web analytics configuration details.
   - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#%EF%B8%8F-site-eligibility-checks) section below.
   - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#-site-submissions) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
@@ -1431,10 +1430,15 @@ The project uses express.js to serve the following routes:
 Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
 
 ### 👨‍💻 Enviromental variables
-The environment variables (that are defined in the `secrets/.env` file locally) control the server configuration, authentication, integrations, and development behavior.
+The environment variables are defined in:
+ - **Secret environment variables**: These are secret variables and MUSR NOT be saved in version control. The are saved locally in the `secrets/.env` file and they control the server configuration, authentication, integrations, and development behavior. These variables vary depending on the environment and are defined through the deployment prosses for `staging` and `production`.
+ - **Non secret environment variables**:  These are non secret enviromentat variables and can be saved in version control. These are stored in the root folder of the project:
+   - `.env.development` for local development
+   - `.env.staging` for staging
+   - `.env.production` for production
 
-#### Server environment variables
-The following environment variables are used to configure the server:
+#### Secret environment variables
+The following secret environment variables are used to configure the server:
 
 ```dotenv
 # 🔐 Session
@@ -1454,12 +1458,9 @@ DEBUG=true
 ALLOW_SELF_SIGNED_CERTIFICATES=false
 # Allow self-signed SSL certs (e.g. for local development). Set to false in production.
 
-```
-
+# -----------------------------------------------
 #### CY Login environment variables
-The following environment variables are used to configure CY Login authentication:
-
-```dotenv
+# The following environment variables are used to configure CY Login authentication:
 CYLOGIN_ISSUER_URL=https://aztest.cyprus.gov.cy/cylogin/core/.well-known/openid-configuration
 # The OIDC issuer URL for discovery.
 
@@ -1478,12 +1479,10 @@ CYLOGIN_CODE_CHALLENGE_METHOD=S256
 
 CYLOGIN_POST_LOGOUR_REIDRECT_URI=https://localhost:44319/
 # Where to redirect users after logout.
-```
 
+# -----------------------------------------------
 #### DSF API Gateway environment variables
-The following environment variables are used to configure the DSF API Gateway. The DSF API Gateway is used to send notifications to the NotificationEngine API.
-
-```dotenv
+# The following environment variables are used to configure the DSF API Gateway. The DSF API Gateway is used to send notifications to the NotificationEngine API.
 DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
 DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
 DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
@@ -1491,12 +1490,10 @@ DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
 
 DSF_API_GTW_NOTIFICATION_API_URL=https://127.0.0.1/api/v1/NotificationEngine/simple-message
 # URL for the NotificationEngine API.
-```
 
+#-----------------------------------------------
 #### Service API environmental variables
-The following environment variables are used to configure the services (they are referenced in the JSON config file):
-
-```dotenv
+# The following environment variables are used to configure the services (they are referenced in the JSON config file):
 # Submission endpoint (test service)
 TEST_SUBMISSION_API_URL=http://localhost:3002/submission
 TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
@@ -1506,6 +1503,14 @@ TEST_SUBMISSION_DSF_GTW_KEY=12345678901234567890123456789000
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1
 TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/eligibility2
+```
+#### Non secret environment variables
+The following non-secret environment variables are used to configure the server defined in `.env.development` for local development, `.env.staging` for staging, and `.env.production` for production.:
+
+```dotenv
+#### Matomo web analytics environment variables
+MATOMO_SITE_ID=51
+MATOMO_URL=//wp.matomo.dits.dmrid.gov.cy
 ```
 
 ## 🔒 Security note

@@ -20,9 +20,9 @@ This is a development guide for the govcy-express-services project.
    npm install
    ```
 
-### .env sample for local development
+### `secrets/.env` sample for local development
 
-Create a `secrets/.env` file in the root of your project folder (see example below): 
+Create a `secrets/.env` file  (see example below): 
 
 ```dotenv
 SESSION_SECRET=12345678901234567890123456789012345678901234567890
@@ -62,6 +62,14 @@ To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').ran
 
 #### Create certs for local development
 Make sure to have certs for local development in the root of your project folder (see [install notes](./INSTALL-NOTES.md#create-certs-for-local-development))
+
+### non secret environment variables
+Create `.env.development`, `.env.staging`, and `.env.production` files in the root folder of the project. Here's an example for `.env.development`:
+
+```dotenv
+MATOMO_SITE_ID=51
+MATOMO_URL=//wp.matomo.dits.dmrid.gov.cy
+```
 
 ---
 

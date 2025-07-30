@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { whatsIsMyEnvironment } from './govcyEnvVariables.mjs';
+import { whatsIsMyEnvironment, getEnvVariable} from './govcyEnvVariables.mjs';
 import { logger } from "./govcyLogger.mjs";
 
 
@@ -76,6 +76,11 @@ export function getServiceConfigData(siteId,lang) {
     //Handle TESTING banner: check if staging and set isTesting
     serviceCopy.site.isTesting = (whatsIsMyEnvironment() === "staging");
 
+    //Handle matomo: Set Matomo URL and siteId
+    serviceCopy.site.matomo = {
+        url: getEnvVariable('MATOMO_URL', 'https://wp.matomo.dits.dmrid.gov.cy/'),
+        siteId: getEnvVariable('MATOMO_SITE_ID', '50')
+    };
     // Add manifest path
     serviceCopy.site.manifest = `/${siteId}/manifest.json`;
 

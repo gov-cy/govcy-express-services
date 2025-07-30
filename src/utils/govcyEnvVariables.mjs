@@ -6,12 +6,19 @@
  */
 
 import * as dotenv from 'dotenv';
+import fs from 'fs';
 import { dirname, join } from 'path';
 
 // Load environment variables from .env file 
 let envFilePath = join(process.cwd(),'secrets', '.env');
 dotenv.config({ path: envFilePath });
 
+// Load additional environment variables from .env.{{environment}} 
+let configPathEnv = join(process.cwd(),'.env.' + whatsIsMyEnvironment());
+if (fs.existsSync(configPathEnv)) {
+    dotenv.config({ path: configPathEnv, override: false }); // don't override existing vars from secrets
+}
+//:todo, when loading the service, change `matomo.url` and `matomo.siteId` to the service's values
 /**
  * Check if the current environment is production
  * 

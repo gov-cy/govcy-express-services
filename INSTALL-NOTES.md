@@ -42,7 +42,7 @@ Common Name (CN): **Make sure** this is localhost for local development.
 3. Where to Save the Files?
 Save server.cert and server.key in the root of your project folder.
 
-### Create a .env file for local development
+### Create secret environment variables
 
 Create a `secrets/.env` file in the root of your project folder.
 
@@ -86,6 +86,15 @@ Details about cyLogin can be found at the [CY Login documentation](https://dev.a
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
 
 See more on the environment variables in the [README Enviromental variables](README.md#-enviromental-variables)
+
+### Create non secret environment variables
+
+Create `.env.development`, `.env.staging`, and `.env.production` files in the root of your project folder. Here's an example for `.env.development`:
+
+```dotenv
+MATOMO_SITE_ID=51
+MATOMO_URL=//wp.matomo.dits.dmrid.gov.cy
+```
 
 ## 4. Create data config files for services
 
