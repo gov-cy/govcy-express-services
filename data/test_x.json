@@ -81,11 +81,7 @@
     },
     "submission_data_version": "1",
     "renderer_version": "1.16.1",
-    "design_systems_version": "3.2.0",
-    "matomo": {
-      "url": "//wp.matomo.dits.dmrid.gov.cy/",
-      "siteId": "50"
-    }
+    "design_systems_version": "3.2.0"
   },
   "pages": [
     {
