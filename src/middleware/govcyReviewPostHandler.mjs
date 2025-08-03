@@ -85,6 +85,8 @@ export function govcyReviewPostHandler() {
                 // Prepare submission data for API
                 const submissionDataAPI = prepareSubmissionDataAPI(submissionData);
                 
+                logger.debug("Prepared submission data for API:", submissionDataAPI);
+
                 // Call the API to submit the data
                 const response = await govcyApiRequest(
                     "post",                         // Use POST method

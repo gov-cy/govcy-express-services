@@ -4,6 +4,7 @@ import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import { evaluatePageConditions } from "./govcyExpressions.mjs";
+import { logger } from "./govcyLogger.mjs";
 
 /**
  * Prepares the submission data for the service, including raw data, print-friendly data, and renderer data.
@@ -19,17 +20,78 @@ export function prepareSubmissionData(req, siteId, service) {
     
     // ----- Conditional logic comes here
     // Filter site input data based on active pages only
-    const rawData = {};
+    // const rawData = {};
+    // for (const page of service.pages) {
+    // const shouldInclude = evaluatePageConditions(page, req.session, siteId, req).result === true;
+    //     if (shouldInclude) {
+    //         const pageUrl = page.pageData.url;
+    //         const formData = dataLayer.getPageData(req.session, siteId, pageUrl);
+    //         if (formData && Object.keys(formData).length > 0) {
+    //             rawData[pageUrl] = { formData };
+    //         }
+    //     }
+    // }
+
+    // ----- consistent data model for submission_data (CONFIG-BASED)
+    const submissionData = {};
+
+    // Loop through every page in the service definition
     for (const page of service.pages) {
-    const shouldInclude = evaluatePageConditions(page, req.session, siteId, req).result === true;
-    if (shouldInclude) {
-        const pageUrl = page.pageData.url;
-        const formData = dataLayer.getPageData(req.session, siteId, pageUrl);
-        if (formData && Object.keys(formData).length > 0) {
-            rawData[pageUrl] = { formData };
+        const pageUrl = page.pageData.url || "";
+
+        // Find the <form> element in the page
+        let formElement = null;
+        for (const section of page.pageTemplate.sections || []) {
+            formElement = section.elements.find(el => el.element === "form");
+            if (formElement) break;
+        }
+
+        if (!formElement) continue; // ⛔ Skip pages without a <form> element
+
+        submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+
+        // Traverse the form elements inside the form
+        for (const element of formElement.params.elements || []) {
+            const elType = element.element;
+
+            // ✅ Skip non-input elements like buttons
+            if (!ALLOWED_FORM_ELEMENTS.includes(elType)) continue;
+
+            const elId = element.params?.id || element.params?.name;
+            if (!elId) continue; // ⛔ Skip elements with no id/name
+
+            // 🟢 Use helper to get session value (or "" fallback if missing)
+            const value = getValue(element, pageUrl, req, siteId) ?? "";
+
+            // Store in submissionData
+            submissionData[pageUrl].formData[elId] = value;
+
+
+            // 🔄 If radios with conditionalElements, walk ALL options
+            if (elType === "radios" && Array.isArray(element.params?.items)) {
+                for (const radioItem of element.params.items) {
+                    const condEls = radioItem.conditionalElements;
+                    if (!Array.isArray(condEls)) continue;
+
+                    for (const condElement of condEls) {
+                        const condType = condElement.element;
+                        if (!ALLOWED_FORM_ELEMENTS.includes(condType)) continue;
+
+                        const condId = condElement.params?.id || condElement.params?.name;
+                        if (!condId) continue;
+
+                        // Again: read from session or fallback to ""
+                        const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
+
+                        // Store even if the field was not visible to user
+                        submissionData[pageUrl].formData[condId] = condValue;
+                    }
+                }
+            }
         }
     }
-    }
+    logger.debug("Submission Data prepared:", submissionData);
+    // ----- END config-based stable submission_data block
 
     // Get the print-friendly data from the session store
     const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
@@ -40,7 +102,7 @@ export function prepareSubmissionData(req, siteId, service) {
     return {
         submission_username: dataLayer.getUser(req.session).name,
         submission_email: dataLayer.getUser(req.session).email,
-        submission_data: rawData, // Raw data as submitted by the user in each page
+        submission_data: submissionData, // Raw data as submitted by the user in each page
         submission_data_version: service.site?.submission_data_version || "", // The submission data version
         print_friendly_data: printFriendlyData, // Print-friendly data
         renderer_data: reviewSummaryList, // Renderer data of the summary list
@@ -89,123 +151,6 @@ export function preparePrintFriendlyData(req, siteId, service) {
 
     const allowedElements = ALLOWED_FORM_ELEMENTS;
 
-    /**
-     * Helper function to retrieve date raw input.
-     * 
-     * @param {string} pageUrl The page URL
-     * @param {string} name The name of the form element
-     * @returns {string} The raw date input in ISO format (YYYY-MM-DD) or an empty string if not found
-     */
-    function getDateInputISO(pageUrl, name) {
-        const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
-        const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
-        const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
-        if (!day || !month || !year) return "";
-
-        // Pad day and month with leading zero if needed
-        const paddedDay = String(day).padStart(2, "0");
-        const paddedMonth = String(month).padStart(2, "0");
-
-        return `${year}-${paddedMonth}-${paddedDay}`;   // ISO format: YYYY-MM-DD
-    }
-
-    /**
-     * Helper function to retrieve date input in DMY format.
-     * 
-     * @param {string} pageUrl The page URL
-     * @param {string} name The name of the form element
-     * @returns {string} The raw date input in DMY format (DD/MM/YYYY) or an empty string if not found
-     */
-    function getDateInputDMY(pageUrl, name) {
-        const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
-        const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
-        const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
-        if (!day || !month || !year) return "";
-        return `${day}/${month}/${year}`;   // EU format: DD/MM/YYYY
-    }
-
-    /**
-     * Helper function to create a field object.
-     * 
-     * @param {object} formElement The form element object 
-     * @param {string} value The value of the form element
-     * @param {object} valueLabel The label of the form element 
-     * @returns {object} The field object containing id, label, value, and valueLabel
-     */
-    function createFieldObject(formElement, value, valueLabel) {
-        return {
-            id: formElement.params?.id || "",
-            name: formElement.params?.name || "",
-            label: formElement.params.label
-                || formElement.params.legend
-                || govcyResources.getSameMultilingualObject(service.site.languages, formElement.params.name),
-            value: value,
-            valueLabel: valueLabel
-        };
-    }
-
-    /**
-     * Helper function to retrieve the value of a form element from the session.
-     * 
-     * @param {object} formElement The form element object
-     * @param {string} pageUrl The page URL
-     * @returns {string} The value of the form element from the session or an empty string if not found
-     */
-    function getValue(formElement, pageUrl) {
-        // handle raw value 
-        let value = ""
-        if (formElement.element === "dateInput") {
-            value = getDateInputISO(pageUrl, formElement.params.name);
-        } else {
-            value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
-        }
-        return value;
-    }
-
-    /**
-     * Helper function to get the label of a form element based on its value and type.
-     * 
-     * @param {object} formElement The form element object 
-     * @param {string} value The value of the form element 
-     * @param {string} pageUrl The page URL 
-     * @returns {object} The label of the form element based on the value and element type
-     */
-    function getValueLabel(formElement, value, pageUrl) {
-        //handle checkboxes label
-        if (formElement.element === "checkboxes") {
-            if (Array.isArray(value)) {
-                // loop through each value and find the corresponding item
-                return value.map(v => {
-                    // find the item
-                    const item = formElement.params.items.find(i => i.value === v);
-                    return item?.text || govcyResources.getSameMultilingualObject(service.site.languages, "");
-                });
-            } else if (typeof value === "string") {
-                const matchedItem = formElement.params.items.find(item => item.value === value);
-                if (matchedItem) {
-                    return matchedItem.text;
-                } else {
-                    return govcyResources.getSameMultilingualObject(service.site.languages, "")
-                }
-            }
-        }
-
-        // handle radios and select labels
-        if (formElement.element === "radios" || formElement.element === "select") {
-            const item = formElement.params.items.find(i => i.value === value);
-            return item?.text || govcyResources.getSameMultilingualObject(service.site.languages, "");
-        }
-
-        // handle dateInput
-        if (formElement.element === "dateInput") {
-            const formattedDate = getDateInputDMY(pageUrl, formElement.params.name);
-            return govcyResources.getSameMultilingualObject(service.site.languages, formattedDate);
-        }
-
-        // textInput, textArea, etc.
-        return govcyResources.getSameMultilingualObject(service.site.languages, value);
-    }
-
     // loop through each page in the service
     // and extract the form data from the session
     for (const page of service.pages) {
@@ -228,11 +173,11 @@ export function preparePrintFriendlyData(req, siteId, service) {
                     if (!allowedElements.includes(formElement.element)) continue;
 
                     // handle raw value 
-                    let rawValue = getValue(formElement, page.pageData.url);
+                    let rawValue = getValue(formElement, page.pageData.url, req, siteId);
 
                     //create the field object and push it to the fields array
                     // value of the field is handled by getValueLabel function
-                    const field = createFieldObject(formElement, rawValue, getValueLabel(formElement, rawValue, page.pageData.url));
+                    const field = createFieldObject(formElement, rawValue, getValueLabel(formElement, rawValue, page.pageData.url, req, siteId, service), service);
                     fields.push(field);
 
                     // Handle conditional elements (only for radios for now)
@@ -246,11 +191,11 @@ export function preparePrintFriendlyData(req, siteId, service) {
                                 if (!allowedElements.includes(condEl.element)) continue;
 
                                 // handle raw value 
-                                let condValue = getValue(condEl, page.pageData.url);
+                                let condValue = getValue(condEl, page.pageData.url, req, siteId);
 
                                 //create the field object and push it to the fields array
                                 // value of the field is handled by getValueLabel function
-                                const field = createFieldObject(condEl, condValue, getValueLabel(condEl, condValue, page.pageData.url));
+                                const field = createFieldObject(condEl, condValue, getValueLabel(condEl, condValue, page.pageData.url, req, siteId, service), service);
                                 fields.push(field);
                             }
                         }
@@ -272,6 +217,132 @@ export function preparePrintFriendlyData(req, siteId, service) {
 }
 
 //------------------------------- Helper Functions -------------------------------//
+/**
+ * Helper function to retrieve date raw input.
+ * 
+ * @param {string} pageUrl The page URL
+ * @param {string} name The name of the form element
+ * @param {object} req The request object
+ * @param {string} siteId The site ID
+ * @returns {string} The raw date input in ISO format (YYYY-MM-DD) or an empty string if not found
+ */
+function getDateInputISO(pageUrl, name, req, siteId) {
+    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
+    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
+    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
+    if (!day || !month || !year) return "";
+
+    // Pad day and month with leading zero if needed
+    const paddedDay = String(day).padStart(2, "0");
+    const paddedMonth = String(month).padStart(2, "0");
+
+    return `${year}-${paddedMonth}-${paddedDay}`;   // ISO format: YYYY-MM-DD
+}
+
+/**
+ * Helper function to retrieve date input in DMY format.
+ * 
+ * @param {string} pageUrl The page URL
+ * @param {string} name The name of the form element
+ * @param {object} req The request object
+ * @param {string} siteId The site ID
+ * @returns {string} The raw date input in DMY format (DD/MM/YYYY) or an empty string if not found
+ */
+function getDateInputDMY(pageUrl, name, req, siteId) {
+    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
+    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
+    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
+    if (!day || !month || !year) return "";
+    return `${day}/${month}/${year}`;   // EU format: DD/MM/YYYY
+}
+
+/**
+ * Helper function to create a field object.
+ * 
+ * @param {object} formElement The form element object 
+ * @param {string} value The value of the form element
+ * @param {object} valueLabel The label of the form element 
+ * @param {object} service The service object
+ * @returns {object} The field object containing id, label, value, and valueLabel
+ */
+function createFieldObject(formElement, value, valueLabel, service) {
+    return {
+        id: formElement.params?.id || "",
+        name: formElement.params?.name || "",
+        label: formElement.params.label
+            || formElement.params.legend
+            || govcyResources.getSameMultilingualObject(service.site.languages, formElement.params.name),
+        value: value,
+        valueLabel: valueLabel
+    };
+}
+
+/**
+ * Helper function to retrieve the value of a form element from the session.
+ * 
+ * @param {object} formElement The form element object
+ * @param {string} pageUrl The page URL
+ * @param {object} req The request object
+ * @param {string} siteId The site ID
+ * @returns {string} The value of the form element from the session or an empty string if not found
+ */
+function getValue(formElement, pageUrl, req, siteId) {
+    // handle raw value 
+    let value = ""
+    if (formElement.element === "dateInput") {
+        value = getDateInputISO(pageUrl, formElement.params.name, req, siteId);
+    } else {
+        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
+    }
+    return value;
+}
+
+/**
+ * Helper function to get the label of a form element based on its value and type.
+ * 
+ * @param {object} formElement The form element object 
+ * @param {string} value The value of the form element 
+ * @param {string} pageUrl The page URL 
+ * @param {object} req The request object
+ * @param {string} siteId The site ID
+ * @param {object} service The service object
+ * @returns {object} The label of the form element based on the value and element type
+ */
+function getValueLabel(formElement, value, pageUrl, req, siteId, service) {
+    //handle checkboxes label
+    if (formElement.element === "checkboxes") {
+        if (Array.isArray(value)) {
+            // loop through each value and find the corresponding item
+            return value.map(v => {
+                // find the item
+                const item = formElement.params.items.find(i => i.value === v);
+                return item?.text || govcyResources.getSameMultilingualObject(service.site.languages, "");
+            });
+        } else if (typeof value === "string") {
+            const matchedItem = formElement.params.items.find(item => item.value === value);
+            if (matchedItem) {
+                return matchedItem.text;
+            } else {
+                return govcyResources.getSameMultilingualObject(service.site.languages, "")
+            }
+        }
+    }
+
+    // handle radios and select labels
+    if (formElement.element === "radios" || formElement.element === "select") {
+        const item = formElement.params.items.find(i => i.value === value);
+        return item?.text || govcyResources.getSameMultilingualObject(service.site.languages, "");
+    }
+
+    // handle dateInput
+    if (formElement.element === "dateInput") {
+        const formattedDate = getDateInputDMY(pageUrl, formElement.params.name, req, siteId);
+        return govcyResources.getSameMultilingualObject(service.site.languages, formattedDate);
+    }
+
+    // textInput, textArea, etc.
+    return govcyResources.getSameMultilingualObject(service.site.languages, value);
+}
 
 /**
  * Helper function to get the item value of checkboxes based on the selected value.
