@@ -157,7 +157,7 @@ describe('govcySubmitData', () => {
         });
     });
 
-    it('4. should skip pages with redirecting conditions', () => {
+    it('4. should NOT skip pages with redirecting conditions', () => {
         // Extend the service to include a conditional page with a redirect
         service.pages.push({
             pageData: {
@@ -208,7 +208,7 @@ describe('govcySubmitData', () => {
 
         // Expect only page1 to be included in submission_data
         expect(result.submission_data).to.have.property('page1');
-        expect(result.submission_data).to.not.have.property('conditionalPage');
+        expect(result.submission_data).to.have.property('conditionalPage');
     });
 
 

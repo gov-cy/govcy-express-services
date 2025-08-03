@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.13] - 2025-08-03 - Stable Submission Data Schema
+### Changed
+- Implemented **template-driven** `submissionData` generation inside `prepareSubmissionData()`:
+  - Now builds a complete, schema-consistent `submission_data` object based on the service config (JSON definition).
+  - Each `pageUrl` includes all expected fields under a `formData` object, even if not filled or shown to the user.
+  - Nested `conditionalElements` (e.g. inside `radios.items[]`) are always included, regardless of user selection.
+
+## Why it matters
+- Guarantees a **stable, predictable submission schema** for API consumers (e.g., Excel exports, backoffice integrations).
+- Eliminates variation caused by hidden/skipped inputs or conditionally rendered pages.
+
 ## [v0.2.12] - 2025-07-29
 ### Changed
 - Added ability to load non secret environmental variables from version controlled files with `.env.development`, `.env.staging`, and `.env.production`
