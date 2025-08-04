@@ -51,6 +51,46 @@
         "href": "#"
       }
     ],
+    "footerIcons": [
+        {
+            "src": {
+                "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
+                "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png"
+            },
+            "alt": {
+                "en": "Funded by the EU Next Generation EU",
+                "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU"
+            },
+            "href": {
+                "en": "https://europa.eu/",
+                "el": "https://europa.eu/"
+            },
+            "title": {
+                "en": "Go to EU website",
+                "el": "Μετάβαση στην ιστοσελίδα της ΕΕ"
+            },
+            "target": "_blank"
+        },
+        {
+            "src": {
+                "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
+                "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png"
+            },
+            "alt": {
+                "en": "Cyprus tomorrow, recovery and resilience plan",
+                "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας"
+            },
+            "href": {
+                "en": "http://www.cyprus-tomorrow.gov.cy/",
+                "el": "http://www.cyprus-tomorrow.gov.cy/"
+            },
+            "title": {
+                "en": "Go to Cyprus Tomorrow website",
+                "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο"
+            },
+            "target": "_blank"
+        }
+    ],
     "copyrightText" : {"en":"Republic of Cyprus, 2025", "el":"Κυπριακή Δημοκρατία, 2025"},
     "menu": {
       "el": "Μενού",
