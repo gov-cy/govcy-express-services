@@ -1,6 +1,10 @@
 # Dev notes
 This is a development guide for the govcy-express-services project.
 
+## Release management
+
+Details on release management can be found in the [release document](./RELEASE.md).
+
 ## Local development
 
 ### Installation
