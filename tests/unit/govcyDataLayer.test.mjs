@@ -18,6 +18,7 @@ describe('govcyDataLayer', () => {
                         formData: {}
                     },
                 },
+                loadData: {},
                 submissionData: {}
             },
         });
@@ -238,6 +239,54 @@ describe('govcyDataLayer', () => {
         const result = dataLayer.getSiteData(session, 'site1');
         expect(result).to.deep.equal({});
     });
+
+    it("16. should store and retrieve load data correctly", () => {
+        const loadData = {
+            prefillFromAPI: true,
+            values: {
+                name: "Alice",
+                age: 30
+            }
+        };
+
+        dataLayer.storeSiteLoadData(session, 'site1', loadData);
+
+        const result = dataLayer.getSiteLoadData(session, 'site1');
+        expect(result).to.deep.equal(loadData);
+    });
+
+    it("17. should return empty object if load data does not exist", () => {
+        const result = dataLayer.getSiteLoadData(session, 'site1');
+        expect(result).to.deep.equal({});
+    });
+
+    it("18. should replace site inputData with provided loadData", () => {
+        const siteId = "site1";
+
+        // Pre-fill inputData to prove it's replaced
+        dataLayer.initializeSiteData(session, siteId, "pageOld");
+        session.siteData[siteId].inputData.pageOld.formData = {
+            oldField: "should be replaced"
+        };
+
+        const newInputData = {
+            index: {
+                formData: {
+                    email: "test@example.com"
+                }
+            },
+            page2: {
+                formData: {
+                    option: "yes"
+                }
+            }
+        };
+
+        dataLayer.storeSiteInputData(session, siteId, newInputData);
+
+        expect(session.siteData[siteId].inputData).to.deep.equal(newInputData);
+    });
+
 
     
 });

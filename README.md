@@ -32,6 +32,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
   - [✅ Conditional logic](#-conditional-logic)
+  - [💾 Temporary save](#-temporary-save)
 - [🛣️ Routes](#%EF%B8%8F-routes)
 - [👨‍💻 Enviromental variables](#-enviromental-variables)
 - [🔒 Security note](#-security-note)
@@ -55,6 +56,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 - Pre-filling posted values (in the same session)
 - Site level API eligibility checks
 - API integration with retry logic for form submissions.
+- Optional temporary save of in-progress form data via configurable API endpoints
 
 ## 📋 Prerequisites
 - Node.js 20+
@@ -1412,6 +1414,55 @@ Explanation:
 - `[].concat(...)`: safely flattens a string or array into an array.
 - `.includes('value1')`: checks if the value is selected.
 
+### 💾 Temporary save
+
+The **temporary save** feature allows user progress to be stored in an external API and automatically reloaded on the next visit.  
+This is useful for long forms or cases where users may leave and return later.
+
+#### 1. Configure the endpoints in your service JSON
+In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` entry:
+
+```json
+"submissionGetAPIEndpoint": {
+  "url": "TEST_SUBMISSION_GET_API_URL",
+  "method": "GET",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+},
+"submissionPutAPIEndpoint": {
+  "url": "TEST_SUBMISSION_PUT_API_URL",
+  "method": "PUT",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+}
+```
+
+These values should point to environment variables that hold your real endpoint URLs and credentials.
+
+#### 2. Add environment variables
+In your `secrets/.env` file (and staging/production configs), define the variables referenced above:
+
+```dotenv
+TEST_SUBMISSION_GET_API_URL=https://example.com/api/submissionData
+TEST_SUBMISSION_PUT_API_URL=https://example.com/api/submissionData
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVICE_ID=123
+```
+
+#### 3. How it works
+
+- **On first page load** for a site, `govcyLoadSubmissionData` will:
+  1. Call the GET endpoint to retrieve any saved submission.
+  2. If found, populate the session’s `inputData` so fields are pre-filled.
+  3. If not found, call the PUT endpoint to create a new temporary record.
+- **On every form POST**, after successful validation:
+  - The `govcyFormsPostHandler` will fire-and-forget a `PUT` request to update the saved submission with the latest form data.
+  - The payload includes all required submission fields with `submission_data` JSON-stringified.
+
+#### 4. Backward compatibility
+If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
+Existing services will continue to work without modification.
+
 ### 🛣️ Routes
 The project uses express.js to serve the following routes:
 
@@ -1499,6 +1550,11 @@ TEST_SUBMISSION_API_URL=http://localhost:3002/submission
 TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
 TEST_SUBMISSION_API_SERVIVE_ID=123
 TEST_SUBMISSION_DSF_GTW_KEY=12345678901234567890123456789000
+
+# Optional Temporary Save GET and PUT endpoint (test service)
+TEST_SUBMISSION_GET_API_URL=http://localhost:3002/getTempSubmission
+TEST_SUBMISSION_PUT_API_URL=http://localhost:3002/save
+
 
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1

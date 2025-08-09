@@ -16,6 +16,7 @@
 export function initializeSiteData(store, siteId, pageUrl = null) {
     if (!store.siteData) store.siteData = {};
     if (!store.siteData[siteId]) store.siteData[siteId] = {};
+    if (!store.siteData[siteId].inputData) store.siteData[siteId].loadData = {};
     if (!store.siteData[siteId].inputData) store.siteData[siteId].inputData = {};
     if (!store.siteData[siteId].submissionData) store.siteData[siteId].submissionData = {};
 
@@ -97,6 +98,33 @@ export function storePageData(store, siteId, pageUrl, formData) {
 
     store.siteData[siteId].inputData[pageUrl]["formData"] = formData;
 }
+/**
+ * Stores the page's input data in the data layer
+ *  * 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {object} loadData The form data to be stored 
+ */
+export function storeSiteInputData(store, siteId, loadData) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+
+    store.siteData[siteId]["inputData"] = loadData;
+}
+
+/**
+ * Stores the page's load data in the data layer
+ *  * 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {object} loadData The form data to be stored 
+ */
+export function storeSiteLoadData(store, siteId, loadData) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+
+    store.siteData[siteId]["loadData"] = loadData;
+}
 
 /**
  * Stores the site validation errors in the data layer 
@@ -156,8 +184,11 @@ export function storeSiteSubmissionData(store, siteId, submissionData) {
     // Store the submission data
     store.siteData[siteId].submissionData = submissionData;
       
-      // Clear validation errors from the session
+    // Clear validation errors from the session
     store.siteData[siteId].inputData = {};
+    // Clear presaved/temporary save data
+    store.siteData[siteId].loadData = {}; 
+
 }
 
 
@@ -275,6 +306,23 @@ export function getSiteInputData(store, siteId) {
     
     if (inputData) {
         return inputData;
+    }
+
+    return null;
+}
+
+/**
+ * Get the site's load data from the store 
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId |The site id
+ * @returns The site load data or null if none exist.
+ */
+export function getSiteLoadData(store, siteId) {
+    const loadData = store?.siteData?.[siteId]?.loadData || {};
+    
+    if (loadData) {
+        return loadData;
     }
 
     return null;

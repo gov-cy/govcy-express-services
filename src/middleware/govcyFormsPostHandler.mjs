@@ -6,6 +6,7 @@ import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { getFormData } from "../utils/govcyFormHandling.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs"; 
+import { tempSaveIfConfigured } from "../utils/govcyTempSave.mjs";
 
 
 /**
@@ -59,7 +60,12 @@ export function govcyFormsPostHandler() {
     
             //⤴️ Store validated form data in session
             dataLayer.storePageData(req.session, siteId, pageUrl, formData);
-
+            
+            // 🔄 Fire-and-forget temporary save (non-blocking)
+            (async () => {
+                try { await tempSaveIfConfigured(req.session, service, siteId); }
+                catch (e) { /* already logged internally */ }
+            })();
             
             logger.debug("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl), req);
             logger.info("✅ Form submitted successfully:", req.originalUrl);

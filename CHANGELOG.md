@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.0] - 2025-08-09
+### Added
+## Changelog
+
+### Added
+- **Temporary save & load feature** for service submissions:
+  - **`govcyLoadSubmissionData` middleware**:
+    - Calls `submissionGetAPIEndpoint` to retrieve existing saved submissions.
+    - If found, stores API `Data` in `siteData[siteId].loadData`.
+    - Hydrates `siteData[siteId].inputData` from `submissionData` JSON string (if available).
+    - If no saved submission exists, calls `submissionPutAPIEndpoint` to create one.
+    - Skips API calls if load data already exists in the session.
+  - **`storeSiteInputData`** function added to `govcyDataLayer` to replace in-memory form data with pre-saved values.
+  - Unit tests added/updated to verify `govcyLoadSubmissionData` and `storeSiteInputData` behavior.
+- **Automatic temporary save on form POST**:
+  - `govcyFormsPostHandler` now supports *fire-and-forget* call to new helper `govcyTempSave`:
+    - Saves form data via `submissionPutAPIEndpoint` after successful validation.
+    - Errors are caught and logged internally to avoid blocking user flow.
+    - `submission_data` is JSON-stringified before sending to the API.
+    - Sends correct headers:  
+      - `accept: "text/plain"`  
+      - `content-type: "application/json"`
+
+### Changed
+- Registered `govcyLoadSubmissionData` middleware in all relevant GET routes:
+  - `/:siteId` (before redirect to first page)  
+  - `/:siteId/:pageUrl` (before rendering form page)  
+  - `/:siteId/review` (before rendering review page)  
+  In all cases, middleware runs after `govcyServiceEligibilityHandler` and before page handler.
+
+### Configuration & Environment Changes
+- **Service config JSON**:
+  - New optional `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` objects under `site`:
+    ```json
+    "submissionGetAPIEndpoint": {
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+    },
+    "submissionPutAPIEndpoint": {
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+    }
+    ```
+  - Optional field: `"dsfgtwApiKey"` if API gateway key is required.
+
+- **Environment variables**:
+  - Each JSON `url`, `clientKey`, `serviceId` (and optionally `dsfgtwApiKey`) should map to an environment variable containing the actual value.
+
+### Backward Compatibility
+- **Fully backward compatible**:
+  - If `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` are not defined in the service config, the new save/load logic is skipped entirely.
+  - Existing services without these settings continue to work unchanged.
+
+
 ## [v0.2.16] - 2025-08-06
 ### Added
 - Workflow to publish legacy and dev versions `tag-and-publish-legacy-and-dev.yml`

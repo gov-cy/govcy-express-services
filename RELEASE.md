@@ -72,38 +72,58 @@ npm version prerelease --preid=alpha  # creates 1.0.0-alpha.0 → 1.0.0-alpha.1
 gitGraph
    commit id: "Initial commit"
    commit id: "Feature A"
-   commit tag: "v0.2.14"
+   commit tag: "v0.2.14" id: "Major release v0"
 
-   branch release-0.x
-   checkout release-0.x
-   commit id: "Hotfix for v0"
-   commit tag: "v0.2.15"
 
    checkout main
    branch v1-dev
    checkout v1-dev
-   commit tag: "v1.0.0-alpha.0"
-   commit id: "Feature B"
-   commit tag: "v1.0.0-alpha.1"
-   commit id: "Feature C"
-   commit tag: "v1.0.0"
+   commit tag: "v1.0.0-alpha.0" id: "Feature B"
+   commit tag: "v1.0.0-alpha.1" id: "Feature C"
+   commit tag: "v1.0.0" id: "Major release v1"
    checkout main
-   merge v1-dev
+   merge v1-dev  tag: "v1.0.0"
 
-   branch release-1.x
-   checkout release-1.x
-   commit id: "Hotfix for v1"
-   commit tag: "v1.0.1"
+   branch release-0.x
+   checkout release-0.x
+   commit tag: "v0.2.15" id: "Hotfix for v0"
+   checkout main
+   
+   commit tag: "v1.0.1" id: "Feature D"
+   commit tag: "v1.0.2" id: "Feature E"
 
    checkout main
    branch v2-dev
    checkout v2-dev
-   commit id: "Start file upload feature"
-   commit tag: "v2.0.0-alpha.0"
-   commit id: "Add file validation"
-   commit tag: "v2.0.0-alpha.1"
+   commit tag: "v2.0.0-alpha.0" id: "Start file upload feature"
 
+   checkout main
+   commit tag: "v1.0.3" id: "Feature E.1"
 
+   checkout v2-dev
+   commit tag: "v2.0.0" id: "Major release v2"
+   checkout main
+   merge v2-dev tag: "v2.0.0"
+   
+   branch release-1.x
+   checkout release-1.x
+   checkout main
+
+   commit tag: "v2.0.1" id: "Feature F"
+
+   
+   checkout release-1.x
+   commit tag: "v1.0.4" id: "Hotfix for v1"
+   checkout main
+
+   commit tag: "v2.0.2" id: "Feature G"
+
+   checkout release-0.x
+   commit tag: "v0.2.16" id: "Hotfix for 2 for v0"
+   
+   checkout release-1.x
+   commit tag: "v1.0.5" id: "Hotfix 2 for v1"
+   checkout main
 
 ```
 
