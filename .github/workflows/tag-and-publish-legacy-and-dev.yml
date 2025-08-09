@@ -4,8 +4,9 @@ name: Tag and Publish Legacy and Dev Versions (v0, v1, ...)
 on:
   push:
     tags:
-      # - 'v0.*.*'
-      - 'v1.*.*'
+      - 'v1.*'
+      # - 'v0.*'   # uncomment later if/when you publish v0 tags here too
+      # - 'v2.*'   # future-proof
 
 jobs:
   publish:
