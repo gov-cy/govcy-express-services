@@ -1419,8 +1419,8 @@ Explanation:
 The **temporary save** feature allows user progress to be stored in an external API and automatically reloaded on the next visit.  
 This is useful for long forms or cases where users may leave and return later.
 
-#### 1. Configure the endpoints in your service JSON
-In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` entry:
+#### How to configure temporary save 
+To use this feature, configure the config JSON file. In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` entry:
 
 ```json
 "submissionGetAPIEndpoint": {
@@ -1439,7 +1439,6 @@ In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `su
 
 These values should point to environment variables that hold your real endpoint URLs and credentials.
 
-#### 2. Add environment variables
 In your `secrets/.env` file (and staging/production configs), define the variables referenced above:
 
 ```dotenv
@@ -1449,17 +1448,145 @@ TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
 TEST_SUBMISSION_API_SERVICE_ID=123
 ```
 
-#### 3. How it works
+#### How temporary save works
 
-- **On first page load** for a site, `govcyLoadSubmissionData` will:
+- **On first page load** for a site, using the `submissionGetAPIEndpoint` the system will:
   1. Call the GET endpoint to retrieve any saved submission.
   2. If found, populate the session’s `inputData` so fields are pre-filled.
   3. If not found, call the PUT endpoint to create a new temporary record.
 - **On every form POST**, after successful validation:
-  - The `govcyFormsPostHandler` will fire-and-forget a `PUT` request to update the saved submission with the latest form data.
+  - The `submissionPutAPIEndpoint` will fire-and-forget a `PUT` request to update the saved submission with the latest form data.
   - The payload includes all required submission fields with `submission_data` JSON-stringified.
 
-#### 4. Backward compatibility
+#### `submissionGetAPIEndpoint` `GET` API Request and Response
+This API is used to retrieve the saved submission data.
+
+**Request:**
+
+- **HTTP Method**: GET
+- **URL**: Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+- **Body**: The body contains the and either:
+  - an a `null` which means no data was found for the user
+  - a JSON object with all the form data collected from the user across all pages in previous sessions.
+
+**Example Request:**
+
+```http
+GET /temp-save-get-endpoint?status=0 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When temporary submission data are found:**
+
+```json
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+    }
+}
+```
+
+**When temporary submission data are NOT found:**
+
+```json
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": null
+}
+```
+
+**When temporary submission retreival fails:**
+
+```json
+{
+    "Succeeded": false,
+    "ErrorCode": 401,
+    "ErrorMessage": "Not authorized",
+    "Data": null
+}
+```
+
+#### `submissionPutAPIEndpoint` `PUT` API Request and Response
+This API is used to temporary save the submission data.
+
+**Request:**
+
+- **HTTP Method**: PUT
+- **URL**: Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+- **Body**: The body contains the a JSON object with all the form data collected from the user across all pages.
+
+**Example Request:**
+
+```http
+PUT /temp-save-endpoint HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "submission_data" : "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+}
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**On success:**
+
+```json
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+    }
+}
+```
+
+**On failure:**
+
+```json
+{
+    "Succeeded": false,
+    "ErrorCode": 401,
+    "ErrorMessage": "Not authorized",
+    "Data": null
+}
+```
+
+**Notes**:
+- The response is normalized to always use PascalCase keys (`Succeeded`, `ErrorCode`, etc.), regardless of the backend’s casing.
+
+#### Temporary save backward compatibility
 If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
 Existing services will continue to work without modification.
 
