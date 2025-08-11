@@ -11,6 +11,7 @@ import { logger } from "./govcyLogger.mjs";
  * @param {object} headers - Custom headers (optional)
  * @param {number} retries - Number of retry attempts (default: 3)
  * @param {boolean} allowSelfSignedCerts - Whether to allow self-signed certificates (default: false)
+ * @param {array} allowedHTTPStatusCodes - Array of allowed HTTP status codes (default: [200])
  * @returns {Promise<object>} - API response
  */
 export async function govcyApiRequest(
@@ -21,7 +22,8 @@ export async function govcyApiRequest(
     user = null, 
     headers = {}, 
     retries = 3,
-    allowSelfSignedCerts = false
+    allowSelfSignedCerts = false,
+    allowedHTTPStatusCodes = [200]
 ) {
     let attempt = 0;
 
@@ -48,6 +50,8 @@ export async function govcyApiRequest(
                 [method?.toLowerCase() === 'get' ? 'params' : 'data']: inputData,
                 headers: requestHeaders,
                 timeout: 10000, // 10 seconds timeout
+                // ✅ Treat only these statuses as "resolved" (no throw)
+                validateStatus: (status) => allowedHTTPStatusCodes.includes(status),
             };
 
             // Add httpsAgent if NOT production to allow self-signed certificates
@@ -60,9 +64,13 @@ export async function govcyApiRequest(
 
             logger.debug(`📥 Received API response`, { status: response.status, data: response.data });
 
-            if (response.status !== 200) {
+            // Validate HTTP status
+            if (!allowedHTTPStatusCodes.includes(response.status)) {
                 throw new Error(`Unexpected HTTP status: ${response.status}`);
             }
+            // if (response.status !== 200) {
+            //     throw new Error(`Unexpected HTTP status: ${response.status}`);
+            // }
             
             // const { Succeeded, ErrorCode, ErrorMessage } = response.data;
             // Normalize to PascalCase regardless of input case
@@ -77,7 +85,7 @@ export async function govcyApiRequest(
                 ErrorMessage,
                 Data,
                 InformationMessage
-            } = response.data;
+            } = response.data ?? {};
 
             const normalized = {
                 Succeeded: Succeeded !== undefined ? Succeeded : succeeded,

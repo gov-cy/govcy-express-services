@@ -73,7 +73,8 @@ export async function govcyLoadSubmissionDataAPIs(store, service, siteId, next) 
                     ...(getCfgDsfGtwApiKey !== '' && { "dsfgtw-api-key": getCfgDsfGtwApiKey }) // Use the DSF API GTW secret from environment variables
                 },
                 3,
-                allowSelfSignedCerts
+                allowSelfSignedCerts,
+                [200, 404] // Allowed HTTP status codes
             );
 
             // If not succeeded, handle error
@@ -88,7 +89,9 @@ export async function govcyLoadSubmissionDataAPIs(store, service, siteId, next) 
                 dataLayer.storeSiteLoadData(store, siteId, getResponse.Data);
 
                 try {
-                    const parsed = JSON.parse(getResponse.Data.submissionData || "{}");
+                    const parsed = JSON.parse(getResponse.Data.submissionData
+                        || getResponse.Data.submission_data 
+                        || "{}");
                     if (parsed && typeof parsed === "object") {
                         dataLayer.storeSiteInputData(store, siteId, parsed);
                         logger.debug(`💾 Input data restored from saved submission for siteId: ${siteId}`);
@@ -99,11 +102,15 @@ export async function govcyLoadSubmissionDataAPIs(store, service, siteId, next) 
 
             // if not call the PUT submission API
             } else {
+                const tempPutPayload = {
+                    // submission_data: JSON.stringify({}),
+                    submissionData: JSON.stringify({})
+                };
                 // If no data, call the PUT submission API to create it
                 const putResponse = await govcyApiRequest(
                     putCfgMethod,
                     putCfgUrl,
-                    putCfgParams,
+                    tempPutPayload,
                     true, // use access token auth
                     user,
                     { 

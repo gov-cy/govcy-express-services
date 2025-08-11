@@ -494,7 +494,9 @@ Content-Type: application/json
 The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
 
 **On Success:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": true,
   "ErrorCode": 0,
@@ -503,7 +505,9 @@ The API is expected to return a JSON response with the following structure (see 
 ```
 
 **On Failure:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": false,
   "ErrorCode": 102,
@@ -637,7 +641,9 @@ Content-Type: application/json
 The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
 
 **On Success:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": true,
   "ErrorCode": 0,
@@ -649,7 +655,9 @@ The API is expected to return a JSON response with the following structure (see 
 ```
 
 **On Failure:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": false,
   "ErrorCode": 102,
@@ -1492,7 +1500,9 @@ The API is expected to return a JSON response with the following structure:
 
 **When temporary submission data are found:**
 
-```json
+```http
+HTTP/1.1 200 OK
+
 {
     "Succeeded": true,
     "ErrorCode": 0,
@@ -1505,7 +1515,9 @@ The API is expected to return a JSON response with the following structure:
 
 **When temporary submission data are NOT found:**
 
-```json
+```http
+HTTP/1.1 404 Not Found
+
 {
     "Succeeded": true,
     "ErrorCode": 0,
@@ -1516,7 +1528,9 @@ The API is expected to return a JSON response with the following structure:
 
 **When temporary submission retreival fails:**
 
-```json
+```http
+HTTP/1.1 200 OK
+
 {
     "Succeeded": false,
     "ErrorCode": 401,
@@ -1561,7 +1575,9 @@ The API is expected to return a JSON response with the following structure:
 
 **On success:**
 
-```json
+```http
+HTTP/1.1 200 OK
+
 {
     "Succeeded": true,
     "ErrorCode": 0,
@@ -1574,7 +1590,9 @@ The API is expected to return a JSON response with the following structure:
 
 **On failure:**
 
-```json
+```http
+HTTP/1.1 401 Unauthorized
+
 {
     "Succeeded": false,
     "ErrorCode": 401,

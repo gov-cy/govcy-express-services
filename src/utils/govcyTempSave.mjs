@@ -27,7 +27,8 @@ export async function tempSaveIfConfigured(store, service, siteId) {
   const inputData = dataLayer.getSiteInputData(store, siteId) || {};
   const tempPayload = {
     // mirror final submission format: send stringified JSON
-    submission_data: JSON.stringify(inputData)
+    // submission_data: JSON.stringify(inputData),
+    submissionData: JSON.stringify(inputData)
   };
 
   if (!url || !clientKey) {

@@ -226,19 +226,19 @@ For example:
     // SITE: `nsf-2`
     "nsf-2": {  
       "loadData": { // Data used to load the site when presaved
-        "submission_id": "f97c091b-caa6-4e69-a515-f57043a704b0",
-        "service_id": "f11077f3-72c7-4eec-ab01-f07d9efed08d",
-        "reference_value": "0000000924107836",
-        "submission_ts": "2025-08-07T17:05:26+03:00",
+        "submissionId": "f97c091b-caa6-4e69-a515-f57043a704b0",
+        "serviceId": "f11077f3-72c7-4eec-ab01-f07d9efed08d",
+        "referenceValue": "0000000924107836",
+        "submissionTs": "2025-08-07T17:05:26+03:00",
         "status": 0,
-        "status_ts": "2025-08-07T17:05:34+03:00",
-        "user_id": "0000000924107836",
-        "user_type": 1,
-        "user_name": "",
-        "user_identifier": "0001013317",
-        "user_email": "",
-        "submission_data": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}}",
-        "data_status": 0
+        "statusTs": "2025-08-07T17:05:34+03:00",
+        "userId": "0000000924107836",
+        "userType": 1,
+        "userName": "",
+        "userIdentifier": "0001013317",
+        "userEmail": "",
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}}",
+        "dataStatus": 0
       },
        // INPUT DATA
       "inputData": { 
