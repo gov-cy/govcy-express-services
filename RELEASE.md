@@ -203,7 +203,7 @@ This is where you’ll work on the file input version:
 
 ```bash
 git checkout -b v1-dev main
-npm version 1.0.0-alpha.0
+npm version 1.0.0-alpha.0 # or: `npm version prerelease --preid=alpha`
 ```
 - Commit any changes (including file input support)
 - Push the branch:
