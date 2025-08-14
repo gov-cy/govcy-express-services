@@ -1035,6 +1035,24 @@
                       }
                     },
                     {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "file1",
+                        "name": "file1",
+                        "label": {
+                          "el": "Upload a file Ελληνικά",
+                          "en": "Upload a file",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "The file must be a PDF",
+                          "en": "The file must be a PDF",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
                       "element": "button",
                       "params": {
                         "id": "continue",

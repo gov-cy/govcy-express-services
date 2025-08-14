@@ -1,9 +1,66 @@
 import express from "express";
+import multer from "multer"; 
 
 const app = express();
 const port = 3002; // Mock API will run on this port
 
 app.use(express.json()); // Middleware to parse JSON requests
+
+// 🔧 NEW: Multer setup (memory; fine for mocks/tests)
+const upload = multer({ storage: multer.memoryStorage() });
+
+/**
+ * NEW route: multipart/form-data upload
+ * - Expects field "file" as the uploaded file
+ * - Optional text fields (e.g., "description") available via req.body
+ */
+app.post("/form-upload/:tag", upload.single("file"), (req, res) => {
+    try {
+      const authHeader = req.headers["authorization"] || null;
+    
+      console.log(`Received multipart/form-data upload --------------`);
+
+      // Access parsed file and fields
+      const file = req.file;                 // { originalname, mimetype, size, buffer, ... }
+      const { description } = req.body || {};
+    
+      if (!file) {
+        return res.status(400).json({
+          Succeeded: false,
+          ErrorCode: 400,
+          ErrorMessage: "No file received",
+          Data: null
+        });
+      }
+    
+      return res.status(200).json({
+        Succeeded: true,
+        ErrorCode: 0,
+        ErrorMessage: null,
+        Data: {
+          receivedFile: true,
+          filename: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+          description: description || null,
+          fileId: "mock-file-id", // Mock ID for testing
+          sha256: "mock-sha256-hash", // Mock SHA256 for testing
+        },
+        // Echo headers for test assertions
+        ReceivedAuthorization: authHeader,
+        ReceivedClientKey: req.headers["client-key"] || null,
+        ReceivedServiceId: req.headers["service-id"] || null
+      });
+  } catch (err) {
+        console.error("Error processing multipart upload:", err);
+        return res.status(500).json({
+            Succeeded: false,
+            ErrorCode: 500,
+            ErrorMessage: "Internal server error",
+            Data: null
+        });
+    }
+});
 
 // Mock endpoint for submission
 app.post("/:key", (req, res) => {

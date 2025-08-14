@@ -1,8 +1,13 @@
 import { expect } from "chai";
+import fs from "fs";
+import path from "path";
+import FormData from "form-data";
+
 import { govcyApiRequest } from "../../src/utils/govcyApiRequest.mjs";
 
 describe("Integration Test - Mock API", () => {
     const mockApiBaseUrl = "http://localhost:3002"; // Base URL for the mock API
+    const fixturesPath = path.resolve("tests/fixtures/testfile.pdf"); // your dummy file
 
     it("1. should successfully submit data to the mock API", async () => {
         // Dummy data to send to the mock API
@@ -156,4 +161,54 @@ describe("Integration Test - Mock API", () => {
         expect(response.ReceivedServiceId).to.equal("my-service-id-456");
         expect(response.ReceivedAuthorization).to.equal("Bearer test-token-abc");
     });
+
+    it("10. should send FormData with file upload successfully", async () => {
+        // Create form-data body
+        const form = new FormData();
+        form.append("file", fs.createReadStream(fixturesPath));
+        form.append("meta", JSON.stringify({ example: true }));
+
+        const response = await govcyApiRequest(
+            "post",
+            `${mockApiBaseUrl}/form-upload/tag`, // Mock endpoint for file upload
+            form,                  // 👈 Pass FormData directly
+            true,                 // useAccessTokenAuth
+            { access_token: "form-token-123" },                  // user
+            { "client-key": "form-client-key" } // custom header
+        );
+
+        expect(response.Succeeded).to.be.true;
+        expect(response.ErrorCode).to.equal(0);
+        // These will depend on what your mock API echoes back
+        expect(response.ReceivedClientKey).to.equal("form-client-key");
+        expect(response.Data).to.have.property("receivedFile").that.is.true;
+        expect(response.ReceivedAuthorization).to.equal("Bearer form-token-123");
+        expect(response.Data.filename).to.equal("testfile.pdf");
+        expect(response.Data.mimeType).to.equal("application/pdf");
+        expect(response.Data.size).to.be.greaterThan(0);
+    });
+
+    it("11. should fail when no file is provided", async () => {
+        const form = new FormData();
+        form.append("meta", "no-file-case");
+
+      
+        const response = await govcyApiRequest(
+            "post",
+            `${mockApiBaseUrl}/form-upload/tag`, // Mock endpoint for file upload
+            form,
+            true,
+            { access_token: "form-token-123" },
+            {},
+            3,
+            false,
+            [200, 400, 500] // Allow 200, 400, and 500 status codes
+        );
+        console.log("Unexpected success response:", response);
+        expect(response.Succeeded).to.be.false;
+        expect(response.ErrorCode).to.equal(400);
+        expect(response.ErrorMessage).to.include("No file received");
+            
+    });
+
 });

@@ -113,9 +113,9 @@ export const staticResources = {
             element: "htmlElement",
             params: {
                 text: {
-                    en: `<script src="/js/govcyForms.js"></script>`,
-                    el: `<script src="/js/govcyForms.js"></script>`,
-                    tr: `<script src="/js/govcyForms.js"></script>`
+                    en: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
+                    el: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
+                    tr: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`
                 }
             }
         },

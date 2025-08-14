@@ -329,6 +329,20 @@ export function getSiteLoadData(store, siteId) {
 }
 
 /**
+ * Get the site's reference number from load data from the store 
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId The site ID
+ * @returns {string|null} The reference number or null if not available
+ */
+export function getSiteLoadDataReferenceNumber(store, siteId) {
+  const ref = store?.siteData?.[siteId]?.loadData?.referenceValue;
+
+  return typeof ref === 'string' && ref.trim() !== '' ? ref : null;
+}
+
+
+/**
  * Get the site's input data from the store 
  * 
  * @param {object} store The session store

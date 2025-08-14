@@ -7,6 +7,8 @@
 import { getLoginUrl, handleCallback, getLogoutUrl } from '../auth/cyLoginAuth.mjs';
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import { errorResponse } from "../utils/govcyApiResponse.mjs"; 
+import { isApiRequest } from '../utils/govcyApiDetection.mjs';
 
 /**
  * Middleware to check if the user is authenticated. If not, redirect to the login page.
@@ -17,6 +19,12 @@ import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
  */
 export function requireAuth(req, res, next) {
     if (!req.session.user) {
+        if (isApiRequest(req)) {
+            const err = new Error("Unauthorized: user not authenticated");
+            err.status = 401;
+            return next(err);
+        }
+
         // Store the original URL before redirecting to login
         req.session.redirectAfterLogin = req.originalUrl;
         return res.redirect('/login');

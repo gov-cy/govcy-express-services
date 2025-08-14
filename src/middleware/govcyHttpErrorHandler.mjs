@@ -3,6 +3,8 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
+import { errorResponse } from '../utils/govcyApiResponse.mjs';
+import { isApiRequest } from '../utils/govcyApiDetection.mjs';
 
 /**
  * Middleware function to handle HTTP errors and render appropriate error pages.
@@ -49,9 +51,8 @@ export function govcyHttpErrorHandler(err, req, res, next) {
 
     res.status(statusCode);
 
-    // Return JSON if the request expects it
-    if (req.headers.accept && req.headers.accept.includes("application/json")) {
-        return res.json({ error: message });
+    if (isApiRequest(req)) {
+        return res.status(statusCode).json(errorResponse(statusCode, message));
     }
 
     // Render an error page for non-JSON requests

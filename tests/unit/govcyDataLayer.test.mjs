@@ -287,6 +287,39 @@ describe('govcyDataLayer', () => {
         expect(session.siteData[siteId].inputData).to.deep.equal(newInputData);
     });
 
+    it("19. should return the reference number from load data if it exists", () => {
+        session.siteData = {
+            site1: {
+                loadData: {
+                    referenceValue: "REF-001"
+                }
+            }
+        };
+
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.equal("REF-001");
+    });
+
+    it("20. should return null if reference number is missing", () => {
+        session.siteData = {
+            site1: {
+                loadData: {
+                    // no referenceValue
+                }
+            }
+        };
+
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.be.null;
+    });
+
+    it("21. should return null if siteData or loadData is missing", () => {
+        session = {}; // no siteData at all
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.be.null;
+    });
+
+
 
     
 });

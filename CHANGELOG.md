@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.XXX] - 2025-08-14
+### Added
+- **File upload feature endpoint** to serve JS calls to upload files using API:
+  - **`handleFileUpload` utility** (`govcyHandleFiles.mjs`)
+    - Centralized all upload logic with validation, config loading, conditional logic, and API request handling.
+    - Returns consistent `{ status, data?, errorMessage? }` structure.
+    - Supports future extensions like download handling.
+
+  - **`govcyFiles.js`**
+    - Browser-side file upload script using `axios`.
+    - Automatically injects uploaded file metadata into hidden inputs.
+    - Handles CSRF and API response parsing.
+
+  - **API-aware detection utility** (`govcyIsApiRequest.mjs`)
+    - Detects whether request targets an API based on headers or upload/download URL patterns.
+    - Used in CSRF, auth, and error handling.
+
+  - **API response helpers** (`govcyApiResponse.mjs`)
+    - `successResponse(data)` and `errorResponse(status, message)` for consistent API output formatting.
+
+  - **Magic byte (file signature) validation** (in `govcyHandleFiles.mjs`)
+    - Ensures uploaded files match allowed MIME types both via declared `mimetype` and actual magic byte inspection.
+
+### Changed
+- **`govcyUpload.mjs`**
+  - Now delegates all logic to `handleFileUpload`.
+  - Multer middleware simplified with consistent error response handling.
+
+- **`govcyApiRequest.mjs`**
+  - Automatically adds correct `Content-Type` headers for `FormData` payloads.
+
+- **`govcyHttpErrorHandler.mjs`**
+  - Returns JSON error responses for API routes (e.g., file upload) using `errorResponse()`.
+
+- **`cyLoginAuth.mjs`**
+  - Detects API requests and returns `401` instead of redirecting unauthenticated users.
+
+- **`govcyCsrfMiddleware.mjs`**
+  - Supports `X-CSRF-Token` for `multipart/form-data` API requests.
+
+- **`index.mjs`**
+  - Added the `/:siteId/:pageUrl/upload` route to handle file upload requests.
+
+- **Tests**
+  - **Unit tests for `handleFileUpload`** (`govcyHandleFiles.test.mjs`)
+    - 12 tests covering:
+      - Missing file, invalid MIME, empty file, conditional logic, file too large
+      - Invalid config, invalid page, and successful upload.
+    - Uses real API mocking endpoint where applicable.
+
+- **Constants**
+  - Added to `govcyConstants.mjs`:
+    - `ALLOWED_MULTER_FILE_SIZE_MB`
+    - `ALLOWED_FILE_SIZE_MB`
+    - `ALLOWED_FILE_MIME_TYPES`
+
 ## [v1.0.0-alpha.5] - 2025-08-12
 ### Changed
 - Updated `RELEASE.md`

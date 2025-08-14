@@ -24,6 +24,7 @@ import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
 import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
 import { govcyServiceEligibilityHandler } from './middleware/govcyServiceEligibilityHandler.mjs';
 import { govcyLoadSubmissionData } from './middleware/govcyLoadSubmissionData.mjs';
+import { govcyUploadMiddleware } from './middleware/govcyUpload.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -147,9 +148,16 @@ export default function initializeGovCyExpressService(){
   // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
   
+  // 🗃️ -- ROUTE: Handle POST requests for file uploads for a page. 
+  app.post('/:siteId/:pageUrl/upload', 
+    serviceConfigDataMiddleware, 
+    requireAuth, // UNCOMMENT 
+    naturalPersonPolicy, // UNCOMMENT 
+    govcyServiceEligibilityHandler(true), // UNCOMMENT 
+    govcyUploadMiddleware);
+  
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
   app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFormsPostHandler());
-  
   
   // post for /:siteId/review
   

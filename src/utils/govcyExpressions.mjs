@@ -124,7 +124,7 @@ export function evaluateExpressionWithFlattening(expression, object, prefix = ''
  * @returns {{ result: true } | { result: false, redirect: string }}
  *          An object indicating whether to render the page or redirect
  */
-export function evaluatePageConditions(page, store, siteKey, req) {
+export function evaluatePageConditions(page, store, siteKey, req = {}) {
   // Get conditions array from nested page structure
   const conditions = page?.pageData?.conditions;
 
