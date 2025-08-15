@@ -43,7 +43,7 @@ export function govcyFormsPostHandler() {
             }
     
             // const formData = req.body; // Submitted data
-            const formData = getFormData(formElement.params.elements, req.body); // Submitted data
+            const formData = getFormData(formElement.params.elements, req.body, req.session, siteId, pageUrl); // Submitted data
 
             // ☑️ Start validation from top-level form elements
             const validationErrors = validateFormElements(formElement.params.elements, formData);

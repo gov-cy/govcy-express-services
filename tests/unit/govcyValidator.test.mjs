@@ -1215,5 +1215,161 @@ describe('govcyValidator', () => {
             page1field1: { id: 'field1', message: 'Input is too long', pageUrl: 'page1' },
         });
     });
+
+    it('32. should fail `required` validation for missing fileInput', () => {
+  const elements = [
+    {
+      element: 'fileInput',
+      params: { name: 'myUpload', id: 'myUpload' },
+      validations: [
+        {
+          check: 'required',
+          params: {
+            checkValue: '',
+            message: 'You must upload a file'
+          }
+        }
+      ]
+    }
+  ];
+
+  const formData = {
+    // no myUploadAttachment provided
+  };
+
+  const result = validateFormElements(elements, formData, 'page1');
+
+  expect(result).to.deep.equal({
+    page1myUpload: {
+      id: 'myUpload',
+      message: 'You must upload a file',
+      pageUrl: 'page1'
+    }
+  });
+});
+
+it('33. should pass `required` validation for existing fileInput metadata', () => {
+  const elements = [
+    {
+      element: 'fileInput',
+      params: { name: 'myUpload', id: 'myUpload' },
+      validations: [
+        {
+          check: 'required',
+          params: {
+            checkValue: '',
+            message: 'You must upload a file'
+          }
+        }
+      ]
+    }
+  ];
+
+  const formData = {
+    myUploadAttachment: {
+      fileId: 'abc123',
+      sha256: 'xyz456'
+    }
+  };
+
+  const result = validateFormElements(elements, formData, 'page1');
+
+  expect(result).to.deep.equal({});
+});
+
+it('34. should fail `required` validation for conditional fileInput when selected but no file uploaded', () => {
+  const elements = [
+    {
+      element: 'radios',
+      params: {
+        name: 'fileChoice',
+        id: 'fileChoice',
+        items: [
+          {
+            value: 'yes',
+            conditionalElements: [
+              {
+                element: 'fileInput',
+                params: { name: 'supportingDoc', id: 'supportingDoc' },
+                validations: [
+                  {
+                    check: 'required',
+                    params: {
+                      checkValue: '',
+                      message: 'Please upload a supporting document'
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          { value: 'no' }
+        ]
+      }
+    }
+  ];
+
+  const formData = {
+    fileChoice: 'yes'
+    // supportingDocAttachment missing
+  };
+
+  const result = validateFormElements(elements, formData, 'page1');
+
+  expect(result).to.deep.equal({
+    page1supportingDoc: {
+      id: 'supportingDoc',
+      message: 'Please upload a supporting document',
+      pageUrl: 'page1'
+    }
+  });
+});
+
+it('35. should pass `required` validation for conditional fileInput when file is uploaded', () => {
+  const elements = [
+    {
+      element: 'radios',
+      params: {
+        name: 'fileChoice',
+        id: 'fileChoice',
+        items: [
+          {
+            value: 'yes',
+            conditionalElements: [
+              {
+                element: 'fileInput',
+                params: { name: 'supportingDoc', id: 'supportingDoc' },
+                validations: [
+                  {
+                    check: 'required',
+                    params: {
+                      checkValue: '',
+                      message: 'Please upload a supporting document'
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          { value: 'no' }
+        ]
+      }
+    }
+  ];
+
+  const formData = {
+    fileChoice: 'yes',
+    supportingDocAttachment: {
+      fileId: 'abc123',
+      sha256: 'def456'
+    }
+  };
+
+  const result = validateFormElements(elements, formData, 'page1');
+
+  expect(result).to.deep.equal({});
+});
+
+
     //TODO: test more validation rules
 });

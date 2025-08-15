@@ -113,9 +113,9 @@ export const staticResources = {
             element: "htmlElement",
             params: {
                 text: {
-                    en: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
-                    el: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
-                    tr: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`
+                    en: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
+                    el: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
+                    tr: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`
                 }
             }
         },
@@ -187,6 +187,27 @@ export function csrfTokenInput(csrfToken) {
                 en: csrfTokenInput,
                 el: csrfTokenInput,
                 tr: csrfTokenInput
+            }
+        }
+    };
+}
+
+/**
+ * Get the site and page input elements 
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url
+ * @param {string} lang The page language
+ * @returns {object} htmlElement with the site and page inputs
+ */
+export function siteAndPageInput(siteId, pageUrl, lang = "el") {
+    const siteAndPageInputs = `<input type="hidden" name="_siteId" value="${siteId}"><input type="hidden" name="_pageUrl" value="${pageUrl}"><input type="hidden" name="_lang" value="${lang}">`;
+    return {
+        element: "htmlElement",
+        params: {
+            text: {
+                en: siteAndPageInputs,
+                el: siteAndPageInputs,
+                tr: siteAndPageInputs
             }
         }
     };

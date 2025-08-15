@@ -174,6 +174,11 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     }
 
     // ✅ Success
+    // Store the file metadata in the session store
+    dataLayer.storePageDataElement(store, siteId, pageUrl, elementName+"Attachment", {
+      sha256: response.Data.sha256,
+      fileId: response.Data.fileId,
+    });
     logger.debug("File upload successful", response.Data);
     logger.info(`File uploaded successfully for element ${elementName} on page ${pageUrl} for site ${siteId}`);
     return {

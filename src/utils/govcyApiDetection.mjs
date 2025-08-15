@@ -10,7 +10,7 @@
 export function isApiRequest(req) {
   const acceptJson = (req.headers?.accept || "").toLowerCase().includes("application/json");
 
-  const apiUrlPattern = /^\/[^/]+\/[^/]+\/(upload|download)$/;
+  const apiUrlPattern =  /^\/apis\/[^/]+\/[^/]+\/(upload|download)$/;
   const isStructuredApiUrl = apiUrlPattern.test(req.originalUrl || req.url);
 
   return acceptJson || isStructuredApiUrl;

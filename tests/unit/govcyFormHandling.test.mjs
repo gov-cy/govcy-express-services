@@ -116,7 +116,7 @@ describe('govcyFormHandling', () => {
         expect(formElements[0].params.items[0].conditionalHasErrors).to.be.true;
     });
 
-    
+
 });
 
 describe('getFormData', () => {
@@ -316,4 +316,280 @@ describe('getFormData', () => {
             field2: '',
         });
     });
+
+    it('11. should transform fileInput to fileView with session data', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' },
+                    id: 'uploadDoc'
+                }
+            }
+        ];
+        const fileData = {
+            fileId: 'file123',
+            sha256: 'sha256hash'
+        };
+        const store = {
+            siteData: {
+                'mySite': {
+                    inputData: {
+                        'uploadPage': {
+                            formData: {
+                                uploadDocAttachment: fileData
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        populateFormData(formElements, {}, { errors: {}, errorSummary: [] }, store, 'mySite', 'uploadPage');
+
+        const fileView = formElements[0];
+        expect(fileView.element).to.equal('fileView');
+        expect(fileView.params.fileId).to.equal(fileData.fileId);
+        expect(fileView.params.sha256).to.equal(fileData.sha256);
+        expect(fileView.params.viewHref).to.equal('#viewHref');
+        expect(fileView.params.deleteHref).to.equal('#deleteHref');
+    });
+
+    it('12. should inject JS config and ARIA live regions when fileInput is present', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' },
+                    id: 'uploadDoc'
+                }
+            }
+        ];
+        const fileData = {
+            fileId: 'file123',
+            sha256: 'sha256hash'
+        };
+        const store = {
+            siteData: {
+                'mySite': {
+                    inputData: {
+                        'uploadPage': {
+                            formData: {
+                                uploadDocAttachment: fileData
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+
+        populateFormData(formElements, {}, validationErrors, store, 'mySite', 'uploadPage', 'en');
+
+        const injected = formElements.find(el => el.element === 'htmlElement');
+        expect(injected).to.exist;
+        expect(injected.params?.text?.en).to.include('window._govcyFileInputs');
+        expect(injected.params?.text?.en).to.include('window._govcySiteId');
+        expect(injected.params?.text?.en).to.include('govcy-upload-status');
+        expect(injected.params?.text?.en).to.include('govcy-upload-error');
+    });
+
+    it('13. should leave fileInput as is if no session data exists', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    name: 'uploadDoc',
+                    label: 'Upload document',
+                    id: 'uploadDoc'
+                }
+            }
+        ];
+
+        const store = {}; // no data
+        const validationErrors = { errors: {}, errorSummary: [] };
+
+        populateFormData(formElements, {}, validationErrors, store, 'site123', 'page1');
+
+        expect(formElements[0].element).to.equal('fileInput');
+        expect(formElements[0].params.value).to.equal('');
+    });
+
+
+    it('14. should populate conditional input inside radios correctly', () => {
+        const formElements = [
+            {
+                element: 'radios',
+                params: {
+                    id: 'mobile_select',
+                    name: 'mobile_select',
+                    legend: {
+                        el: "Σε ποιο κινητό μπορούμε να επικοινωνήσουμε μαζί σας;",
+                        en: "What mobile number can we use to contact you?"
+                    },
+                    isPageHeading: true,
+                    items: [
+                        {
+                            value: 'mobile',
+                            text: {
+                                el: "Στο [99 123456]",
+                                en: "You can use [99 123456]",
+                            }
+                        },
+                        {
+                            value: 'other',
+                            text: {
+                                el: "Θα δώσω άλλο αριθμό",
+                                en: "I will give a different number"
+                            },
+                            conditionalElements: [
+                                {
+                                    element: 'textInput',
+                                    params: {
+                                        id: 'mobileTxt',
+                                        name: 'mobileTxt',
+                                        label: {
+                                            el: 'Αριθμός τηλεφώνου',
+                                            en: 'Telephone number'
+                                        },
+                                        isPageHeading: false,
+                                        fixedWidth: '20',
+                                        type: 'tel'
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        const sessionData = {
+            mobile_select: 'other',
+            mobileTxt: '99123456'
+        };
+
+        const validationErrors = {
+            errors: {},
+            errorSummary: []
+        };
+
+        // Call the function
+        populateFormData(formElements, sessionData, validationErrors);
+
+        // Assertions
+        const radios = formElements[0];
+        const conditionalInput = radios.params.items[1].conditionalElements[0];
+
+        expect(conditionalInput.params.value).to.equal('99123456');
+    });
+
+    it('15. should set conditionalHasErrors when nested conditional has error', () => {
+        const formElements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'mobile_select',
+                    items: [
+                        {
+                            value: 'other',
+                            conditionalElements: [
+                                {
+                                    element: 'textInput',
+                                    params: {
+                                        name: 'mobileTxt',
+                                        id: 'mobileTxt'
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        const validationErrors = {
+            errors: {
+                mobileTxt: { message: 'Enter your mobile phone number' }
+            },
+            errorSummary: []
+        };
+
+        populateFormData(formElements, {}, validationErrors);
+
+        const conditionalInput = formElements[0].params.items[0].conditionalElements[0];
+        expect(conditionalInput.params.error).to.equal('Enter your mobile phone number');
+        expect(formElements[0].params.items[0].conditionalHasErrors).to.be.true;
+    });
+
+    it('16. should retrieve file metadata from session store for fileInput', () => {
+        const elements = [
+            {
+                element: 'fileInput',
+                params: { name: 'myUpload' }
+            }
+        ];
+        const formData = {}; // ignored for fileInput
+
+        const store = {
+            siteData: {
+                site1: {
+                    inputData: {
+                        'page-1': {
+                            formData: {
+                                myUploadAttachment: {
+                                    fileId: 'abc123',
+                                    sha256: 'def456'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const result = getFormData(elements, formData, store, 'site1', 'page-1');
+
+        expect(result).to.deep.equal({
+            myUploadAttachment: {
+                fileId: 'abc123',
+                sha256: 'def456'
+            }
+        });
+    });
+
+    it('17. should return empty string if fileInput metadata is missing in store', () => {
+        const elements = [
+            {
+                element: 'fileInput',
+                params: { name: 'myUpload' }
+            }
+        ];
+        const formData = {}; // doesn't matter
+
+        const store = {
+            siteData: {
+                site1: {
+                    inputData: {
+                        'page-1': {
+                            formData: {
+                                // myUploadAttachment missing
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const result = getFormData(elements, formData, store, 'site1', 'page-1');
+
+        expect(result).to.deep.equal({
+            myUploadAttachment: ''
+        });
+    });
+
+
 });

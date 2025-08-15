@@ -129,6 +129,14 @@ export default function initializeGovCyExpressService(){
 
   // 📝 -- ROUTE: Serve manifest.json dynamically for each site
   app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
+
+  // 🗃️ -- ROUTE: Handle POST requests for file uploads for a page. 
+  app.post('/apis/:siteId/:pageUrl/upload', 
+    serviceConfigDataMiddleware, 
+    requireAuth, // UNCOMMENT 
+    naturalPersonPolicy, // UNCOMMENT 
+    govcyServiceEligibilityHandler(true), // UNCOMMENT 
+    govcyUploadMiddleware);
   
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
   app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true),govcyLoadSubmissionData(),govcyPageHandler(), renderGovcyPage());
@@ -147,14 +155,6 @@ export default function initializeGovCyExpressService(){
   
   // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
-  
-  // 🗃️ -- ROUTE: Handle POST requests for file uploads for a page. 
-  app.post('/:siteId/:pageUrl/upload', 
-    serviceConfigDataMiddleware, 
-    requireAuth, // UNCOMMENT 
-    naturalPersonPolicy, // UNCOMMENT 
-    govcyServiceEligibilityHandler(true), // UNCOMMENT 
-    govcyUploadMiddleware);
   
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
   app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFormsPostHandler());

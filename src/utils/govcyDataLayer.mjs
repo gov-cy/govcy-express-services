@@ -98,6 +98,14 @@ export function storePageData(store, siteId, pageUrl, formData) {
 
     store.siteData[siteId].inputData[pageUrl]["formData"] = formData;
 }
+
+export function storePageDataElement(store, siteId, pageUrl, elementName, value) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId, pageUrl);
+    
+    // Store the element value
+    store.siteData[siteId].inputData[pageUrl].formData[elementName] = value;
+}
 /**
  * Stores the page's input data in the data layer
  *  * 

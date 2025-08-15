@@ -5,16 +5,22 @@
  * and show error summary when there are validation errors.
  */
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
+import * as dataLayer from "./govcyDataLayer.mjs";
 
 
 /**
  * Helper function to populate form data with session data
  * @param {Array} formElements The form elements  
  * @param {*} theData The data either from session or request
+ * @param {Object} validationErrors The validation errors
+ * @param {Object} store The session store
+ * @param {string} siteId The site ID
+ * @param {string} pageUrl The page URL
+ * @param {string} lang The language
  */
-export function populateFormData(formElements, theData, validationErrors) {
+export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el") {
     const inputElements = ALLOWED_FORM_ELEMENTS;
-
+    let fileInputElements = {};
     // Recursively populate form data with session data
     formElements.forEach(element => {
         if (inputElements.includes(element.element)) {
@@ -53,6 +59,24 @@ export function populateFormData(formElements, theData, validationErrors) {
                     // Invalid format (not matching D/M/YYYY or DD/MM/YYYY)
                     element.params.value = "";
                 }
+            } else if (element.element === "fileInput") {
+                // For fileInput, we change the element.element to "fileView" and set the 
+                // fileId and sha256 from the session store
+                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName + "Attachment");
+                // TODO: Ask Andreas how to handle empty file inputs
+                if (fileData) {
+                    element.element = "fileView";
+                    element.params.fileId = fileData.fileId;
+                    element.params.sha256 = fileData.sha256;
+                    element.params.visuallyHiddenText = element.params.label;
+                    // TODO: Also need to set the `view` and `download` URLs 
+                    element.params.viewHref = "#viewHref";
+                    element.params.deleteHref  = "#deleteHref";
+                } else {
+                    // TODO: Ask Andreas how to handle empty file inputs
+                    element.params.value = "";
+                }       
+                fileInputElements[fieldName] = element;
             // Handle all other input elements (textInput, checkboxes, radios, etc.)
             } else {
                 element.params.value = theData[fieldName] || "";
@@ -88,6 +112,29 @@ export function populateFormData(formElements, theData, validationErrors) {
             });
         }
     });
+    // add file input elements's definition in js object
+    if (fileInputElements != {}) {
+        const scriptTag = `
+        <script type="text/javascript">
+            window._govcyFileInputs = ${JSON.stringify(fileInputElements)};
+            window._govcySiteId = "${siteId}";
+            window._govcyPageUrl = "${pageUrl}";
+            window._govcyLang = "${lang}";
+        </script>
+        <div id="_govcy-upload-status" class="govcy-visually-hidden" role="status" aria-live="polite"></div>
+        <div id="_govcy-upload-error" class="govcy-visually-hidden" role="alert" aria-live="assertive"></div>
+        `.trim();
+        formElements.push({
+            element: 'htmlElement',
+            params: {
+                text: {
+                    en: scriptTag,
+                    el: scriptTag,
+                    tr: scriptTag
+                }
+            }
+        });
+    }
 }
 
 
@@ -96,9 +143,12 @@ export function populateFormData(formElements, theData, validationErrors) {
  * 
  * @param {Array} elements - The form elements (including conditional ones).
  * @param {Object} formData - The submitted form data.
+ * @param {Object} store - The session store .
+ * @param {string} siteId - The site ID .
+ * @param {string} pageUrl - The page URL .
  * @returns {Object} filteredData - The filtered form data.
  */
-export function getFormData(elements, formData) {
+export function getFormData(elements, formData, store = {}, siteId = "", pageUrl = "") {
     const filteredData = {};
     elements.forEach(element => {
         const { name } = element.params || {};
@@ -130,6 +180,17 @@ export function getFormData(elements, formData) {
                 filteredData[`${name}_day`] = day !== undefined && day !== null ? day : "";
                 filteredData[`${name}_month`] = month !== undefined && month !== null ? month : "";
                 filteredData[`${name}_year`] = year !== undefined && year !== null ? year : "";
+            // handle fileInput
+            } else if (element.element === "fileInput") {
+                // fileInput elements are already stored in the store when it was uploaded
+                // so we just need to check if the file exists in the dataLayer in the store and add it the filteredData
+                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name + "Attachment");
+                if (fileData) {
+                    filteredData[name + "Attachment"] = fileData;
+                } else {
+                    //TODO: Ask Andreas how to handle empty file inputs
+                    filteredData[name + "Attachment"] = ""; // or handle as needed
+                }
             // Handle other elements (e.g., textInput, textArea, datePicker)
             } else {
                 filteredData[name] = formData[name] !== undefined && formData[name] !== null ? formData[name] : "";

@@ -1050,7 +1050,20 @@
                           "en": "The file must be a PDF",
                           "tr": ""
                         }
-                      }
+                      },
+                      "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Ανεβάστε file",
+                                "en": "Upload file",
+                                "tr": ""
+                              }
+                            }
+                          }
+                      ]
                     },
                     {
                       "element": "button",

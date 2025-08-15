@@ -53,6 +53,9 @@ export function govcyPageHandler() {
             element.params.method = "POST";
             // ➕ Add CSRF token
             element.params.elements.push(govcyResources.csrfTokenInput(req.csrfToken()));
+            // // ➕ Add siteId and pageUrl to form data
+            // element.params.elements.push(govcyResources.siteAndPageInput(siteId, pageUrl, req.globalLang));
+            // ➕ Add govcyFormsJs script to the form
             element.params.elements.push(govcyResources.staticResources.elements["govcyFormsJs"]);
 
             // 🔍 Find the first button with `prototypeNavigate`
@@ -88,7 +91,7 @@ export function govcyPageHandler() {
             }
             //--------- End of Handle Validation Errors ---------
             
-            populateFormData(element.params.elements, theData,validationErrors);
+            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang);
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));

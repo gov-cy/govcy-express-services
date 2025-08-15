@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.7] - 2025-08-15
+### Changed
+- Added support for fileInput inside conditional radio elements
+- Transforms uploaded fileInput into fileView with fileId, sha256, viewHref, deleteHref
+- Injects window._govcyFileInputs, siteId, pageUrl, and lang via script tag
+- Removes need for hidden inputs for file metadata (cleaner DOM)
+- Adds ARIA live regions for success/failure announcements
+- Preserves accessibility (form-control-error, screen reader support)
+- Expanded unit tests to cover:
+  - Conditional file input rendering
+  - Validation and dataLayer integration
+- Refactored data lookup via `getFormDataValue` for safety and reusability
+
 ## [v1.0.0-alpha.6] - 2025-08-14
 ### Added
 - **File upload feature endpoint** to serve JS calls to upload files using API:
@@ -46,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Supports `X-CSRF-Token` for `multipart/form-data` API requests.
 
 - **`index.mjs`**
-  - Added the `/:siteId/:pageUrl/upload` route to handle file upload requests.
+  - Added the `/apis/:siteId/:pageUrl/upload` route to handle file upload requests.
 
 - **Tests**
   - **Unit tests for `handleFileUpload`** (`govcyHandleFiles.test.mjs`)

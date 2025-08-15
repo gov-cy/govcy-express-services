@@ -18,7 +18,7 @@ describe('isApiRequest utility', () => {
     it('2. should detect API request based on /upload route', () => {
         const mockReq = {
             headers: {}, // no Accept header
-            originalUrl: '/site42/kypk-documents/upload'
+            originalUrl: '/apis/site42/kypk-documents/upload'
         };
 
         const result = isApiRequest(mockReq);
@@ -28,7 +28,7 @@ describe('isApiRequest utility', () => {
     it('3. should detect API request based on /download route', () => {
         const mockReq = {
             headers: {},
-            originalUrl: '/site42/kypk-documents/download'
+            originalUrl: '/apis/site42/kypk-documents/download'
         };
 
         const result = isApiRequest(mockReq);
@@ -79,7 +79,7 @@ describe('isApiRequest utility', () => {
 
     it("8. should return true when URL matches /upload and no Accept header", () => {
         const req = {
-            originalUrl: "/mySite/myPage/upload",
+            originalUrl: "/apis/mySite/myPage/upload",
             headers: {} // no Accept header
         };
         const result = isApiRequest(req);
@@ -97,6 +97,14 @@ describe('isApiRequest utility', () => {
         const result = isApiRequest(req);
         expect(result).to.be.true;
     });
+
+    it("10. should return true for /apis/ route even with complex path", () => {
+    const req = {
+        originalUrl: "/apis/my-site/special-page/download",
+        headers: {}
+    };
+    expect(isApiRequest(req)).to.be.true;
+});
 
 
 });
