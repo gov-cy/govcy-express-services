@@ -1266,7 +1266,9 @@ it('33. should pass `required` validation for existing fileInput metadata', () =
   ];
 
   const formData = {
-    myUploadAttachment: {
+    // unneeded handle of `Attachment` at the end
+    // myUploadAttachment: {
+    myUpload: {
       fileId: 'abc123',
       sha256: 'xyz456'
     }
@@ -1359,7 +1361,9 @@ it('35. should pass `required` validation for conditional fileInput when file is
 
   const formData = {
     fileChoice: 'yes',
-    supportingDocAttachment: {
+    // unneeded handle of `Attachment` at the end
+    // supportingDocAttachment: {
+    supportingDoc: {
       fileId: 'abc123',
       sha256: 'def456'
     }

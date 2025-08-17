@@ -338,7 +338,9 @@ describe('getFormData', () => {
                     inputData: {
                         'uploadPage': {
                             formData: {
-                                uploadDocAttachment: fileData
+                                // unneeded handle of `Attachment` at the end
+                                // uploadDocAttachment: fileData
+                                uploadDoc: fileData
                             }
                         }
                     }
@@ -377,7 +379,9 @@ describe('getFormData', () => {
                     inputData: {
                         'uploadPage': {
                             formData: {
-                                uploadDocAttachment: fileData
+                                // unneeded handle of `Attachment` at the end
+                                // uploadDocAttachment: fileData
+                                uploadDoc: fileData
                             }
                         }
                     }
@@ -540,7 +544,9 @@ describe('getFormData', () => {
                     inputData: {
                         'page-1': {
                             formData: {
-                                myUploadAttachment: {
+                                // unneeded handle of `Attachment` at the end
+                                // myUploadAttachment: {
+                                myUpload: {
                                     fileId: 'abc123',
                                     sha256: 'def456'
                                 }
@@ -554,7 +560,9 @@ describe('getFormData', () => {
         const result = getFormData(elements, formData, store, 'site1', 'page-1');
 
         expect(result).to.deep.equal({
-            myUploadAttachment: {
+            // unneeded handle of `Attachment` at the end
+            // myUploadAttachment: {
+            myUpload: {
                 fileId: 'abc123',
                 sha256: 'def456'
             }
@@ -587,7 +595,9 @@ describe('getFormData', () => {
         const result = getFormData(elements, formData, store, 'site1', 'page-1');
 
         expect(result).to.deep.equal({
-            myUploadAttachment: ''
+            // unneeded handle of `Attachment` at the end
+            // myUploadAttachment: ''
+            myUpload: ''
         });
     });
 

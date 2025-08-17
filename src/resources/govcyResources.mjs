@@ -100,6 +100,16 @@ export const staticResources = {
             en: "We have received your request. ",
             el: "Έχουμε λάβει την αίτησή σας. ",
             tr: "We have received your request. "
+        },
+        fileUploaded : {
+            en: "File has been uploaded. ",
+            el: "Το αρχείο ανεβάστηκε. ",
+            tr: "File has been uploaded. "
+        },
+        fileNotUploaded : {
+            en: "File has not been uploaded. ",
+            el: "Το αρχείο δεν ανεβάστηκε. ",
+            tr: "File has not been uploaded. "
         }
     },
     //remderer sections

@@ -239,4 +239,81 @@ describe('govcySubmitData', () => {
             expect(summary.params.items).to.deep.equal([]);
         });
     });
+
+    it('7. should rename fileInput field to include "Attachment" in submission_data', () => {
+    // Add fileInput to the form
+    service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
+        element: 'fileInput',
+        params: { id: 'passportFile', name: 'passportFile', label: { en: 'Passport File', el: 'Αρχείο Διαβατηρίου' } }
+    });
+
+    // Simulate uploaded file in session (already stored in dataLayer under original name)
+    req.session.siteData[siteId].inputData.page1.formData.passportFile = {
+        fileId: '12345-file-id',
+        sha256: 'abc123sha'
+    };
+
+    const result = prepareSubmissionData(req, siteId, service);
+
+    expect(result.submission_data.page1.formData).to.not.have.property('passportFile');
+    expect(result.submission_data.page1.formData).to.have.property('passportFileAttachment');
+    expect(result.submission_data.page1.formData.passportFileAttachment).to.deep.equal({
+        fileId: '12345-file-id',
+        sha256: 'abc123sha'
+    });
+});
+
+it('8. should handle fileInput inside conditional radio and rename correctly', () => {
+    // Add a radios element with conditional file input
+    service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
+        element: 'radios',
+        params: {
+            id: 'uploadType',
+            name: 'uploadType',
+            items: [
+                {
+                    value: 'yes',
+                    conditionalElements: [
+                        {
+                            element: 'fileInput',
+                            params: { id: 'cvFile', name: 'cvFile', label: { en: 'CV File', el: 'Αρχείο Βιογραφικού' } }
+                        }
+                    ]
+                },
+                {
+                    value: 'no'
+                }
+            ]
+        }
+    });
+
+    // Simulate radio selection + file upload
+    req.session.siteData[siteId].inputData.page1.formData.uploadType = 'yes';
+    req.session.siteData[siteId].inputData.page1.formData.cvFile = {
+        fileId: 'cv-abc-id',
+        sha256: 'cvsha256xyz'
+    };
+
+    const result = prepareSubmissionData(req, siteId, service);
+
+    expect(result.submission_data.page1.formData).to.have.property('cvFileAttachment');
+    expect(result.submission_data.page1.formData.cvFileAttachment).to.deep.equal({
+        fileId: 'cv-abc-id',
+        sha256: 'cvsha256xyz'
+    });
+});
+
+it('9. should assign empty string when fileInput value is missing', () => {
+    service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
+        element: 'fileInput',
+        params: { id: 'licenseFile', name: 'licenseFile', label: { en: 'License', el: 'Άδεια' } }
+    });
+
+    // File not uploaded, key doesn't exist
+    const result = prepareSubmissionData(req, siteId, service);
+
+    expect(result.submission_data.page1.formData.licenseFileAttachment).to.equal("");
+});
+
+
 });

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.8] - 2025-08-17
+### Changed
+- Better accessibility on upload failed and success announcements from JS
+- Better error messages from JS
+- Created a dedicated site for files `test-files.json`
+- Added `ErrorCode`'s on `handleFileUpload` to let JS know which message to show
+- Refactored `prepareSubmissionData` to handle files (also adding the `Attachment` at the end of the key)
+- Added more unit tests
+
 ## [v1.0.0-alpha.7] - 2025-08-15
 ### Changed
 - Added support for fileInput inside conditional radio elements

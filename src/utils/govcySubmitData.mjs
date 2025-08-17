@@ -66,6 +66,12 @@ export function prepareSubmissionData(req, siteId, service) {
             // Store in submissionData
             submissionData[pageUrl].formData[elId] = value;
 
+            // handle fileInput
+            if (elType === "fileInput") {
+                // change the name of the key to include "Attachment" at the end but not have the original key
+                submissionData[pageUrl].formData[elId + "Attachment"] = value;
+                delete submissionData[pageUrl].formData[elId];
+            }
 
             // 🔄 If radios with conditionalElements, walk ALL options
             if (elType === "radios" && Array.isArray(element.params?.items)) {
@@ -85,6 +91,12 @@ export function prepareSubmissionData(req, siteId, service) {
 
                         // Store even if the field was not visible to user
                         submissionData[pageUrl].formData[condId] = condValue;
+                        // handle fileInput
+                        if (condType === "fileInput") {
+                            // change the name of the key to include "Attachment" at the end but not have the original key
+                            submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
+                            delete submissionData[pageUrl].formData[condId];
+                        }
                     }
                 }
             }
@@ -291,6 +303,10 @@ function getValue(formElement, pageUrl, req, siteId) {
     let value = ""
     if (formElement.element === "dateInput") {
         value = getDateInputISO(pageUrl, formElement.params.name, req, siteId);
+    } else if (formElement.element === "fileInput") {
+        // unneeded handle of `Attachment` at the end
+        // value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name + "Attachment");
+        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
     } else {
         value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
     }
@@ -338,6 +354,17 @@ function getValueLabel(formElement, value, pageUrl, req, siteId, service) {
     if (formElement.element === "dateInput") {
         const formattedDate = getDateInputDMY(pageUrl, formElement.params.name, req, siteId);
         return govcyResources.getSameMultilingualObject(service.site.languages, formattedDate);
+    }
+
+    // handle fileInput
+    if (formElement.element === "fileInput") {
+        // TODO: Ask Andreas how to handle empty file inputs 
+        if (value) {
+            return govcyResources.staticResources.text.fileUploaded;
+        } else {
+            return govcyResources.getSameMultilingualObject(service.site.languages, "");
+            // return govcyResources.staticResources.text.fileNotUploaded;
+        }
     }
 
     // textInput, textArea, etc.

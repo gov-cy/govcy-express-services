@@ -27,6 +27,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!file || !elementName) {
       return {
         status: 400,
+        dataStatus: 400,
         errorMessage: 'Missing file or element name'
       };
     }
@@ -37,6 +38,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!uploadCfg?.url || !uploadCfg?.clientKey || !uploadCfg?.serviceId) {
       return {
         status: 400,
+        dataStatus: 401,
         errorMessage: 'Missing upload configuration'
       };
     }
@@ -53,6 +55,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!url || !clientKey) {
       return {
         status: 400,
+        dataStatus: 402,
         errorMessage: 'Missing environment variables for upload'
       };
     }
@@ -67,6 +70,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!page?.pageTemplate) {
       return {
         status: 400,
+        dataStatus: 403,
         errorMessage: 'Invalid page configuration'
       };
     }
@@ -77,6 +81,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (conditionResult.result === false) {
       return {
         status: 403,
+        dataStatus: 404,
         errorMessage: 'This page is skipped by conditional logic'
       };
     }
@@ -88,6 +93,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!isAllowed) {
       return {
         status: 403,
+        dataStatus: 405,
         errorMessage: `File input [${elementName}] not allowed on this page`
       };
     }
@@ -96,6 +102,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (file.size === 0) {
       return {
         status: 400,
+        dataStatus: 406,
         errorMessage: 'Uploaded file is empty'
       };
     }
@@ -105,6 +112,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!ALLOWED_FILE_MIME_TYPES.includes(file.mimetype)) {
         return {
             status: 400,
+            dataStatus: 407,
             errorMessage: 'Invalid file type (MIME not allowed)'
         };
     }
@@ -113,6 +121,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!isMagicByteValid(file.buffer, file.mimetype)) {
         return {
             status: 400,
+            dataStatus: 408,
             errorMessage: 'Invalid file type (magic byte mismatch)'
         };
     }
@@ -121,6 +130,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (file.size > ALLOWED_FILE_SIZE_MB * 1024 * 1024) {
       return {
         status: 400,
+        dataStatus: 409,
         errorMessage: 'File exceeds allowed size'
       };
     }
@@ -161,6 +171,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!response?.Succeeded) {
       return {
         status: 500,
+        dataStatus: 410,
         errorMessage: `${response?.ErrorCode} - ${response?.ErrorMessage} - fileUploadAPIEndpoint returned succeeded false`
       };
     }
@@ -169,13 +180,16 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     if (!response?.Data?.fileId || !response?.Data?.sha256) {
       return {
         status: 500,
+        dataStatus: 411,
         errorMessage: 'Missing fileId or sha256 in response'
       };
     }
 
     // ✅ Success
     // Store the file metadata in the session store
-    dataLayer.storePageDataElement(store, siteId, pageUrl, elementName+"Attachment", {
+    // unneeded handle of `Attachment` at the end
+    // dataLayer.storePageDataElement(store, siteId, pageUrl, elementName+"Attachment", {
+    dataLayer.storePageDataElement(store, siteId, pageUrl, elementName, {
       sha256: response.Data.sha256,
       fileId: response.Data.fileId,
     });
@@ -195,6 +209,7 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
   } catch (err) {
     return {
       status: 500,
+      dataStatus: 500,
       errorMessage: 'Upload failed' + (err.message ? `: ${err.message}` : ''),
     };
   }

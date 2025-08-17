@@ -18,9 +18,12 @@ import * as dataLayer from "./govcyDataLayer.mjs";
  * @param {string} pageUrl The page URL
  * @param {string} lang The language
  */
-export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el") {
+export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el", fileInputElements = null) {
     const inputElements = ALLOWED_FORM_ELEMENTS;
-    let fileInputElements = {};
+    const isRootCall = !fileInputElements;
+    if (isRootCall) {
+        fileInputElements = {};
+    }
     // Recursively populate form data with session data
     formElements.forEach(element => {
         if (inputElements.includes(element.element)) {
@@ -62,7 +65,9 @@ export function populateFormData(formElements, theData, validationErrors, store 
             } else if (element.element === "fileInput") {
                 // For fileInput, we change the element.element to "fileView" and set the 
                 // fileId and sha256 from the session store
-                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName + "Attachment");
+                // unneeded handle of `Attachment` at the end
+                // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName + "Attachment");
+                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
                 // TODO: Ask Andreas how to handle empty file inputs
                 if (fileData) {
                     element.element = "fileView";
@@ -102,7 +107,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
         if (element.element === "radios" && element.params.items) {
             element.params.items.forEach(item => {
                 if (item.conditionalElements) {
-                    populateFormData(item.conditionalElements, theData, validationErrors);
+                    populateFormData(item.conditionalElements, theData, validationErrors,store, siteId , pageUrl, lang, fileInputElements);
                   
                     // Check if any conditional element has an error and add to the parent "conditionalHasErrors": true
                     if (item.conditionalElements.some(condEl => condEl.params?.error)) {
@@ -113,7 +118,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
         }
     });
     // add file input elements's definition in js object
-    if (fileInputElements != {}) {
+    if (isRootCall && Object.keys(fileInputElements).length > 0) {
         const scriptTag = `
         <script type="text/javascript">
             window._govcyFileInputs = ${JSON.stringify(fileInputElements)};
@@ -121,7 +126,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
             window._govcyPageUrl = "${pageUrl}";
             window._govcyLang = "${lang}";
         </script>
-        <div id="_govcy-upload-status" class="govcy-visually-hidden" role="status" aria-live="polite"></div>
+        <div id="_govcy-upload-status" class="govcy-visually-hidden" role="status" aria-live="assertive"></div>
         <div id="_govcy-upload-error" class="govcy-visually-hidden" role="alert" aria-live="assertive"></div>
         `.trim();
         formElements.push({
@@ -165,7 +170,7 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
                         if (item.conditionalElements) {
                             Object.assign(
                                 filteredData,
-                                getFormData(item.conditionalElements, formData)
+                                getFormData(item.conditionalElements, formData, store, siteId, pageUrl)
                             );
                         }
                     });
@@ -184,12 +189,18 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
             } else if (element.element === "fileInput") {
                 // fileInput elements are already stored in the store when it was uploaded
                 // so we just need to check if the file exists in the dataLayer in the store and add it the filteredData
-                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name + "Attachment");
+                // unneeded handle of `Attachment` at the end
+                // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name + "Attachment");
+                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name);
                 if (fileData) {
-                    filteredData[name + "Attachment"] = fileData;
+                    // unneeded handle of `Attachment` at the end
+                    // filteredData[name + "Attachment"] = fileData;
+                    filteredData[name] = fileData;
                 } else {
                     //TODO: Ask Andreas how to handle empty file inputs
-                    filteredData[name + "Attachment"] = ""; // or handle as needed
+                    // unneeded handle of `Attachment` at the end
+                    // filteredData[name + "Attachment"] = ""; // or handle as needed
+                    filteredData[name] = ""; // or handle as needed
                 }
             // Handle other elements (e.g., textInput, textArea, datePicker)
             } else {

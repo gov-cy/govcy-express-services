@@ -28,7 +28,7 @@ export const govcyUploadMiddleware = [
 
         if (result.status !== 200) {
             logger.error("Upload failed", result);
-            return res.status(result.status).json(errorResponse(result.status, result.errorMessage || 'File upload failed'));
+            return res.status(result.status).json(errorResponse(result.dataStatus, result.errorMessage || 'File upload failed'));
         }
 
         return res.json(successResponse(result.data));
