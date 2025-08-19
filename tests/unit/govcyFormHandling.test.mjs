@@ -355,7 +355,7 @@ describe('getFormData', () => {
         expect(fileView.params.fileId).to.equal(fileData.fileId);
         expect(fileView.params.sha256).to.equal(fileData.sha256);
         expect(fileView.params.viewHref).to.equal('#viewHref');
-        expect(fileView.params.deleteHref).to.equal('#deleteHref');
+        expect(fileView.params.deleteHref).to.equal('/mySite/uploadPage/uploadDoc/delete-file');
     });
 
     it('12. should inject JS config and ARIA live regions when fileInput is present', () => {

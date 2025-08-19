@@ -6,6 +6,11 @@ export const staticResources = {
             el: "Υποβολή", 
             tr: "Gönder" 
         },
+        continue: { 
+            en: "Continue", 
+            el: "Συνέχεια", 
+            tr: "Continue" 
+        },
         cancel: { 
             en: "Cancel", 
             el: "Ακύρωση", 
@@ -102,14 +107,39 @@ export const staticResources = {
             tr: "We have received your request. "
         },
         fileUploaded : {
-            en: "File has been uploaded. ",
-            el: "Το αρχείο ανεβάστηκε. ",
-            tr: "File has been uploaded. "
+            en: "File uploaded",
+            el: "Το αρχείο ανεβάστηκε",
+            tr: "File uploaded"
         },
         fileNotUploaded : {
             en: "File has not been uploaded. ",
             el: "Το αρχείο δεν ανεβάστηκε. ",
             tr: "File has not been uploaded. "
+        },
+        fileYouHaveUploaded : {
+            en: "You have uploaded the file for \"{{file}}\"",
+            el: "Έχετε ανεβάσει το αρχείο \"{{file}}\"",
+            tr: "You have uploaded the file for \"{{file}}\""
+        },
+        deleteFileTitle : {
+            en: "Are you sure you want to delete the file \"{{file}}\"? ",
+            el: "Είστε σίγουροι ότι θέλετε να διαγράψετε το αρχείο \"{{file}}\";",
+            tr: "Are you sure you want to delete the file \"{{file}}\"? "
+        },
+        deleteYesOption: {
+            el:"Ναι, θέλω να διαγράψω το αρχείο",
+            en:"Yes, I want to delete this file",
+            tr:"Yes, I want to delete this file"
+        },
+        deleteNoOption: {
+            el:"Όχι, δεν θέλω να διαγράψω το αρχείο",
+            en:"No, I don't want to delete this file",
+            tr:"No, I don't want to delete this file"
+        },
+        deleteFileValidationError: {
+            en: "Select if you want to delete the file",
+            el: "Επιλέξτε αν θέλετε να διαγράψετε το αρχείο",
+            tr: "Select if you want to delete the filez"
         }
     },
     //remderer sections
@@ -123,9 +153,9 @@ export const staticResources = {
             element: "htmlElement",
             params: {
                 text: {
-                    en: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
-                    el: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`,
-                    tr: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script src="/js/govcyForms.js"></script><script src="/js/govcyFiles.js"></script>`
+                    en: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`,
+                    el: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`,
+                    tr: `<script src="https://cdn.jsdelivr.net/npm/axios@1.6.2/dist/axios.min.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`
                 }
             }
         },

@@ -234,11 +234,12 @@ function containsFileInput(elements = [], targetName) {
   for (const el of elements) {
     // ✅ Direct file input match
     if (el.element === 'fileInput' && el.params?.name === targetName) {
-      return true;
+      return el;
     }
     // 🔁 Recurse into nested elements (e.g. groups, conditionals)
     if (Array.isArray(el?.params?.elements)) {
-      if (containsFileInput(el.params.elements, targetName)) return true;
+      const nestedMatch = containsFileInput(el.params.elements, targetName);
+      if (nestedMatch) return nestedMatch; // ← propagate the found element
     }
 
     // 🎯 Special case: conditional radios/checkboxes
@@ -248,7 +249,8 @@ function containsFileInput(elements = [], targetName) {
     ) {
       for (const item of el.params.items) {
         if (Array.isArray(item?.conditionalElements)) {
-          if (containsFileInput(item.conditionalElements, targetName)) return true;
+          const match = containsFileInput(item.conditionalElements, targetName);
+          if (match) return match; // ← propagate the found element
         }
       }
     }
@@ -264,15 +266,23 @@ function containsFileInput(elements = [], targetName) {
  * @param {string} elementName The name of the element to check
  * @return {boolean} True if a fileInput exists, false otherwise
  */
-function pageContainsFileInput(pageTemplate, elementName) {
+export function pageContainsFileInput(pageTemplate, elementName) {
   const sections = pageTemplate?.sections || [];
-  return sections.some(section =>
-    section?.elements?.some(el =>
-      el.element === 'form' &&
-      containsFileInput(el.params?.elements, elementName)
-    )
-  );
+
+  for (const section of sections) {
+    for (const el of section?.elements || []) {
+      if (el.element === 'form') {
+        const match = containsFileInput(el.params?.elements, elementName);
+        if (match) {
+          return match; // ← return the actual element
+        }
+      }
+    }
+  }
+
+  return null; // no match found
 }
+
 
 /**
  * Validates magic bytes against expected mimetype

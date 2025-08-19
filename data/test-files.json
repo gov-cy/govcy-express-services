@@ -694,7 +694,7 @@
                         "name": "file2",
                         "label": {
                           "el": "Αρχείο 2",
-                          "en": "File 1",
+                          "en": "File 2",
                           "tr": ""
                         },
                         "isPageHeading": false
@@ -707,7 +707,7 @@
                         "name": "file3",
                         "label": {
                           "el": "Αρχείο 3",
-                          "en": "File 1",
+                          "en": "File 3",
                           "tr": ""
                         },
                         "isPageHeading": false

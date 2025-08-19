@@ -25,6 +25,7 @@ import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
 import { govcyServiceEligibilityHandler } from './middleware/govcyServiceEligibilityHandler.mjs';
 import { govcyLoadSubmissionData } from './middleware/govcyLoadSubmissionData.mjs';
 import { govcyUploadMiddleware } from './middleware/govcyUpload.mjs';
+import { govcyDeleteFilePageHandler, govcyDeleteFilePostHandler } from './middleware/govcyDeleteFileHandler.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -150,8 +151,14 @@ export default function initializeGovCyExpressService(){
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
   app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
   
+  // ❌🗃️ -- ROUTE: Delete file (BEFORE the dynamic route)
+  app.get('/:siteId/:pageUrl/:elementName/delete-file', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyDeleteFilePageHandler(), renderGovcyPage());
+  
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
   app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());
+  
+  // ❌🗃️📥 -- ROUTE: Handle POST requests for delete file
+  app.post('/:siteId/:pageUrl/:elementName/delete-file', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyDeleteFilePostHandler());
   
   // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.9] - 2025-08-19
+### Changed
+- Added support for **delete files** 
+  - Added `/:siteId/:pageUrl/:elementName/delete-file` route (`get` and `post`)
+  - Delete url on fileView both on client side and server side (preserving `route` query param)
+
 ## [v1.0.0-alpha.8] - 2025-08-17
 ### Changed
 - Better accessibility on upload failed and success announcements from JS

@@ -6,6 +6,7 @@
  */
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import * as dataLayer from "./govcyDataLayer.mjs";
+import * as govcyResources from "../resources/govcyResources.mjs";
 
 
 /**
@@ -17,8 +18,10 @@ import * as dataLayer from "./govcyDataLayer.mjs";
  * @param {string} siteId The site ID
  * @param {string} pageUrl The page URL
  * @param {string} lang The language
+ * @param {Object} fileInputElements The file input elements
+ * @param {string} routeParam The route parameter
  */
-export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el", fileInputElements = null) {
+export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el", fileInputElements = null, routeParam = "") {
     const inputElements = ALLOWED_FORM_ELEMENTS;
     const isRootCall = !fileInputElements;
     if (isRootCall) {
@@ -76,7 +79,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
                     element.params.visuallyHiddenText = element.params.label;
                     // TODO: Also need to set the `view` and `download` URLs 
                     element.params.viewHref = "#viewHref";
-                    element.params.deleteHref  = "#deleteHref";
+                    element.params.deleteHref  = `/${siteId}/${pageUrl}/${fieldName}/delete-file${(routeParam) ? `?route=${routeParam}` : ''}`;
                 } else {
                     // TODO: Ask Andreas how to handle empty file inputs
                     element.params.value = "";
@@ -107,7 +110,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
         if (element.element === "radios" && element.params.items) {
             element.params.items.forEach(item => {
                 if (item.conditionalElements) {
-                    populateFormData(item.conditionalElements, theData, validationErrors,store, siteId , pageUrl, lang, fileInputElements);
+                    populateFormData(item.conditionalElements, theData, validationErrors,store, siteId , pageUrl, lang, fileInputElements, routeParam);
                   
                     // Check if any conditional element has an error and add to the parent "conditionalHasErrors": true
                     if (item.conditionalElements.some(condEl => condEl.params?.error)) {

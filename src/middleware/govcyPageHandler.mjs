@@ -91,7 +91,7 @@ export function govcyPageHandler() {
             }
             //--------- End of Handle Validation Errors ---------
             
-            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang);
+            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang, null, req.query.route);
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));
@@ -120,3 +120,4 @@ export function govcyPageHandler() {
     }
   };
 }
+
