@@ -78,8 +78,9 @@ export function populateFormData(formElements, theData, validationErrors, store 
                     element.params.sha256 = fileData.sha256;
                     element.params.visuallyHiddenText = element.params.label;
                     // TODO: Also need to set the `view` and `download` URLs 
-                    element.params.viewHref = "#viewHref";
-                    element.params.deleteHref  = `/${siteId}/${pageUrl}/${fieldName}/delete-file${(routeParam) ? `?route=${routeParam}` : ''}`;
+                    element.params.viewHref = `/${siteId}/${pageUrl}/view-file/${fieldName}`;
+                    element.params.viewTarget = "_blank";
+                    element.params.deleteHref  = `/${siteId}/${pageUrl}/delete-file/${fieldName}${(routeParam) ? `?route=${routeParam}` : ''}`;
                 } else {
                     // TODO: Ask Andreas how to handle empty file inputs
                     element.params.value = "";

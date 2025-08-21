@@ -437,6 +437,33 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
         };
     }
 
+    /**
+     * Helper function to create a summary list item for file links.
+     * @param {object} key the key of multilingual object
+     * @param {string} value the value
+     * @param {string} siteId the site id
+     * @param {string} pageUrl the page url
+     * @param {string} elementName the element name
+     * @returns {object} the summary list item with file link
+    */
+    function createSummaryListItemFileLink(key, value, siteId, pageUrl, elementName) {
+        return {
+            "key": key,
+            "value": [
+                {
+                    "element": "htmlElement",
+                    "params": {
+                        "text": { 
+                            "en": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.en}<span class="govcy-visually-hidden"> ${key?.en || ""}</span></a>`, 
+                            "el": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.el}<span class="govcy-visually-hidden"> ${key?.el || ""}</span></a>`, 
+                            "tr": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.tr}<span class="govcy-visually-hidden"> ${key?.tr || ""}</span></a>` 
+                        }
+                    }
+                }
+            ]
+        };
+    }
+
     
 
 
@@ -452,8 +479,14 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
         for (const field of fields) {
             const label = field.label;
             const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            // add the field to the summary entry
-            summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+            // --- HACK --- to see if this is a file element
+            // check if field.value is an object with `sha256` and `fileId` properties
+            if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
+                summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+            } else {
+                // add the field to the summary entry
+                summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+            }
         }
 
         // Add inner summary list to the main summary list

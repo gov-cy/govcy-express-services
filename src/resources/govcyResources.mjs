@@ -139,7 +139,12 @@ export const staticResources = {
         deleteFileValidationError: {
             en: "Select if you want to delete the file",
             el: "Επιλέξτε αν θέλετε να διαγράψετε το αρχείο",
-            tr: "Select if you want to delete the filez"
+            tr: "Select if you want to delete the file"
+        },
+        viewFile: {
+            en: "View file",
+            el: "Προβολή αρχείου",
+            tr: "View file"
         }
     },
     //remderer sections

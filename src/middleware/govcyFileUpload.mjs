@@ -13,7 +13,7 @@ const upload = multer({
 
 
 
-export const govcyUploadMiddleware = [
+export const govcyFileUpload = [
     upload.single('file'), // multer parses the uploaded file and stores it in req.file
 
     async function govcyUploadHandler(req, res) {

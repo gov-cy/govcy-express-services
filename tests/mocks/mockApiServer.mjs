@@ -1,5 +1,5 @@
 import express from "express";
-import multer from "multer"; 
+import multer from "multer";
 
 const app = express();
 const port = 3002; // Mock API will run on this port
@@ -16,42 +16,42 @@ const upload = multer({ storage: multer.memoryStorage() });
  */
 app.post("/form-upload/:tag", upload.single("file"), (req, res) => {
     try {
-      const authHeader = req.headers["authorization"] || null;
-    
-      console.log(`Received multipart/form-data upload --------------`);
+        const authHeader = req.headers["authorization"] || null;
 
-      // Access parsed file and fields
-      const file = req.file;                 // { originalname, mimetype, size, buffer, ... }
-      const { description } = req.body || {};
-    
-      if (!file) {
-        return res.status(400).json({
-          Succeeded: false,
-          ErrorCode: 400,
-          ErrorMessage: "No file received",
-          Data: null
+        console.log(`Received multipart/form-data upload --------------`);
+
+        // Access parsed file and fields
+        const file = req.file;                 // { originalname, mimetype, size, buffer, ... }
+        const { description } = req.body || {};
+
+        if (!file) {
+            return res.status(400).json({
+                Succeeded: false,
+                ErrorCode: 400,
+                ErrorMessage: "No file received",
+                Data: null
+            });
+        }
+
+        return res.status(200).json({
+            Succeeded: true,
+            ErrorCode: 0,
+            ErrorMessage: null,
+            Data: {
+                receivedFile: true,
+                filename: file.originalname,
+                mimeType: file.mimetype,
+                size: file.size,
+                description: description || null,
+                fileId: "mock-file-id", // Mock ID for testing
+                sha256: "mock-sha256-hash", // Mock SHA256 for testing
+            },
+            // Echo headers for test assertions
+            ReceivedAuthorization: authHeader,
+            ReceivedClientKey: req.headers["client-key"] || null,
+            ReceivedServiceId: req.headers["service-id"] || null
         });
-      }
-    
-      return res.status(200).json({
-        Succeeded: true,
-        ErrorCode: 0,
-        ErrorMessage: null,
-        Data: {
-          receivedFile: true,
-          filename: file.originalname,
-          mimeType: file.mimetype,
-          size: file.size,
-          description: description || null,
-          fileId: "mock-file-id", // Mock ID for testing
-          sha256: "mock-sha256-hash", // Mock SHA256 for testing
-        },
-        // Echo headers for test assertions
-        ReceivedAuthorization: authHeader,
-        ReceivedClientKey: req.headers["client-key"] || null,
-        ReceivedServiceId: req.headers["service-id"] || null
-      });
-  } catch (err) {
+    } catch (err) {
         console.error("Error processing multipart upload:", err);
         return res.status(500).json({
             Succeeded: false,
@@ -76,7 +76,7 @@ app.post("/:key", (req, res) => {
             Succeeded: true,
             ErrorCode: 0,
             ErrorMessage: null,
-            Data : { referenceValue: "12345678-x" },
+            Data: { referenceValue: "12345678-x" },
             ReceivedAuthorization: authHeader, // This is to test the auth header
             ReceivedClientKey: req.headers['client-key'] || null,    // For testing client key
             ReceivedServiceId: req.headers['service-id'] || null     // For testing service ID
@@ -108,7 +108,7 @@ app.get("/:key", (req, res) => {
     const authHeader = req.headers['authorization'] || null;
     console.log(`Received request with key: ${key}`);
     console.log(`Authorization header: ${authHeader}`);
-    console.log(`Query params: ${JSON.stringify(req.query, null, 2)}`); 
+    console.log(`Query params: ${JSON.stringify(req.query, null, 2)}`);
     console.log(`Request body: ${JSON.stringify(req.body, null, 2)}`);
 
     // Simulate different responses based on input
@@ -117,7 +117,7 @@ app.get("/:key", (req, res) => {
             Succeeded: true,
             ErrorCode: 0,
             ErrorMessage: null,
-            Data : { referenceValue: "12345678-x" },
+            Data: { referenceValue: "12345678-x" },
             ReceivedQuery: req.query, // This is to test the query params
             ReceivedAuthorization: authHeader, // This is to test the auth header
             ReceivedClientKey: req.headers['client-key'] || null,    // For testing client key
@@ -135,7 +135,7 @@ app.get("/:key", (req, res) => {
             ErrorCode: 105,
             ErrorMessage: "Other error occurred",
         });
-    // Handle submission data retrieval
+        // Handle submission data retrieval
     } else if (key === "submissionData") {
         return res.status(200).json({
             Succeeded: true,
@@ -175,12 +175,12 @@ app.get("/:key", (req, res) => {
 
 
 // Mock endpoint to download a file
-app.get("/:key/:fileId/:sha256", (req, res) => {
-    const { key, fileId, sha256 } = req.params;
+app.get("/:key/:referenceNo/:fileId/:sha256", (req, res) => {
+    const { key, referenceNo, fileId, sha256 } = req.params;
     const authHeader = req.headers['authorization'] || null;
     console.log(`Received request with key: ${key}`);
     console.log(`Authorization header: ${authHeader}`);
-    console.log(`Query params: ${JSON.stringify(req.query, null, 2)}`); 
+    console.log(`Query params: ${JSON.stringify(req.query, null, 2)}`);
     console.log(`Request body: ${JSON.stringify(req.body, null, 2)}`);
 
     // Simulate different responses based on input
@@ -189,7 +189,7 @@ app.get("/:key/:fileId/:sha256", (req, res) => {
             Succeeded: true,
             ErrorCode: 0,
             ErrorMessage: null,
-            Data : {
+            Data: {
                 fileId: "685ce92aa0291b778956dea3",
                 fileName: "govcy (21).pdf",
                 contentType: "application/pdf",
@@ -200,8 +200,50 @@ app.get("/:key/:fileId/:sha256", (req, res) => {
                 uid: null,
                 tag: "kostis"
             },
+            ReceivedReferenceNo: referenceNo, // This is to test the referenceNo
             ReceivedFileId: fileId, // This is to test the fileId
             ReceivedSha256: sha256 // This is to test the sha256
+        });
+    } else if (key === "fileDownloadBadMime") {
+        return res.status(200).json({
+            Succeeded: true,
+            ErrorCode: 0,
+            ErrorMessage: null,
+            Data: {
+                fileId: "bad-mime-id",
+                fileName: "archive.zip",
+                contentType: "application/zip", // 🚫 Not allowed
+                fileSize: 1000,
+                sha256: "sha123",
+                base64: Buffer.from("fake content").toString("base64"),
+                tag: "kostis"
+            }
+        });
+    } else if (key === "fileDownloadBadMagic") {
+        return res.status(200).json({
+            Succeeded: true,
+            Data: {
+                fileId: "bad-magic",
+                fileName: "fake.pdf",
+                contentType: "application/pdf",
+                fileSize: 1000,
+                sha256: "sha-bad",
+                base64: Buffer.from("This is not a real PDF").toString("base64"),
+                tag: "kostis"
+            }
+        });
+    } else if (key === "fileDownloadEmpty") {
+        return res.status(200).json({
+            Succeeded: true,
+            Data: {
+                fileId: "empty-file",
+                fileName: "empty.pdf",
+                contentType: "application/pdf",
+                fileSize: 0,
+                sha256: "sha-empty",
+                base64: "", // ❌ Empty
+                tag: "kostis"
+            }
         });
     } else if (key === "fileDownloadError401") {
         return res.status(401).json({
@@ -215,7 +257,7 @@ app.get("/:key/:fileId/:sha256", (req, res) => {
             ErrorCode: 404,
             ErrorMessage: "File not found",
         });
-    }else {
+    } else {
         return res.status(400).json({
             Succeeded: false,
             ErrorCode: 400,
@@ -238,17 +280,17 @@ app.put("/:key", (req, res) => {
             succeeded: true,
             errorCode: 0,
             errorMessage: null,
-            data : { 
-                referenceValue: "0000000924107836" 
+            data: {
+                referenceValue: "0000000924107836"
             },
-          });
+        });
     } else if (key === "error401") {
         return res.status(401).json({
             Succeeded: false,
             ErrorCode: 401,
             ErrorMessage: "Unauthorized access",
         });
-    }  else {
+    } else {
         return res.status(400).json({
             Succeeded: false,
             ErrorCode: 400,

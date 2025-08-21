@@ -198,11 +198,11 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
     return {
       status: 200,
       data: {
-        sha: response.Data.sha256,
+        sha256: response.Data.sha256,
         filename: response.Data.fileName || '',
         fileId: response.Data.fileId,
         mimeType: response.Data.contentType || '',
-        sha256: response.Data.fileSize || ''
+        fileSize: response.Data?.fileSize || ''
       }
     };
 
@@ -290,7 +290,7 @@ export function pageContainsFileInput(pageTemplate, elementName) {
  * @param {string} mimetype 
  * @returns {boolean}
  */
-function isMagicByteValid(buffer, mimetype) {
+export function isMagicByteValid(buffer, mimetype) {
   const signatures = {
     'application/pdf':      [0x25, 0x50, 0x44, 0x46],                // %PDF
     'image/png':            [0x89, 0x50, 0x4E, 0x47],                // PNG

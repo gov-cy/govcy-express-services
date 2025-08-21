@@ -170,8 +170,9 @@ function _renderFileElement(elementState, elementId, elementName, fileId, sha256
   if (elementState == "fileView") {
     fileElement.params.visuallyHiddenText = fileElement.params.label;
     // TODO: Also need to set the `view` and `download` URLs 
-    fileElement.params.viewHref = "#viewHref";
-    fileElement.params.deleteHref  = "/" + window._govcySiteId + "/" + window._govcyPageUrl + "/" + elementName + "/delete-file" 
+    fileElement.params.viewHref = "/" + window._govcySiteId + "/" + window._govcyPageUrl + "/view-file/" + elementName;
+    fileElement.params.viewTarget = "_blank";
+    fileElement.params.deleteHref  = "/" + window._govcySiteId + "/" + window._govcyPageUrl + "/delete-file/" + elementName 
       + (route !== null ? "?route=" + encodeURIComponent(route) : "");
   }
   // Construct the JSONTemplate

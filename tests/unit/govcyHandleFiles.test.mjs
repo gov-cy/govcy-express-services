@@ -319,7 +319,7 @@ describe('handleFileUpload - file upload util', () => {
     });
 
     expect(result.status).to.equal(200);
-    expect(result.data).to.have.property("sha", "mock-sha256-hash");
+    expect(result.data).to.have.property("sha256", "mock-sha256-hash");
     expect(result.data).to.have.property("fileId", "mock-file-id");
   });
 
