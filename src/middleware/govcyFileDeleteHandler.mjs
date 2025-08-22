@@ -221,6 +221,7 @@ export function govcyFileDeletePostHandler() {
             //if no validation errors
             if (req.body.deleteFile === "yes") {
                 dataLayer.storePageDataElement(req.session, siteId, pageUrl, elementName, "");
+                logger.info(`File deleted by user`, { siteId, pageUrl, elementName });
             }
             // construct the page url
             let myUrl = new URL(pageBaseReturnUrl);
