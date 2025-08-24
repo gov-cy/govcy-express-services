@@ -87,8 +87,7 @@ export function govcySuccessPageHandler(isPDF = false) {
                 weHaveSendYouAnEmail, 
                 pdfLink,
                 theDataFromYourRequest, 
-                summaryList, 
-                govcyResources.staticResources.elements["govcyFormsJs"]
+                summaryList
             );
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });

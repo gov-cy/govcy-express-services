@@ -53,11 +53,7 @@ export function govcyPageHandler() {
             element.params.method = "POST";
             // ➕ Add CSRF token
             element.params.elements.push(govcyResources.csrfTokenInput(req.csrfToken()));
-            // // ➕ Add siteId and pageUrl to form data
-            // element.params.elements.push(govcyResources.siteAndPageInput(siteId, pageUrl, req.globalLang));
-            // ➕ Add govcyFormsJs script to the form
-            element.params.elements.push(govcyResources.staticResources.elements["govcyFormsJs"]);
-
+            
             // 🔍 Find the first button with `prototypeNavigate`
             const button = element.params.elements.find(subElement =>
               // subElement.element === "button" && subElement.params.prototypeNavigate

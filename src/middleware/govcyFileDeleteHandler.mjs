@@ -139,7 +139,7 @@ export function govcyFileDeletePageHandler() {
             //--------- End Handle Validation Errors ---------
 
             // Add elements to the main section, the H1, summary list, the submit button and the JS
-            mainElements.push(formElement, govcyResources.staticResources.elements["govcyFormsJs"]);
+            mainElements.push(formElement);
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });
 

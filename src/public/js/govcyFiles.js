@@ -1,10 +1,104 @@
 // 🔍 Select all file inputs that have the .govcy-file-upload class
 var fileInputs = document.querySelectorAll('input[type="file"].govcy-file-upload');
 
+// select overlay and app root elements
+var _govcyOverlay = document.getElementById("govcy--loadingOverlay");
+var _govcyAppRoot = document.getElementById("govcy--body");
+
+// Accessibility: Keep track of previously focused element and disabled elements
+var _govcyPrevFocus = null;
+var _govcyDisabledEls = [];
+
 // 🔁 Loop over each file input and attach a change event listener
 fileInputs.forEach(function(input) {
   input.addEventListener('change', _uploadFileEventHandler);
 });
+
+/**
+ * Disables all focusable elements within a given root element
+ * @param {*} root  The root element whose focusable children will be disabled
+ */
+function disableFocusables(root) {
+    var sel = 'a[href],area[href],button,input,select,textarea,iframe,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
+    var nodes = root.querySelectorAll(sel);
+    _govcyDisabledEls = [];
+    for (var i = 0; i < nodes.length; i++) {
+        var el = nodes[i];
+        if (_govcyOverlay.contains(el)) continue;                 // don’t disable overlay itself
+        var prev = el.getAttribute('tabindex');
+        el.setAttribute('data-prev-tabindex', prev === null ? '' : prev);
+        el.setAttribute('tabindex', '-1');
+        _govcyDisabledEls.push(el);
+    }
+    root.setAttribute('aria-hidden', 'true');              // hide from AT on fallback
+    root.setAttribute('aria-busy', 'true');
+}
+
+/**
+ * Restores all focusable elements within a given root element
+ * @param {*} root  The root element whose focusable children will be restored
+ */
+function restoreFocusables(root) {
+    for (var i = 0; i < _govcyDisabledEls.length; i++) {
+        var el = _govcyDisabledEls[i];
+        var prev = el.getAttribute('data-prev-tabindex');
+        if (prev === '') el.removeAttribute('tabindex'); else el.setAttribute('tabindex', prev);
+        el.removeAttribute('data-prev-tabindex');
+    }
+    _govcyDisabledEls = [];
+    root.removeAttribute('aria-hidden');
+    root.removeAttribute('aria-busy');
+}
+
+/**
+ * Traps tab key navigation within the overlay
+ * @param {*} e The event
+ * @returns 
+ */
+function trapTab(e) {
+    if (e.key !== 'Tab') return;
+    var focusables = _govcyOverlay.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    if (focusables.length === 0) { e.preventDefault(); _govcyOverlay.focus(); return; }
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
+/**
+ * Shows the loading spinner overlay and traps focus within it
+ */
+function showLoadingSpinner() {
+    _govcyPrevFocus = document.activeElement;
+    _govcyOverlay.setAttribute('aria-hidden', 'false');
+    _govcyOverlay.setAttribute('tabindex', '-1');
+    _govcyOverlay.style.display = 'flex';
+    document.documentElement.style.overflow = 'hidden';
+
+    if ('inert' in HTMLElement.prototype) {               // progressive enhancement
+        _govcyAppRoot.inert = true;
+    } else {
+        disableFocusables(_govcyAppRoot);
+        document.addEventListener('keydown', trapTab, true);
+    }
+    _govcyOverlay.focus();
+}
+
+/**
+ * Hides the loading spinner overlay and restores focus to the previously focused element
+ */
+function hideLoadingSpinner() {
+    _govcyOverlay.style.display = 'none';
+    _govcyOverlay.setAttribute('aria-hidden', 'true');
+    document.documentElement.style.overflow = '';
+
+    if ('inert' in HTMLElement.prototype) {
+        _govcyAppRoot.inert = false;
+    } else {
+        restoreFocusables(_govcyAppRoot);
+        document.removeEventListener('keydown', trapTab, true);
+    }
+    if (_govcyPrevFocus && _govcyPrevFocus.focus) _govcyPrevFocus.focus();
+}
 
 
 /**
@@ -63,6 +157,9 @@ function _uploadFileEventHandler(event) {
 
   if (!file) return; // Exit if no file was selected
 
+  // Show loading spinner
+  showLoadingSpinner();
+
   // 🧵 Prepare form-data payload for the API
   var formData = new FormData();
   formData.append('file', file);               // Attach the actual file
@@ -93,6 +190,9 @@ function _uploadFileEventHandler(event) {
       // 📝 Store returned metadata in hidden fields if needed
       // document.querySelector('[name="' + elementName + 'Attachment[fileId]"]').value = fileId;
       // document.querySelector('[name="' + elementName + 'Attachment[sha256]"]').value = sha256;
+      
+      // Hide loading spinner
+      hideLoadingSpinner();
 
       // Render the file view
       _renderFileElement("fileView", elementId, elementName, fileId, sha256, null);
@@ -117,6 +217,8 @@ function _uploadFileEventHandler(event) {
         errorMessage = messages["uploadFailed" + errorCode];
       }
 
+      // Hide loading spinner
+      hideLoadingSpinner();
       // Render the file input with error
       _renderFileElement("fileInput", elementId, elementName, "", "", errorMessage);
 
