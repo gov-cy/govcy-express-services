@@ -59,7 +59,7 @@ export const staticResources = {
         errorPage403NaturalOnlyPolicyBody: {
             el: "<p>Η πρόσβαση επιτρέπεται μόνο σε φυσικά πρόσωπα με επιβεβαιωμένο προφίλ. <a href=\"/logout\">Αποσυνδεθείτε</a> και δοκιμάστε ξανά αργότερα.</p>",
             en: "<p>Access is only allowed to individuals with a verified profile.<a href=\"/logout\">Sign out</a> and try again later.</p>",
-            tr: "<p>Access is only allowed to individuals with a confirmed profile.<a href=\"/logout\">Giriş yapmadan</a> sonra tekrar deneyiniz.</p>"
+            tr: "<p>Access is only allowed to individuals with a verified profile.<a href=\"/logout\">Giriş yapmadan</a> sonra tekrar deneyiniz.</p>"
         },
         errorPage500Title: {
             el: "Λυπούμαστε, υπάρχει πρόβλημα με την υπηρεσία",
