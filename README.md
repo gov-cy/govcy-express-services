@@ -32,7 +32,8 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
   - [✅ Conditional logic](#-conditional-logic)
-  - [💾 Temporary save](#-temporary-save)
+  - [💾 Temporary save feature](#-temporary-save-feature)
+  - [🗃️ Files uploads feature](#%EF%B8%8F-files-uploads-feature)
 - [🛣️ Routes](#%EF%B8%8F-routes)
 - [👨‍💻 Enviromental variables](#-enviromental-variables)
 - [🔒 Security note](#-security-note)
@@ -1422,12 +1423,12 @@ Explanation:
 - `[].concat(...)`: safely flattens a string or array into an array.
 - `.includes('value1')`: checks if the value is selected.
 
-### 💾 Temporary save
+### 💾 Temporary save feature
 
 The **temporary save** feature allows user progress to be stored in an external API and automatically reloaded on the next visit.  
 This is useful for long forms or cases where users may leave and return later.
 
-#### How to configure temporary save 
+#### How to enable and configure temporary save 
 To use this feature, configure the config JSON file. In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` entry:
 
 ```json
@@ -1608,6 +1609,310 @@ HTTP/1.1 401 Unauthorized
 If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
 Existing services will continue to work without modification.
 
+### 🗃️ Files uploads feature
+
+The **Files uploads** feature allows user progress to upload, remove and download files. The files will be stored in an external API and automatically reloaded on the next visit.  
+
+#### Pre-requisites for the files uploads feature
+The [💾 Temporary save feature](#-temporary-save-feature) must be enabled for the file uploads feature to work.
+
+
+#### How to enable and configure file uploads 
+To use this feature, configure the config JSON file. In your service’s `site` object, add both a `fileUploadAPIEndpoint` and `fileDownloadAPIEndpoint` entry:
+
+```json
+"fileUploadAPIEndpoint": {
+  "url": "TEST_UPLOAD_FILE_API_URL",
+  "method": "POST",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+},
+"fileDownloadAPIEndpoint": {
+  "url": "TEST_DOWNLOAD_FILE_API_URL",
+  "method": "GET",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+}
+```
+
+These values should point to environment variables that hold your real endpoint URLs and credentials.
+
+In your `secrets/.env` file (and staging/production configs), define the variables referenced above:
+
+```dotenv
+TEST_UPLOAD_FILE_API_URL=https://example.com/api/fileUpload
+TEST_DOWNLOAD_FILE_API_URL=https://example.com/api/fileDownload
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVICE_ID=123
+```
+
+
+#### How to define the file input field in the JSON config
+The files input field is defined under the `pages[i].pageTemplate.sections["main"].elements[0].elements` array. Basically it must exist in the page template of a page inside a form. 
+
+The element type for files input is `fileInput` (see it's definition in [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md))
+
+Here is a sample code section of a page definition with a file input field:
+
+```json
+{
+  "pageData": {
+    "url": "data-entry-file",
+    "title": {
+      "el": "Λογαριασμός κινήσεως",
+      "en": "Utility bill"
+    },
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "data-entry-all"
+  },
+  "pageTemplate": {
+    "sections": [
+      {
+        "name": "beforeMain",
+        "elements": [
+          {
+            "element": "backLink",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "name": "main",
+        "elements": [
+          {
+            "element": "form",
+            "params": {
+              "elements": [
+                {
+                  "element": "fileInput", //<-- this is the file input
+                  "params": {
+                    "id": "utility",
+                    "name": "utility",
+                    "label": {
+                      "el": "Λογαριασμός κινήσεως",
+                      "en": "Utility bill"
+                    },
+                    "isPageHeading": true,
+                    "hint": {
+                      "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                      "en": "PDF, JPG, JPEG, PNG are the acceptable formats"
+                    }
+                  },
+                  "validations": [ //<-- this is the file input validations
+                    {
+                      "check": "required",
+                      "params": {
+                        "checkValue": "",
+                        "message": {
+                          "el": "Ανεβάστε τον λογαριασμό κινήσεως",
+                          "en": "Upload the utility bill"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "element": "button",
+                  "params": {
+                    "id": "continue",
+                    "variant": "primary",
+                    "text": {
+                      "el": "Συνέχεια",
+                      "en": "Continue"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### How file uploads works
+
+- **On a form page with an upload input field**:
+  - **On first load**: the page displays the fileInput field to choose a file.
+  - **On choosing a file**: the file is uploaded to the `fileUploadAPIEndpoint` endpoint.
+    - The `fileUploadAPIEndpoint` validates the input for allowed file types and file size. On validation error an error message is displayed.
+    - If `fileUploadAPIEndpoint` returns an success, the file is uploaded temporarilly and the `fileView` element is displayed, with links to `View` or `Delete` the file. The file infomation are store in the data layer of the page.
+- **On a form page after upload**:
+  - The `fileView` element is displayed with links to `View` or `Delete` the file.
+- **When clinking `view`**: 
+  - The file is downloaded using the `fileDownloadAPIEndpoint` and opened in a new tab.
+- **When clinking `delete`**:
+  - A confimation page is displayed asking the user to confirm the deletion. If the user confirms, the file is deleted from the data layer and the `fileView` element is removed from the page.
+- **On the `review` page after upload**:
+  - The element is displayed with a link to `View file`. A `Change` link is also displayed for the whole page.
+- **On the `success` page and email after upload**:
+  - The element is displayed with links a marking `File uploaded`.
+  
+
+#### `fileUploadAPIEndpoint` `POST` API Request and Response
+This API is used to temporarily store the file uploaded by the user.
+
+**Request:**
+
+- **HTTP Method**: POST
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:tag` which defines the type of the file (for example `passport`). For example `https://example.com/api/fileUpload/:tag`
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `application/json`
+  - **Content-Type**: `multipart/form-data` (typically automatically set when using FormData in the browser)
+- **Body (multipart/form-data)**: The body the actual file to be uploaded (PDF, JPEG, etc.)
+
+**Example Request:**
+
+``` bash
+curl --location 'https://example.gov.cy/api/v1/files/upload/passport' \
+--header 'client-key: 12345678901234567890123456789000' \
+--header 'service-id: 123' \
+--header 'Authorization: Bearer eyJhbGciOi...' \
+--form 'file=@"/path/to/file.pdf"'
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**On success:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "fileId": "6899adac8864bf90a90047c3",
+        "fileName": "passport.pdf",
+        "contentType": "application/pdf",
+        "fileSize": 4721123,
+        "sha256": "8adb79e0e782280dad8beb227333a21796b8e01d019ab1e84cfea89a523b0e7d",
+        "description": "passport.pdf",
+        "tag": "passport"
+    },
+    "Succeeded": true
+}
+```
+
+**On failure:**
+
+```http
+HTTP/1.1 400
+
+{
+  "ErrorCode": 400,
+  "ErrorMessage": "SUBMISSION_REQUIRED",
+  "Data": null,
+  "Succeeded": false
+}
+```
+
+#### `fileDownloadAPIEndpoint` `GET` API Request and Response
+This API is used to download the file uploaded by the user. It returns the file data in Base64.
+
+**Request:**
+
+- **HTTP Method**: GET
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:refernceValue/:fileid/:sha256`. For example `https://example.com/api/fileDownload/1234567890/123456789123456/12345678901234567890123`: 
+  - `referenceValue` is the `referenceValue` of the file current temporary saved instance (see more [💾 Temporary save feature](#-temporary-save-feature)).
+  - `fileid` is the `fileId` of the file uploaded by the user.
+  - `sha256` is the `sha256` of the file uploaded by the user.
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+
+**Example Request:**
+
+```http
+GET fileDownload/1234567890/123456789123456/12345678901234567890123 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When file is found:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "ErrorCode": 0,
+  "ErrorMessage": null,
+  "Data": {
+    "fileId": "123456789123456",
+    "fileName": "passport.pdf",
+    "contentType": "application/pdf",
+    "fileSize": 1872,
+    "sha256": "12345678901234567890123456789012345678901234567890123456789012345",
+    "base64": "JVBERi0xLjMKJZOMi54gUm....
+",
+    "description": null,
+    "uid": null,
+    "tag": "Passport"
+  },
+  "Succeeded": true
+}
+```
+
+**When file is NOT found:**
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+    "ErrorCode": 404,
+    "ErrorMessage": "File not found",
+    "InformationMessage": null,
+    "Data": null,
+    "Succeeded": false
+}
+```
+
+#### File uploads in the data layer
+The system uses the `fileId` and `sha256` to identify the file uploaded by the user. The file information are stored in the data layer in the following format:
+
+```json
+{
+  "fileId": "1234567891234567890",
+  "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+}
+```
+
+#### File uploads when submitted
+When the user submits the service through the submission API endpoint, the system will use the `fileId` and `sha256` to identify the file uploaded by the user. The actuall file is already uploaded via the `fileUploadAPIEndpoint`. 
+
+To help back-end systems recognize the field as a file, the field's element name is concatenated with `Attachment`. For example, if for the field `passport`, the data will be submitted as follows:
+
+```json
+{
+  "passportAttachment": {
+    "fileId": "1234567891234567890",
+    "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+  }
+}
+```
+
+#### File uploads backward compatibility
+If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
+Existing services will continue to work without modification.
+
 ### 🛣️ Routes
 The project uses express.js to serve the following routes:
 
@@ -1622,8 +1927,6 @@ The project uses express.js to serve the following routes:
 - **`/signin-oidc`**: CY Login authentication endpoint.
 - **`/login`**: Redirect to CY Login login page.
 - **`/logout`**: CY Login logout endpoint.
-
-Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
 
 ### 👨‍💻 Enviromental variables
 The environment variables are defined in:

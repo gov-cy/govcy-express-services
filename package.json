@@ -45,7 +45,7 @@
     "test:package": "mocha --recursive tests/package/**/*.test.mjs",
     "test:functional": "mocha --timeout 30000 --recursive tests/functional/**/*.test.mjs",
     "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs",
-    "coverage": "c8 --reporter=html --reporter=text --reporter=lcov npm test",
+    "coverage": "c8 --reporter=html --reporter=text --reporter=lcov  --reporter=cobertura npm test",
     "coverage:report": "c8 report"
   },
   "dependencies": {
