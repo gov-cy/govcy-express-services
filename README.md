@@ -12,9 +12,11 @@
 > You are responsible for ensuring your own compliance, security, and quality assurance processes.
 
 ## 📝 Description
-This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner.
+This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`, handles data input, validations, renders a review page and submits the data via a submission API. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner. 
 
 The project is designed to support the [Linear structure](https://gov-cy.github.io/govcy-design-system-docs/patterns/service_structure/#variant-1---linear-structure) as described in the [Unified Design System](https://gov-cy.github.io/govcy-design-system-docs/). 
+
+The APIs used for submission, temporary save and file uploads are not part of this project. The project has been designed to work together with the **DSF Submission plarform** and all API calls are based on the **DSF Submission Platform APIs**. This readme file describes the definition of these APIs if you wish to develop your own for your own government back-end solution. For more details about the DSF Submission Platform [contact the DSF team](https://dsf.dmrid.gov.cy/contact/).
 
 ![govcy-express-services](express-services.png)
 
@@ -45,7 +47,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 
 ## ✨ Features
 - Dynamic form rendering from JSON templates
-    - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`
+    - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`, `fileInput` elements
     - Support for `conditional radios`
 - Dynamic creation of check your answers page
 - OpenID Connect authentication with CY Login
@@ -58,6 +60,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 - Site level API eligibility checks
 - API integration with retry logic for form submissions.
 - Optional temporary save of in-progress form data via configurable API endpoints
+- Optional file uploads via API endpoints
 
 ## 📋 Prerequisites
 - Node.js 20+
@@ -749,8 +752,7 @@ Here's an example of a page defined in the JSON file:
             "element": "backLink",
             "params": {}
           }
-        ],
-        "params": {}
+        ]
       },
       {
         "name": "main",
@@ -1174,7 +1176,7 @@ Content-Type: application/json
 {
   "submission_username": "username",
   "submission_email": "email@example.com",
-  "submission_data": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}}",
+  "submission_data": "{\"index\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}",
   "submission_data_version": "1",
   "print_friendly_data": "[{\"pageUrl\":\"index\",\"pageTitle\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"fields\":[{\"id\":\"certificate_select\",\"name\":\"certificate_select\",\"label\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[\"birth\",\"permanent_residence\"],\"valueLabel\":[{\"el\":\"Πιστοποιητικό γέννησης​\",\"en\":\"Birth certificate\",\"tr\":\"\"},{\"el\":\"Βεβαίωση μόνιμης διαμονής​\",\"en\":\"Certificate of permanent residence\",\"tr\":\"\"}]}]}]",
   "renderer_data": "{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"value\":[{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[{\"element\":\"textElement\",\"params\":{\"text\":{\"en\":\"Birth certificate, Certificate of permanent residence\",\"el\":\"Birth certificate, Certificate of permanent residence\",\"tr\":\"Birth certificate, Certificate of permanent residence\"},\"type\":\"span\"}}]}]}}]}]}}",
@@ -1260,35 +1262,34 @@ The data is collected from the form elements and the data layer and are sent via
   "submission_data_version": "0.1",         // Submission data version
   "submission_data": {                      // Submission raw data. Object, will be stringified
     "index": {                              // Page level
-      "formData": {
-        "id_select": ["id", "arc"],         // field level. Could be string or array
-        "id_number": "654654",
-        "arc_number": "",
-        "aka": "232323"
-      }
+      "id_select": ["id", "arc"],           // field level. Could be string or array
+      "id_number": "654654",
+      "arc_number": "",
+      "aka": "232323",
+      "evidenceAttachments":                // File attachments contains an object with `fileId` and `sha256`
+      {
+        "fileId": "1234567891234567890",
+        "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+      }        
     },
     "appointment": {
-      "formData": {
-        "diorismos": "monimos",
-        "fileno_monimos": "3233",
-        "eidikotita_monimos": "1",
-        "fileno_sumvasiouxos": "",
-        "eidikotita_sumvasiouxos": "",
-        "fileno_aoristou": "",
-        "eidikotita_aoristou": "",
-        "program": "",
-        "fileno_orismenou": ""
-      }
+      "diorismos": "monimos",
+      "fileno_monimos": "3233",
+      "eidikotita_monimos": "1",
+      "fileno_sumvasiouxos": "",
+      "eidikotita_sumvasiouxos": "",
+      "fileno_aoristou": "",
+      "eidikotita_aoristou": "",
+      "program": "",
+      "fileno_orismenou": ""
     },
     "takeover": {
-      "formData": {
-        "date_start_day": "11",
-        "date_start_month": "12",
-        "date_start_year": "2020",
-        "date_on_contract": "date_other",
-        "date_contract": "16/04/2025",
-        "reason": "24324dssf"
-      }
+      "date_start_day": "11",
+      "date_start_month": "12",
+      "date_start_year": "2020",
+      "date_on_contract": "date_other",
+      "date_contract": "16/04/2025",
+      "reason": "24324dssf"
     }
   },
   "submission_data_version": "1",           // Submission data version
@@ -1687,6 +1688,7 @@ The project includes input validation for the following elements:
 - `checkboxes`
 - `datePicker`
 - `dateInput`
+- `fileInput` (only required check)
 
 The validation rules for each element are defined in the `"validations` array for each element. The project support the following validations:
 
@@ -2285,7 +2287,13 @@ Here is a sample code section of a page definition with a file input field:
 - **On a form page with an upload input field**:
   - **On first load**: the page displays the fileInput field to choose a file.
   - **On choosing a file**: the file is uploaded to the `fileUploadAPIEndpoint` endpoint.
-    - The `fileUploadAPIEndpoint` validates the input for allowed file types and file size. On validation error an error message is displayed.
+    - The `fileUploadAPIEndpoint` validates the input for allowed file types and file size. On validation error an error message is displayed. The following validations are performed:
+      - The fileInput element is defined in the JSON config 
+      - API endpoints and environment variables are defined
+      - The page is not skiped because of conditional logic
+      - The file is not empty
+      - The file size must be less than 5MB
+      - The file type must be one of the following: pdf, jpg, jpeg, png
     - If `fileUploadAPIEndpoint` returns an success, the file is uploaded temporarilly and the `fileView` element is displayed, with links to `View` or `Delete` the file. The file infomation are store in the data layer of the page.
 - **On a form page after upload**:
   - The `fileView` element is displayed with links to `View` or `Delete` the file.
@@ -2300,7 +2308,7 @@ Here is a sample code section of a page definition with a file input field:
   
 
 #### `fileUploadAPIEndpoint` `POST` API Request and Response
-This API is used to temporarily store the file uploaded by the user.
+This API is used to temporarily store the file uploaded by the user. The API connects the file with a temporary saved submission, for the specific user and service. It does not create a connection with the actual field on the specific page, that is done by the `submissionPutAPIEndpoint` API.
 
 **Request:**
 
@@ -2457,7 +2465,7 @@ To help back-end systems recognize the field as a file, the field's element name
 ```
 
 #### File uploads backward compatibility
-If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
+If these endpoints are not defined in the service JSON, the file upload logic is skipped entirely.
 Existing services will continue to work without modification.
 
 ### 🛣️ Routes
@@ -2550,10 +2558,13 @@ TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
 TEST_SUBMISSION_API_SERVIVE_ID=123
 TEST_SUBMISSION_DSF_GTW_KEY=12345678901234567890123456789000
 
-# Optional Temporary Save GET and PUT endpoint (test service)
+# Optional Temporary Save GET and PUT endpoints (test service)
 TEST_SUBMISSION_GET_API_URL=http://localhost:3002/getTempSubmission
 TEST_SUBMISSION_PUT_API_URL=http://localhost:3002/save
 
+# Optional File Upload and download endpoints (test service)
+TEST_FILE_UPLOAD_API_URL=http://localhost:3002/fileUpload
+TEST_FILE_DOWNLOAD_API_URL=http://localhost:3002/fileDownload
 
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1
