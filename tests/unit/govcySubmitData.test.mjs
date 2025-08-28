@@ -255,9 +255,12 @@ describe('govcySubmitData', () => {
 
     const result = prepareSubmissionData(req, siteId, service);
 
-    expect(result.submission_data.page1.formData).to.not.have.property('passportFile');
-    expect(result.submission_data.page1.formData).to.have.property('passportFileAttachment');
-    expect(result.submission_data.page1.formData.passportFileAttachment).to.deep.equal({
+    // expect(result.submission_data.page1.formData).to.not.have.property('passportFile');
+    // expect(result.submission_data.page1.formData).to.have.property('passportFileAttachment');
+    // expect(result.submission_data.page1.formData.passportFileAttachment).to.deep.equal({
+    expect(result.submission_data.page1).to.not.have.property('passportFile');
+    expect(result.submission_data.page1).to.have.property('passportFileAttachment');
+    expect(result.submission_data.page1.passportFileAttachment).to.deep.equal({
         fileId: '12345-file-id',
         sha256: 'abc123sha'
     });
@@ -288,6 +291,8 @@ it('8. should handle fileInput inside conditional radio and rename correctly', (
     });
 
     // Simulate radio selection + file upload
+    // req.session.siteData[siteId].inputData.page1.formData.uploadType = 'yes';
+    // req.session.siteData[siteId].inputData.page1.formData.cvFile = {
     req.session.siteData[siteId].inputData.page1.formData.uploadType = 'yes';
     req.session.siteData[siteId].inputData.page1.formData.cvFile = {
         fileId: 'cv-abc-id',
@@ -296,8 +301,10 @@ it('8. should handle fileInput inside conditional radio and rename correctly', (
 
     const result = prepareSubmissionData(req, siteId, service);
 
-    expect(result.submission_data.page1.formData).to.have.property('cvFileAttachment');
-    expect(result.submission_data.page1.formData.cvFileAttachment).to.deep.equal({
+    // expect(result.submission_data.page1.formData).to.have.property('cvFileAttachment');
+    // expect(result.submission_data.page1.formData.cvFileAttachment).to.deep.equal({
+    expect(result.submission_data.page1).to.have.property('cvFileAttachment');
+    expect(result.submission_data.page1.cvFileAttachment).to.deep.equal({
         fileId: 'cv-abc-id',
         sha256: 'cvsha256xyz'
     });
@@ -312,7 +319,8 @@ it('9. should assign empty string when fileInput value is missing', () => {
     // File not uploaded, key doesn't exist
     const result = prepareSubmissionData(req, siteId, service);
 
-    expect(result.submission_data.page1.formData.licenseFileAttachment).to.equal("");
+    // expect(result.submission_data.page1.formData.licenseFileAttachment).to.equal("");
+    expect(result.submission_data.page1.licenseFileAttachment).to.equal("");
 });
 
 

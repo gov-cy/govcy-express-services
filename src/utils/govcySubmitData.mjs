@@ -48,7 +48,8 @@ export function prepareSubmissionData(req, siteId, service) {
 
         if (!formElement) continue; // ⛔ Skip pages without a <form> element
 
-        submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+        // submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+        submissionData[pageUrl] = {}; // ✅ Now initialize only if a form is present
 
         // Traverse the form elements inside the form
         for (const element of formElement.params.elements || []) {
@@ -64,13 +65,16 @@ export function prepareSubmissionData(req, siteId, service) {
             const value = getValue(element, pageUrl, req, siteId) ?? "";
 
             // Store in submissionData
-            submissionData[pageUrl].formData[elId] = value;
+            // submissionData[pageUrl].formData[elId] = value;
+            submissionData[pageUrl][elId] = value;
 
             // handle fileInput
             if (elType === "fileInput") {
                 // change the name of the key to include "Attachment" at the end but not have the original key
-                submissionData[pageUrl].formData[elId + "Attachment"] = value;
-                delete submissionData[pageUrl].formData[elId];
+                // submissionData[pageUrl].formData[elId + "Attachment"] = value;
+                submissionData[pageUrl][elId + "Attachment"] = value;
+                // delete submissionData[pageUrl].formData[elId];
+                delete submissionData[pageUrl][elId];
             }
 
             // 🔄 If radios with conditionalElements, walk ALL options
@@ -90,12 +94,15 @@ export function prepareSubmissionData(req, siteId, service) {
                         const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
 
                         // Store even if the field was not visible to user
-                        submissionData[pageUrl].formData[condId] = condValue;
+                        // submissionData[pageUrl].formData[condId] = condValue;
+                        submissionData[pageUrl][condId] = condValue;
                         // handle fileInput
                         if (condType === "fileInput") {
                             // change the name of the key to include "Attachment" at the end but not have the original key
-                            submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
-                            delete submissionData[pageUrl].formData[condId];
+                            // submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
+                            submissionData[pageUrl][condId + "Attachment"] = condValue;
+                            // delete submissionData[pageUrl].formData[condId];
+                            delete submissionData[pageUrl][condId];
                         }
                     }
                 }
