@@ -141,6 +141,538 @@ The CY Login settings are configured in the `secrets/.env` file.
 ### 🧩 Dynamic Services Rendering
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
 
+Here is an example JSON config:
+
+```json
+{
+  "site": {
+    "id": "test",
+    "lang": "el",     //<-- Default language
+    "languages": [    //<-- Supported languages
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      },
+      {
+        "code": "en",
+        "label": "EN",
+        "alt": "English language",
+        "href": "?lang=en"
+      }
+    ],
+    "footerLinks": [ //<-- Links on the footer
+      {
+        "label": {
+          "el": "Δήλωση απορρήτου",
+          "en": "Privacy statement",
+          "tr": "Privacy statement"
+        },
+        "href": "test/privacy-statement"
+      },
+      {
+        "label": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": "Cookies"
+        },
+        "href": "test/cookie-policy"
+      },
+      {
+        "label": {
+          "el": "Προσβασιμότητα",
+          "en": "Accessibility",
+          "tr": "Accessibility"
+        },
+        "href": "test/accessibility-statement"
+      }
+    ],
+    "footerIcons": [ //<-- Icons on the footer
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png"
+        },
+        "alt": {
+          "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU",
+          "en": "Funded by the EU Next Generation EU",
+          "tr": "Funded by the EU Next Generation EU"
+        },
+        "href": {
+          "el": "https://europa.eu/",
+          "en": "https://europa.eu/",
+          "tr": "https://europa.eu/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα της ΕΕ",
+          "en": "Go to EU website",
+          "tr": "Go to EU website"
+        }
+      },
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png"
+        },
+        "alt": {
+          "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας",
+          "en": "Cyprus tomorrow, recovery and resilience plan",
+          "tr": "Cyprus tomorrow, recovery and resilience plan"
+        },
+        "href": {
+          "el": "http://www.cyprus-tomorrow.gov.cy/",
+          "en": "http://www.cyprus-tomorrow.gov.cy/",
+          "tr": "http://www.cyprus-tomorrow.gov.cy/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο",
+          "en": "Go to Cyprus Tomorrow website",
+          "tr": "Go to Cyprus Tomorrow website"
+        }
+      }
+    ],
+    "menu": {     //<-- Menu altext
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {  //<-- Service title (meta)
+      "el": "Υπηρεσία τεστ",
+      "en": "Test service",
+      "tr": ""
+    },
+    "headerTitle": {  //<-- Service title (as it apears in the header)
+      "el": "[Το ΟΝΟΜΑ της υπηρεσίας που θα φαίνεται στις φόρμες]",
+      "en": "[The NAME of the service as it will appear on forms]",
+      "tr": ""
+    },
+    "description": {  //<-- Service description (meta)
+      "el": "[Υποβάλετε αίτηση για ...]",
+      "en": "[Submit an application ...]",
+      "tr": ""
+    },
+    "url": "https://gov.cy", //<-- URL in (meta, for example `og:url`)
+    "cdn": {                 //<-- CDN URL and integrity
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+      "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+      "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
+    },
+    "submission_data_version": "1",     //<-- Submission data version
+    "renderer_version": "1.16.1",       //<-- govcy-frontend-renderer version
+    "design_systems_version": "3.2.0",  //<-- govcy-design-system version
+    "homeRedirectPage": {               //<-- Home redirect page
+      "el": "https://www.gov.cy/service/aitisi-gia-taftotita/",
+      "en": "https://www.gov.cy/en/service/issue-an-id-card/",
+      "tr": "https://www.gov.cy/en/service/issue-an-id-card/"
+    },
+    "copyrightText": {                  //<-- Copyright text
+      "el": "Κυπριακή Δημοκρατία, 2025",
+      "en": "Republic of Cyprus, 2025",
+      "tr": "Republic of Cyprus, 2025"
+    },
+    "submissionAPIEndpoint": {          //<-- Submission API endpoint
+      "url": "TEST_SUBMISSION_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "105": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
+    },
+    "submissionGetAPIEndpoint": {     //<-- Submission GET API endpoint for temporary saving
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "submissionPutAPIEndpoint": {    //<-- Submission PUT API endpoint for temporary saving
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileUploadAPIEndpoint": {       //<-- File upload API endpoint
+      "url": "TEST_UPLOAD_FILE_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDownloadAPIEndpoint": {     //<-- File download API endpoint
+      "url": "TEST_DOWNLOAD_FILE_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "eligibilityAPIEndpoints": [     //<-- Eligibility API endpoints
+      {
+        "url": "TEST_ELIGIBILITY_2_API_URL",
+        "method": "GET",
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+        "cashingTimeoutMinutes": "60",
+        "params": {},
+        "response": {
+          "errorResponse": {
+            "105": {
+              "error": "user not registration",
+              "page": "/test/user-not-registered"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "pages": [                 //<-- Pages
+    {
+      "pageData": {            //<-- 1st Page's data (form)
+        "url": "index",        // Page URL
+        "title": {             // Page title
+          "el": "Επιλογή Εγγάφου",
+          "en": "Document selection",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",  // Page layout
+        "mainLayout": "two-third",          // Page main layout
+        "nextPage": "data-entry-radios"     // The next page's URL
+      },
+      "pageTemplate": {         //<-- Page template
+        "sections": [           //<-- Page sections
+          {
+            "name": "main",   //<-- Main section
+            "elements": [     //<-- Main section elements
+              {
+                "element": "form",  // Form element
+                "params": {
+                  "elements": [     // Elements inside the form
+                    {
+                      "element": "checkboxes",  // Checkboxes element
+                      "params": {               // Checkboxes parameters
+                        "id": "certificate_select",
+                        "name": "certificate_select",
+                        "legend": {
+                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+                          "en": "What documents do you wish to issue?"
+                        },
+                        "items": [
+                          {
+                            "value": "birth",
+                            "text": {
+                              "el": "Πιστοποιητικό γέννησης​",
+                              "en": "Birth certificate",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Αν η γέννηση έγινε στην Κύπρο ή στο εξωτερικό και έχει ενημερωθεί το μητρώο του Αρχείου Πληθυσμού ",
+                              "en": "For a birth in Cyprus or abroad which Civil Registry is updated with "
+                            }
+                          },
+                          {
+                            "value": "permanent_residence",
+                            "text": {
+                              "el": "Βεβαίωση μόνιμης διαμονής​",
+                              "en": "Certificate of permanent residence",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για όσους είναι εγγεγραμμένοι στον εκλογικό κατάλογο",
+                              "en": "For those registered in the electoral list"
+                            }
+                          },
+                          {
+                            "value": "student_proof_of_origin",
+                            "text": {
+                              "el": "Βεβαίωση καταγωγής",
+                              "en": "Certificate of origin",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για αίτηση σε πανεπιστήμια στην Ελλάδα",
+                              "en": "To apply to a university in Greece"
+                            }
+                          }
+                        ],
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Επιλέξτε ένα ή περισσότερα έγγραφα",
+                          "en": "Select one or more documents",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [      // Checkboxes validations
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε ένα ή περισσότερα έγγραφα",
+                              "en": "Select one or more documents",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {             //<-- 2nd Page's data (form)
+        "url": "data-entry-radios",
+        "title": {
+          "el": "Στοιχεία επικοινωνίας ",
+          "en": "Contact details",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "mobile_select",
+                        "name": "mobile_select",
+                        "legend": {
+                          "el": "Σε ποιο κινητό μπορούμε να επικοινωνήσουμε μαζί σας;",
+                          "en": "What mobile number can we use to contact you?"
+                        },
+                        "items": [
+                          {
+                            "value": "mobile",
+                            "text": {
+                              "el": "Στο [99 123456]",
+                              "en": "You can use [99 123456]",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "other",
+                            "text": {
+                              "el": "Θα δώσω άλλο αριθμό",
+                              "en": "I will give a different number",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "fileInput",
+                                "params": {
+                                  "id": "proof",
+                                  "name": "proof",
+                                  "label": {
+                                    "el": "Αποδεικτικό τηλεφώνου",
+                                    "en": "Telephone proof",
+                                    "tr": ""
+                                  },
+                                  "isPageHeading": false,
+                                  "hint": {
+                                    "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                                    "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                                    "tr": ""
+                                  }
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Ανεβάστε τον αποδεικτικό τηλεφώνου",
+                                        "en": "Upload the telephone proof",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "isPageHeading": true
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε αν θέλετε να χρησιμοποιήσετε το τηλέφωνο που φαίνεται εδώ, ή κάποιο άλλο",
+                              "en": "Choose if you'd like to use the phone number shown here, or a different one",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {         //<-- 3rd Page's data (not a form)
+        "url": "user-not-registered",
+        "title": {
+          "el": "Δεν είστε εγγεγραμμένοι ",
+          "en": "You are not an registered",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε εγγεγραμμένοι",
+                    "en": "You are not registered"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε εγγεγραμμένοι στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be registered at XYZ.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {         //<-- 4th Page's data (not a form)
+        "url": "user-not-admin",
+        "title": {
+          "el": "Δεν είστε διαχειριστής ",
+          "en": "You are not an administrator",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε διαχειριστής ",
+                    "en": "You are not an administrator"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+
+```
+
 Here are some details explaining the JSON structure:
 
 - `site` object: Contains information about the site, including the site ID, language, and footer links. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details. Some fields that are only specific to the govcy-express-forms project are the following:
@@ -156,8 +688,13 @@ Here are some details explaining the JSON structure:
   ```
   - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#%EF%B8%8F-site-eligibility-checks) section below.
   - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#-site-submissions) section below.
+  - `submissionGetAPIEndpoint`: The submission get API endpoint, to be used for getting the submission data. See more on the [temporary save feature](#-temporary-save-feature) section below.
+  - `submissionPutAPIEndpoint`: The submission put API endpoint, to be used for temporary saving the submission data. See more on the [temporary save feature](#-temporary-save-feature) section below.
+  - `fileUploadAPIEndpoint`: The file upload API endpoint, to be used for uploading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
+  - `fileDownloadAPIEndpoint`: The file download API endpoint, to be used for downloading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
+      - `nextPage`: The URL of the next page to be rendered after the user clicks the `continue` button.
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
       - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
 
@@ -298,14 +835,24 @@ Lets break down the JSON config for this page:
   - `pageData.nextPage` is the next page to redirect to when the user clicks the `continue` button and all validations pass, in this case it will redirect to `/:siteId/telephone-number`
   - `pageData.conditions` is the array that defines the [conditional logic](#-conditional-logic)
 - **pageTemplate** is the page's template, which is a JSON object that contains the sections and elements of the page. Check out the [govcy-frontend-renderer's documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md) for more details.
+  - `sections` is an array of sections, which is an array of elements. Sections allowed: `beforeMain`, `main`, `afterMain`.
+    - `elements` is an array of elements for the said section. Seem more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md).
 
 **Forms vs static content**
 
 - If the `pageTemplate` includes a `form` element in the `main` section and `button` element, the system will treat it as form and will:
   - Perform the eligibility checks
   - Display the form
-  - Collect the form data
-  - Validate the form data
+  - Collect the form data for the following input elements (more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md)):
+    - `textInput`
+    - `textArea`
+    - `select`
+    - `radios`
+    - `checkboxes`
+    - `datePicker`
+    - `dateInput`
+    - `fileInput`: the file upload feature must be enabled to use this element (see more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below)
+  - Validate the form data (see more on the [Input validations](#-input-validations) section below)
   - Store the form data in the systems data layer
   - Redirect the user to the next page (or `review` page if the user came from the review page)
 - Else if the `pageTemplate` does not include a `form` element in the `main` section, the system will treat it as static content and will:
@@ -1921,12 +2468,16 @@ The project uses express.js to serve the following routes:
 - **`/:siteId/:pageUrl`**: Requires **cyLogin** authentication for **authorized individual users**. Based on `/data/:siteId.json`, Renders the specified page template. Validates page and saves data to session. If validation fails, errors are displayed with links to the inputs.
 - **`/:siteId/review`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the check your answers page template. Validates all pages in the service and submits the data to the configured API endpoint. If validation fails, errors are displayed with links to the relevant pages.
 - **`/:siteId/success`**: Requires **cyLogin** authentication for **authorized individual users**. Renders latest successful submission.
-- **`/:siteId/success/pdf`**: Requires **cyLogin** authentication for **authorized individual users**. Downloads the PDF of the latest successful submission.
+- **`/:siteId/:pageUrl/view-file/:elementName`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the specified file in a new tab.
+- **`/:siteId/:pageUrl/delete-file/:elementName`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the delete confirmation page and handles the file delete.
 
 #### Authentication routes:
 - **`/signin-oidc`**: CY Login authentication endpoint.
 - **`/login`**: Redirect to CY Login login page.
 - **`/logout`**: CY Login logout endpoint.
+
+#### API routes:
+- **`/apis/:siteId/:pageUrl/upload`**: Uploads a file. Used from the client side JS.
 
 ### 👨‍💻 Enviromental variables
 The environment variables are defined in:
