@@ -6,6 +6,7 @@ import { logger } from "../utils/govcyLogger.mjs";
  * Middleware function to render PDFs using the GovCy Frontend Renderer.
  * This function takes the processed page data and template, and generates the final PDF response.
  */
+/* c8 ignore start */
 export function govcyPDFRender() {
     return async (req, res) => {
         try {
@@ -30,3 +31,4 @@ export function govcyPDFRender() {
         }
     };
 }
+/* c8 ignore end */

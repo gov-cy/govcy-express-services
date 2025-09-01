@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/github/license/gov-cy/govcy-express-services)
 [![Unit test](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml)
 [![tag-and-publish-on-version-change](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml)
+![coverage](coverage-badges.svg)
 
 > ⚠️ **Warning:**  
 > This package is **under active development** and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only. 
@@ -29,15 +30,15 @@ The APIs used for submission, temporary save and file uploads are not part of th
 - [✅ Best Practices](#-best-practices)
 - [📦 Full installation guide](#-full-installation-guide)
 - [🛠️ Usage](#%EF%B8%8F-usage)
-  - [🧩 Dynamic services rendering](#-dynamic-services-rendering)
+  - [🧩 Dynamic services](#-dynamic-services)
   - [🛡️ Site eligibility checks](#%EF%B8%8F-site-eligibility-checks)
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
-  - [✅ Conditional logic](#-conditional-logic)
+  - [🔀 Conditional logic](#-conditional-logic)
   - [💾 Temporary save feature](#-temporary-save-feature)
   - [🗃️ Files uploads feature](#%EF%B8%8F-files-uploads-feature)
 - [🛣️ Routes](#%EF%B8%8F-routes)
-- [👨‍💻 Enviromental variables](#-enviromental-variables)
+- [👨‍💻 Environment variables](#-environment-variables)
 - [🔒 Security note](#-security-note)
 - [❓ Troubleshooting / FAQ](#-troubleshooting--faq)
 - [🙏 Credits](#-credits)
@@ -141,7 +142,7 @@ The CY Login tokens are used to also connect with the various APIs through [cyCo
 
 The CY Login settings are configured in the `secrets/.env` file.
 
-### 🧩 Dynamic Services Rendering
+### 🧩 Dynamic Services
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
 
 Here is an example JSON config:
@@ -1266,7 +1267,7 @@ The data is collected from the form elements and the data layer and are sent via
       "id_number": "654654",
       "arc_number": "",
       "aka": "232323",
-      "evidenceAttachments":                // File attachments contains an object with `fileId` and `sha256`
+      "evidenceAttachment":                // File attachments contains an object with `fileId` and `sha256`
       {
         "fileId": "1234567891234567890",
         "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
@@ -1744,7 +1745,7 @@ Example:
 ]
 ```
 
-### ✅ Conditional logic
+### 🔀 Conditional logic
 
 The project supports conditional logic on pages. Conditional logic is evaluated using a custom `govcyExpressions.mjs` module, which executes expressions in a safe and scoped context using `new Function`. Only safe data access through the `dataLayer` is allowed. The system uses expressions and session data from the service's [data layer](NOTES.md#data-layer) to decide if a page will be shown or not.
 
@@ -2487,7 +2488,7 @@ The project uses express.js to serve the following routes:
 #### API routes:
 - **`/apis/:siteId/:pageUrl/upload`**: Uploads a file. Used from the client side JS.
 
-### 👨‍💻 Enviromental variables
+### 👨‍💻 Environment variables
 The environment variables are defined in:
  - **Secret environment variables**: These are secret variables and MUSR NOT be saved in version control. The are saved locally in the `secrets/.env` file and they control the server configuration, authentication, integrations, and development behavior. These variables vary depending on the environment and are defined through the deployment prosses for `staging` and `production`.
  - **Non secret environment variables**:  These are non secret enviromentat variables and can be saved in version control. These are stored in the root folder of the project:

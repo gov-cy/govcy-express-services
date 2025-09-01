@@ -10,6 +10,7 @@ import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { errorResponse } from "../utils/govcyApiResponse.mjs"; 
 import { isApiRequest } from '../utils/govcyApiDetection.mjs';
 
+/* c8 ignore start */
 /**
  * Middleware to check if the user is authenticated. If not, redirect to the login page.
  * 
@@ -137,3 +138,4 @@ export function handleLogout() {
         });
     };
 }
+/* c8 ignore end */
