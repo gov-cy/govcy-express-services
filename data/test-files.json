@@ -609,7 +609,20 @@
                           "type": "word",
                           "max": 300
                         }
-                      }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "textArea είναι υποχρεωτικό",
+                              "en": "textArea is required",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "element": "select",
@@ -667,7 +680,20 @@
                           "el": "Hint",
                           "en": "Hint"
                         }
-                      }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "select1 είναι υποχρεωτικό",
+                              "en": "select1 is required",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "element": "fileInput",
@@ -685,7 +711,20 @@
                           "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
                           "tr": ""
                         }
-                      }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε το file1",
+                              "en": "Upload the file1",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "element": "fileInput",
@@ -693,8 +732,8 @@
                         "id": "file2",
                         "name": "file2",
                         "label": {
-                          "el": "Αρχείο 2",
-                          "en": "File 2",
+                          "el": "Αρχείο 2 (Optional)",
+                          "en": "File 2 (Optional)",
                           "tr": ""
                         },
                         "isPageHeading": false
@@ -706,8 +745,8 @@
                         "id": "file3",
                         "name": "file3",
                         "label": {
-                          "el": "Αρχείο 3",
-                          "en": "File 3",
+                          "el": "Αρχείο 3 (Optional)",
+                          "en": "File 3 (Optional)",
                           "tr": ""
                         },
                         "isPageHeading": false

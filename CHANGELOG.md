@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.17] - 2025-09-3
+### Changed
+- Updated `govcy-frontend-renderer` for better screen reader support on the `summaryList` which is used in the `review` and `success` page
+- Updated the `submission` data send via the API to use camelCase instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+```json
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "",// The submission data version
+  "printFriendlyData": "[]",  // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "", // The design systems version
+  "service": "{}"               // Service info
+}
+```
+
 ## [v1.0.0-alpha.16] - 2025-09-1
 ### Added
 - Added more unit tests and coverage tests and badges

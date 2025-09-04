@@ -154,14 +154,14 @@ This is an overview of the data stored in the session:
         "errorSummary": []
       },
       "submissionData": {           // Site level successful submission data
-        "submission_username" : "", // User's username
-        "submission_email" : "",    // User's email
-        "submission_data": {},      // Raw data as submitted by the user in each page
-        "submission_data_version": "", // The submission data version
-        "print_friendly_data": [],  // Print friendly data
-        "renderer_data" :{},        // Renderer data of the summary list
-        "renderer_version": "",     // The renderer version
-        "design_systems_version": "", // The design systems version
+        "submissionUsername" : "", // User's username
+        "submissionEmail" : "",    // User's email
+        "submissionData": {},      // Raw data as submitted by the user in each page
+        "submissionDataVersion": "", // The submission data version
+        "printFriendlyData": [],  // Print friendly data
+        "rendererData" :{},        // Renderer data of the summary list
+        "rendererVersion": "",     // The renderer version
+        "designSystemsVersion": "", // The design systems version
         "service": {                // Service info
               "id": "",             // Service id
               "title": {}           // Service title multilingual object

@@ -12,14 +12,14 @@ describe("Integration Test - Mock API", () => {
     it("1. should successfully submit data to the mock API", async () => {
         // Dummy data to send to the mock API
         const dummyData = {
-            submission_username: "John Doe",
-            submission_email: "john@example.com",
-            submission_data: { field1: "value1", field2: "value2" },
-            submission_data_version: "1.0",
-            print_friendly_data: [],
-            renderer_data: [],
-            renderer_version: "1.14.2",
-            design_systems_version: "3.2.0",
+            submissionUsername: "John Doe",
+            submissionEmail: "john@example.com",
+            submissionData: { field1: "value1", field2: "value2" },
+            submissionData_version: "1.0",
+            printFriendlyData: [],
+            rendererData: [],
+            rendererVersion: "1.14.2",
+            designSystemsVersion: "3.2.0",
             service: {
                 id: "testSite",
                 title: { en: "Test Service", el: "Υπηρεσία Τεστ" },
@@ -39,8 +39,8 @@ describe("Integration Test - Mock API", () => {
     it("2. should handle API error responses correctly (error102)", async () => {
         // Dummy data to send to the mock API
         const dummyData = {
-            submission_username: "John Doe",
-            submission_email: "john@example.com",
+            submissionUsername: "John Doe",
+            submissionEmail: "john@example.com",
         };
 
         try {
@@ -55,8 +55,8 @@ describe("Integration Test - Mock API", () => {
     it("3. should handle API error responses correctly (error103)", async () => {
         // Dummy data to send to the mock API
         const dummyData = {
-            submission_username: "John Doe",
-            submission_email: "john@example.com",
+            submissionUsername: "John Doe",
+            submissionEmail: "john@example.com",
         };
 
         try {
@@ -71,8 +71,8 @@ describe("Integration Test - Mock API", () => {
     it("4. should handle bad requests correctly", async () => {
         // Dummy data to send to the mock API
         const dummyData = {
-            submission_username: "John Doe",
-            submission_email: "john@example.com",
+            submissionUsername: "John Doe",
+            submissionEmail: "john@example.com",
         };
 
         try {

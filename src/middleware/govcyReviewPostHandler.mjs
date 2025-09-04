@@ -118,7 +118,7 @@ export function govcyReviewPostHandler() {
                         
                     //-- Send email to user
                     // Generate the email body
-                    let emailBody = generateSubmitEmail(service, submissionData.print_friendly_data, referenceNo, req);
+                    let emailBody = generateSubmitEmail(service, submissionData.printFriendlyData, referenceNo, req);
                     logger.debug("Email generated:", emailBody);
                     // Send the email
                     sendEmail(service.site.title[service.site.lang],emailBody,[dataLayer.getUser(req.session).email], "eMail").catch(err => {

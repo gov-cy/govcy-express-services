@@ -1175,14 +1175,14 @@ Accept: text/plain
 Content-Type: application/json
 
 {
-  "submission_username": "username",
-  "submission_email": "email@example.com",
-  "submission_data": "{\"index\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}",
-  "submission_data_version": "1",
-  "print_friendly_data": "[{\"pageUrl\":\"index\",\"pageTitle\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"fields\":[{\"id\":\"certificate_select\",\"name\":\"certificate_select\",\"label\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[\"birth\",\"permanent_residence\"],\"valueLabel\":[{\"el\":\"Πιστοποιητικό γέννησης​\",\"en\":\"Birth certificate\",\"tr\":\"\"},{\"el\":\"Βεβαίωση μόνιμης διαμονής​\",\"en\":\"Certificate of permanent residence\",\"tr\":\"\"}]}]}]",
-  "renderer_data": "{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"value\":[{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[{\"element\":\"textElement\",\"params\":{\"text\":{\"en\":\"Birth certificate, Certificate of permanent residence\",\"el\":\"Birth certificate, Certificate of permanent residence\",\"tr\":\"Birth certificate, Certificate of permanent residence\"},\"type\":\"span\"}}]}]}}]}]}}",
-  "renderer_version": "1.14.3",
-  "design_systems_version": "3.2.0",
+  "submissionUsername": "username",
+  "submissionEmail": "email@example.com",
+  "submissionData": "{\"index\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}",
+  "submissionDataVersion": "1",
+  "printFriendlyData": "[{\"pageUrl\":\"index\",\"pageTitle\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"fields\":[{\"id\":\"certificate_select\",\"name\":\"certificate_select\",\"label\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[\"birth\",\"permanent_residence\"],\"valueLabel\":[{\"el\":\"Πιστοποιητικό γέννησης​\",\"en\":\"Birth certificate\",\"tr\":\"\"},{\"el\":\"Βεβαίωση μόνιμης διαμονής​\",\"en\":\"Certificate of permanent residence\",\"tr\":\"\"}]}]}]",
+  "rendererData": "{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"value\":[{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[{\"element\":\"textElement\",\"params\":{\"text\":{\"en\":\"Birth certificate, Certificate of permanent residence\",\"el\":\"Birth certificate, Certificate of permanent residence\",\"tr\":\"Birth certificate, Certificate of permanent residence\"},\"type\":\"span\"}}]}]}}]}]}}",
+  "rendererVersion": "1.14.3",
+  "designSystemsVersion": "3.2.0",
   "service": "{\"id\":\"test\",\"title\":{\"el\":\"Υπηρεσία τεστ\",\"en\":\"Test service\",\"tr\":\"\"}}"
 }
 ```
@@ -1233,15 +1233,15 @@ HTTP/1.1 200 OK
 The data is collected from the form elements and the data layer and are sent via the submission API in the following format:
 
 ```json
-"submissionData": {             // Site level successful submission data
-  "submission_username" : "",   // User's username
-  "submission_email" : "",      // User's email
-  "submission_data": "{}",      // Raw data as submitted by the user in each page
-  "submission_data_version": "",// The submission data version
-  "print_friendly_data": "[]",  // Print friendly data
-  "renderer_data" :"{}",        // Renderer data of the summary list
-  "renderer_version": "",       // The renderer version
-  "design_systems_version": "", // The design systems version
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "",// The submission data version
+  "printFriendlyData": "[]",  // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "", // The design systems version
   "service": "{}"               // Service info
 }
 ```
@@ -1252,16 +1252,16 @@ The data is collected from the form elements and the data layer and are sent via
 
 > ℹ️ **Note:**  
 >
-> When sent to the API, the fields `submission_data`, `renderer_data`, `print_friendly_data`, and `service` are stringified using `JSON.stringify()`.  
+> When sent to the API, the fields `submissionData`, `rendererData`, `printFriendlyData`, and `service` are stringified using `JSON.stringify()`.  
 >
 > The sample below shows the structure **before** stringification for clarity.
 
 ```json
 {
-  "submission_username": "username",        // User's username
-  "submission_email": "email@example.com",  // User's email
-  "submission_data_version": "0.1",         // Submission data version
-  "submission_data": {                      // Submission raw data. Object, will be stringified
+  "submissionUsername": "username",        // User's username
+  "submissionEmail": "email@example.com",  // User's email
+  "submissionDataVersion": "0.1",         // Submission data version
+  "submissionData": {                      // Submission raw data. Object, will be stringified
     "index": {                              // Page level
       "id_select": ["id", "arc"],           // field level. Could be string or array
       "id_number": "654654",
@@ -1293,8 +1293,8 @@ The data is collected from the form elements and the data layer and are sent via
       "reason": "24324dssf"
     }
   },
-  "submission_data_version": "1",           // Submission data version
-  "renderer_data": {                        // Summary list renderer data ready for rendering . Object, will be stringified
+  "submissionDataVersion": "1",           // Submission data version
+  "rendererData": {                        // Summary list renderer data ready for rendering . Object, will be stringified
     "element": "summaryList",
     "params": {
       "items": [
@@ -1501,7 +1501,7 @@ The data is collected from the form elements and the data layer and are sent via
       ]
     }
   },
-  "print_friendly_data": [                  // Print friendly data. Object, will be stringified
+  "printFriendlyData": [                  // Print friendly data. Object, will be stringified
     {
       "pageUrl": "index",                     // Page URL
       "pageTitle": {                          // Page title
@@ -1664,8 +1664,8 @@ The data is collected from the form elements and the data layer and are sent via
       ]
     }
   ],
-  "renderer_version": "1.14.1",              // Renderer version
-  "design_systems_version": "3.1.0",          // Design systems version
+  "rendererVersion": "1.14.1",              // Renderer version
+  "designSystemsVersion": "3.1.0",          // Design systems version
   "service": {                                // Service metadata. Object, will be stringified
     "id": "takeover",
     "title": {
@@ -2015,7 +2015,7 @@ TEST_SUBMISSION_API_SERVICE_ID=123
   3. If not found, call the PUT endpoint to create a new temporary record.
 - **On every form POST**, after successful validation:
   - The `submissionPutAPIEndpoint` will fire-and-forget a `PUT` request to update the saved submission with the latest form data.
-  - The payload includes all required submission fields with `submission_data` JSON-stringified.
+  - The payload includes all required submission fields with `submissionData` JSON-stringified.
 
 #### `submissionGetAPIEndpoint` `GET` API Request and Response
 This API is used to retrieve the saved submission data.
@@ -2116,7 +2116,7 @@ Accept: text/plain
 Content-Type: application/json
 
 {
-  "submission_data" : "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+  "submissionData" : "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
 }
 ```
 

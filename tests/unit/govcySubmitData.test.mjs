@@ -80,11 +80,11 @@ describe('govcySubmitData', () => {
             const submissionData = prepareSubmissionData(req, siteId, service);
 
             expect(submissionData).to.deep.include({
-                submission_username: 'John Doe',
-                submission_email: 'john@example.com',
-                submission_data_version: '1.0',
-                renderer_version: '1.14.2',
-                design_systems_version: '3.2.0',
+                submissionUsername: 'John Doe',
+                submissionEmail: 'john@example.com',
+                submissionDataVersion: '1.0',
+                rendererVersion: '1.14.2',
+                designSystemsVersion: '3.2.0',
                 service: {
                     id: 'testSite',
                     title: { en: 'Test Service', el: 'Υπηρεσία Τεστ' },
@@ -206,9 +206,9 @@ describe('govcySubmitData', () => {
         // Run the function
         const result = prepareSubmissionData(req, siteId, service);
 
-        // Expect only page1 to be included in submission_data
-        expect(result.submission_data).to.have.property('page1');
-        expect(result.submission_data).to.have.property('conditionalPage');
+        // Expect only page1 to be included in submissionData
+        expect(result.submissionData).to.have.property('page1');
+        expect(result.submissionData).to.have.property('conditionalPage');
     });
 
 
@@ -240,7 +240,7 @@ describe('govcySubmitData', () => {
         });
     });
 
-    it('7. should rename fileInput field to include "Attachment" in submission_data', () => {
+    it('7. should rename fileInput field to include "Attachment" in submissionData', () => {
     // Add fileInput to the form
     service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
         element: 'fileInput',
@@ -255,12 +255,12 @@ describe('govcySubmitData', () => {
 
     const result = prepareSubmissionData(req, siteId, service);
 
-    // expect(result.submission_data.page1.formData).to.not.have.property('passportFile');
-    // expect(result.submission_data.page1.formData).to.have.property('passportFileAttachment');
-    // expect(result.submission_data.page1.formData.passportFileAttachment).to.deep.equal({
-    expect(result.submission_data.page1).to.not.have.property('passportFile');
-    expect(result.submission_data.page1).to.have.property('passportFileAttachment');
-    expect(result.submission_data.page1.passportFileAttachment).to.deep.equal({
+    // expect(result.submissionData.page1.formData).to.not.have.property('passportFile');
+    // expect(result.submissionData.page1.formData).to.have.property('passportFileAttachment');
+    // expect(result.submissionData.page1.formData.passportFileAttachment).to.deep.equal({
+    expect(result.submissionData.page1).to.not.have.property('passportFile');
+    expect(result.submissionData.page1).to.have.property('passportFileAttachment');
+    expect(result.submissionData.page1.passportFileAttachment).to.deep.equal({
         fileId: '12345-file-id',
         sha256: 'abc123sha'
     });
@@ -301,10 +301,10 @@ it('8. should handle fileInput inside conditional radio and rename correctly', (
 
     const result = prepareSubmissionData(req, siteId, service);
 
-    // expect(result.submission_data.page1.formData).to.have.property('cvFileAttachment');
-    // expect(result.submission_data.page1.formData.cvFileAttachment).to.deep.equal({
-    expect(result.submission_data.page1).to.have.property('cvFileAttachment');
-    expect(result.submission_data.page1.cvFileAttachment).to.deep.equal({
+    // expect(result.submissionData.page1.formData).to.have.property('cvFileAttachment');
+    // expect(result.submissionData.page1.formData.cvFileAttachment).to.deep.equal({
+    expect(result.submissionData.page1).to.have.property('cvFileAttachment');
+    expect(result.submissionData.page1.cvFileAttachment).to.deep.equal({
         fileId: 'cv-abc-id',
         sha256: 'cvsha256xyz'
     });
@@ -319,8 +319,8 @@ it('9. should assign empty string when fileInput value is missing', () => {
     // File not uploaded, key doesn't exist
     const result = prepareSubmissionData(req, siteId, service);
 
-    // expect(result.submission_data.page1.formData.licenseFileAttachment).to.equal("");
-    expect(result.submission_data.page1.licenseFileAttachment).to.equal("");
+    // expect(result.submissionData.page1.formData.licenseFileAttachment).to.equal("");
+    expect(result.submissionData.page1.licenseFileAttachment).to.equal("");
 });
 
 

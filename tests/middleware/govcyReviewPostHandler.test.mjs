@@ -227,7 +227,7 @@ describe("govcyReviewPostHandler", () => {
         // ✅ Assert submission data was stored
         const submission = req.session.siteData["site123"].submissionData;
         expect(submission).to.have.property("referenceNumber");
-        expect(submission.print_friendly_data).to.be.an("array");
+        expect(submission.printFriendlyData).to.be.an("array");
     });
 
 

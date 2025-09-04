@@ -78,7 +78,7 @@ export function govcySuccessPageHandler(isPDF = false) {
                 }   
             }
 
-            let summaryList = submissionData.renderer_data;
+            let summaryList = submissionData.rendererData;
 
             let mainElements = [];
             // Add elements to the main section

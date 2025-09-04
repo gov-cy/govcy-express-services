@@ -103,14 +103,14 @@ describe('govcyDataLayer', () => {
             session,
             'site1',
             {
-                submission_username: "John Doe",
-                submission_email: "HtYyj@example.com",
-                submission_data: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
-                submission_data_version: service.site?.submission_data_version || "", // The submission data version
-                print_friendly_data: printFriendlyData, // Print-friendly data
-                renderer_data: reviewSummaryList, // Renderer data of the summary list
-                renderer_version: service.site?.renderer_version || "", // The renderer version
-                design_systems_version: service.site?.design_systems_version || "", // The design systems version
+                submissionUsername: "John Doe",
+                submissionEmail: "HtYyj@example.com",
+                submissionData: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
+                submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+                printFriendlyData: printFriendlyData, // Print-friendly data
+                rendererData: reviewSummaryList, // Renderer data of the summary list
+                rendererVersion: service.site?.renderer_version || "", // The renderer version
+                designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
                 service: { // Service info
                     id: service.site.id, // Service ID
                     title: service.site.title // Service title multilingual object
@@ -120,17 +120,17 @@ describe('govcyDataLayer', () => {
     
         const submissionData = dataLayer.getSiteSubmissionData(session, 'site1');
         expect(submissionData).to.deep.equal({
-            submission_username: 'John Doe',
-            submission_email: 'HtYyj@example.com',
-            submission_data: {
+            submissionUsername: 'John Doe',
+            submissionEmail: 'HtYyj@example.com',
+            submissionData: {
                 page1: { formData: { field1: 'value1' } },
                 page2: { formData: { field2: 'value2' } },
             },
-            submission_data_version: '1.0',
-            print_friendly_data: printFriendlyData,
-            renderer_data: reviewSummaryList,
-            renderer_version: '2.0',
-            design_systems_version: "3.0",
+            submissionDataVersion: '1.0',
+            printFriendlyData: printFriendlyData,
+            rendererData: reviewSummaryList,
+            rendererVersion: '2.0',
+            designSystemsVersion: "3.0",
             service: { id: 'service1', title: 'Test Service' }
         });
     

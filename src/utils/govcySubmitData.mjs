@@ -32,7 +32,7 @@ export function prepareSubmissionData(req, siteId, service) {
     //     }
     // }
 
-    // ----- consistent data model for submission_data (CONFIG-BASED)
+    // ----- consistent data model for submissionData (CONFIG-BASED)
     const submissionData = {};
 
     // Loop through every page in the service definition
@@ -110,7 +110,7 @@ export function prepareSubmissionData(req, siteId, service) {
         }
     }
     logger.debug("Submission Data prepared:", submissionData);
-    // ----- END config-based stable submission_data block
+    // ----- END config-based stable submissionData block
 
     // Get the print-friendly data from the session store
     const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
@@ -119,14 +119,14 @@ export function prepareSubmissionData(req, siteId, service) {
     const reviewSummaryList = generateReviewSummary(printFriendlyData, req, siteId, false);
     // Prepare the submission data object
     return {
-        submission_username: dataLayer.getUser(req.session).name,
-        submission_email: dataLayer.getUser(req.session).email,
-        submission_data: submissionData, // Raw data as submitted by the user in each page
-        submission_data_version: service.site?.submission_data_version || "", // The submission data version
-        print_friendly_data: printFriendlyData, // Print-friendly data
-        renderer_data: reviewSummaryList, // Renderer data of the summary list
-        renderer_version: service.site?.renderer_version || "", // The renderer version
-        design_systems_version: service.site?.design_systems_version || "", // The design systems version
+        submissionUsername: dataLayer.getUser(req.session).name,
+        submissionEmail: dataLayer.getUser(req.session).email,
+        submissionData: submissionData, // Raw data as submitted by the user in each page
+        submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+        printFriendlyData: printFriendlyData, // Print-friendly data
+        rendererData: reviewSummaryList, // Renderer data of the summary list
+        rendererVersion: service.site?.renderer_version || "", // The renderer version
+        designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
         service: { // Service info
             id: service.site.id, // Service ID
             title: service.site.title // Service title multilingual object
@@ -145,14 +145,14 @@ export function prepareSubmissionData(req, siteId, service) {
 export function prepareSubmissionDataAPI(data) {
     
     return {
-        submission_username: String(data.submission_username ?? ""),
-        submission_email: String(data.submission_email ?? ""),
-        submission_data: JSON.stringify(data.submission_data ?? {}),
-        submission_data_version: String(data.submission_data_version ?? ""),
-        print_friendly_data: JSON.stringify(data.print_friendly_data ?? []),
-        renderer_data: JSON.stringify(data.renderer_data ?? {}),
-        renderer_version: String(data.renderer_version ?? ""),
-        design_systems_version: String(data.design_systems_version ?? ""),
+        submissionUsername: String(data.submissionUsername ?? ""),
+        submissionEmail: String(data.submissionEmail ?? ""),
+        submissionData: JSON.stringify(data.submissionData ?? {}),
+        submissionDataVersion: String(data.submissionDataVersion ?? ""),
+        printFriendlyData: JSON.stringify(data.printFriendlyData ?? []),
+        rendererData: JSON.stringify(data.rendererData ?? {}),
+        rendererVersion: String(data.rendererVersion ?? ""),
+        designSystemsVersion: String(data.designSystemsVersion ?? ""),
         service: JSON.stringify(data.service ?? {})
     };
 }

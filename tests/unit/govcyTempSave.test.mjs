@@ -18,7 +18,7 @@ describe("tempSaveIfConfigured (integration-ish, uses mock API)", () => {
     expect(store.siteData.site1.loadData).to.be.undefined;
   });
 
-  it("2. should PUT stringified submission_data and merge Data into loadData", async () => {
+  it("2. should PUT stringified submissionData and merge Data into loadData", async () => {
     // Mock endpoint that returns { succeeded:true, data:{ referenceValue: "0000000924107836" } }
     process.env.PUT_URL = "http://localhost:3002/submissionData";
 

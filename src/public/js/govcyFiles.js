@@ -135,9 +135,9 @@ function _uploadFileEventHandler(event) {
       "tr": "The selected file must be a JPG, JPEG, PNG or PDF"
     },
     "uploadFailed409": {
-      "el": "Το επιλεγμένο αρχείο πρέπει να είναι μικρότερο από 5MB",
-      "en": "The selected file must be smaller than 5MB",
-      "tr": "The selected file must be smaller than 5MB"
+      "el": "Το επιλεγμένο αρχείο πρέπει να είναι μικρότερο από 4MB",
+      "en": "The selected file must be smaller than 4MB",
+      "tr": "The selected file must be smaller than 4MB"
     }
   };
 
