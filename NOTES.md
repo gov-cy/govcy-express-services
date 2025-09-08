@@ -1,6 +1,71 @@
 # Dev notes
 This is a development guide for the govcy-express-services project.
 
+## Breaking changes
+### As of v.1.x.x
+- the `submission` data send via the API:
+  - Changed to use camelCase instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+```json
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "",// The submission data version
+  "printFriendlyData": "[]",  // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "", // The design systems version
+  "service": "{}"               // Service info
+}
+```
+  - `submissionData` no longer has the `formData` part of the `pageUrl.formData.elementName`. It directly uses `pageUrl.elementName` for example:
+```json
+{
+  "index": {
+    "certificate_select": [
+      "birth",
+      "permanent_residence"
+    ]
+  },
+  "data-entry-radios": {
+    "mobile_select": "mobile",
+    "mobileTxt": ""
+  },
+  "data-entry-textinput": {
+    "mobile": "+35722404383",
+    "dateGot": "1212-01-12",
+    "appointment": "03/09/2025"
+  },
+  "data-entry-all": {
+    "txtMobile": "",
+    "txtName": "",
+    "txtEmail": "",
+    "txtNumeric": "",
+    "dateInput": "",
+    "datePicker": "",
+    "checkboxes": [],
+    "radios": "",
+    "textArea": "",
+    "textArea1": "",
+    "textArea2": "",
+    "select1": "",
+    "file1Attachment": {
+      "sha256": "mock-sha256-hash",
+      "fileId": "mock-file-id"
+    }
+  },
+  "radios-conditions": {
+    "id_select": "",
+    "id_number": "",
+    "id_country": "",
+    "arc_number": "",
+    "passport_number": "",
+    "passport_country": ""
+  }
+}
+```
+- `checkboxes` values are normalized to **arrays** (including `[]` when no options are selected).
+
 ## Release management
 
 Details on release management can be found in the [release document](./RELEASE.md).

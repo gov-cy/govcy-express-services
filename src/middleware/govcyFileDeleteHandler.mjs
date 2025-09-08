@@ -220,6 +220,12 @@ export function govcyFileDeletePostHandler() {
 
             //if no validation errors
             if (req.body.deleteFile === "yes") {
+                //TODO: Check if fileDeleteAPIEndpoint exists and call the API to delete the file from the storage
+                // if it exists, check that the Env vars are set
+                // construct url
+                // get user
+                // call the API
+                // if succeeded all good
                 dataLayer.storePageDataElement(req.session, siteId, pageUrl, elementName, "");
                 logger.info(`File deleted by user`, { siteId, pageUrl, elementName });
             }

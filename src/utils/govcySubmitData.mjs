@@ -17,7 +17,7 @@ import { logger } from "./govcyLogger.mjs";
 export function prepareSubmissionData(req, siteId, service) {
     // Get the raw data from the session store
     // const rawData = dataLayer.getSiteInputData(req.session, siteId);
-    
+
     // ----- Conditional logic comes here
     // Filter site input data based on active pages only
     // const rawData = {};
@@ -143,7 +143,7 @@ export function prepareSubmissionData(req, siteId, service) {
  * @returns {object} The API-ready submission data object with all fields as strings
  */
 export function prepareSubmissionDataAPI(data) {
-    
+
     return {
         submissionUsername: String(data.submissionUsername ?? ""),
         submissionEmail: String(data.submissionEmail ?? ""),
@@ -232,7 +232,7 @@ export function preparePrintFriendlyData(req, siteId, service) {
         }
     }
 
-    return submissionData ;
+    return submissionData;
 }
 
 //------------------------------- Helper Functions -------------------------------//
@@ -316,6 +316,19 @@ function getValue(formElement, pageUrl, req, siteId) {
         value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
     } else {
         value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
+    }
+
+    // 🔁 Normalize checkboxes: always return an array
+    if (formElement.element === "checkboxes") {
+        // If no value, return empty array
+        if (value == null || value === "") return [];
+        // If already an array, return as-is (but strip empties just in case)
+        if (Array.isArray(value)) {
+            // Strip empties just in case
+            return value.filter(v => v != null && v !== "");
+        }
+        // Else single value, convert to array
+        return [String(value)];
     }
     return value;
 }
@@ -460,10 +473,10 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
                 {
                     "element": "htmlElement",
                     "params": {
-                        "text": { 
-                            "en": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.en}<span class="govcy-visually-hidden"> ${key?.en || ""}</span></a>`, 
-                            "el": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.el}<span class="govcy-visually-hidden"> ${key?.el || ""}</span></a>`, 
-                            "tr": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.tr}<span class="govcy-visually-hidden"> ${key?.tr || ""}</span></a>` 
+                        "text": {
+                            "en": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.en}<span class="govcy-visually-hidden"> ${key?.en || ""}</span></a>`,
+                            "el": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.el}<span class="govcy-visually-hidden"> ${key?.el || ""}</span></a>`,
+                            "tr": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.tr}<span class="govcy-visually-hidden"> ${key?.tr || ""}</span></a>`
                         }
                     }
                 }
@@ -471,7 +484,7 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
         };
     }
 
-    
+
 
 
     // Loop through each page in the submission data
@@ -550,7 +563,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
             }
         );
     }
-    
+
     // Add data title to the body
     body.push(
         {
@@ -568,7 +581,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         body.push(
             {
                 component: "bodyHeading",
-                params: {"headingLevel":2},
+                params: { "headingLevel": 2 },
                 body: govcyResources.getLocalizeContent(pageTitle, req.globalLang)
             }
         );
@@ -578,14 +591,14 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         for (const field of fields) {
             const label = govcyResources.getLocalizeContent(field.label, req.globalLang);
             const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            dataUl.push({key: label, value: valueLabel});
+            dataUl.push({ key: label, value: valueLabel });
         }
         // add data to the body
         body.push(
-        {
-            component: "bodyKeyValue",
-            params: {type:"ul", items: dataUl},
-        });
+            {
+                component: "bodyKeyValue",
+                params: { type: "ul", items: dataUl },
+            });
 
     }
 
@@ -606,84 +619,84 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
 
 
 
- /*
+/*
 {
-  "bank-details": {
-    "formData": {
-      "AccountName": "asd",
-      "Iban": "CY12 0020 0123 0000 0001 2345 6789",
-      "Swift": "BANKCY2NXXX",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  },
-  "answer-bank-boc": {
-    "formData": {
-      "Objection": "Object",
-      "country": "Azerbaijan",
-      "ObjectionReason": "ObjectionReasonCode1",
-      "ObjectionExplanation": "asdsa",
-      "DepositsBOCAttachment": "",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  },
-  "bank-settlement": {
-    "formData": {
-      "ReceiveSettlementExplanation": "",
-      "ReceiveSettlementDate_day": "",
-      "ReceiveSettlementDate_month": "",
-      "ReceiveSettlementDate_year": "",
-      "ReceiveSettlement": "no",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  }
+ "bank-details": {
+   "formData": {
+     "AccountName": "asd",
+     "Iban": "CY12 0020 0123 0000 0001 2345 6789",
+     "Swift": "BANKCY2NXXX",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ },
+ "answer-bank-boc": {
+   "formData": {
+     "Objection": "Object",
+     "country": "Azerbaijan",
+     "ObjectionReason": "ObjectionReasonCode1",
+     "ObjectionExplanation": "asdsa",
+     "DepositsBOCAttachment": "",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ },
+ "bank-settlement": {
+   "formData": {
+     "ReceiveSettlementExplanation": "",
+     "ReceiveSettlementDate_day": "",
+     "ReceiveSettlementDate_month": "",
+     "ReceiveSettlementDate_year": "",
+     "ReceiveSettlement": "no",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ }
 }
 
 
 
 [
-  {
-    pageUrl: "personal-details",
-    pageTitle: { en: "Personal data", el: "Προσωπικά στοιχεία" }, // from pageData.title in correct language
-    fields: [
-      [
-        {
-            id: "firstName",
-            label: { en: "First Name", el: "Όνομα" },
-            value: "John",  // The actual user input value
-            valueLabel: { en: "John", el: "John" }  // Same label as the value for text inputs
-        },
-        {
-            id: "lastName",
-            label: { en: "Last Name", el: "Επίθετο" },
-            value: "Doe",  // The actual user input value
-            valueLabel: { en: "Doe", el: "Doe" }  // Same label as the value for text inputs
-        },
-        {
-            id: "gender",
-            label: { en: "Gender", el: "Φύλο" },
-            value: "m",  // The actual value ("male")
-            valueLabel: { en: "Male", el: "Άντρας" }  // The corresponding label for "male"
-        },
-        {
-            id: "languages",
-            label: { en: "Languages", el: "Γλώσσες" },
-            value: ["en", "el"],  // The selected values ["en", "el"]
-            valueLabel: [
-                { en: "English", el: "Αγγλικά" },  // Labels corresponding to "en" and "el"
-                { en: "Greek", el: "Ελληνικά" }
-            ]
-        },
-        {
-            id: "birthDate",
-            label: { en: "Birth Date", el: "Ημερομηνία Γέννησης" },
-            value: "1990-01-13",  // The actual value based on user input
-            valueLabel: "13/1/1990"  // Date inputs label will be conveted to D/M/YYYY
-        }
-    ]
-  },
-  ...
+ {
+   pageUrl: "personal-details",
+   pageTitle: { en: "Personal data", el: "Προσωπικά στοιχεία" }, // from pageData.title in correct language
+   fields: [
+     [
+       {
+           id: "firstName",
+           label: { en: "First Name", el: "Όνομα" },
+           value: "John",  // The actual user input value
+           valueLabel: { en: "John", el: "John" }  // Same label as the value for text inputs
+       },
+       {
+           id: "lastName",
+           label: { en: "Last Name", el: "Επίθετο" },
+           value: "Doe",  // The actual user input value
+           valueLabel: { en: "Doe", el: "Doe" }  // Same label as the value for text inputs
+       },
+       {
+           id: "gender",
+           label: { en: "Gender", el: "Φύλο" },
+           value: "m",  // The actual value ("male")
+           valueLabel: { en: "Male", el: "Άντρας" }  // The corresponding label for "male"
+       },
+       {
+           id: "languages",
+           label: { en: "Languages", el: "Γλώσσες" },
+           value: ["en", "el"],  // The selected values ["en", "el"]
+           valueLabel: [
+               { en: "English", el: "Αγγλικά" },  // Labels corresponding to "en" and "el"
+               { en: "Greek", el: "Ελληνικά" }
+           ]
+       },
+       {
+           id: "birthDate",
+           label: { en: "Birth Date", el: "Ημερομηνία Γέννησης" },
+           value: "1990-01-13",  // The actual value based on user input
+           valueLabel: "13/1/1990"  // Date inputs label will be conveted to D/M/YYYY
+       }
+   ]
+ },
+ ...
 ]
 
 
 
-    */
+   */

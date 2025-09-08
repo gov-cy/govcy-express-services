@@ -1263,7 +1263,7 @@ The data is collected from the form elements and the data layer and are sent via
   "submissionDataVersion": "0.1",         // Submission data version
   "submissionData": {                      // Submission raw data. Object, will be stringified
     "index": {                              // Page level
-      "id_select": ["id", "arc"],           // field level. Could be string or array
+      "id_select": ["id", "arc"],           // field level: checkboxes are ALWAYS arrays (may be []); radios/select/text are strings
       "id_number": "654654",
       "arc_number": "",
       "aka": "232323",
@@ -1516,8 +1516,8 @@ The data is collected from the form elements and the data layer and are sent via
             "el": "Ταυτοποίηση",
             "en": "Identification"
           },
-          "value": ["id", "arc"],          // Field value. Could be string or array
-          "valueLabel": [                       // Field value label. Could be string or array
+          "value": ["id", "arc"],          // Field value. // field level: checkboxes are ALWAYS arrays (may be []); radios/select/text are strings
+          "valueLabel": [                       // Field value label
             {
               "el": "Ταυτότητα",
               "en": "ID",

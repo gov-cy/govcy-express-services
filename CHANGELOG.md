@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-alpha.17] - 2025-09-3
+## [v1.0.0-alpha.18] - 2025-09-08
+### Changed
+- `checkboxes` values are normalized to **arrays**
+
+## [v1.0.0-alpha.17] - 2025-09-03
 ### Changed
 - Updated `govcy-frontend-renderer` for better screen reader support on the `summaryList` which is used in the `review` and `success` page
 - Updated the `submission` data send via the API to use camelCase instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
@@ -23,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 }
 ```
 
-## [v1.0.0-alpha.16] - 2025-09-1
+## [v1.0.0-alpha.16] - 2025-09-01
 ### Added
 - Added more unit tests and coverage tests and badges
 
