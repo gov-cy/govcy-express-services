@@ -2,10 +2,11 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { pageContainsFileInput } from "../utils/govcyHandleFiles.mjs";
-import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
+import { whatsIsMyEnvironment, getEnvVariable, getEnvVariableBool } from '../utils/govcyEnvVariables.mjs';
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { getPageConfigData } from "../utils/govcyLoadConfigData.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
+import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { URL } from "url";
 
 
@@ -50,7 +51,7 @@ export function govcyFileDeletePageHandler() {
             const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
 
             // If the element data is not found, return an error response
-            if (!elementData) {
+            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 
@@ -80,6 +81,20 @@ export function govcyFileDeletePageHandler() {
                 ]
             };
 
+            //contruct the warning if the file was uploaded more than once
+            const warningSameFile = {
+                element: "warning",
+                params: {
+                    text: govcyResources.staticResources.text.deleteSameFileWarning,
+                }
+            };
+
+            const showSameFileWarning = dataLayer.isFileUsedInSiteInputDataAgain(
+                req.session,
+                siteId,
+                elementData 
+            );
+
             // Construct page title
             const pageRadios = {
                 element: "radios",
@@ -88,7 +103,8 @@ export function govcyFileDeletePageHandler() {
                     name: "deleteFile",
                     legend: pageTitle,
                     isPageHeading: true,
-                    classes: "govcy-mb-6",
+                    classes: "govcy-mb-6",// only include the warning block when the file is referenced >1 times
+                    elements: showSameFileWarning ? [warningSameFile] : [],
                     items: [
                         {
                             value: "yes",
@@ -171,7 +187,7 @@ export function govcyFileDeletePageHandler() {
  * This middleware processes the post, validates the form and handles the file data layer
  */
 export function govcyFileDeletePostHandler() {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         try {
             // Extract siteId and pageUrl from request
             let { siteId, pageUrl, elementName } = req.params;
@@ -198,6 +214,15 @@ export function govcyFileDeletePostHandler() {
             if (!fileInputElement) {
                 return handleMiddlewareError(`File input [${elementName}] not allowed on this page`, 404, next);
             }
+
+            //get element data 
+            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
+
+            // If the element data is not found, return an error response
+            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
+                return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
+            }
+
             // the page base return url
             const pageBaseReturnUrl = `http://localhost:3000/${siteId}/${pageUrl}`;
 
@@ -220,13 +245,62 @@ export function govcyFileDeletePostHandler() {
 
             //if no validation errors
             if (req.body.deleteFile === "yes") {
-                //TODO: Check if fileDeleteAPIEndpoint exists and call the API to delete the file from the storage
-                // if it exists, check that the Env vars are set
-                // construct url
-                // get user
-                // call the API
+                // Try to delete the file via the delete API. 
+                // If it fails, log the error but continue to remove the file from the session
+                try {
+                    // Get the delete file configuration
+                    const deleteCfg = serviceCopy?.site?.fileDeleteAPIEndpoint;
+                    // Check if download file configuration is available
+                    if (!deleteCfg?.url || !deleteCfg?.clientKey || !deleteCfg?.serviceId) {
+                        return handleMiddlewareError(`File delete APU configuration not found`, 404, next);
+                    }
+
+                    // Environment vars
+                    const allowSelfSignedCerts = getEnvVariableBool("ALLOW_SELF_SIGNED_CERTIFICATES", false);
+                    let url = getEnvVariable(deleteCfg.url || "", false);
+                    const clientKey = getEnvVariable(deleteCfg.clientKey || "", false);
+                    const serviceId = getEnvVariable(deleteCfg.serviceId || "", false);
+                    const dsfGtwKey = getEnvVariable(deleteCfg?.dsfgtwApiKey || "", "");
+                    const method = (deleteCfg?.method || "GET").toLowerCase();
+
+                    // Check if the upload API is configured correctly
+                    if (!url || !clientKey) {
+                        return handleMiddlewareError(`Missing environment variables for upload`, 404, next);
+                    }
+
+                    // Construct the URL with tag being the elementName
+                    url += `/${encodeURIComponent(elementData.fileId)}/${encodeURIComponent(elementData.sha256)}`;
+
+                    // Get the user
+                    const user = dataLayer.getUser(req.session);
+                    // Perform the delete request
+                    const response = await govcyApiRequest(
+                        method,
+                        url,
+                        {},
+                        true,
+                        user,
+                        {
+                            accept: "text/plain",
+                            "client-key": clientKey,
+                            "service-id": serviceId,
+                            ...(dsfGtwKey !== "" && { "dsfgtw-api-key": dsfGtwKey })
+                        },
+                        3,
+                        allowSelfSignedCerts
+                    );
+
+                    // If not succeeded, handle error
+                    if (!response?.Succeeded) {
+                        logger.error("fileDeleteAPIEndpoint returned succeeded false");
+                    }
+
+                } catch (error) {
+                    logger.error(`fileDeleteAPIEndpoint Call failed: ${error.message}`);
+                }
                 // if succeeded all good
-                dataLayer.storePageDataElement(req.session, siteId, pageUrl, elementName, "");
+                // dataLayer.storePageDataElement(req.session, siteId, pageUrl, elementName, "");
+                dataLayer.removeAllFilesFromSite(req.session, siteId, { fileId: elementData.fileId, sha256: elementData.sha256 });
                 logger.info(`File deleted by user`, { siteId, pageUrl, elementName });
             }
             // construct the page url
@@ -239,6 +313,7 @@ export function govcyFileDeletePostHandler() {
             // redirect to the page (relative path)
             res.redirect(myUrl.pathname + myUrl.search);
         } catch (error) {
+            logger.error("Error in govcyFileDeletePostHandler middleware:", error.message);
             return next(error);  // Pass error to govcyHttpErrorHandler
         }
     };

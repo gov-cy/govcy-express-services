@@ -123,7 +123,7 @@ export const staticResources = {
         },
         deleteFileTitle : {
             en: "Are you sure you want to delete the file \"{{file}}\"? ",
-            el: "Είστε σίγουροι ότι θέλετε να διαγράψετε το αρχείο \"{{file}}\";",
+            el: "Σίγουρα θέλετε να διαγράψετε το αρχείο \"{{file}}\";",
             tr: "Are you sure you want to delete the file \"{{file}}\"? "
         },
         deleteYesOption: {
@@ -145,6 +145,11 @@ export const staticResources = {
             en: "View file",
             el: "Προβολή αρχείου",
             tr: "View file"
+        },
+        deleteSameFileWarning: {
+            en: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application.",
+            el: "Έχετε ανεβάσει το αρχείο αυτό και σε άλλα σημεία της αίτησης. Αν το διαγράψετε, θα διαγραφεί από όλα τα σημεία.",
+            tr: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application."
         }
     },
     //remderer sections

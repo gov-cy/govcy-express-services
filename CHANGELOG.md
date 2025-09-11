@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.19] - 2025-09-11
+### Changed
+- Updated `govcy-frontend-renderer` for `warning` component support
+- When deleting file, will remove all instances of `fileId` and `sha256` from the dataLayer
+
+### Added
+- `fileDeleteAPIEndpoint` to delete files from the API
+
 ## [v1.0.0-alpha.18] - 2025-09-08
 ### Changed
 - `checkboxes` values are normalized to **arrays**

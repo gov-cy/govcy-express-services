@@ -326,6 +326,13 @@ Here is an example JSON config:
       "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
       "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
     },
+    "fileDeleteAPIEndpoint": {     //<-- File delete API endpoint
+      "url": "TEST_DELETE_FILE_API_URL",
+      "method": "DELETE",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
     "eligibilityAPIEndpoints": [     //<-- Eligibility API endpoints
       {
         "url": "TEST_ELIGIBILITY_2_API_URL",
@@ -696,6 +703,7 @@ Here are some details explaining the JSON structure:
   - `submissionPutAPIEndpoint`: The submission put API endpoint, to be used for temporary saving the submission data. See more on the [temporary save feature](#-temporary-save-feature) section below.
   - `fileUploadAPIEndpoint`: The file upload API endpoint, to be used for uploading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
   - `fileDownloadAPIEndpoint`: The file download API endpoint, to be used for downloading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
+  - `fileDeleteAPIEndpoint`: The file delete API endpoint, to be used for deleting files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
       - `nextPage`: The URL of the next page to be rendered after the user clicks the `continue` button.
@@ -2168,7 +2176,7 @@ The [💾 Temporary save feature](#-temporary-save-feature) must be enabled for 
 
 
 #### How to enable and configure file uploads 
-To use this feature, configure the config JSON file. In your service’s `site` object, add both a `fileUploadAPIEndpoint` and `fileDownloadAPIEndpoint` entry:
+To use this feature, configure the config JSON file. In your service’s `site` object, add a `fileUploadAPIEndpoint`, `fileDownloadAPIEndpoint`and `fileDeleteAPIEndpoint` entry:
 
 ```json
 "fileUploadAPIEndpoint": {
@@ -2180,6 +2188,12 @@ To use this feature, configure the config JSON file. In your service’s `site` 
 "fileDownloadAPIEndpoint": {
   "url": "TEST_DOWNLOAD_FILE_API_URL",
   "method": "GET",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+},
+"fileDeleteAPIEndpoint": {
+  "url": "TEST_DELETE_FILE_API_URL",
+  "method": "DELETE",
   "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
   "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
 }
@@ -2301,7 +2315,10 @@ Here is a sample code section of a page definition with a file input field:
 - **When clinking `view`**: 
   - The file is downloaded using the `fileDownloadAPIEndpoint` and opened in a new tab.
 - **When clinking `delete`**:
-  - A confimation page is displayed asking the user to confirm the deletion. If the user confirms, the file is deleted from the data layer and the `fileView` element is removed from the page.
+  - A confimation page is displayed asking the user to confirm the deletion. If the user confirms (clicks `Yes`):
+    - The file is deleted using the `fileDeleteAPIEndpoint`
+    - The file is deleted from the data layer and the `fileView` element is removed from the page.
+    - If the same file is used on another page (with the same `fileId` and `sha256`), they are also removed from the data layer
 - **On the `review` page after upload**:
   - The element is displayed with a link to `View file`. A `Change` link is also displayed for the whole page.
 - **On the `success` page and email after upload**:
@@ -2423,6 +2440,65 @@ HTTP/1.1 200 OK
     "uid": null,
     "tag": "Passport"
   },
+  "Succeeded": true
+}
+```
+
+**When file is NOT found:**
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+    "ErrorCode": 404,
+    "ErrorMessage": "File not found",
+    "InformationMessage": null,
+    "Data": null,
+    "Succeeded": false
+}
+```
+
+#### `fileDeleteAPIEndpoint` `DELETE` API Request and Response
+This API is used to delete the file uploaded by the user. It returns the file data in Base64. 
+> ⚠️ **Important note:**  
+> If the same file (same `fileId` and `sha256`) is used for other fields in the same application for the same service and the same user, when deleted it will be removed from all instances in the data layer. A warning will appear in the user's delete confirmation page to warn the users in such cases. 
+
+**Request:**
+
+- **HTTP Method**: DELETE
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:fileid/:sha256`. For example `https://example.com/api/fileDelete/123456789123456/12345678901234567890123`: 
+  - `fileid` is the `fileId` of the file uploaded by the user.
+  - `sha256` is the `sha256` of the file uploaded by the user.
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+
+**Example Request:**
+
+```http
+DELETE fileDelete/123456789123456/12345678901234567890123 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When file is found and deleted:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "ErrorCode": 0,
+  "ErrorMessage": null,
   "Succeeded": true
 }
 ```
@@ -2566,6 +2642,7 @@ TEST_SUBMISSION_PUT_API_URL=http://localhost:3002/save
 # Optional File Upload and download endpoints (test service)
 TEST_FILE_UPLOAD_API_URL=http://localhost:3002/fileUpload
 TEST_FILE_DOWNLOAD_API_URL=http://localhost:3002/fileDownload
+TEST_FILE_DELETE_API_URL=http://localhost:3002/fileDelete
 
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1

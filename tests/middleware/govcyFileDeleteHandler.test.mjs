@@ -178,11 +178,26 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
 
     it("7. POST should remove file from session and redirect if deleteFile is 'yes'", async () => {
 
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+
         req.body = { deleteFile: "yes" };
+        console.log("Session before delete:", JSON.stringify(req.session.siteData["test-site"].inputData.index.formData, null, 2));
         const handler = govcyFileDeletePostHandler();
         await handler(req, res, next);
 
         const fileData = req.session.siteData["test-site"].inputData.index.formData.upload;
+        console.log("Session after delete:", JSON.stringify(req.session.siteData["test-site"].inputData.index.formData, null, 2));
         expect(fileData).to.equal("");
 
         expect(res.redirect.calledOnce).to.be.true;
@@ -191,82 +206,272 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
     });
 
     it("8. POST should redirect with error if deleteFile is missing", async () => {
-  req.body = {}; // 🔥 no deleteFile
+        // in test setup:
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
 
-  const handler = govcyFileDeletePostHandler();
-  await handler(req, res, next);
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+        req.body = {}; // 🔥 no deleteFile
 
-  expect(res.redirect.calledOnce).to.be.true;
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
 
-  const redirectUrl = res.redirect.firstCall.args[0];
-  expect(redirectUrl).to.include("hasError=1");
-  expect(redirectUrl).to.include("/test-site/index/delete-file/upload");
-});
+        expect(res.redirect.calledOnce).to.be.true;
 
-it("9. POST should redirect without deleting if deleteFile is 'no'", async () => {
-  req.body = { deleteFile: "no" };
+        const redirectUrl = res.redirect.firstCall.args[0];
+        expect(redirectUrl).to.include("hasError=1");
+        expect(redirectUrl).to.include("/test-site/index/delete-file/upload");
+    });
 
-  const fileBefore = JSON.parse(JSON.stringify(
-    req.session.siteData["test-site"].inputData.index.formData.upload
-  ));
+    it("9. POST should redirect without deleting if deleteFile is 'no'", async () => {
+        // in test setup:
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
 
-  const handler = govcyFileDeletePostHandler();
-  await handler(req, res, next);
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+        req.body = { deleteFile: "no" };
 
-  const fileAfter = req.session.siteData["test-site"].inputData.index.formData.upload;
-  expect(fileAfter).to.deep.equal(fileBefore); // ✅ unchanged
+        const fileBefore = JSON.parse(JSON.stringify(
+            req.session.siteData["test-site"].inputData.index.formData.upload
+        ));
 
-  expect(res.redirect.calledOnce).to.be.true;
-  const redirectUrl = res.redirect.firstCall.args[0];
-  expect(redirectUrl).to.equal("/test-site/index");
-});
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
 
-it("10. POST should preserve route=review in redirect", async () => {
-  req.query.route = "review";
-  req.body = { deleteFile: "yes" };
+        const fileAfter = req.session.siteData["test-site"].inputData.index.formData.upload;
+        expect(fileAfter).to.deep.equal(fileBefore); // ✅ unchanged
 
-  const handler = govcyFileDeletePostHandler();
-  await handler(req, res, next);
+        expect(res.redirect.calledOnce).to.be.true;
+        const redirectUrl = res.redirect.firstCall.args[0];
+        expect(redirectUrl).to.equal("/test-site/index");
+    });
 
-  expect(res.redirect.calledOnce).to.be.true;
+    it("10. POST should preserve route=review in redirect", async () => {
+        // in test setup:
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
 
-  const redirectUrl = res.redirect.firstCall.args[0];
-  expect(redirectUrl).to.include("/test-site/index");
-  expect(redirectUrl).to.include("route=review");
-});
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+        req.query.route = "review";
+        req.body = { deleteFile: "yes" };
 
-it("11. POST should return error if file input element is not found", async () => {
-  req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
 
-  // 🔥 Remove fileInput element from page template
-  req.serviceData.pages[0].pageTemplate.sections[0].elements[0].params.elements = [];
+        expect(res.redirect.calledOnce).to.be.true;
 
-  const handler = govcyFileDeletePostHandler();
-  await handler(req, res, next);
+        const redirectUrl = res.redirect.firstCall.args[0];
+        expect(redirectUrl).to.include("/test-site/index");
+        expect(redirectUrl).to.include("route=review");
+    });
 
-  const error = next.firstCall.args[0];
-  expect(error).to.be.an("error");
-  expect(error.message).to.include("File input [upload] not allowed on this page");
-});
+    it("11. POST should return error if file input element is not found", async () => {
+        req.body = { deleteFile: "yes" };
 
-it("12. POST should redirect if page condition evaluates to true", async () => {
-  req.body = { deleteFile: "yes" };
+        // 🔥 Remove fileInput element from page template
+        req.serviceData.pages[0].pageTemplate.sections[0].elements[0].params.elements = [];
 
-  // Inject a condition that evaluates to true
-  req.serviceData.pages[0].pageData.conditions = [
-    {
-      expression: "true",
-      redirect: "redirected-from-post"
-    }
-  ];
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
 
-  const handler = govcyFileDeletePostHandler();
-  await handler(req, res, next);
+        const error = next.firstCall.args[0];
+        expect(error).to.be.an("error");
+        expect(error.message).to.include("File input [upload] not allowed on this page");
+    });
 
-  expect(res.redirect.calledOnce).to.be.true;
-  const redirectUrl = res.redirect.firstCall.args[0];
-  expect(redirectUrl).to.include("redirected-from-post");
-});
+    it("12. POST should redirect if page condition evaluates to true", async () => {
+        req.body = { deleteFile: "yes" };
+
+        // Inject a condition that evaluates to true
+        req.serviceData.pages[0].pageData.conditions = [
+            {
+                expression: "true",
+                redirect: "redirected-from-post"
+            }
+        ];
+
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        expect(res.redirect.calledOnce).to.be.true;
+        const redirectUrl = res.redirect.firstCall.args[0];
+        expect(redirectUrl).to.include("redirected-from-post");
+    });
+
+    it("13. POST should not delete and fail if fileDeleteAPIEndpoint config is missing", async () => {
+        // Ensure endpoint is NOT configured
+        delete req.serviceData.site.fileDeleteAPIEndpoint;
+
+        const before = JSON.parse(JSON.stringify(
+            req.session.siteData["test-site"].inputData.index.formData.upload
+        ));
+
+        req.body = { deleteFile: "yes" };
+
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        // No redirect on config error, should call next(err)
+        expect(res.redirect.called).to.be.false;
+        expect(next.calledOnce).to.be.true;
+
+        const err = next.firstCall.args[0];
+        expect(err).to.be.an("error");
+        // tolerate possible typo 'APU' vs 'API'
+        expect(err.message).to.match(/File delete (APU|API) configuration not found/i);
+        expect(err.status || err.statusCode || err.code).to.satisfy(v => (v === 404) || v == null);
+
+        // File must remain untouched
+        const after = req.session.siteData["test-site"].inputData.index.formData.upload;
+        expect(after).to.deep.equal(before);
+    });
+
+    it("14. POST should not delete and fail if required env vars are missing", async () => {
+        // Endpoint configured, but env URL/clientKey intentionally missing
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",          // will remain unset in process.env
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY", // also unset
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+        delete process.env.TEST_DELETE_FILE_API_URL;
+        delete process.env.TEST_SUBMISSION_API_CLIENT_KEY;
+
+        const before = JSON.parse(JSON.stringify(
+            req.session.siteData["test-site"].inputData.index.formData.upload
+        ));
+
+        req.body = { deleteFile: "yes" };
+
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        // Should surface error via next(err), not redirect
+        expect(res.redirect.called).to.be.false;
+        expect(next.calledOnce).to.be.true;
+
+        const err = next.firstCall.args[0];
+        expect(err).to.be.an("error");
+        // your code message suggests "Missing environment variables for upload" (keep it loose)
+        expect(err.message).to.match(/Missing environment variables/i);
+        expect(err.status || err.statusCode || err.code).to.satisfy(v => (v === 404) || v == null);
+
+        // File must remain untouched
+        const after = req.session.siteData["test-site"].inputData.index.formData.upload;
+        expect(after).to.deep.equal(before);
+    });
+
+
+
+    it("15. POST should remove same physical file from other pages (site-wide)", async () => {
+        // Add another page that references the same file
+        req.serviceData.pages.push({
+            pageData: { url: "another-page", title: "Another" },
+            pageTemplate: {
+                sections: [
+                    {
+                        name: "main", elements: [
+                            {
+                                element: "form", params: {
+                                    elements: [
+                                        { element: "fileInput", params: { id: "upload2", name: "upload2", label: { en: "Another File", el: "Άλλο Αρχείο" } } }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+        // Put same file ref there
+        req.session.siteData["test-site"].inputData["another-page"] = {
+            formData: { upload2: { fileId: "abc123", sha256: "xyz987" } }
+        };
+
+        // Success endpoint
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/fileDelete";
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+
+        req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        // original page cleared
+        expect(req.session.siteData["test-site"].inputData.index.formData.upload).to.equal("");
+        // other page cleared as well
+        expect(req.session.siteData["test-site"].inputData["another-page"].formData.upload2).to.equal("");
+    });
+
+    it("16. POST should error if file input data not found in session", async () => {
+        // Remove file from session
+        delete req.session.siteData["test-site"].inputData.index.formData.upload;
+
+        req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        const err = next.firstCall.args[0];
+        expect(err).to.be.an("error");
+        expect(err.message).to.match(/data not found/i);
+    });
+
+    it("17. POST should redirect to condition.redirect when condition is true (even if API would fail)", async () => {
+        // Make a failing endpoint to ensure it shouldn't matter
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/error404";
+
+        // Condition that triggers redirect
+        req.serviceData.pages[0].pageData.conditions = [
+            { expression: "true", redirect: "redirected-from-post" }
+        ];
+
+        req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.include("redirected-from-post");
+    });
 
 
 });

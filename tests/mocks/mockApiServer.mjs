@@ -299,6 +299,37 @@ app.put("/:key", (req, res) => {
     }
 });
 
+// Mock put endpoint for File delete 
+app.delete("/:key/:fileId/:sha256", (req, res) => {
+    const { key, fileId, sha256 } = req.params;
+    const authHeader = req.headers['authorization'] || null;
+    console.log(`Received request with key: ${key}`);
+    console.log(`Authorization header: ${authHeader}`);
+    console.log(`Request body: ${JSON.stringify(req.body, null, 2)}`);
+
+    // Simulate different responses based on input
+    if (key === "fileDelete") {
+        return res.status(200).json({
+            succeeded: true,
+            errorCode: 0,
+            errorMessage: null,
+            data: {},
+        });
+    } else if (key === "error404") {
+        return res.status(404).json({
+            Succeeded: false,
+            ErrorCode: 404,
+            ErrorMessage: "File not found",
+        });
+    } else {
+        return res.status(400).json({
+            Succeeded: false,
+            ErrorCode: 400,
+            ErrorMessage: "Bad request",
+        });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Mock API running at http://localhost:${port}`);
 });
