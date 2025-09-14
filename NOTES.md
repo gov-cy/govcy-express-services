@@ -1,10 +1,10 @@
 # Dev notes
 This is a development guide for the govcy-express-services project.
 
-## Breaking changes
-### As of v.1.x.x
+## v.1.x.x changes
+### Breaking changes
 - the `submission` data send via the API:
-  - Changed to use camelCase instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+  - Changed to use **camelCase** instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
 ```json
 {
   "submissionUsername" : "",   // User's username
@@ -65,6 +65,42 @@ This is a development guide for the govcy-express-services project.
 }
 ```
 - `checkboxes` values are normalized to **arrays** (including `[]` when no options are selected).
+
+### Non breaking changes
+- `Header title link`: The header title can now be a link. To do that the `site.headerTitle` must look something like this:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "title": {
+                "en":"Header title", 
+                "el":"Τιτλός επικεφαλιδας"
+            },
+            "href": {
+                "en":"/service-id",
+                "el":"/service-id"
+            }
+        },
+        ...
+    }
+}
+```
+- - `Header title link - Backward compatibility`: If `site.headerTitle.title` is not set, the `site.headerTitle` will be used instead, as was before v1.x.x , for example:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "en":"Header title", 
+            "el":"Τιτλός επικεφαλιδας"
+        }
+        ...
+    }
+}
+```
 
 ## Release management
 

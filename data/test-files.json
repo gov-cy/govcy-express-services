@@ -126,10 +126,18 @@
       "tr": ""
     },
     "headerTitle": {
-      "el": "Υπηρεσία τεστ αρχεία",
-      "en": "Test service files",
-      "tr": ""
-    },
+        "title": 
+        {
+          "el": "Υπηρεσία τεστ αρχεία",
+          "en": "Test service files",
+          "tr": ""
+        },
+        "href": {
+          "el": "/test-files",
+          "en": "/test-files",
+          "tr": "/test-files"
+        }
+      },
     "description": {
       "el": "[Υποβάλετε αίτηση για ...]",
       "en": "[Submit an application ...]",

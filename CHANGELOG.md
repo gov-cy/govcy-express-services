@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0-alpha.20] - 2025-09-14
+### Added
+- Added ability to add a link on the header title (from govcy-frontend-renderer). To do that the `site.headerTitle` must look something like this:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "title": {
+                "en":"Header title", 
+                "el":"Τιτλός επικεφαλιδας"
+            },
+            "href": {
+                "en":"/service-id",
+                "el":"/service-id"
+            }
+        },
+        ...
+    }
+}
+```
+- **Backward compatibility**: If `site.headerTitle.title` is not set, the `site.headerTitle` will be used instead, for example:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "en":"Header title", 
+            "el":"Τιτλός επικεφαλιδας"
+        }
+        ...
+    }
+}
+```
+
 ## [v1.0.0-alpha.19] - 2025-09-11
 ### Changed
 - Updated `govcy-frontend-renderer` for `warning` component support

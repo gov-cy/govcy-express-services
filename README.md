@@ -250,10 +250,17 @@ Here is an example JSON config:
       "en": "Test service",
       "tr": ""
     },
-    "headerTitle": {  //<-- Service title (as it apears in the header)
-      "el": "[Το ΟΝΟΜΑ της υπηρεσίας που θα φαίνεται στις φόρμες]",
-      "en": "[The NAME of the service as it will appear on forms]",
-      "tr": ""
+    "headerTitle": {  // <-- The header title settings
+      "title": {      //<-- Service title (as it apears in the header)
+        "el": "[Το ΟΝΟΜΑ της υπηρεσίας που θα φαίνεται στις φόρμες]",
+        "en": "[The NAME of the service as it will appear on forms]",
+        "tr": ""
+      },
+      "href": {       // <-- The relative URL of the header title link (for each language)
+          "el":"/service-id",
+          "en":"/service-id",
+          "tr":"/service-id"
+      }
     },
     "description": {  //<-- Service description (meta)
       "el": "[Υποβάλετε αίτηση για ...]",
