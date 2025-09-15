@@ -1,5 +1,8 @@
 
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import { errorResponse } from '../utils/govcyApiResponse.mjs';
+import { isApiRequest } from '../utils/govcyApiDetection.mjs';
+
 /**
  * Middleware to handle CSRF token generation and validation.
  * 
@@ -14,7 +17,18 @@ export function govcyCsrfMiddleware(req, res, next) {
   }
 
   req.csrfToken = () => req.session.csrfToken;
-
+  
+  if (
+    req.method === 'POST' &&
+    req.headers['content-type']?.includes('multipart/form-data') &&
+    isApiRequest(req)) {
+    const tokenFromHeader = req.get('X-CSRF-Token');
+    // UNCOMMENT
+    if (!tokenFromHeader || tokenFromHeader !== req.session.csrfToken) {
+      return res.status(400).json(errorResponse(403, 'Invalid CSRF token'));
+    }
+    return next();
+  } 
   // Check token on POST requests
   if (req.method === 'POST') {
     const tokenFromBody = req.body._csrf;

@@ -263,6 +263,9 @@ export function validateFormElements(elements, formData, pageUrl) {
         formData[`${field.params.name}_day`]]
           .filter(Boolean) // Remove empty values
           .join("-") // Join remaining parts
+        // unneeded handle of `Attachment` at the end
+        // : (field.element === "fileInput") // Handle fileInput
+        //   ? formData[`${field.params.name}Attachment`] || ""
         : formData[field.params.name] || ""; // Get submitted value
 
       //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items
@@ -310,6 +313,10 @@ export function validateFormElements(elements, formData, pageUrl) {
                   formData[`${conditionalElement.params.name}_day`]]
                     .filter(Boolean) // Remove empty values
                     .join("-") // Join remaining parts
+                  : (conditionalElement.element === "fileInput") // Handle fileInput
+                      // unneeded handle of `Attachment` at the end
+                      // ? formData[`${conditionalElement.params.name}Attachment`] || ""
+                      ? formData[`${conditionalElement.params.name}`] || ""
                   : formData[conditionalElement.params.name] || ""; // Get submitted value
 
                 //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items`

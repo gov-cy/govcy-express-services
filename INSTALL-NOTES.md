@@ -85,7 +85,7 @@ Details about cyLogin can be found at the [CY Login documentation](https://dev.a
 
 To generate the SESSION_SECRET, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
 
-See more on the environment variables in the [README Enviromental variables](README.md#-enviromental-variables)
+See more on the environment variables in the [README Enviromental variables](README.md#-environment-variables)
 
 ### Create non secret environment variables
 

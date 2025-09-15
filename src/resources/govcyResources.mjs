@@ -6,6 +6,11 @@ export const staticResources = {
             el: "Υποβολή", 
             tr: "Gönder" 
         },
+        continue: { 
+            en: "Continue", 
+            el: "Συνέχεια", 
+            tr: "Continue" 
+        },
         cancel: { 
             en: "Cancel", 
             el: "Ακύρωση", 
@@ -54,7 +59,7 @@ export const staticResources = {
         errorPage403NaturalOnlyPolicyBody: {
             el: "<p>Η πρόσβαση επιτρέπεται μόνο σε φυσικά πρόσωπα με επιβεβαιωμένο προφίλ. <a href=\"/logout\">Αποσυνδεθείτε</a> και δοκιμάστε ξανά αργότερα.</p>",
             en: "<p>Access is only allowed to individuals with a verified profile.<a href=\"/logout\">Sign out</a> and try again later.</p>",
-            tr: "<p>Access is only allowed to individuals with a confirmed profile.<a href=\"/logout\">Giriş yapmadan</a> sonra tekrar deneyiniz.</p>"
+            tr: "<p>Access is only allowed to individuals with a verified profile.<a href=\"/logout\">Giriş yapmadan</a> sonra tekrar deneyiniz.</p>"
         },
         errorPage500Title: {
             el: "Λυπούμαστε, υπάρχει πρόβλημα με την υπηρεσία",
@@ -100,6 +105,51 @@ export const staticResources = {
             en: "We have received your request. ",
             el: "Έχουμε λάβει την αίτησή σας. ",
             tr: "We have received your request. "
+        },
+        fileUploaded : {
+            en: "File uploaded",
+            el: "Το αρχείο ανεβάστηκε",
+            tr: "File uploaded"
+        },
+        fileNotUploaded : {
+            en: "File has not been uploaded. ",
+            el: "Το αρχείο δεν ανεβάστηκε. ",
+            tr: "File has not been uploaded. "
+        },
+        fileYouHaveUploaded : {
+            en: "You have uploaded the file for \"{{file}}\"",
+            el: "Έχετε ανεβάσει το αρχείο \"{{file}}\"",
+            tr: "You have uploaded the file for \"{{file}}\""
+        },
+        deleteFileTitle : {
+            en: "Are you sure you want to delete the file \"{{file}}\"? ",
+            el: "Σίγουρα θέλετε να διαγράψετε το αρχείο \"{{file}}\";",
+            tr: "Are you sure you want to delete the file \"{{file}}\"? "
+        },
+        deleteYesOption: {
+            el:"Ναι, θέλω να διαγράψω το αρχείο",
+            en:"Yes, I want to delete this file",
+            tr:"Yes, I want to delete this file"
+        },
+        deleteNoOption: {
+            el:"Όχι, δεν θέλω να διαγράψω το αρχείο",
+            en:"No, I don't want to delete this file",
+            tr:"No, I don't want to delete this file"
+        },
+        deleteFileValidationError: {
+            en: "Select if you want to delete the file",
+            el: "Επιλέξτε αν θέλετε να διαγράψετε το αρχείο",
+            tr: "Select if you want to delete the file"
+        },
+        viewFile: {
+            en: "View file",
+            el: "Προβολή αρχείου",
+            tr: "View file"
+        },
+        deleteSameFileWarning: {
+            en: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application.",
+            el: "Έχετε ανεβάσει το αρχείο αυτό και σε άλλα σημεία της αίτησης. Αν το διαγράψετε, θα διαγραφεί από όλα τα σημεία.",
+            tr: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application."
         }
     },
     //remderer sections
@@ -113,9 +163,19 @@ export const staticResources = {
             element: "htmlElement",
             params: {
                 text: {
-                    en: `<script src="/js/govcyForms.js"></script>`,
-                    el: `<script src="/js/govcyForms.js"></script>`,
-                    tr: `<script src="/js/govcyForms.js"></script>`
+                    en: `<script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`,
+                    el: `<script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`,
+                    tr: `<script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyCompiledTemplates.browser.js"></script><script src="https://cdn.jsdelivr.net/gh/gov-cy/govcy-frontend-renderer@v1.22.0/dist/govcyFrontendRenderer.browser.js"></script><script type="module" src="/js/govcyForms.js"></script><script type="module" src="/js/govcyFiles.js"></script>`
+                }
+            }
+        },
+        govcyLoadingOverlay: {
+            element: "htmlElement",
+            params: {
+                text: {
+                    en: `<style>.govcy-loadingOverlay{position:fixed;top:0;right:0;bottom:0;left:0;display:none;justify-content:center;align-items:center;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);z-index:1050}.govcy-loadingOverlay[aria-hidden="false"]{display:flex}</style><div id="govcy--loadingOverlay" class="govcy-loadingOverlay" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1"><div class="govcy-loadingOverlay__content" role="status" aria-live="polite"><div class="spinner-border govcy-text-primary" role="status"><span class="govcy-visually-hidden">Loading...</span></div></div></div>`,
+                    el: `<style>.govcy-loadingOverlay{position:fixed;top:0;right:0;bottom:0;left:0;display:none;justify-content:center;align-items:center;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);z-index:1050}.govcy-loadingOverlay[aria-hidden="false"]{display:flex}</style><div id="govcy--loadingOverlay" class="govcy-loadingOverlay" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1"><div class="govcy-loadingOverlay__content" role="status" aria-live="polite"><div class="spinner-border govcy-text-primary" role="status"><span class="govcy-visually-hidden">Φόρτωση...</span></div></div></div>`,
+                    tr: `<style>.govcy-loadingOverlay{position:fixed;top:0;right:0;bottom:0;left:0;display:none;justify-content:center;align-items:center;background:rgba(255,255,255,.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);z-index:1050}.govcy-loadingOverlay[aria-hidden="false"]{display:flex}</style><div id="govcy--loadingOverlay" class="govcy-loadingOverlay" aria-hidden="true" role="dialog" aria-modal="true" tabindex="-1"><div class="govcy-loadingOverlay__content" role="status" aria-live="polite"><div class="spinner-border govcy-text-primary" role="status"><span class="govcy-visually-hidden">Loading...</span></div></div></div>`
                 }
             }
         },
@@ -187,6 +247,27 @@ export function csrfTokenInput(csrfToken) {
                 en: csrfTokenInput,
                 el: csrfTokenInput,
                 tr: csrfTokenInput
+            }
+        }
+    };
+}
+
+/**
+ * Get the site and page input elements 
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url
+ * @param {string} lang The page language
+ * @returns {object} htmlElement with the site and page inputs
+ */
+export function siteAndPageInput(siteId, pageUrl, lang = "el") {
+    const siteAndPageInputs = `<input type="hidden" name="_siteId" value="${siteId}"><input type="hidden" name="_pageUrl" value="${pageUrl}"><input type="hidden" name="_lang" value="${lang}">`;
+    return {
+        element: "htmlElement",
+        params: {
+            text: {
+                en: siteAndPageInputs,
+                el: siteAndPageInputs,
+                tr: siteAndPageInputs
             }
         }
     };

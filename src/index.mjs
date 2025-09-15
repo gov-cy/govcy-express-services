@@ -23,6 +23,10 @@ import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mj
 import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
 import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
 import { govcyServiceEligibilityHandler } from './middleware/govcyServiceEligibilityHandler.mjs';
+import { govcyLoadSubmissionData } from './middleware/govcyLoadSubmissionData.mjs';
+import { govcyFileUpload } from './middleware/govcyFileUpload.mjs';
+import { govcyFileDeletePageHandler, govcyFileDeletePostHandler } from './middleware/govcyFileDeleteHandler.mjs';
+import { govcyFileViewHandler } from './middleware/govcyFileViewHandler.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -127,12 +131,20 @@ export default function initializeGovCyExpressService(){
 
   // 📝 -- ROUTE: Serve manifest.json dynamically for each site
   app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
+
+  // 🗃️ -- ROUTE: Handle POST requests for file uploads for a page. 
+  app.post('/apis/:siteId/:pageUrl/upload', 
+    serviceConfigDataMiddleware, 
+    requireAuth, // UNCOMMENT 
+    naturalPersonPolicy, // UNCOMMENT 
+    govcyServiceEligibilityHandler(true), // UNCOMMENT 
+    govcyFileUpload);
   
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
-  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true),govcyPageHandler(), renderGovcyPage());
+  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true),govcyLoadSubmissionData(),govcyPageHandler(), renderGovcyPage());
   
   // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
-  app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPageHandler(), renderGovcyPage());
+  app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(),govcyLoadSubmissionData(), govcyReviewPageHandler(), renderGovcyPage());
   
   // ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
   app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(true), govcyPDFRender());
@@ -140,15 +152,23 @@ export default function initializeGovCyExpressService(){
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
   app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
   
+  // 👀🗃️ -- ROUTE: View file (BEFORE the dynamic route)
+  app.get('/:siteId/:pageUrl/view-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileViewHandler());
+
+  // ❌🗃️ -- ROUTE: Delete file (BEFORE the dynamic route)
+  app.get('/:siteId/:pageUrl/delete-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileDeletePageHandler(), renderGovcyPage());
+  
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
-  app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyPageHandler(), renderGovcyPage());
+  app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());
+  
+  // ❌🗃️📥 -- ROUTE: Handle POST requests for delete file
+  app.post('/:siteId/:pageUrl/delete-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFileDeletePostHandler());
   
   // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
   
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
   app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFormsPostHandler());
-  
   
   // post for /:siteId/review
   

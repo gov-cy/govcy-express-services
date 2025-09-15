@@ -1,6 +1,7 @@
 tests/mocks/
 node_modules
 mochawesome-report/
+coverage/
 secrets/
 server.cert
 server.key

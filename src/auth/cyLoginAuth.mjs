@@ -2,7 +2,7 @@ import * as client from 'openid-client';
 import { getEnvVariable } from '../utils/govcyEnvVariables.mjs';
 import { logger } from "../utils/govcyLogger.mjs";
 
-
+/* c8 ignore start */
 // OpenID Configuration
 const issuerUrl = getEnvVariable('CYLOGIN_ISSUER_URL');
 const clientId = getEnvVariable('CYLOGIN_CLIENT_ID');
@@ -131,3 +131,4 @@ export function getLogoutUrl(id_token_hint = '') {
 
 // Export config if needed elsewhere
 export { config };
+/* c8 ignore end */

@@ -16,6 +16,7 @@
 export function initializeSiteData(store, siteId, pageUrl = null) {
     if (!store.siteData) store.siteData = {};
     if (!store.siteData[siteId]) store.siteData[siteId] = {};
+    if (!store.siteData[siteId].inputData) store.siteData[siteId].loadData = {};
     if (!store.siteData[siteId].inputData) store.siteData[siteId].inputData = {};
     if (!store.siteData[siteId].submissionData) store.siteData[siteId].submissionData = {};
 
@@ -98,6 +99,41 @@ export function storePageData(store, siteId, pageUrl, formData) {
     store.siteData[siteId].inputData[pageUrl]["formData"] = formData;
 }
 
+export function storePageDataElement(store, siteId, pageUrl, elementName, value) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId, pageUrl);
+
+    // Store the element value
+    store.siteData[siteId].inputData[pageUrl].formData[elementName] = value;
+}
+/**
+ * Stores the page's input data in the data layer
+ *  * 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {object} loadData The form data to be stored 
+ */
+export function storeSiteInputData(store, siteId, loadData) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+
+    store.siteData[siteId]["inputData"] = loadData;
+}
+
+/**
+ * Stores the page's load data in the data layer
+ *  * 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {object} loadData The form data to be stored 
+ */
+export function storeSiteLoadData(store, siteId, loadData) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+
+    store.siteData[siteId]["loadData"] = loadData;
+}
+
 /**
  * Stores the site validation errors in the data layer 
  * 
@@ -155,9 +191,12 @@ export function storeSiteSubmissionData(store, siteId, submissionData) {
     // let rawData = getSiteInputData(store, siteId);
     // Store the submission data
     store.siteData[siteId].submissionData = submissionData;
-      
-      // Clear validation errors from the session
+
+    // Clear validation errors from the session
     store.siteData[siteId].inputData = {};
+    // Clear presaved/temporary save data
+    store.siteData[siteId].loadData = {};
+
 }
 
 
@@ -169,7 +208,7 @@ export function storeSiteSubmissionData(store, siteId, submissionData) {
  * @param {object} result - API response
  */
 export function storeSiteEligibilityResult(store, siteId, endpointKey, result) {
-    
+
     initializeSiteData(store, siteId); // Ensure the structure exists
 
     if (!store.siteData[siteId].eligibility) store.siteData[siteId].eligibility = {};
@@ -205,7 +244,7 @@ export function getSiteEligibilityResult(store, siteId, endpointKey, maxAgeMs = 
  */
 export function getPageValidationErrors(store, siteId, pageUrl) {
     const validationErrors = store?.siteData?.[siteId]?.inputData?.[pageUrl]?.validationErrors || null;
-    
+
     if (validationErrors) {
         // Clear validation errors from the session
         delete store.siteData[siteId].inputData[pageUrl].validationErrors;
@@ -236,7 +275,7 @@ export function getPageData(store, siteId, pageUrl) {
  */
 export function getSiteSubmissionErrors(store, siteId) {
     const validationErrors = store?.siteData?.[siteId]?.submissionErrors || null;
-    
+
     if (validationErrors) {
         // Clear validation errors from the session
         delete store.siteData[siteId].submissionErrors;
@@ -255,7 +294,7 @@ export function getSiteSubmissionErrors(store, siteId) {
  */
 export function getSiteData(store, siteId) {
     const inputData = store?.siteData?.[siteId] || {};
-    
+
     if (inputData) {
         return inputData;
     }
@@ -272,13 +311,44 @@ export function getSiteData(store, siteId) {
  */
 export function getSiteInputData(store, siteId) {
     const inputData = store?.siteData?.[siteId]?.inputData || {};
-    
+
     if (inputData) {
         return inputData;
     }
 
     return null;
 }
+
+/**
+ * Get the site's load data from the store 
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId |The site id
+ * @returns The site load data or null if none exist.
+ */
+export function getSiteLoadData(store, siteId) {
+    const loadData = store?.siteData?.[siteId]?.loadData || {};
+
+    if (loadData) {
+        return loadData;
+    }
+
+    return null;
+}
+
+/**
+ * Get the site's reference number from load data from the store 
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId The site ID
+ * @returns {string|null} The reference number or null if not available
+ */
+export function getSiteLoadDataReferenceNumber(store, siteId) {
+    const ref = store?.siteData?.[siteId]?.loadData?.referenceValue;
+
+    return typeof ref === 'string' && ref.trim() !== '' ? ref : null;
+}
+
 
 /**
  * Get the site's input data from the store 
@@ -289,9 +359,9 @@ export function getSiteInputData(store, siteId) {
  */
 export function getSiteSubmissionData(store, siteId) {
     initializeSiteData(store, siteId); // Ensure the structure exists
-    
+
     const submission = store?.siteData?.[siteId]?.submissionData || {};
-    
+
     if (submission) {
         return submission;
     }
@@ -318,11 +388,189 @@ export function getFormDataValue(store, siteId, pageUrl, elementName) {
  * @param {object} store The session store 
  * @returns The user object from the store or null if it doesn't exist.
  */
-export function getUser(store){
+export function getUser(store) {
     return store.user || null;
 }
 
 export function clearSiteData(store, siteId) {
     delete store?.siteData[siteId];
+}
+
+/**
+ * Check if a file reference is used in more than one place (field) across the site's inputData.
+ *
+ * A "file reference" is an object like:
+ *   { sha256: "abc...", fileId: "xyz..." }
+ *
+ * Matching rules:
+ *  - If both fileId and sha256 are provided, both must match.
+ *  - If only one is provided, we match by that single property.
+ *
+ * Notes:
+ *  - Does NOT mutate the session.
+ *  - Safely handles missing site/pages.
+ *  - If a form field is an array (e.g., multiple file inputs), each item is checked.
+ *
+ * @param {object} store   The session object (e.g., req.session)
+ * @param {string} siteId  The site identifier
+ * @param {object} params  { fileId?: string, sha256?: string }
+ * @returns {boolean}      true if the file is found in more than one place, else false
+ */
+export function isFileUsedInSiteInputDataAgain(store, siteId, { fileId, sha256 } = {}) {
+    // If neither identifier is provided, we cannot match anything
+    if (!fileId && !sha256) return false;
+
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+
+    // Site input data: session.siteData[siteId].inputData
+    const site = store?.siteData?.[siteId]?.inputData;
+    if (!site || typeof site !== 'object') return false;
+
+    let hits = 0; // how many fields across the site reference this file
+
+    // Loop all pages under the site
+    for (const pageKey of Object.keys(site)) {
+        const formData = site[pageKey]?.formData;
+        if (!formData || typeof formData !== 'object') continue;
+
+        // Loop all fields on the page
+        for (const [_, value] of Object.entries(formData)) {
+            if (value == null) continue;
+
+            // Normalize to an array to also support multi-value fields (e.g., multiple file inputs)
+            const candidates = Array.isArray(value) ? value : [value];
+
+            for (const candidate of candidates) {
+                // We only consider objects that look like file references
+                if (
+                    candidate &&
+                    typeof candidate === 'object' &&
+                    'fileId' in candidate &&
+                    'sha256' in candidate
+                ) {
+                    const idMatches = fileId ? candidate.fileId === fileId : true;
+                    const shaMatches = sha256 ? candidate.sha256 === sha256 : true;
+
+                    if (idMatches && shaMatches) {
+                        hits += 1;
+                        // As soon as we see it in more than one place, we can answer true
+                        if (hits > 1) return true;
+                    }
+                }
+            }
+        }
+    }
+
+    // If we get here, it was used 0 or 1 times
+    return false;
+}
+
+
+/**
+ * Remove (replace with "") file values across ALL pages of a site,
+ * matching a specific fileId and/or sha256.
+ *
+ * Matching rules:
+ *  - If BOTH fileId and sha256 are provided, a file object must match BOTH.
+ *  - If ONLY fileId is provided, match on fileId.
+ *  - If ONLY sha256 is provided, match on sha256.
+ *
+ * Scope:
+ *  - Operates on every page under store.siteData[siteId].inputData.
+ *  - Shallow traversal of formData:
+ *      • Direct fields: formData[elementId] = { fileId, sha256, ... }
+ *      • Arrays: [ {fileId...}, {sha256...}, "other" ] → ["", "", "other"] (for matches)
+ *
+ * Side effects:
+ *  - Mutates store.siteData[siteId].inputData[*].formData in place.
+ *  - Intentionally returns nothing.
+ *
+ * @param {object} store - The data-layer store.
+ * @param {string} siteId - The site key under store.siteData to modify.
+ * @param {{ fileId?: string|null, sha256?: string|null }} match - Identifiers to match.
+ *   Provide at least one of fileId/sha256. If both are given, both must match.
+ */
+export function removeAllFilesFromSite(
+    store,
+    siteId,
+    { fileId = null, sha256 = null } = {}
+) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId);
+    // --- Guard rails ---------------------------------------------------------
+
+    // Nothing to remove if neither identifier is provided.
+    if (!fileId && !sha256) return;
+
+    // Per your structure: dig under .inputData for the site's pages.
+    const site = store?.siteData?.[siteId]?.inputData;
+    if (!site || typeof site !== "object") return;
+
+    // --- Helpers -------------------------------------------------------------
+
+    // Is this value a "file-like" object (has fileId and/or sha256)?
+    const isFileLike = (v) =>
+        v &&
+        typeof v === "object" &&
+        (Object.prototype.hasOwnProperty.call(v, "fileId") ||
+            Object.prototype.hasOwnProperty.call(v, "sha256"));
+
+    // Does a file-like object match the provided criteria?
+    const isMatch = (obj) => {
+        if (!isFileLike(obj)) return false;
+
+        // Strict when both are given
+        if (fileId && sha256) {
+            return obj.fileId === fileId && obj.sha256 === sha256;
+        }
+        // Otherwise match whichever was provided
+        if (fileId) return obj.fileId === fileId;
+        if (sha256) return obj.sha256 === sha256;
+
+        return false;
+    };
+
+    // --- Main traversal over all pages --------------------------------------
+
+    for (const page of Object.values(site)) {
+        // Each page should be an object with a formData object
+        const formData =
+            page &&
+                typeof page === "object" &&
+                page.formData &&
+                typeof page.formData === "object"
+                ? page.formData
+                : null;
+
+        if (!formData) continue; // skip content-only pages, etc.
+
+        // For each field on this page…
+        for (const key of Object.keys(formData)) {
+            const val = formData[key];
+
+            // Case A: a single file object → replace with "" if it matches.
+            if (isMatch(val)) {
+                formData[key] = "";
+                continue;
+            }
+
+            // Case B: an array → replace ONLY the matching items with "".
+            if (Array.isArray(val)) {
+                let changed = false;
+                const mapped = val.map((item) => {
+                    if (isMatch(item)) {
+                        changed = true;
+                        return "";
+                    }
+                    return item;
+                });
+                if (changed) formData[key] = mapped;
+            }
+
+            // Note: If you later store file-like objects deeper in nested objects,
+            // add a recursive visitor here (with cycle protection / max depth).
+        }
+    }
 }
 

@@ -4,8 +4,9 @@ name: Tag and Publish Legacy and Dev Versions (v0, v1, ...)
 on:
   push:
     tags:
-      # - 'v0.*.*'
-      - 'v1.*.*'
+      - 'v1.*'
+      # - 'v0.*'   # uncomment later if/when you publish v0 tags here too
+      # - 'v2.*'   # future-proof
 
 jobs:
   publish:
@@ -31,13 +32,25 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Parsed version: $VERSION"
 
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+\.[0-9]+)?$ ]]; then
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
             echo "❌ Invalid semver version in package.json: $VERSION"
             exit 1
           fi
 
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           echo "major=$MAJOR" >> $GITHUB_OUTPUT
+
+      - name: Compute dist-tag (lts for stable, next for prerelease)
+        id: disttag
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          MAJOR="${{ steps.version.outputs.major }}"
+          if [[ "$VERSION" == *-* ]]; then
+            echo "tag=v${MAJOR}-next" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v${MAJOR}-lts" >> $GITHUB_OUTPUT
+          fi
+          echo "Using dist-tag=$(grep -o 'tag=.*' $GITHUB_OUTPUT || true)"
 
       # ✅ Skip publish if version already exists on NPM
       - name: Check if version already published
@@ -59,7 +72,8 @@ jobs:
       # ✅ Publish to NPM under dist-tag 'v0' or 'v1'
       - name: Publish to NPM
         if: steps.check-npm.outputs.skip == 'false'
-        run: npm publish --access public --tag v${{ steps.version.outputs.major }}
+        run: npm publish --access public --tag ${{ steps.disttag.outputs.tag }}
+        # run: npm publish --access public --tag v${{ steps.version.outputs.major }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

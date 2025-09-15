@@ -92,6 +92,7 @@
       "method": "POST",
       "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
       "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
       "response": {
         "errorResponse": {
           "102": {
@@ -104,6 +105,34 @@
           }
         }
       }
+    },
+    "submissionGetAPIEndpoint": {
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "submissionPutAPIEndpoint": {
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileUploadAPIEndpoint": {
+      "url": "TEST_UPLOAD_FILE_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDownloadAPIEndpoint": {
+      "url": "TEST_DOWNLOAD_FILE_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
     },
     "eligibilityAPIEndpoints": [
       {
@@ -1004,6 +1033,37 @@
                           "en": "Hint"
                         }
                       }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "file1",
+                        "name": "file1",
+                        "label": {
+                          "el": "Upload a file Ελληνικά",
+                          "en": "Upload a file",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "The file must be a PDF",
+                          "en": "The file must be a PDF",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                          {
+                            "check": "required",
+                            "params": {
+                              "checkValue": "",
+                              "message": {
+                                "el": "Ανεβάστε file",
+                                "en": "Upload file",
+                                "tr": ""
+                              }
+                            }
+                          }
+                      ]
                     },
                     {
                       "element": "button",

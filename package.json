@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "0.2.16",
+  "version": "1.0.0",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -44,22 +44,30 @@
     "test:integration": "mocha --recursive tests/integration/**/*.test.mjs",
     "test:package": "mocha --recursive tests/package/**/*.test.mjs",
     "test:functional": "mocha --timeout 30000 --recursive tests/functional/**/*.test.mjs",
-    "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs"
+    "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs",
+    "coverage": "c8 --reporter=html --reporter=text --reporter=lcov --reporter=json-summary npm test",
+    "coverage:copy": "node -e \"try{require('fs').copyFileSync('coverage/coverage-summary.json','./coverage-summary.json')}catch(e){process.exit(0)}\"",
+    "coverage:report": "c8 report",
+    "coverage:badge": "coverage-badges --output ./coverage-badges.svg && npm run coverage:copy"
   },
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.0",
-    "@gov-cy/govcy-frontend-renderer": "^1.18.0",
+    "@gov-cy/govcy-frontend-renderer": "^1.24.0",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "form-data": "^4.0.4",
+    "multer": "^2.0.2",
     "openid-client": "^6.3.4",
     "puppeteer": "^24.6.0"
   },
   "devDependencies": {
+    "c8": "^10.1.3",
     "chai": "^5.2.0",
     "chai-http": "^5.1.1",
+    "coverage-badges-cli": "^2.2.0",
     "mocha": "^11.1.0",
     "mochawesome": "^7.1.3",
     "nodemon": "^3.0.2",

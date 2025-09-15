@@ -17,7 +17,7 @@ import { logger } from "./govcyLogger.mjs";
 export function prepareSubmissionData(req, siteId, service) {
     // Get the raw data from the session store
     // const rawData = dataLayer.getSiteInputData(req.session, siteId);
-    
+
     // ----- Conditional logic comes here
     // Filter site input data based on active pages only
     // const rawData = {};
@@ -32,7 +32,7 @@ export function prepareSubmissionData(req, siteId, service) {
     //     }
     // }
 
-    // ----- consistent data model for submission_data (CONFIG-BASED)
+    // ----- consistent data model for submissionData (CONFIG-BASED)
     const submissionData = {};
 
     // Loop through every page in the service definition
@@ -48,7 +48,8 @@ export function prepareSubmissionData(req, siteId, service) {
 
         if (!formElement) continue; // ⛔ Skip pages without a <form> element
 
-        submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+        // submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+        submissionData[pageUrl] = {}; // ✅ Now initialize only if a form is present
 
         // Traverse the form elements inside the form
         for (const element of formElement.params.elements || []) {
@@ -64,8 +65,17 @@ export function prepareSubmissionData(req, siteId, service) {
             const value = getValue(element, pageUrl, req, siteId) ?? "";
 
             // Store in submissionData
-            submissionData[pageUrl].formData[elId] = value;
+            // submissionData[pageUrl].formData[elId] = value;
+            submissionData[pageUrl][elId] = value;
 
+            // handle fileInput
+            if (elType === "fileInput") {
+                // change the name of the key to include "Attachment" at the end but not have the original key
+                // submissionData[pageUrl].formData[elId + "Attachment"] = value;
+                submissionData[pageUrl][elId + "Attachment"] = value;
+                // delete submissionData[pageUrl].formData[elId];
+                delete submissionData[pageUrl][elId];
+            }
 
             // 🔄 If radios with conditionalElements, walk ALL options
             if (elType === "radios" && Array.isArray(element.params?.items)) {
@@ -84,14 +94,23 @@ export function prepareSubmissionData(req, siteId, service) {
                         const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
 
                         // Store even if the field was not visible to user
-                        submissionData[pageUrl].formData[condId] = condValue;
+                        // submissionData[pageUrl].formData[condId] = condValue;
+                        submissionData[pageUrl][condId] = condValue;
+                        // handle fileInput
+                        if (condType === "fileInput") {
+                            // change the name of the key to include "Attachment" at the end but not have the original key
+                            // submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
+                            submissionData[pageUrl][condId + "Attachment"] = condValue;
+                            // delete submissionData[pageUrl].formData[condId];
+                            delete submissionData[pageUrl][condId];
+                        }
                     }
                 }
             }
         }
     }
     logger.debug("Submission Data prepared:", submissionData);
-    // ----- END config-based stable submission_data block
+    // ----- END config-based stable submissionData block
 
     // Get the print-friendly data from the session store
     const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
@@ -100,14 +119,14 @@ export function prepareSubmissionData(req, siteId, service) {
     const reviewSummaryList = generateReviewSummary(printFriendlyData, req, siteId, false);
     // Prepare the submission data object
     return {
-        submission_username: dataLayer.getUser(req.session).name,
-        submission_email: dataLayer.getUser(req.session).email,
-        submission_data: submissionData, // Raw data as submitted by the user in each page
-        submission_data_version: service.site?.submission_data_version || "", // The submission data version
-        print_friendly_data: printFriendlyData, // Print-friendly data
-        renderer_data: reviewSummaryList, // Renderer data of the summary list
-        renderer_version: service.site?.renderer_version || "", // The renderer version
-        design_systems_version: service.site?.design_systems_version || "", // The design systems version
+        submissionUsername: dataLayer.getUser(req.session).name,
+        submissionEmail: dataLayer.getUser(req.session).email,
+        submissionData: submissionData, // Raw data as submitted by the user in each page
+        submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+        printFriendlyData: printFriendlyData, // Print-friendly data
+        rendererData: reviewSummaryList, // Renderer data of the summary list
+        rendererVersion: service.site?.renderer_version || "", // The renderer version
+        designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
         service: { // Service info
             id: service.site.id, // Service ID
             title: service.site.title // Service title multilingual object
@@ -124,16 +143,16 @@ export function prepareSubmissionData(req, siteId, service) {
  * @returns {object} The API-ready submission data object with all fields as strings
  */
 export function prepareSubmissionDataAPI(data) {
-    
+
     return {
-        submission_username: String(data.submission_username ?? ""),
-        submission_email: String(data.submission_email ?? ""),
-        submission_data: JSON.stringify(data.submission_data ?? {}),
-        submission_data_version: String(data.submission_data_version ?? ""),
-        print_friendly_data: JSON.stringify(data.print_friendly_data ?? []),
-        renderer_data: JSON.stringify(data.renderer_data ?? {}),
-        renderer_version: String(data.renderer_version ?? ""),
-        design_systems_version: String(data.design_systems_version ?? ""),
+        submissionUsername: String(data.submissionUsername ?? ""),
+        submissionEmail: String(data.submissionEmail ?? ""),
+        submissionData: JSON.stringify(data.submissionData ?? {}),
+        submissionDataVersion: String(data.submissionDataVersion ?? ""),
+        printFriendlyData: JSON.stringify(data.printFriendlyData ?? []),
+        rendererData: JSON.stringify(data.rendererData ?? {}),
+        rendererVersion: String(data.rendererVersion ?? ""),
+        designSystemsVersion: String(data.designSystemsVersion ?? ""),
         service: JSON.stringify(data.service ?? {})
     };
 }
@@ -213,7 +232,7 @@ export function preparePrintFriendlyData(req, siteId, service) {
         }
     }
 
-    return submissionData ;
+    return submissionData;
 }
 
 //------------------------------- Helper Functions -------------------------------//
@@ -291,8 +310,25 @@ function getValue(formElement, pageUrl, req, siteId) {
     let value = ""
     if (formElement.element === "dateInput") {
         value = getDateInputISO(pageUrl, formElement.params.name, req, siteId);
+    } else if (formElement.element === "fileInput") {
+        // unneeded handle of `Attachment` at the end
+        // value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name + "Attachment");
+        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
     } else {
         value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
+    }
+
+    // 🔁 Normalize checkboxes: always return an array
+    if (formElement.element === "checkboxes") {
+        // If no value, return empty array
+        if (value == null || value === "") return [];
+        // If already an array, return as-is (but strip empties just in case)
+        if (Array.isArray(value)) {
+            // Strip empties just in case
+            return value.filter(v => v != null && v !== "");
+        }
+        // Else single value, convert to array
+        return [String(value)];
     }
     return value;
 }
@@ -338,6 +374,17 @@ function getValueLabel(formElement, value, pageUrl, req, siteId, service) {
     if (formElement.element === "dateInput") {
         const formattedDate = getDateInputDMY(pageUrl, formElement.params.name, req, siteId);
         return govcyResources.getSameMultilingualObject(service.site.languages, formattedDate);
+    }
+
+    // handle fileInput
+    if (formElement.element === "fileInput") {
+        // TODO: Ask Andreas how to handle empty file inputs 
+        if (value) {
+            return govcyResources.staticResources.text.fileUploaded;
+        } else {
+            return govcyResources.getSameMultilingualObject(service.site.languages, "");
+            // return govcyResources.staticResources.text.fileNotUploaded;
+        }
     }
 
     // textInput, textArea, etc.
@@ -410,7 +457,34 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
         };
     }
 
-    
+    /**
+     * Helper function to create a summary list item for file links.
+     * @param {object} key the key of multilingual object
+     * @param {string} value the value
+     * @param {string} siteId the site id
+     * @param {string} pageUrl the page url
+     * @param {string} elementName the element name
+     * @returns {object} the summary list item with file link
+    */
+    function createSummaryListItemFileLink(key, value, siteId, pageUrl, elementName) {
+        return {
+            "key": key,
+            "value": [
+                {
+                    "element": "htmlElement",
+                    "params": {
+                        "text": {
+                            "en": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.en}<span class="govcy-visually-hidden"> ${key?.en || ""}</span></a>`,
+                            "el": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.el}<span class="govcy-visually-hidden"> ${key?.el || ""}</span></a>`,
+                            "tr": `<a href="/${siteId}/${pageUrl}/view-file/${elementName}" target="_blank">${govcyResources.staticResources.text.viewFile.tr}<span class="govcy-visually-hidden"> ${key?.tr || ""}</span></a>`
+                        }
+                    }
+                }
+            ]
+        };
+    }
+
+
 
 
     // Loop through each page in the submission data
@@ -425,8 +499,14 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
         for (const field of fields) {
             const label = field.label;
             const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            // add the field to the summary entry
-            summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+            // --- HACK --- to see if this is a file element
+            // check if field.value is an object with `sha256` and `fileId` properties
+            if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
+                summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+            } else {
+                // add the field to the summary entry
+                summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+            }
         }
 
         // Add inner summary list to the main summary list
@@ -483,7 +563,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
             }
         );
     }
-    
+
     // Add data title to the body
     body.push(
         {
@@ -501,7 +581,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         body.push(
             {
                 component: "bodyHeading",
-                params: {"headingLevel":2},
+                params: { "headingLevel": 2 },
                 body: govcyResources.getLocalizeContent(pageTitle, req.globalLang)
             }
         );
@@ -511,14 +591,14 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         for (const field of fields) {
             const label = govcyResources.getLocalizeContent(field.label, req.globalLang);
             const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            dataUl.push({key: label, value: valueLabel});
+            dataUl.push({ key: label, value: valueLabel });
         }
         // add data to the body
         body.push(
-        {
-            component: "bodyKeyValue",
-            params: {type:"ul", items: dataUl},
-        });
+            {
+                component: "bodyKeyValue",
+                params: { type: "ul", items: dataUl },
+            });
 
     }
 
@@ -539,84 +619,84 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
 
 
 
- /*
+/*
 {
-  "bank-details": {
-    "formData": {
-      "AccountName": "asd",
-      "Iban": "CY12 0020 0123 0000 0001 2345 6789",
-      "Swift": "BANKCY2NXXX",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  },
-  "answer-bank-boc": {
-    "formData": {
-      "Objection": "Object",
-      "country": "Azerbaijan",
-      "ObjectionReason": "ObjectionReasonCode1",
-      "ObjectionExplanation": "asdsa",
-      "DepositsBOCAttachment": "",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  },
-  "bank-settlement": {
-    "formData": {
-      "ReceiveSettlementExplanation": "",
-      "ReceiveSettlementDate_day": "",
-      "ReceiveSettlementDate_month": "",
-      "ReceiveSettlementDate_year": "",
-      "ReceiveSettlement": "no",
-      "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-    }
-  }
+ "bank-details": {
+   "formData": {
+     "AccountName": "asd",
+     "Iban": "CY12 0020 0123 0000 0001 2345 6789",
+     "Swift": "BANKCY2NXXX",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ },
+ "answer-bank-boc": {
+   "formData": {
+     "Objection": "Object",
+     "country": "Azerbaijan",
+     "ObjectionReason": "ObjectionReasonCode1",
+     "ObjectionExplanation": "asdsa",
+     "DepositsBOCAttachment": "",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ },
+ "bank-settlement": {
+   "formData": {
+     "ReceiveSettlementExplanation": "",
+     "ReceiveSettlementDate_day": "",
+     "ReceiveSettlementDate_month": "",
+     "ReceiveSettlementDate_year": "",
+     "ReceiveSettlement": "no",
+     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
+   }
+ }
 }
 
 
 
 [
-  {
-    pageUrl: "personal-details",
-    pageTitle: { en: "Personal data", el: "Προσωπικά στοιχεία" }, // from pageData.title in correct language
-    fields: [
-      [
-        {
-            id: "firstName",
-            label: { en: "First Name", el: "Όνομα" },
-            value: "John",  // The actual user input value
-            valueLabel: { en: "John", el: "John" }  // Same label as the value for text inputs
-        },
-        {
-            id: "lastName",
-            label: { en: "Last Name", el: "Επίθετο" },
-            value: "Doe",  // The actual user input value
-            valueLabel: { en: "Doe", el: "Doe" }  // Same label as the value for text inputs
-        },
-        {
-            id: "gender",
-            label: { en: "Gender", el: "Φύλο" },
-            value: "m",  // The actual value ("male")
-            valueLabel: { en: "Male", el: "Άντρας" }  // The corresponding label for "male"
-        },
-        {
-            id: "languages",
-            label: { en: "Languages", el: "Γλώσσες" },
-            value: ["en", "el"],  // The selected values ["en", "el"]
-            valueLabel: [
-                { en: "English", el: "Αγγλικά" },  // Labels corresponding to "en" and "el"
-                { en: "Greek", el: "Ελληνικά" }
-            ]
-        },
-        {
-            id: "birthDate",
-            label: { en: "Birth Date", el: "Ημερομηνία Γέννησης" },
-            value: "1990-01-13",  // The actual value based on user input
-            valueLabel: "13/1/1990"  // Date inputs label will be conveted to D/M/YYYY
-        }
-    ]
-  },
-  ...
+ {
+   pageUrl: "personal-details",
+   pageTitle: { en: "Personal data", el: "Προσωπικά στοιχεία" }, // from pageData.title in correct language
+   fields: [
+     [
+       {
+           id: "firstName",
+           label: { en: "First Name", el: "Όνομα" },
+           value: "John",  // The actual user input value
+           valueLabel: { en: "John", el: "John" }  // Same label as the value for text inputs
+       },
+       {
+           id: "lastName",
+           label: { en: "Last Name", el: "Επίθετο" },
+           value: "Doe",  // The actual user input value
+           valueLabel: { en: "Doe", el: "Doe" }  // Same label as the value for text inputs
+       },
+       {
+           id: "gender",
+           label: { en: "Gender", el: "Φύλο" },
+           value: "m",  // The actual value ("male")
+           valueLabel: { en: "Male", el: "Άντρας" }  // The corresponding label for "male"
+       },
+       {
+           id: "languages",
+           label: { en: "Languages", el: "Γλώσσες" },
+           value: ["en", "el"],  // The selected values ["en", "el"]
+           valueLabel: [
+               { en: "English", el: "Αγγλικά" },  // Labels corresponding to "en" and "el"
+               { en: "Greek", el: "Ελληνικά" }
+           ]
+       },
+       {
+           id: "birthDate",
+           label: { en: "Birth Date", el: "Ημερομηνία Γέννησης" },
+           value: "1990-01-13",  // The actual value based on user input
+           valueLabel: "13/1/1990"  // Date inputs label will be conveted to D/M/YYYY
+       }
+   ]
+ },
+ ...
 ]
 
 
 
-    */
+   */

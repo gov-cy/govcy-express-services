@@ -5,6 +5,364 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0] - 2025-09-15 
+### ⚠️ Breaking Changes
+- the `submission` data send via the API:
+  - Changed to use **camelCase** instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+```json
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "", // The submission data version
+  "printFriendlyData": "[]",   // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "",  // The design systems version
+  "service": "{}"               // Service info
+}
+```
+  - `submissionData` no longer has the `formData` part of the `pageUrl.formData.elementName`. It directly uses `pageUrl.elementName` for example:
+```json
+{
+  "index": {
+    "certificate_select": [
+      "birth",
+      "permanent_residence"
+    ]
+  },
+  "data-entry-radios": {
+    "mobile_select": "mobile",
+    "mobileTxt": ""
+  },
+  "data-entry-textinput": {
+    "mobile": "+35722404383",
+    "dateGot": "1212-01-12",
+    "appointment": "03/09/2025"
+  },
+  "data-entry-all": {
+    "txtMobile": "",
+    "txtName": "",
+    "txtEmail": "",
+    "txtNumeric": "",
+    "dateInput": "",
+    "datePicker": "",
+    "checkboxes": [],
+    "radios": "",
+    "textArea": "",
+    "textArea1": "",
+    "textArea2": "",
+    "select1": "",
+    "file1Attachment": {
+      "sha256": "mock-sha256-hash",
+      "fileId": "mock-file-id"
+    }
+  },
+  "radios-conditions": {
+    "id_select": "",
+    "id_number": "",
+    "id_country": "",
+    "arc_number": "",
+    "passport_number": "",
+    "passport_country": ""
+  }
+}
+```
+- `checkboxes` values are normalized to **arrays** (including `[]` when no options are selected).
+
+### Added
+- **Temporary save & load feature** for service submissions. See more on the [temporary save feature in README.md](./README.md#-temporary-save-feature).
+- **File upload feature** for service submissions. See more on the [files uploads feature in README.md](./README.md#%EF%B8%8F-files-uploads-feature).
+
+### Changed
+- Updated `govcy-frontend-renderer` for
+  - better screen reader support on the `summaryList` which is used in the `review` and `success` page
+  - `warning` component support
+  - `header title with links` support. To do that the `site.headerTitle` must look something like this:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "title": {
+                "en":"Header title", 
+                "el":"Τιτλός επικεφαλιδας"
+            },
+            "href": {
+                "en":"/service-id",
+                "el":"/service-id"
+            }
+        },
+        ...
+    }
+}
+```
+- `Header title link - Backward compatibility`: If `site.headerTitle.title` is not set, the `site.headerTitle` will be used instead, as was before v1.x.x , for example:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "en":"Header title", 
+            "el":"Τιτλός επικεφαλιδας"
+        }
+        ...
+    }
+}
+```
+
+### Security
+- Updated to handle [Axios is vulnerable to DoS attack through lack of data size check](https://github.com/advisories/GHSA-4hjh-wcwx-xvwj) issue
+
+## [v1.0.0-alpha.20] - 2025-09-14
+### Added
+- Added ability to add a link on the header title (from govcy-frontend-renderer). To do that the `site.headerTitle` must look something like this:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "title": {
+                "en":"Header title", 
+                "el":"Τιτλός επικεφαλιδας"
+            },
+            "href": {
+                "en":"/service-id",
+                "el":"/service-id"
+            }
+        },
+        ...
+    }
+}
+```
+- **Backward compatibility**: If `site.headerTitle.title` is not set, the `site.headerTitle` will be used instead, for example:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "en":"Header title", 
+            "el":"Τιτλός επικεφαλιδας"
+        }
+        ...
+    }
+}
+```
+
+## [v1.0.0-alpha.19] - 2025-09-11
+### Changed
+- Updated `govcy-frontend-renderer` for `warning` component support
+- When deleting file, will remove all instances of `fileId` and `sha256` from the dataLayer
+
+### Added
+- `fileDeleteAPIEndpoint` to delete files from the API
+
+## [v1.0.0-alpha.18] - 2025-09-08
+### Changed
+- `checkboxes` values are normalized to **arrays**
+
+## [v1.0.0-alpha.17] - 2025-09-03
+### Changed
+- Updated `govcy-frontend-renderer` for better screen reader support on the `summaryList` which is used in the `review` and `success` page
+- Updated the `submission` data send via the API to use camelCase instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+```json
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "",// The submission data version
+  "printFriendlyData": "[]",  // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "", // The design systems version
+  "service": "{}"               // Service info
+}
+```
+
+## [v1.0.0-alpha.16] - 2025-09-01
+### Added
+- Added more unit tests and coverage tests and badges
+
+## [v1.0.0-alpha.15] - 2025-08-31
+### Changed
+- Updated overall documentation for better readability
+
+## [v1.0.0-alpha.14] - 2025-08-28
+### Changed
+- Removed `formData` from `submission_data` for clearer submission data.
+
+## [v1.0.0-alpha.13] - 2025-08-28
+### Changed
+- Update documentation for file Uploads and more.
+
+## [v1.0.0-alpha.12] - 2025-08-26
+### Added
+- Added more unit tests
+
+## [v1.0.0-alpha.11] - 2025-08-24
+### Added
+- Added overlay when loading. Improved accessibility
+
+## [v1.0.0-alpha.10] - 2025-08-21
+### Changed
+- Added support for **view files** 
+  - Added `/:siteId/:pageUrl/view-file/:elementName` route (`get`)
+  - Added links on fileView both on client side and server side (opening in new tab)
+  - Added links on `review` page to view files (opening in new tab)
+  - Added unit tests
+- Changed delete file url to `/:siteId/:pageUrl/delete-file/:elementName`
+
+## [v1.0.0-alpha.9] - 2025-08-19
+### Changed
+- Added support for **delete files** 
+  - Added `/:siteId/:pageUrl/:elementName/delete-file` route (`get` and `post`)
+  - Delete url on fileView both on client side and server side (preserving `route` query param)
+
+## [v1.0.0-alpha.8] - 2025-08-17
+### Changed
+- Better accessibility on upload failed and success announcements from JS
+- Better error messages from JS
+- Created a dedicated site for files `test-files.json`
+- Added `ErrorCode`'s on `handleFileUpload` to let JS know which message to show
+- Refactored `prepareSubmissionData` to handle files (also adding the `Attachment` at the end of the key)
+- Added more unit tests
+
+## [v1.0.0-alpha.7] - 2025-08-15
+### Changed
+- Added support for fileInput inside conditional radio elements
+- Transforms uploaded fileInput into fileView with fileId, sha256, viewHref, deleteHref
+- Injects window._govcyFileInputs, siteId, pageUrl, and lang via script tag
+- Removes need for hidden inputs for file metadata (cleaner DOM)
+- Adds ARIA live regions for success/failure announcements
+- Preserves accessibility (form-control-error, screen reader support)
+- Expanded unit tests to cover:
+  - Conditional file input rendering
+  - Validation and dataLayer integration
+- Refactored data lookup via `getFormDataValue` for safety and reusability
+
+## [v1.0.0-alpha.6] - 2025-08-14
+### Added
+- **File upload feature endpoint** to serve JS calls to upload files using API:
+  - **`handleFileUpload` utility** (`govcyHandleFiles.mjs`)
+    - Centralized all upload logic with validation, config loading, conditional logic, and API request handling.
+    - Returns consistent `{ status, data?, errorMessage? }` structure.
+    - Supports future extensions like download handling.
+
+  - **`govcyFiles.js`**
+    - Browser-side file upload script using `axios`.
+    - Automatically injects uploaded file metadata into hidden inputs.
+    - Handles CSRF and API response parsing.
+
+  - **API-aware detection utility** (`govcyIsApiRequest.mjs`)
+    - Detects whether request targets an API based on headers or upload/download URL patterns.
+    - Used in CSRF, auth, and error handling.
+
+  - **API response helpers** (`govcyApiResponse.mjs`)
+    - `successResponse(data)` and `errorResponse(status, message)` for consistent API output formatting.
+
+  - **Magic byte (file signature) validation** (in `govcyHandleFiles.mjs`)
+    - Ensures uploaded files match allowed MIME types both via declared `mimetype` and actual magic byte inspection.
+
+### Changed
+- **`govcyUpload.mjs`**
+  - Now delegates all logic to `handleFileUpload`.
+  - Multer middleware simplified with consistent error response handling.
+
+- **`govcyApiRequest.mjs`**
+  - Automatically adds correct `Content-Type` headers for `FormData` payloads.
+
+- **`govcyHttpErrorHandler.mjs`**
+  - Returns JSON error responses for API routes (e.g., file upload) using `errorResponse()`.
+
+- **`cyLoginAuth.mjs`**
+  - Detects API requests and returns `401` instead of redirecting unauthenticated users.
+
+- **`govcyCsrfMiddleware.mjs`**
+  - Supports `X-CSRF-Token` for `multipart/form-data` API requests.
+
+- **`index.mjs`**
+  - Added the `/apis/:siteId/:pageUrl/upload` route to handle file upload requests.
+
+- **Tests**
+  - **Unit tests for `handleFileUpload`** (`govcyHandleFiles.test.mjs`)
+    - 12 tests covering:
+      - Missing file, invalid MIME, empty file, conditional logic, file too large
+      - Invalid config, invalid page, and successful upload.
+    - Uses real API mocking endpoint where applicable.
+
+- **Constants**
+  - Added to `govcyConstants.mjs`:
+    - `ALLOWED_MULTER_FILE_SIZE_MB`
+    - `ALLOWED_FILE_SIZE_MB`
+    - `ALLOWED_FILE_MIME_TYPES`
+
+## [v1.0.0-alpha.5] - 2025-08-12
+### Changed
+- Updated `RELEASE.md`
+
+## [v1.0.0-alpha.3] - 2025-08-11
+### Changed
+- Now we allow API response HTTP Status Codes other than `200`
+
+## [v1.0.0-alpha.0] - 2025-08-09
+### Added
+- **Temporary save & load feature** for service submissions:
+  - **`govcyLoadSubmissionData` middleware**:
+    - Calls `submissionGetAPIEndpoint` to retrieve existing saved submissions.
+    - If found, stores API `Data` in `siteData[siteId].loadData`.
+    - Hydrates `siteData[siteId].inputData` from `submissionData` JSON string (if available).
+    - If no saved submission exists, calls `submissionPutAPIEndpoint` to create one.
+    - Skips API calls if load data already exists in the session.
+  - **`storeSiteInputData`** function added to `govcyDataLayer` to replace in-memory form data with pre-saved values.
+  - Unit tests added/updated to verify `govcyLoadSubmissionData` and `storeSiteInputData` behavior.
+- **Automatic temporary save on form POST**:
+  - `govcyFormsPostHandler` now supports *fire-and-forget* call to new helper `govcyTempSave`:
+    - Saves form data via `submissionPutAPIEndpoint` after successful validation.
+    - Errors are caught and logged internally to avoid blocking user flow.
+    - `submission_data` is JSON-stringified before sending to the API.
+    - Sends correct headers:  
+      - `accept: "text/plain"`  
+      - `content-type: "application/json"`
+
+### Changed
+- Registered `govcyLoadSubmissionData` middleware in all relevant GET routes:
+  - `/:siteId` (before redirect to first page)  
+  - `/:siteId/:pageUrl` (before rendering form page)  
+  - `/:siteId/review` (before rendering review page)  
+  In all cases, middleware runs after `govcyServiceEligibilityHandler` and before page handler.
+
+### Configuration & Environment Changes
+- **Service config JSON**:
+  - New optional `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` objects under `site`:
+    ```json
+    "submissionGetAPIEndpoint": {
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+    },
+    "submissionPutAPIEndpoint": {
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+    }
+    ```
+  - Optional field: `"dsfgtwApiKey"` if API gateway key is required.
+
+- **Environment variables**:
+  - Each JSON `url`, `clientKey`, `serviceId` (and optionally `dsfgtwApiKey`) should map to an environment variable containing the actual value.
+
+### Backward Compatibility
+- **Fully backward compatible**:
+  - If `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` are not defined in the service config, the new save/load logic is skipped entirely.
+  - Existing services without these settings continue to work unchanged.
+
+
 ## [v0.2.16] - 2025-08-06
 ### Added
 - Workflow to publish legacy and dev versions `tag-and-publish-legacy-and-dev.yml`

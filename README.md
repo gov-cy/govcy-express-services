@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/github/license/gov-cy/govcy-express-services)
 [![Unit test](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml)
 [![tag-and-publish-on-version-change](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml)
+[![coverage](coverage-badges.svg)](coverage-summary.json)
 
 > ⚠️ **Warning:**  
 > This package is **under active development** and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only. 
@@ -12,9 +13,11 @@
 > You are responsible for ensuring your own compliance, security, and quality assurance processes.
 
 ## 📝 Description
-This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner.
+This project is an Express-based project that dynamically renders online service forms using `@gov-cy/govcy-frontend-renderer`, handles data input, validations, renders a review page and submits the data via a submission API. It is designed for developers building government services in Cyprus, enabling them to manage user authentication, form submissions, and OpenID authentication workflows in a timely manner. 
 
 The project is designed to support the [Linear structure](https://gov-cy.github.io/govcy-design-system-docs/patterns/service_structure/#variant-1---linear-structure) as described in the [Unified Design System](https://gov-cy.github.io/govcy-design-system-docs/). 
+
+The APIs used for submission, temporary save and file uploads are not part of this project. The project has been designed to work together with the **DSF Submission plarform** and all API calls are based on the **DSF Submission Platform APIs**. This readme file describes the definition of these APIs if you wish to develop your own for your own government back-end solution. For more details about the DSF Submission Platform [contact the DSF team](https://dsf.dmrid.gov.cy/contact/).
 
 ![govcy-express-services](express-services.png)
 
@@ -27,13 +30,15 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 - [✅ Best Practices](#-best-practices)
 - [📦 Full installation guide](#-full-installation-guide)
 - [🛠️ Usage](#%EF%B8%8F-usage)
-  - [🧩 Dynamic services rendering](#-dynamic-services-rendering)
+  - [🧩 Dynamic services](#-dynamic-services)
   - [🛡️ Site eligibility checks](#%EF%B8%8F-site-eligibility-checks)
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
-  - [✅ Conditional logic](#-conditional-logic)
+  - [🔀 Conditional logic](#-conditional-logic)
+  - [💾 Temporary save feature](#-temporary-save-feature)
+  - [🗃️ Files uploads feature](#%EF%B8%8F-files-uploads-feature)
 - [🛣️ Routes](#%EF%B8%8F-routes)
-- [👨‍💻 Enviromental variables](#-enviromental-variables)
+- [👨‍💻 Environment variables](#-environment-variables)
 - [🔒 Security note](#-security-note)
 - [❓ Troubleshooting / FAQ](#-troubleshooting--faq)
 - [🙏 Credits](#-credits)
@@ -43,7 +48,7 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 
 ## ✨ Features
 - Dynamic form rendering from JSON templates
-    - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`
+    - Support for `textInput`, `textArea`, `select`, `radios`, `checkboxes`, `datePicker`, `dateInput`, `fileInput` elements
     - Support for `conditional radios`
 - Dynamic creation of check your answers page
 - OpenID Connect authentication with CY Login
@@ -55,6 +60,8 @@ The project is designed to support the [Linear structure](https://gov-cy.github.
 - Pre-filling posted values (in the same session)
 - Site level API eligibility checks
 - API integration with retry logic for form submissions.
+- Optional temporary save of in-progress form data via configurable API endpoints
+- Optional file uploads via API endpoints
 
 ## 📋 Prerequisites
 - Node.js 20+
@@ -135,8 +142,554 @@ The CY Login tokens are used to also connect with the various APIs through [cyCo
 
 The CY Login settings are configured in the `secrets/.env` file.
 
-### 🧩 Dynamic Services Rendering
+### 🧩 Dynamic Services
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
+
+Here is an example JSON config:
+
+```json
+{
+  "site": {
+    "id": "test",
+    "lang": "el",     //<-- Default language
+    "languages": [    //<-- Supported languages
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      },
+      {
+        "code": "en",
+        "label": "EN",
+        "alt": "English language",
+        "href": "?lang=en"
+      }
+    ],
+    "footerLinks": [ //<-- Links on the footer
+      {
+        "label": {
+          "el": "Δήλωση απορρήτου",
+          "en": "Privacy statement",
+          "tr": "Privacy statement"
+        },
+        "href": "test/privacy-statement"
+      },
+      {
+        "label": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": "Cookies"
+        },
+        "href": "test/cookie-policy"
+      },
+      {
+        "label": {
+          "el": "Προσβασιμότητα",
+          "en": "Accessibility",
+          "tr": "Accessibility"
+        },
+        "href": "test/accessibility-statement"
+      }
+    ],
+    "footerIcons": [ //<-- Icons on the footer
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png"
+        },
+        "alt": {
+          "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU",
+          "en": "Funded by the EU Next Generation EU",
+          "tr": "Funded by the EU Next Generation EU"
+        },
+        "href": {
+          "el": "https://europa.eu/",
+          "en": "https://europa.eu/",
+          "tr": "https://europa.eu/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα της ΕΕ",
+          "en": "Go to EU website",
+          "tr": "Go to EU website"
+        }
+      },
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png"
+        },
+        "alt": {
+          "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας",
+          "en": "Cyprus tomorrow, recovery and resilience plan",
+          "tr": "Cyprus tomorrow, recovery and resilience plan"
+        },
+        "href": {
+          "el": "http://www.cyprus-tomorrow.gov.cy/",
+          "en": "http://www.cyprus-tomorrow.gov.cy/",
+          "tr": "http://www.cyprus-tomorrow.gov.cy/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο",
+          "en": "Go to Cyprus Tomorrow website",
+          "tr": "Go to Cyprus Tomorrow website"
+        }
+      }
+    ],
+    "menu": {     //<-- Menu altext
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {  //<-- Service title (meta)
+      "el": "Υπηρεσία τεστ",
+      "en": "Test service",
+      "tr": ""
+    },
+    "headerTitle": {  // <-- The header title settings
+      "title": {      //<-- Service title (as it apears in the header)
+        "el": "[Το ΟΝΟΜΑ της υπηρεσίας που θα φαίνεται στις φόρμες]",
+        "en": "[The NAME of the service as it will appear on forms]",
+        "tr": ""
+      },
+      "href": {       // <-- The relative URL of the header title link (for each language)
+          "el":"/service-id",
+          "en":"/service-id",
+          "tr":"/service-id"
+      }
+    },
+    "description": {  //<-- Service description (meta)
+      "el": "[Υποβάλετε αίτηση για ...]",
+      "en": "[Submit an application ...]",
+      "tr": ""
+    },
+    "url": "https://gov.cy", //<-- URL in (meta, for example `og:url`)
+    "cdn": {                 //<-- CDN URL and integrity
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+      "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+      "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
+    },
+    "submission_data_version": "1",     //<-- Submission data version
+    "renderer_version": "1.16.1",       //<-- govcy-frontend-renderer version
+    "design_systems_version": "3.2.0",  //<-- govcy-design-system version
+    "homeRedirectPage": {               //<-- Home redirect page
+      "el": "https://www.gov.cy/service/aitisi-gia-taftotita/",
+      "en": "https://www.gov.cy/en/service/issue-an-id-card/",
+      "tr": "https://www.gov.cy/en/service/issue-an-id-card/"
+    },
+    "copyrightText": {                  //<-- Copyright text
+      "el": "Κυπριακή Δημοκρατία, 2025",
+      "en": "Republic of Cyprus, 2025",
+      "tr": "Republic of Cyprus, 2025"
+    },
+    "submissionAPIEndpoint": {          //<-- Submission API endpoint
+      "url": "TEST_SUBMISSION_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "105": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
+    },
+    "submissionGetAPIEndpoint": {     //<-- Submission GET API endpoint for temporary saving
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "submissionPutAPIEndpoint": {    //<-- Submission PUT API endpoint for temporary saving
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileUploadAPIEndpoint": {       //<-- File upload API endpoint
+      "url": "TEST_UPLOAD_FILE_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDownloadAPIEndpoint": {     //<-- File download API endpoint
+      "url": "TEST_DOWNLOAD_FILE_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDeleteAPIEndpoint": {     //<-- File delete API endpoint
+      "url": "TEST_DELETE_FILE_API_URL",
+      "method": "DELETE",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "eligibilityAPIEndpoints": [     //<-- Eligibility API endpoints
+      {
+        "url": "TEST_ELIGIBILITY_2_API_URL",
+        "method": "GET",
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+        "cashingTimeoutMinutes": "60",
+        "params": {},
+        "response": {
+          "errorResponse": {
+            "105": {
+              "error": "user not registration",
+              "page": "/test/user-not-registered"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "pages": [                 //<-- Pages
+    {
+      "pageData": {            //<-- 1st Page's data (form)
+        "url": "index",        // Page URL
+        "title": {             // Page title
+          "el": "Επιλογή Εγγάφου",
+          "en": "Document selection",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",  // Page layout
+        "mainLayout": "two-third",          // Page main layout
+        "nextPage": "data-entry-radios"     // The next page's URL
+      },
+      "pageTemplate": {         //<-- Page template
+        "sections": [           //<-- Page sections
+          {
+            "name": "main",   //<-- Main section
+            "elements": [     //<-- Main section elements
+              {
+                "element": "form",  // Form element
+                "params": {
+                  "elements": [     // Elements inside the form
+                    {
+                      "element": "checkboxes",  // Checkboxes element
+                      "params": {               // Checkboxes parameters
+                        "id": "certificate_select",
+                        "name": "certificate_select",
+                        "legend": {
+                          "el": "Τι έγγραφα επιθυμείτε να εκδώσετε;",
+                          "en": "What documents do you wish to issue?"
+                        },
+                        "items": [
+                          {
+                            "value": "birth",
+                            "text": {
+                              "el": "Πιστοποιητικό γέννησης​",
+                              "en": "Birth certificate",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Αν η γέννηση έγινε στην Κύπρο ή στο εξωτερικό και έχει ενημερωθεί το μητρώο του Αρχείου Πληθυσμού ",
+                              "en": "For a birth in Cyprus or abroad which Civil Registry is updated with "
+                            }
+                          },
+                          {
+                            "value": "permanent_residence",
+                            "text": {
+                              "el": "Βεβαίωση μόνιμης διαμονής​",
+                              "en": "Certificate of permanent residence",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για όσους είναι εγγεγραμμένοι στον εκλογικό κατάλογο",
+                              "en": "For those registered in the electoral list"
+                            }
+                          },
+                          {
+                            "value": "student_proof_of_origin",
+                            "text": {
+                              "el": "Βεβαίωση καταγωγής",
+                              "en": "Certificate of origin",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "Για αίτηση σε πανεπιστήμια στην Ελλάδα",
+                              "en": "To apply to a university in Greece"
+                            }
+                          }
+                        ],
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Επιλέξτε ένα ή περισσότερα έγγραφα",
+                          "en": "Select one or more documents",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [      // Checkboxes validations
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε ένα ή περισσότερα έγγραφα",
+                              "en": "Select one or more documents",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {             //<-- 2nd Page's data (form)
+        "url": "data-entry-radios",
+        "title": {
+          "el": "Στοιχεία επικοινωνίας ",
+          "en": "Contact details",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "mobile_select",
+                        "name": "mobile_select",
+                        "legend": {
+                          "el": "Σε ποιο κινητό μπορούμε να επικοινωνήσουμε μαζί σας;",
+                          "en": "What mobile number can we use to contact you?"
+                        },
+                        "items": [
+                          {
+                            "value": "mobile",
+                            "text": {
+                              "el": "Στο [99 123456]",
+                              "en": "You can use [99 123456]",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "other",
+                            "text": {
+                              "el": "Θα δώσω άλλο αριθμό",
+                              "en": "I will give a different number",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "fileInput",
+                                "params": {
+                                  "id": "proof",
+                                  "name": "proof",
+                                  "label": {
+                                    "el": "Αποδεικτικό τηλεφώνου",
+                                    "en": "Telephone proof",
+                                    "tr": ""
+                                  },
+                                  "isPageHeading": false,
+                                  "hint": {
+                                    "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                                    "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                                    "tr": ""
+                                  }
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Ανεβάστε τον αποδεικτικό τηλεφώνου",
+                                        "en": "Upload the telephone proof",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "isPageHeading": true
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε αν θέλετε να χρησιμοποιήσετε το τηλέφωνο που φαίνεται εδώ, ή κάποιο άλλο",
+                              "en": "Choose if you'd like to use the phone number shown here, or a different one",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {         //<-- 3rd Page's data (not a form)
+        "url": "user-not-registered",
+        "title": {
+          "el": "Δεν είστε εγγεγραμμένοι ",
+          "en": "You are not an registered",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε εγγεγραμμένοι",
+                    "en": "You are not registered"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε εγγεγραμμένοι στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be registered at XYZ.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {         //<-- 4th Page's data (not a form)
+        "url": "user-not-admin",
+        "title": {
+          "el": "Δεν είστε διαχειριστής ",
+          "en": "You are not an administrator",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν είστε διαχειριστής ",
+                    "en": "You are not an administrator"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
+                    "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+
+```
 
 Here are some details explaining the JSON structure:
 
@@ -153,8 +706,14 @@ Here are some details explaining the JSON structure:
   ```
   - `eligibilityAPIEndpoints` : An array of API endpoints, to be used for service eligibility. See more on the [Eligibility API Endoints](#%EF%B8%8F-site-eligibility-checks) section below.
   - `submissionAPIEndpoint`: The submission API endpoint, to be used for submitting the form. See more on the [Submission API Endoint](#-site-submissions) section below.
+  - `submissionGetAPIEndpoint`: The submission get API endpoint, to be used for getting the submission data. See more on the [temporary save feature](#-temporary-save-feature) section below.
+  - `submissionPutAPIEndpoint`: The submission put API endpoint, to be used for temporary saving the submission data. See more on the [temporary save feature](#-temporary-save-feature) section below.
+  - `fileUploadAPIEndpoint`: The file upload API endpoint, to be used for uploading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
+  - `fileDownloadAPIEndpoint`: The file download API endpoint, to be used for downloading files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
+  - `fileDeleteAPIEndpoint`: The file delete API endpoint, to be used for deleting files. See more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below.
 - `pages` array: An array of page objects, each representing a page in the site. 
     - `pageData` object: Contains the metadata to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details
+      - `nextPage`: The URL of the next page to be rendered after the user clicks the `continue` button.
     - `pageTemplate` object: Contains the page template to be rendered on the page. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#json-input-template) for more details
       - `elements` array: An array of elements to be rendered on the page. See all supported [govcy-frontend-renderer elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details
 
@@ -209,8 +768,7 @@ Here's an example of a page defined in the JSON file:
             "element": "backLink",
             "params": {}
           }
-        ],
-        "params": {}
+        ]
       },
       {
         "name": "main",
@@ -295,14 +853,24 @@ Lets break down the JSON config for this page:
   - `pageData.nextPage` is the next page to redirect to when the user clicks the `continue` button and all validations pass, in this case it will redirect to `/:siteId/telephone-number`
   - `pageData.conditions` is the array that defines the [conditional logic](#-conditional-logic)
 - **pageTemplate** is the page's template, which is a JSON object that contains the sections and elements of the page. Check out the [govcy-frontend-renderer's documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md) for more details.
+  - `sections` is an array of sections, which is an array of elements. Sections allowed: `beforeMain`, `main`, `afterMain`.
+    - `elements` is an array of elements for the said section. Seem more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md).
 
 **Forms vs static content**
 
 - If the `pageTemplate` includes a `form` element in the `main` section and `button` element, the system will treat it as form and will:
   - Perform the eligibility checks
   - Display the form
-  - Collect the form data
-  - Validate the form data
+  - Collect the form data for the following input elements (more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md)):
+    - `textInput`
+    - `textArea`
+    - `select`
+    - `radios`
+    - `checkboxes`
+    - `datePicker`
+    - `dateInput`
+    - `fileInput`: the file upload feature must be enabled to use this element (see more on the [file upload feature](#%EF%B8%8F-files-uploads-feature) section below)
+  - Validate the form data (see more on the [Input validations](#-input-validations) section below)
   - Store the form data in the systems data layer
   - Redirect the user to the next page (or `review` page if the user came from the review page)
 - Else if the `pageTemplate` does not include a `form` element in the `main` section, the system will treat it as static content and will:
@@ -492,7 +1060,9 @@ Content-Type: application/json
 The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
 
 **On Success:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": true,
   "ErrorCode": 0,
@@ -501,7 +1071,9 @@ The API is expected to return a JSON response with the following structure (see 
 ```
 
 **On Failure:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": false,
   "ErrorCode": 102,
@@ -618,14 +1190,14 @@ Accept: text/plain
 Content-Type: application/json
 
 {
-  "submission_username": "username",
-  "submission_email": "email@example.com",
-  "submission_data": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}}",
-  "submission_data_version": "1",
-  "print_friendly_data": "[{\"pageUrl\":\"index\",\"pageTitle\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"fields\":[{\"id\":\"certificate_select\",\"name\":\"certificate_select\",\"label\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[\"birth\",\"permanent_residence\"],\"valueLabel\":[{\"el\":\"Πιστοποιητικό γέννησης​\",\"en\":\"Birth certificate\",\"tr\":\"\"},{\"el\":\"Βεβαίωση μόνιμης διαμονής​\",\"en\":\"Certificate of permanent residence\",\"tr\":\"\"}]}]}]",
-  "renderer_data": "{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"value\":[{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[{\"element\":\"textElement\",\"params\":{\"text\":{\"en\":\"Birth certificate, Certificate of permanent residence\",\"el\":\"Birth certificate, Certificate of permanent residence\",\"tr\":\"Birth certificate, Certificate of permanent residence\"},\"type\":\"span\"}}]}]}}]}]}}",
-  "renderer_version": "1.14.3",
-  "design_systems_version": "3.2.0",
+  "submissionUsername": "username",
+  "submissionEmail": "email@example.com",
+  "submissionData": "{\"index\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}",
+  "submissionDataVersion": "1",
+  "printFriendlyData": "[{\"pageUrl\":\"index\",\"pageTitle\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"fields\":[{\"id\":\"certificate_select\",\"name\":\"certificate_select\",\"label\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[\"birth\",\"permanent_residence\"],\"valueLabel\":[{\"el\":\"Πιστοποιητικό γέννησης​\",\"en\":\"Birth certificate\",\"tr\":\"\"},{\"el\":\"Βεβαίωση μόνιμης διαμονής​\",\"en\":\"Certificate of permanent residence\",\"tr\":\"\"}]}]}]",
+  "rendererData": "{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Επιλογή Εγγάφου\",\"en\":\"Document selection\",\"tr\":\"\"},\"value\":[{\"element\":\"summaryList\",\"params\":{\"items\":[{\"key\":{\"el\":\"Τι έγγραφα επιθυμείτε να εκδώσετε;\",\"en\":\"What documents do you wish to issue?\"},\"value\":[{\"element\":\"textElement\",\"params\":{\"text\":{\"en\":\"Birth certificate, Certificate of permanent residence\",\"el\":\"Birth certificate, Certificate of permanent residence\",\"tr\":\"Birth certificate, Certificate of permanent residence\"},\"type\":\"span\"}}]}]}}]}]}}",
+  "rendererVersion": "1.14.3",
+  "designSystemsVersion": "3.2.0",
   "service": "{\"id\":\"test\",\"title\":{\"el\":\"Υπηρεσία τεστ\",\"en\":\"Test service\",\"tr\":\"\"}}"
 }
 ```
@@ -635,7 +1207,9 @@ Content-Type: application/json
 The API is expected to return a JSON response with the following structure (see [govcyApiRequest.mjs](src/utils/govcyApiRequest.mjs) for normalization):
 
 **On Success:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": true,
   "ErrorCode": 0,
@@ -647,7 +1221,9 @@ The API is expected to return a JSON response with the following structure (see 
 ```
 
 **On Failure:**
-```json
+```http
+HTTP/1.1 200 OK
+
 {
   "Succeeded": false,
   "ErrorCode": 102,
@@ -672,15 +1248,15 @@ The API is expected to return a JSON response with the following structure (see 
 The data is collected from the form elements and the data layer and are sent via the submission API in the following format:
 
 ```json
-"submissionData": {             // Site level successful submission data
-  "submission_username" : "",   // User's username
-  "submission_email" : "",      // User's email
-  "submission_data": "{}",      // Raw data as submitted by the user in each page
-  "submission_data_version": "",// The submission data version
-  "print_friendly_data": "[]",  // Print friendly data
-  "renderer_data" :"{}",        // Renderer data of the summary list
-  "renderer_version": "",       // The renderer version
-  "design_systems_version": "", // The design systems version
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "",// The submission data version
+  "printFriendlyData": "[]",  // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "", // The design systems version
   "service": "{}"               // Service info
 }
 ```
@@ -691,50 +1267,49 @@ The data is collected from the form elements and the data layer and are sent via
 
 > ℹ️ **Note:**  
 >
-> When sent to the API, the fields `submission_data`, `renderer_data`, `print_friendly_data`, and `service` are stringified using `JSON.stringify()`.  
+> When sent to the API, the fields `submissionData`, `rendererData`, `printFriendlyData`, and `service` are stringified using `JSON.stringify()`.  
 >
 > The sample below shows the structure **before** stringification for clarity.
 
 ```json
 {
-  "submission_username": "username",        // User's username
-  "submission_email": "email@example.com",  // User's email
-  "submission_data_version": "0.1",         // Submission data version
-  "submission_data": {                      // Submission raw data. Object, will be stringified
+  "submissionUsername": "username",        // User's username
+  "submissionEmail": "email@example.com",  // User's email
+  "submissionDataVersion": "0.1",         // Submission data version
+  "submissionData": {                      // Submission raw data. Object, will be stringified
     "index": {                              // Page level
-      "formData": {
-        "id_select": ["id", "arc"],         // field level. Could be string or array
-        "id_number": "654654",
-        "arc_number": "",
-        "aka": "232323"
-      }
+      "id_select": ["id", "arc"],           // field level: checkboxes are ALWAYS arrays (may be []); radios/select/text are strings
+      "id_number": "654654",
+      "arc_number": "",
+      "aka": "232323",
+      "evidenceAttachment":                // File attachments contains an object with `fileId` and `sha256`
+      {
+        "fileId": "1234567891234567890",
+        "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+      }        
     },
     "appointment": {
-      "formData": {
-        "diorismos": "monimos",
-        "fileno_monimos": "3233",
-        "eidikotita_monimos": "1",
-        "fileno_sumvasiouxos": "",
-        "eidikotita_sumvasiouxos": "",
-        "fileno_aoristou": "",
-        "eidikotita_aoristou": "",
-        "program": "",
-        "fileno_orismenou": ""
-      }
+      "diorismos": "monimos",
+      "fileno_monimos": "3233",
+      "eidikotita_monimos": "1",
+      "fileno_sumvasiouxos": "",
+      "eidikotita_sumvasiouxos": "",
+      "fileno_aoristou": "",
+      "eidikotita_aoristou": "",
+      "program": "",
+      "fileno_orismenou": ""
     },
     "takeover": {
-      "formData": {
-        "date_start_day": "11",
-        "date_start_month": "12",
-        "date_start_year": "2020",
-        "date_on_contract": "date_other",
-        "date_contract": "16/04/2025",
-        "reason": "24324dssf"
-      }
+      "date_start_day": "11",
+      "date_start_month": "12",
+      "date_start_year": "2020",
+      "date_on_contract": "date_other",
+      "date_contract": "16/04/2025",
+      "reason": "24324dssf"
     }
   },
-  "submission_data_version": "1",           // Submission data version
-  "renderer_data": {                        // Summary list renderer data ready for rendering . Object, will be stringified
+  "submissionDataVersion": "1",           // Submission data version
+  "rendererData": {                        // Summary list renderer data ready for rendering . Object, will be stringified
     "element": "summaryList",
     "params": {
       "items": [
@@ -941,7 +1516,7 @@ The data is collected from the form elements and the data layer and are sent via
       ]
     }
   },
-  "print_friendly_data": [                  // Print friendly data. Object, will be stringified
+  "printFriendlyData": [                  // Print friendly data. Object, will be stringified
     {
       "pageUrl": "index",                     // Page URL
       "pageTitle": {                          // Page title
@@ -956,8 +1531,8 @@ The data is collected from the form elements and the data layer and are sent via
             "el": "Ταυτοποίηση",
             "en": "Identification"
           },
-          "value": ["id", "arc"],          // Field value. Could be string or array
-          "valueLabel": [                       // Field value label. Could be string or array
+          "value": ["id", "arc"],          // Field value. // field level: checkboxes are ALWAYS arrays (may be []); radios/select/text are strings
+          "valueLabel": [                       // Field value label
             {
               "el": "Ταυτότητα",
               "en": "ID",
@@ -1104,8 +1679,8 @@ The data is collected from the form elements and the data layer and are sent via
       ]
     }
   ],
-  "renderer_version": "1.14.1",              // Renderer version
-  "design_systems_version": "3.1.0",          // Design systems version
+  "rendererVersion": "1.14.1",              // Renderer version
+  "designSystemsVersion": "3.1.0",          // Design systems version
   "service": {                                // Service metadata. Object, will be stringified
     "id": "takeover",
     "title": {
@@ -1129,6 +1704,7 @@ The project includes input validation for the following elements:
 - `checkboxes`
 - `datePicker`
 - `dateInput`
+- `fileInput` (only required check)
 
 The validation rules for each element are defined in the `"validations` array for each element. The project support the following validations:
 
@@ -1184,7 +1760,7 @@ Example:
 ]
 ```
 
-### ✅ Conditional logic
+### 🔀 Conditional logic
 
 The project supports conditional logic on pages. Conditional logic is evaluated using a custom `govcyExpressions.mjs` module, which executes expressions in a safe and scoped context using `new Function`. Only safe data access through the `dataLayer` is allowed. The system uses expressions and session data from the service's [data layer](NOTES.md#data-layer) to decide if a page will be shown or not.
 
@@ -1412,6 +1988,570 @@ Explanation:
 - `[].concat(...)`: safely flattens a string or array into an array.
 - `.includes('value1')`: checks if the value is selected.
 
+### 💾 Temporary save feature
+
+The **temporary save** feature allows user progress to be stored in an external API and automatically reloaded on the next visit.  
+This is useful for long forms or cases where users may leave and return later.
+
+#### How to enable and configure temporary save 
+To use this feature, configure the config JSON file. In your service’s `site` object, add both a `submissionGetAPIEndpoint` and `submissionPutAPIEndpoint` entry:
+
+```json
+"submissionGetAPIEndpoint": {
+  "url": "TEST_SUBMISSION_GET_API_URL",
+  "method": "GET",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+},
+"submissionPutAPIEndpoint": {
+  "url": "TEST_SUBMISSION_PUT_API_URL",
+  "method": "PUT",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVICE_ID"
+}
+```
+
+These values should point to environment variables that hold your real endpoint URLs and credentials.
+
+In your `secrets/.env` file (and staging/production configs), define the variables referenced above:
+
+```dotenv
+TEST_SUBMISSION_GET_API_URL=https://example.com/api/submissionData
+TEST_SUBMISSION_PUT_API_URL=https://example.com/api/submissionData
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVICE_ID=123
+```
+
+#### How temporary save works
+
+- **On first page load** for a site, using the `submissionGetAPIEndpoint` the system will:
+  1. Call the GET endpoint to retrieve any saved submission.
+  2. If found, populate the session’s `inputData` so fields are pre-filled.
+  3. If not found, call the PUT endpoint to create a new temporary record.
+- **On every form POST**, after successful validation:
+  - The `submissionPutAPIEndpoint` will fire-and-forget a `PUT` request to update the saved submission with the latest form data.
+  - The payload includes all required submission fields with `submissionData` JSON-stringified.
+
+#### `submissionGetAPIEndpoint` `GET` API Request and Response
+This API is used to retrieve the saved submission data.
+
+**Request:**
+
+- **HTTP Method**: GET
+- **URL**: Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+- **Body**: The body contains the and either:
+  - an a `null` which means no data was found for the user
+  - a JSON object with all the form data collected from the user across all pages in previous sessions.
+
+**Example Request:**
+
+```http
+GET /temp-save-get-endpoint?status=0 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When temporary submission data are found:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+    }
+}
+```
+
+**When temporary submission data are NOT found:**
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": null
+}
+```
+
+**When temporary submission retreival fails:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+    "Succeeded": false,
+    "ErrorCode": 401,
+    "ErrorMessage": "Not authorized",
+    "Data": null
+}
+```
+
+#### `submissionPutAPIEndpoint` `PUT` API Request and Response
+This API is used to temporary save the submission data.
+
+**Request:**
+
+- **HTTP Method**: PUT
+- **URL**: Resolved from the url property in your config (from the environment variable).
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+- **Body**: The body contains the a JSON object with all the form data collected from the user across all pages.
+
+**Example Request:**
+
+```http
+PUT /temp-save-endpoint HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+
+{
+  "submissionData" : "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+}
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**On success:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+    "Succeeded": true,
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+    }
+}
+```
+
+**On failure:**
+
+```http
+HTTP/1.1 401 Unauthorized
+
+{
+    "Succeeded": false,
+    "ErrorCode": 401,
+    "ErrorMessage": "Not authorized",
+    "Data": null
+}
+```
+
+**Notes**:
+- The response is normalized to always use PascalCase keys (`Succeeded`, `ErrorCode`, etc.), regardless of the backend’s casing.
+
+#### Temporary save backward compatibility
+If these endpoints are not defined in the service JSON, the temporary save/load logic is skipped entirely.
+Existing services will continue to work without modification.
+
+### 🗃️ Files uploads feature
+
+The **Files uploads** feature allows user progress to upload, remove and download files. The files will be stored in an external API and automatically reloaded on the next visit.  
+
+#### Pre-requisites for the files uploads feature
+The [💾 Temporary save feature](#-temporary-save-feature) must be enabled for the file uploads feature to work.
+
+
+#### How to enable and configure file uploads 
+To use this feature, configure the config JSON file. In your service’s `site` object, add a `fileUploadAPIEndpoint`, `fileDownloadAPIEndpoint`and `fileDeleteAPIEndpoint` entry:
+
+```json
+"fileUploadAPIEndpoint": {
+  "url": "TEST_UPLOAD_FILE_API_URL",
+  "method": "POST",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+},
+"fileDownloadAPIEndpoint": {
+  "url": "TEST_DOWNLOAD_FILE_API_URL",
+  "method": "GET",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+},
+"fileDeleteAPIEndpoint": {
+  "url": "TEST_DELETE_FILE_API_URL",
+  "method": "DELETE",
+  "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+  "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID"
+}
+```
+
+These values should point to environment variables that hold your real endpoint URLs and credentials.
+
+In your `secrets/.env` file (and staging/production configs), define the variables referenced above:
+
+```dotenv
+TEST_UPLOAD_FILE_API_URL=https://example.com/api/fileUpload
+TEST_DOWNLOAD_FILE_API_URL=https://example.com/api/fileDownload
+TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
+TEST_SUBMISSION_API_SERVICE_ID=123
+```
+
+
+#### How to define the file input field in the JSON config
+The files input field is defined under the `pages[i].pageTemplate.sections["main"].elements[0].elements` array. Basically it must exist in the page template of a page inside a form. 
+
+The element type for files input is `fileInput` (see it's definition in [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md))
+
+Here is a sample code section of a page definition with a file input field:
+
+```json
+{
+  "pageData": {
+    "url": "data-entry-file",
+    "title": {
+      "el": "Λογαριασμός κινήσεως",
+      "en": "Utility bill"
+    },
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "data-entry-all"
+  },
+  "pageTemplate": {
+    "sections": [
+      {
+        "name": "beforeMain",
+        "elements": [
+          {
+            "element": "backLink",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "name": "main",
+        "elements": [
+          {
+            "element": "form",
+            "params": {
+              "elements": [
+                {
+                  "element": "fileInput", //<-- this is the file input
+                  "params": {
+                    "id": "utility",
+                    "name": "utility",
+                    "label": {
+                      "el": "Λογαριασμός κινήσεως",
+                      "en": "Utility bill"
+                    },
+                    "isPageHeading": true,
+                    "hint": {
+                      "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                      "en": "PDF, JPG, JPEG, PNG are the acceptable formats"
+                    }
+                  },
+                  "validations": [ //<-- this is the file input validations
+                    {
+                      "check": "required",
+                      "params": {
+                        "checkValue": "",
+                        "message": {
+                          "el": "Ανεβάστε τον λογαριασμό κινήσεως",
+                          "en": "Upload the utility bill"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "element": "button",
+                  "params": {
+                    "id": "continue",
+                    "variant": "primary",
+                    "text": {
+                      "el": "Συνέχεια",
+                      "en": "Continue"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### How file uploads works
+
+- **On a form page with an upload input field**:
+  - **On first load**: the page displays the fileInput field to choose a file.
+  - **On choosing a file**: the file is uploaded to the `fileUploadAPIEndpoint` endpoint.
+    - The `fileUploadAPIEndpoint` validates the input for allowed file types and file size. On validation error an error message is displayed. The following validations are performed:
+      - The fileInput element is defined in the JSON config 
+      - API endpoints and environment variables are defined
+      - The page is not skiped because of conditional logic
+      - The file is not empty
+      - The file size must be less than 4MB
+      - The file type must be one of the following: pdf, jpg, jpeg, png
+    - If `fileUploadAPIEndpoint` returns an success, the file is uploaded temporarilly and the `fileView` element is displayed, with links to `View` or `Delete` the file. The file infomation are store in the data layer of the page.
+- **On a form page after upload**:
+  - The `fileView` element is displayed with links to `View` or `Delete` the file.
+- **When clinking `view`**: 
+  - The file is downloaded using the `fileDownloadAPIEndpoint` and opened in a new tab.
+- **When clinking `delete`**:
+  - A confimation page is displayed asking the user to confirm the deletion. If the user confirms (clicks `Yes`):
+    - The file is deleted using the `fileDeleteAPIEndpoint`
+    - The file is deleted from the data layer and the `fileView` element is removed from the page.
+    - If the same file is used on another page (with the same `fileId` and `sha256`), they are also removed from the data layer
+- **On the `review` page after upload**:
+  - The element is displayed with a link to `View file`. A `Change` link is also displayed for the whole page.
+- **On the `success` page and email after upload**:
+  - The element is displayed with links a marking `File uploaded`.
+  
+
+#### `fileUploadAPIEndpoint` `POST` API Request and Response
+This API is used to temporarily store the file uploaded by the user. The API connects the file with a temporary saved submission, for the specific user and service. It does not create a connection with the actual field on the specific page, that is done by the `submissionPutAPIEndpoint` API.
+
+**Request:**
+
+- **HTTP Method**: POST
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:tag` which defines the type of the file (for example `passport`). For example `https://example.com/api/fileUpload/:tag`
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `application/json`
+  - **Content-Type**: `multipart/form-data` (typically automatically set when using FormData in the browser)
+- **Body (multipart/form-data)**: The body the actual file to be uploaded (PDF, JPEG, etc.)
+
+**Example Request:**
+
+``` bash
+curl --location 'https://example.gov.cy/api/v1/files/upload/passport' \
+--header 'client-key: 12345678901234567890123456789000' \
+--header 'service-id: 123' \
+--header 'Authorization: Bearer eyJhbGciOi...' \
+--form 'file=@"/path/to/file.pdf"'
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**On success:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+    "ErrorCode": 0,
+    "ErrorMessage": null,
+    "Data": {
+        "fileId": "6899adac8864bf90a90047c3",
+        "fileName": "passport.pdf",
+        "contentType": "application/pdf",
+        "fileSize": 4721123,
+        "sha256": "8adb79e0e782280dad8beb227333a21796b8e01d019ab1e84cfea89a523b0e7d",
+        "description": "passport.pdf",
+        "tag": "passport"
+    },
+    "Succeeded": true
+}
+```
+
+**On failure:**
+
+```http
+HTTP/1.1 400
+
+{
+  "ErrorCode": 400,
+  "ErrorMessage": "SUBMISSION_REQUIRED",
+  "Data": null,
+  "Succeeded": false
+}
+```
+
+#### `fileDownloadAPIEndpoint` `GET` API Request and Response
+This API is used to download the file uploaded by the user. It returns the file data in Base64.
+
+**Request:**
+
+- **HTTP Method**: GET
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:refernceValue/:fileid/:sha256`. For example `https://example.com/api/fileDownload/1234567890/123456789123456/12345678901234567890123`: 
+  - `referenceValue` is the `referenceValue` of the file current temporary saved instance (see more [💾 Temporary save feature](#-temporary-save-feature)).
+  - `fileid` is the `fileId` of the file uploaded by the user.
+  - `sha256` is the `sha256` of the file uploaded by the user.
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+
+**Example Request:**
+
+```http
+GET fileDownload/1234567890/123456789123456/12345678901234567890123 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When file is found:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "ErrorCode": 0,
+  "ErrorMessage": null,
+  "Data": {
+    "fileId": "123456789123456",
+    "fileName": "passport.pdf",
+    "contentType": "application/pdf",
+    "fileSize": 1872,
+    "sha256": "12345678901234567890123456789012345678901234567890123456789012345",
+    "base64": "JVBERi0xLjMKJZOMi54gUm....
+",
+    "description": null,
+    "uid": null,
+    "tag": "Passport"
+  },
+  "Succeeded": true
+}
+```
+
+**When file is NOT found:**
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+    "ErrorCode": 404,
+    "ErrorMessage": "File not found",
+    "InformationMessage": null,
+    "Data": null,
+    "Succeeded": false
+}
+```
+
+#### `fileDeleteAPIEndpoint` `DELETE` API Request and Response
+This API is used to delete the file uploaded by the user. It returns the file data in Base64. 
+> ⚠️ **Important note:**  
+> If the same file (same `fileId` and `sha256`) is used for other fields in the same application for the same service and the same user, when deleted it will be removed from all instances in the data layer. A warning will appear in the user's delete confirmation page to warn the users in such cases. 
+
+**Request:**
+
+- **HTTP Method**: DELETE
+- **URL**: Resolved from the url property in your config (from the environment variable) concatenated with `/:fileid/:sha256`. For example `https://example.com/api/fileDelete/123456789123456/12345678901234567890123`: 
+  - `fileid` is the `fileId` of the file uploaded by the user.
+  - `sha256` is the `sha256` of the file uploaded by the user.
+- **Headers**:
+  - **Authorization**: `Bearer <access_token>` (form user's cyLogin access token)
+  - **client-key**: `<clientKey>` (from config/env)
+  - **service-id**: `<serviceId>` (from config/env)
+  - **Accept**: `text/plain`
+
+**Example Request:**
+
+```http
+DELETE fileDelete/123456789123456/12345678901234567890123 HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOi...
+client-key: 12345678901234567890123456789000
+service-id: 123
+Accept: text/plain
+Content-Type: application/json
+```
+
+**Response:**
+
+The API is expected to return a JSON response with the following structure:
+
+**When file is found and deleted:**
+
+```http
+HTTP/1.1 200 OK
+
+{
+  "ErrorCode": 0,
+  "ErrorMessage": null,
+  "Succeeded": true
+}
+```
+
+**When file is NOT found:**
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+    "ErrorCode": 404,
+    "ErrorMessage": "File not found",
+    "InformationMessage": null,
+    "Data": null,
+    "Succeeded": false
+}
+```
+
+#### File uploads in the data layer
+The system uses the `fileId` and `sha256` to identify the file uploaded by the user. The file information are stored in the data layer in the following format:
+
+```json
+{
+  "fileId": "1234567891234567890",
+  "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+}
+```
+
+#### File uploads when submitted
+When the user submits the service through the submission API endpoint, the system will use the `fileId` and `sha256` to identify the file uploaded by the user. The actuall file is already uploaded via the `fileUploadAPIEndpoint`. 
+
+To help back-end systems recognize the field as a file, the field's element name is concatenated with `Attachment`. For example, if for the field `passport`, the data will be submitted as follows:
+
+```json
+{
+  "passportAttachment": {
+    "fileId": "1234567891234567890",
+    "sha256": "123456789012345678901234567890123456789012345678901234567890123456"
+  }
+}
+```
+
+#### File uploads backward compatibility
+If these endpoints are not defined in the service JSON, the file upload logic is skipped entirely.
+Existing services will continue to work without modification.
+
 ### 🛣️ Routes
 The project uses express.js to serve the following routes:
 
@@ -1420,16 +2560,18 @@ The project uses express.js to serve the following routes:
 - **`/:siteId/:pageUrl`**: Requires **cyLogin** authentication for **authorized individual users**. Based on `/data/:siteId.json`, Renders the specified page template. Validates page and saves data to session. If validation fails, errors are displayed with links to the inputs.
 - **`/:siteId/review`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the check your answers page template. Validates all pages in the service and submits the data to the configured API endpoint. If validation fails, errors are displayed with links to the relevant pages.
 - **`/:siteId/success`**: Requires **cyLogin** authentication for **authorized individual users**. Renders latest successful submission.
-- **`/:siteId/success/pdf`**: Requires **cyLogin** authentication for **authorized individual users**. Downloads the PDF of the latest successful submission.
+- **`/:siteId/:pageUrl/view-file/:elementName`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the specified file in a new tab.
+- **`/:siteId/:pageUrl/delete-file/:elementName`**: Requires **cyLogin** authentication for **authorized individual users**. Renders the delete confirmation page and handles the file delete.
 
 #### Authentication routes:
 - **`/signin-oidc`**: CY Login authentication endpoint.
 - **`/login`**: Redirect to CY Login login page.
 - **`/logout`**: CY Login logout endpoint.
 
-Absolutely! Here’s a **ready-to-paste Troubleshooting / FAQ section** you can add near the end of your README, just before Credits or Developer notes.
+#### API routes:
+- **`/apis/:siteId/:pageUrl/upload`**: Uploads a file. Used from the client side JS.
 
-### 👨‍💻 Enviromental variables
+### 👨‍💻 Environment variables
 The environment variables are defined in:
  - **Secret environment variables**: These are secret variables and MUSR NOT be saved in version control. The are saved locally in the `secrets/.env` file and they control the server configuration, authentication, integrations, and development behavior. These variables vary depending on the environment and are defined through the deployment prosses for `staging` and `production`.
  - **Non secret environment variables**:  These are non secret enviromentat variables and can be saved in version control. These are stored in the root folder of the project:
@@ -1499,6 +2641,15 @@ TEST_SUBMISSION_API_URL=http://localhost:3002/submission
 TEST_SUBMISSION_API_CLIENT_KEY=12345678901234567890123456789000
 TEST_SUBMISSION_API_SERVIVE_ID=123
 TEST_SUBMISSION_DSF_GTW_KEY=12345678901234567890123456789000
+
+# Optional Temporary Save GET and PUT endpoints (test service)
+TEST_SUBMISSION_GET_API_URL=http://localhost:3002/getTempSubmission
+TEST_SUBMISSION_PUT_API_URL=http://localhost:3002/save
+
+# Optional File Upload and download endpoints (test service)
+TEST_FILE_UPLOAD_API_URL=http://localhost:3002/fileUpload
+TEST_FILE_DOWNLOAD_API_URL=http://localhost:3002/fileDownload
+TEST_FILE_DELETE_API_URL=http://localhost:3002/fileDelete
 
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1

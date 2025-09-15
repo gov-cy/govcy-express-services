@@ -117,7 +117,8 @@ This is an overview of the data stored in the session:
 ```javascript
 {
   "siteData": {
-    "[siteId]": {                   // Sites level - e.g., "site1"
+    "[siteId]": { 
+      "loadData": {},              // Data used to load the site when presaved
       "inputData": {                // Input data of the site
         "[pageUrl]": {              // Pages level - e.g., "page1"
           "formData": {},           // Form data per page
@@ -153,14 +154,14 @@ This is an overview of the data stored in the session:
         "errorSummary": []
       },
       "submissionData": {           // Site level successful submission data
-        "submission_username" : "", // User's username
-        "submission_email" : "",    // User's email
-        "submission_data": {},      // Raw data as submitted by the user in each page
-        "submission_data_version": "", // The submission data version
-        "print_friendly_data": [],  // Print friendly data
-        "renderer_data" :{},        // Renderer data of the summary list
-        "renderer_version": "",     // The renderer version
-        "design_systems_version": "", // The design systems version
+        "submissionUsername" : "", // User's username
+        "submissionEmail" : "",    // User's email
+        "submissionData": {},      // Raw data as submitted by the user in each page
+        "submissionDataVersion": "", // The submission data version
+        "printFriendlyData": [],  // Print friendly data
+        "rendererData" :{},        // Renderer data of the summary list
+        "rendererVersion": "",     // The renderer version
+        "designSystemsVersion": "", // The design systems version
         "service": {                // Service info
               "id": "",             // Service id
               "title": {}           // Service title multilingual object
@@ -224,6 +225,21 @@ For example:
   "siteData": { 
     // SITE: `nsf-2`
     "nsf-2": {  
+      "loadData": { // Data used to load the site when presaved
+        "submissionId": "f97c091b-caa6-4e69-a515-f57043a704b0",
+        "serviceId": "f11077f3-72c7-4eec-ab01-f07d9efed08d",
+        "referenceValue": "0000000924107836",
+        "submissionTs": "2025-08-07T17:05:26+03:00",
+        "status": 0,
+        "statusTs": "2025-08-07T17:05:34+03:00",
+        "userId": "0000000924107836",
+        "userType": 1,
+        "userName": "",
+        "userIdentifier": "0001013317",
+        "userEmail": "",
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}}}",
+        "dataStatus": 0
+      },
        // INPUT DATA
       "inputData": { 
         // SITE: `nsf-2`, PAGE: `bank-details`

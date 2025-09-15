@@ -53,8 +53,7 @@ export function govcyPageHandler() {
             element.params.method = "POST";
             // ➕ Add CSRF token
             element.params.elements.push(govcyResources.csrfTokenInput(req.csrfToken()));
-            element.params.elements.push(govcyResources.staticResources.elements["govcyFormsJs"]);
-
+            
             // 🔍 Find the first button with `prototypeNavigate`
             const button = element.params.elements.find(subElement =>
               // subElement.element === "button" && subElement.params.prototypeNavigate
@@ -88,7 +87,7 @@ export function govcyPageHandler() {
             }
             //--------- End of Handle Validation Errors ---------
             
-            populateFormData(element.params.elements, theData,validationErrors);
+            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang, null, req.query.route);
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));
@@ -117,3 +116,4 @@ export function govcyPageHandler() {
     }
   };
 }
+

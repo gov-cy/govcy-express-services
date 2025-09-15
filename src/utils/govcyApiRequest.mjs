@@ -5,12 +5,13 @@ import { logger } from "./govcyLogger.mjs";
  * Utility to handle API communication with retry logic
  * @param {string} method - HTTP method (e.g., 'post', 'get', etc.)
  * @param {string} url - API endpoint URL
- * @param {object} inputData - Payload for the request (optional)
+ * @param {object|FormData} inputData - Payload for the request (optional)
  * @param {boolean} useAccessTokenAuth - Whether to use Authorization header with Bearer token
  * @param {object} user - User object containing access_token (optional)
  * @param {object} headers - Custom headers (optional)
  * @param {number} retries - Number of retry attempts (default: 3)
  * @param {boolean} allowSelfSignedCerts - Whether to allow self-signed certificates (default: false)
+ * @param {array} allowedHTTPStatusCodes - Array of allowed HTTP status codes (default: [200])
  * @returns {Promise<object>} - API response
  */
 export async function govcyApiRequest(
@@ -21,7 +22,8 @@ export async function govcyApiRequest(
     user = null, 
     headers = {}, 
     retries = 3,
-    allowSelfSignedCerts = false
+    allowSelfSignedCerts = false,
+    allowedHTTPStatusCodes = [200]
 ) {
     let attempt = 0;
 
@@ -37,6 +39,14 @@ export async function govcyApiRequest(
         requestHeaders['Authorization'] = `Bearer ${user.access_token}`;
     }
 
+    // If inputData is FormData, for attachments
+    if (inputData instanceof (await import('form-data')).default) {
+        requestHeaders = {
+        ...requestHeaders,
+        ...inputData.getHeaders(), // includes boundary in content-type
+        };
+    }
+
     while (attempt < retries) {
         try {
             logger.debug(`📤 Sending API request (Attempt ${attempt + 1})`, { method, url, inputData, requestHeaders });
@@ -45,10 +55,21 @@ export async function govcyApiRequest(
             const axiosConfig = {
                 method,
                 url,
-                [method?.toLowerCase() === 'get' ? 'params' : 'data']: inputData,
+                ...(inputData instanceof (await import('form-data')).default // If inputData is FormData, for attachments
+                    ? { data: inputData }
+                    : { [method?.toLowerCase() === 'get' ? 'params' : 'data']: inputData }),
                 headers: requestHeaders,
                 timeout: 10000, // 10 seconds timeout
+                // ✅ Treat only these statuses as "resolved" (no throw)
+                validateStatus: (status) => allowedHTTPStatusCodes.includes(status),
             };
+
+            // If inputData is FormData, for attachments
+            if (inputData instanceof (await import('form-data')).default) {
+                axiosConfig.maxContentLength = Infinity;
+                axiosConfig.maxBodyLength = Infinity;
+            }
+
 
             // Add httpsAgent if NOT production to allow self-signed certificates
             // Use per-call config for self-signed certs
@@ -60,9 +81,13 @@ export async function govcyApiRequest(
 
             logger.debug(`📥 Received API response`, { status: response.status, data: response.data });
 
-            if (response.status !== 200) {
+            // Validate HTTP status
+            if (!allowedHTTPStatusCodes.includes(response.status)) {
                 throw new Error(`Unexpected HTTP status: ${response.status}`);
             }
+            // if (response.status !== 200) {
+            //     throw new Error(`Unexpected HTTP status: ${response.status}`);
+            // }
             
             // const { Succeeded, ErrorCode, ErrorMessage } = response.data;
             // Normalize to PascalCase regardless of input case
@@ -77,7 +102,7 @@ export async function govcyApiRequest(
                 ErrorMessage,
                 Data,
                 InformationMessage
-            } = response.data;
+            } = response.data ?? {};
 
             const normalized = {
                 Succeeded: Succeeded !== undefined ? Succeeded : succeeded,

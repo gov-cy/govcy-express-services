@@ -18,6 +18,7 @@ describe('govcyDataLayer', () => {
                         formData: {}
                     },
                 },
+                loadData: {},
                 submissionData: {}
             },
         });
@@ -77,12 +78,12 @@ describe('govcyDataLayer', () => {
     // Test the `storeSiteSubmissionData` and `getSiteSubmissionData` function
     it('5. should store site submission data and clear input data', () => {
         dataLayer.initializeSiteData(session, 'site1');
-    
+
         session.siteData.site1.inputData = {
             page1: { formData: { field1: 'value1' } },
             page2: { formData: { field2: 'value2' } },
         };
-    
+
         session.user = { name: 'John Doe', unique_identifier: 'user123', email: 'HtYyj@example.com' };
         const service = {
             site: {
@@ -97,42 +98,42 @@ describe('govcyDataLayer', () => {
         // const timestamp = new Date().toISOString();
         const printFriendlyData = [{ pageUrl: 'page1', fields: [] }];
         const reviewSummaryList = [{ pageUrl: 'page1', summary: 'Summary data' }];
-    
+
         dataLayer.storeSiteSubmissionData(
             session,
             'site1',
             {
-                submission_username: "John Doe",
-                submission_email: "HtYyj@example.com",
-                submission_data: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
-                submission_data_version: service.site?.submission_data_version || "", // The submission data version
-                print_friendly_data: printFriendlyData, // Print-friendly data
-                renderer_data: reviewSummaryList, // Renderer data of the summary list
-                renderer_version: service.site?.renderer_version || "", // The renderer version
-                design_systems_version: service.site?.design_systems_version || "", // The design systems version
+                submissionUsername: "John Doe",
+                submissionEmail: "HtYyj@example.com",
+                submissionData: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
+                submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+                printFriendlyData: printFriendlyData, // Print-friendly data
+                rendererData: reviewSummaryList, // Renderer data of the summary list
+                rendererVersion: service.site?.renderer_version || "", // The renderer version
+                designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
                 service: { // Service info
                     id: service.site.id, // Service ID
                     title: service.site.title // Service title multilingual object
                 }
             }
         );
-    
+
         const submissionData = dataLayer.getSiteSubmissionData(session, 'site1');
         expect(submissionData).to.deep.equal({
-            submission_username: 'John Doe',
-            submission_email: 'HtYyj@example.com',
-            submission_data: {
+            submissionUsername: 'John Doe',
+            submissionEmail: 'HtYyj@example.com',
+            submissionData: {
                 page1: { formData: { field1: 'value1' } },
                 page2: { formData: { field2: 'value2' } },
             },
-            submission_data_version: '1.0',
-            print_friendly_data: printFriendlyData,
-            renderer_data: reviewSummaryList,
-            renderer_version: '2.0',
-            design_systems_version: "3.0",
+            submissionDataVersion: '1.0',
+            printFriendlyData: printFriendlyData,
+            rendererData: reviewSummaryList,
+            rendererVersion: '2.0',
+            designSystemsVersion: "3.0",
             service: { id: 'service1', title: 'Test Service' }
         });
-    
+
         // Ensure input data is cleared after submission
         expect(dataLayer.getSiteInputData(session, 'site1')).to.deep.equal({});
     });
@@ -158,7 +159,7 @@ describe('govcyDataLayer', () => {
         const user = dataLayer.getUser(session);
         expect(user).to.deep.equal({ name: 'John Doe', email: 'john@example.com' });
     });
-    
+
     it('9. should return null if user data is missing', () => {
         expect(dataLayer.getUser(session)).to.be.null;
     });
@@ -166,9 +167,9 @@ describe('govcyDataLayer', () => {
     it('10. should handle simultaneous updates correctly', () => {
         dataLayer.initializeSiteData(session, 'site1', 'page1');
         dataLayer.storePageData(session, 'site1', 'page1', { field1: 'value1' });
-    
+
         dataLayer.storePageData(session, 'site1', 'page1', { field2: 'value2' });
-    
+
         expect(dataLayer.getPageData(session, 'site1', 'page1')).to.deep.equal({
             field2: 'value2',
         });
@@ -239,5 +240,370 @@ describe('govcyDataLayer', () => {
         expect(result).to.deep.equal({});
     });
 
-    
+    it("16. should store and retrieve load data correctly", () => {
+        const loadData = {
+            prefillFromAPI: true,
+            values: {
+                name: "Alice",
+                age: 30
+            }
+        };
+
+        dataLayer.storeSiteLoadData(session, 'site1', loadData);
+
+        const result = dataLayer.getSiteLoadData(session, 'site1');
+        expect(result).to.deep.equal(loadData);
+    });
+
+    it("17. should return empty object if load data does not exist", () => {
+        const result = dataLayer.getSiteLoadData(session, 'site1');
+        expect(result).to.deep.equal({});
+    });
+
+    it("18. should replace site inputData with provided loadData", () => {
+        const siteId = "site1";
+
+        // Pre-fill inputData to prove it's replaced
+        dataLayer.initializeSiteData(session, siteId, "pageOld");
+        session.siteData[siteId].inputData.pageOld.formData = {
+            oldField: "should be replaced"
+        };
+
+        const newInputData = {
+            index: {
+                formData: {
+                    email: "test@example.com"
+                }
+            },
+            page2: {
+                formData: {
+                    option: "yes"
+                }
+            }
+        };
+
+        dataLayer.storeSiteInputData(session, siteId, newInputData);
+
+        expect(session.siteData[siteId].inputData).to.deep.equal(newInputData);
+    });
+
+    it("19. should return the reference number from load data if it exists", () => {
+        session.siteData = {
+            site1: {
+                loadData: {
+                    referenceValue: "REF-001"
+                }
+            }
+        };
+
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.equal("REF-001");
+    });
+
+    it("20. should return null if reference number is missing", () => {
+        session.siteData = {
+            site1: {
+                loadData: {
+                    // no referenceValue
+                }
+            }
+        };
+
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.be.null;
+    });
+
+    it("21. should return null if siteData or loadData is missing", () => {
+        session = {}; // no siteData at all
+        const ref = dataLayer.getSiteLoadDataReferenceNumber(session, "site1");
+        expect(ref).to.be.null;
+    });
+
+    // --- removeAllFilesFromSite tests ---
+    it("22. should replace matching single file objects and array items by fileId across the site", () => {
+        dataLayer.initializeSiteData(session, "site1", "page1");
+        dataLayer.initializeSiteData(session, "site1", "page2");
+
+        // Populate formData across pages
+        session.siteData.site1.inputData.page1.formData = {
+            textField: "keep",
+            fileSingleA: { fileId: "A", sha256: "X" },      // should remain (fileId != "B")
+            fileSingleΒ: { fileId: "B", sha256: "Y" },               // should be replaced -> ""
+            fileList: [
+                { fileId: "B", sha256: "Y" },               // should be replaced -> ""
+                { fileId: "C", sha256: "Z" },               // should remain
+                "keep"
+            ]
+        };
+        session.siteData.site1.inputData.page2.formData = {
+            util: { fileId: "B", sha256: "Y" },              // should be replaced -> ""
+            util2: { fileId: "Α", sha256: "Y" }              // should remain -> ""
+        };
+
+        dataLayer.removeAllFilesFromSite(session, "site1", { fileId: "B" });
+
+        expect(session.siteData.site1.inputData.page1.formData).to.deep.equal({
+            textField: "keep",
+            fileSingleA: { fileId: "A", sha256: "X" },      // unchanged
+            fileSingleΒ: "",                               // replaced
+            fileList: ["", { fileId: "C", sha256: "Z" }, "keep"] // only first item replaced
+        });
+        expect(session.siteData.site1.inputData.page2.formData).to.deep.equal({
+            util: "",                                        // replaced
+            util2: { fileId: "Α", sha256: "Y" }              // unchanged
+        });
+
+    });
+
+    it("23. should replace matching values by sha256 across the site", () => {
+        dataLayer.initializeSiteData(session, "site1", "page1");
+        dataLayer.initializeSiteData(session, "site1", "page2");
+
+        session.siteData.site1.inputData.page1.formData = {
+            f1: { fileId: "ID-1", sha256: "SHA-TARGET" },   // should be replaced
+            f2: { fileId: "ID-2", sha256: "SHA-OTHER" }     // should remain
+        };
+        session.siteData.site1.inputData.page2.formData = {
+            list: [
+                { fileId: "ID-3", sha256: "SHA-TARGET" },   // should be replaced
+                "keep"
+            ]
+        };
+
+        dataLayer.removeAllFilesFromSite(session, "site1", { sha256: "SHA-TARGET" });
+
+        expect(session.siteData.site1.inputData.page1.formData).to.deep.equal({
+            f1: "",                                         // replaced
+            f2: { fileId: "ID-2", sha256: "SHA-OTHER" }     // unchanged
+        });
+        expect(session.siteData.site1.inputData.page2.formData).to.deep.equal({
+            list: ["", "keep"]                              // only matching item replaced
+        });
+    });
+
+    it("24. should require BOTH fileId and sha256 to match when both are provided", () => {
+        dataLayer.initializeSiteData(session, "site1", "page1");
+
+        session.siteData.site1.inputData.page1.formData = {
+            exactMatch: { fileId: "X", sha256: "S" },       // both match -> replaced
+            idOnly: { fileId: "X", sha256: "DIFF" },    // sha differs -> keep
+            shaOnly: { fileId: "DIFF", sha256: "S" },    // id differs -> keep
+            other: { fileId: "A", sha256: "B" }        // keep
+        };
+
+        dataLayer.removeAllFilesFromSite(session, "site1", { fileId: "X", sha256: "S" });
+
+        expect(session.siteData.site1.inputData.page1.formData).to.deep.equal({
+            exactMatch: "",
+            idOnly: { fileId: "X", sha256: "DIFF" },
+            shaOnly: { fileId: "DIFF", sha256: "S" },
+            other: { fileId: "A", sha256: "B" }
+        });
+    });
+
+    it("25. should do nothing if neither fileId nor sha256 is provided", () => {
+        dataLayer.initializeSiteData(session, "site1", "page1");
+
+        const original = {
+            a: { fileId: "ONE", sha256: "S1" },
+            b: [{ fileId: "TWO", sha256: "S2" }, "keep"]
+        };
+        session.siteData.site1.inputData.page1.formData = JSON.parse(JSON.stringify(original));
+
+        // No criteria provided
+        dataLayer.removeAllFilesFromSite(session, "site1", {});
+
+        expect(session.siteData.site1.inputData.page1.formData).to.deep.equal(original);
+    });
+
+    it("26. should skip pages without formData and not throw", () => {
+        // page1 has formData; page2 doesn't
+        dataLayer.initializeSiteData(session, "site1", "page1");
+        session.siteData.site1.inputData.page1.formData = {
+            f: { fileId: "K", sha256: "S" }
+        };
+        // create a page2 bucket without formData
+        session.siteData.site1.inputData.page2 = { someMeta: true };
+
+        // Should not throw and should still process page1
+        dataLayer.removeAllFilesFromSite(session, "site1", { fileId: "K" });
+
+        expect(session.siteData.site1.inputData.page1.formData).to.deep.equal({ f: "" });
+        expect(session.siteData.site1.inputData.page2).to.deep.equal({ someMeta: true });
+    });
+
+    // --- isFileUsedInSiteInputDataAgain tests ---
+
+it("27. should return true when the same file is used in two different fields on the same page", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "F1", sha256: "S1" },
+        b: { fileId: "F1", sha256: "S1" }, // second place on same page
+        c: "keep"
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "F1",
+        sha256: "S1"
+    });
+
+    expect(result).to.equal(true);
+});
+
+it("28. should return true when the same file appears on two different pages", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    dataLayer.initializeSiteData(session, "site1", "page2");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "F2", sha256: "S2" }
+    };
+    session.siteData.site1.inputData.page2.formData = {
+        b: { fileId: "F2", sha256: "S2" }, // second place on different page
+        c: { fileId: "F2", sha256: "S3" }
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "F2",
+        sha256: "S2"
+    });
+
+    expect(result).to.equal(true);
+});
+
+it("29. should return false when the file appears only once in the entire site", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "ONLY", sha256: "ONE" },
+        b: "keep"
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "ONLY",
+        sha256: "ONE"
+    });
+
+    expect(result).to.equal(false);
+});
+
+it("30. when both fileId and sha256 are provided, BOTH must match", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    dataLayer.initializeSiteData(session, "site1", "page2");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "X", sha256: "S-OK" }   // id differs -> NOT a hit
+    };
+    session.siteData.site1.inputData.page2.formData = {
+        b: { fileId: "X-OK", sha256: "S" }   // sha differs -> NOT a hit
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "X-OK",
+        sha256: "S-OK"
+    });
+
+    expect(result).to.equal(false);
+});
+
+it("31. should match and return true when only fileId is provided (multiple occurrences)", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    dataLayer.initializeSiteData(session, "site1", "page2");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "ID-ONLY", sha256: "S-A" }
+    };
+    session.siteData.site1.inputData.page2.formData = {
+        b: { fileId: "ID-ONLY", sha256: "S-B" }
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "ID-ONLY"
+    });
+
+    expect(result).to.equal(true);
+});
+
+it("32. should match and return true when only sha256 is provided (multiple occurrences)", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    dataLayer.initializeSiteData(session, "site1", "page2");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: { fileId: "A1", sha256: "SHA-ONLY" }
+    };
+    session.siteData.site1.inputData.page2.formData = {
+        b: { fileId: "A2", sha256: "SHA-ONLY" }
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        sha256: "SHA-ONLY"
+    });
+
+    expect(result).to.equal(true);
+});
+
+it("33. should return true when the same file appears twice in the same array field", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+
+    session.siteData.site1.inputData.page1.formData = {
+        files: [
+            { fileId: "DUP", sha256: "SAME" },
+            { fileId: "DUP", sha256: "SAME" }
+        ],
+        other: "keep"
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "DUP",
+        sha256: "SAME"
+    });
+
+    expect(result).to.equal(true);
+});
+
+it("34. should return false when site/inputData/page/formData is missing or non-object", () => {
+    // No siteData at all
+    session = {};
+    expect(
+        dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", { fileId: "X" })
+    ).to.equal(false);
+
+    // Site exists but no inputData
+    session = { siteData: { site1: {} } };
+    expect(
+        dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", { fileId: "X" })
+    ).to.equal(false);
+
+    // Page exists but no formData
+    session = {};
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    delete session.siteData.site1.inputData.page1.formData;
+
+    expect(
+        dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", { fileId: "X" })
+    ).to.equal(false);
+});
+
+it("35. should ignore non-file-like values (strings, nulls, objects without both keys)", () => {
+    dataLayer.initializeSiteData(session, "site1", "page1");
+    dataLayer.initializeSiteData(session, "site1", "page2");
+
+    session.siteData.site1.inputData.page1.formData = {
+        a: "not a file",
+        b: null,
+        c: { fileId: "PRESENT_ONLY" },           // missing sha256 → not counted by matcher
+        d: { sha256: "PRESENT_ONLY" }            // missing fileId → not counted by matcher
+    };
+    session.siteData.site1.inputData.page2.formData = {
+        e: "still not a file"
+    };
+
+    const result = dataLayer.isFileUsedInSiteInputDataAgain(session, "site1", {
+        fileId: "PRESENT_ONLY",
+        sha256: "PRESENT_ONLY"
+    });
+
+    expect(result).to.equal(false);
+});
+
 });

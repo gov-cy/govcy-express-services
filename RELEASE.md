@@ -32,7 +32,7 @@ Before publishing a new version:
 
 ### 🚀 Publishing
 
-- ⬜ Run `git push origin HEAD --follow-tags` to trigger the correct GitHub Actions workflow  
+- ⬜ Run `git push origin release-0.x --follow-tags` to trigger the correct GitHub Actions workflow  
 - ⬜ Watch GitHub Actions to confirm:
   - ✅ NPM publish succeeded
   - ✅ GitHub release created (if tag pushed)
@@ -62,9 +62,10 @@ npm version prerelease --preid=alpha  # creates 1.0.0-alpha.0 → 1.0.0-alpha.1
 | Branch        | Purpose                       | Workflow file                           | Publishes as |
 | ------------- | ----------------------------- | --------------------------------------- | ------------ |
 | `main`        | Stable line (`v1`, `v2`, ...) | `tag-and-publish-on-version-change.yml` | `latest`     |
-| `release-0.x` | Maintains `v0.x` (Legacy patch line) | `tag-and-publish-legacy-and-dev.yml`            | `v0`         |
-| `release-1.x` | Maintains `v1.x` (Legacy patch line) | `tag-and-publish-legacy-and-dev.yml`            | `v1`         |
-| `v2-dev`      | Future version work           | `tag-and-publish-legacy-and-dev.yml`            | `v2`         |
+| `release-0.x` | Maintains `v0.x` (legacy)     | `tag-and-publish-legacy-and-dev.yml`    | `v0-lts`     |
+| `release-1.x` | Maintains `v1.x` (legacy)     | `tag-and-publish-legacy-and-dev.yml`    | `v1-lts`     |
+| `v2-dev`      | Future version work           | `tag-and-publish-legacy-and-dev.yml`    | `v2-next`    |
+
 
 ### 📋 Versioning overview
 
@@ -72,38 +73,58 @@ npm version prerelease --preid=alpha  # creates 1.0.0-alpha.0 → 1.0.0-alpha.1
 gitGraph
    commit id: "Initial commit"
    commit id: "Feature A"
-   commit tag: "v0.2.14"
+   commit tag: "v0.2.14" id: "Major release v0"
 
-   branch release-0.x
-   checkout release-0.x
-   commit id: "Hotfix for v0"
-   commit tag: "v0.2.15"
 
    checkout main
    branch v1-dev
    checkout v1-dev
-   commit tag: "v1.0.0-alpha.0"
-   commit id: "Feature B"
-   commit tag: "v1.0.0-alpha.1"
-   commit id: "Feature C"
-   commit tag: "v1.0.0"
+   commit tag: "v1.0.0-alpha.0" id: "Feature B"
+   commit tag: "v1.0.0-alpha.1" id: "Feature C"
+   commit tag: "v1.0.0" id: "Major release v1"
    checkout main
-   merge v1-dev
+   merge v1-dev  tag: "v1.0.0"
 
-   branch release-1.x
-   checkout release-1.x
-   commit id: "Hotfix for v1"
-   commit tag: "v1.0.1"
+   branch release-0.x
+   checkout release-0.x
+   commit tag: "v0.2.15" id: "Hotfix for v0"
+   checkout main
+   
+   commit tag: "v1.0.1" id: "Feature D"
+   commit tag: "v1.0.2" id: "Feature E"
 
    checkout main
    branch v2-dev
    checkout v2-dev
-   commit id: "Start file upload feature"
-   commit tag: "v2.0.0-alpha.0"
-   commit id: "Add file validation"
-   commit tag: "v2.0.0-alpha.1"
+   commit tag: "v2.0.0-alpha.0" id: "Start file upload feature"
 
+   checkout main
+   commit tag: "v1.0.3" id: "Feature E.1"
 
+   checkout v2-dev
+   commit tag: "v2.0.0" id: "Major release v2"
+   checkout main
+   merge v2-dev tag: "v2.0.0"
+   
+   branch release-1.x
+   checkout release-1.x
+   checkout main
+
+   commit tag: "v2.0.1" id: "Feature F"
+
+   
+   checkout release-1.x
+   commit tag: "v1.0.4" id: "Hotfix for v1"
+   checkout main
+
+   commit tag: "v2.0.2" id: "Feature G"
+
+   checkout release-0.x
+   commit tag: "v0.2.16" id: "Hotfix for 2 for v0"
+   
+   checkout release-1.x
+   commit tag: "v1.0.5" id: "Hotfix 2 for v1"
+   checkout main
 
 ```
 
@@ -115,7 +136,10 @@ Use this flow when you want to release:
 - A patch or minor version to an older line (e.g. `v0.2.15`, `v1.1.0`)
 - Without overriding the `latest` tag on NPM
 
-### 1: Prepare the release
+### 1. Enable trigger
+Enable the trigger (one‑time): uncomment `'v0.*'` (and later `'v1.*'` if you maintain v1 as legacy) in the same workflow (`tag-and-publish-legacy-and-dev.yml`).
+
+### 2: Prepare the release
 - Checkout the legacy branch, or create it if it doesn't exist:
 
 ```bash
@@ -131,18 +155,11 @@ git checkout -b release-0.x v0.2.14    # or release-1.x from v1.x latest
 npm version 0.2.15     # or 1.0.1, etc.
 ```
 
-### 2: Publish the tagged release
+### 3: Publish the tagged release
 - Push the branch and tag to trigger the legacy workflow:
 
 ```bash
-git push origin release-0.x
-git push origin v0.2.15
-```
-
-Or if you're not pushing the branch:
-
-```bash
-git push origin HEAD --follow-tags
+git push origin release-0.x --follow-tags
 ```
 
 - The `tag-and-publish-legacy-and-dev.yml` workflow runs:
@@ -150,7 +167,7 @@ git push origin HEAD --follow-tags
     - ✅ Creates GitHub release
     - 🚫 Does not affect latest
 
-### 3: Validate the release
+### 4: Validate the release
 - Check NPM:
 
 ```bash
@@ -166,41 +183,37 @@ npm view @gov-cy/govcy-express-services@0.2.15
 npm deprecate @gov-cy/govcy-express-services@0.2.14 "Replaced by v0.2.15"
 ```
 
+----------------
+
 ## 🚀 Future Version (prerelease) e.g. `v1-dev`
 Use this flow when you want to release:
 - Work on a major version without overriding the `latest` tag on NPM
 
-### 1.  Keep v0.2.14 as your current stable
-
-- Tag it (if not already):
-```bash
-git tag v0.2.14
-git push origin v0.2.14
-```
-
-### 2. Create a new development branch for `v1`
+### 1. Create a new development branch for `v1`
 This is where you’ll work on the file input version:
 
 ```bash
 git checkout -b v1-dev main
-npm version 1.0.0  # or 1.0.0-alpha.0 if it's early stage
 ```
+
+### 2. Make changes
+- Do changes in code
+- Update the `CHANGELOG.md`
 - Commit any changes (including file input support)
+
+### 3. Bump to prerelease version
+
+Bump to prerelease version:
+```bash
+npm version 1.0.0-alpha.0 # or 1.0.0-alpha.1 (or `npm version prerelease --preid=alpha`)
+```
+
+### 4. Publish the prerelease
 - Push the branch:
 
 ```bash
-git push origin v1-dev
-```
+git push origin v1-dev --follow-tags
 
-You’re now free to break things (safely).
-
-### 3. When you're ready to test or publish a `v1` version
-
-Create a tag **on the `v1-dev` branch**:
-
-```bash
-git tag v1.0.0-alpha.0
-git push origin v1.0.0-alpha.0
 ```
 
 - This will trigger your `tag-and-publish-legacy-and-dev.yml` (because it listens for `v1.*.*`)
@@ -209,28 +222,37 @@ git push origin v1.0.0-alpha.0
     - ✅ Create a GitHub release
     - 🚫 Will NOT override `latest`
 
-### 4. Your users can now do:
+### 5. Your users can now do:
 
 |Use case|Command|
 |---|---|
 |Continue using `v0` stable|`npm install @gov-cy/govcy-express-services@v0`|
 |Try `v1` (file upload support)|`npm install @gov-cy/govcy-express-services@v1`|
 
-### 5. When `v1` is ready to be the default
+### 6. When `v1` is ready to be the default
 
 Later on, you do this:
-1. Merge `v1-dev` into `main`
-2. Run `npm version 1.0.0`
-3. Push to `main`
-4. Your **main workflow** will:
-    - ✅ Create tags
-    - ✅ Publish `v1.0.0` to NPM as `latest`
+1. Update changelog and code
+2. Bump to `v1.0.0` with `--no-git-tag-version`
+```bash
+npm version 1.0.0 --no-git-tag-version   # important: no tag created
+```
+3. Commit changes
+4. Push to changes
+```bash
+git push origin v1-dev
+```
+5. Open a PR v1-dev → main and merge it when green
+6. Your **main workflow**:
+    - ✅ Creates v1.0.0 tag (and your other tags like latest, v1.x.x)
+    - ✅ Publishes to npm as latest
+    - ✅ Creates the GitHub release
 
 Now:
 ```bash
 npm install @gov-cy/govcy-express-services  # installs v1.x
 ```
-### Prelease summary
+### Commands cheat sheet 
 Use these commands to version and publish:
 
 | Purpose                          | Command                                                                              |
@@ -270,12 +292,17 @@ npm deprecate @gov-cy/govcy-express-services@1.0.999-alpha.0 "Test version only.
 - Users can install specific versions via:
 
 ```bash
-npm install @gov-cy/govcy-express-services@v0
-npm install @gov-cy/govcy-express-services@v1
-npm install @gov-cy/govcy-express-services@1.0.0-alpha.2
+# Stable legacy lines
+npm install @gov-cy/govcy-express-services@v0-lts
+npm install @gov-cy/govcy-express-services@v1-lts
+
+# Active prereleases
+npm install @gov-cy/govcy-express-services@v1-next
+npm install @gov-cy/govcy-express-services@v2-next
 ```
 - To avoid surprises, always check what’s already published:
 
 ```bash
 npm view @gov-cy/govcy-express-services versions
+npm view @gov-cy/govcy-express-services dist-tags
 ```
