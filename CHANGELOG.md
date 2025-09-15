@@ -5,6 +5,117 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.0] - 2025-09-15 
+### ⚠️ Breaking Changes
+- the `submission` data send via the API:
+  - Changed to use **camelCase** instead of snake_case, to be aligned with the DSF submission platform. Here is how the data looks like:
+```json
+{
+  "submissionUsername" : "",   // User's username
+  "submissionEmail" : "",      // User's email
+  "submissionData": "{}",      // Raw data as submitted by the user in each page
+  "submissionDataVersion": "", // The submission data version
+  "printFriendlyData": "[]",   // Print friendly data
+  "rendererData" :"{}",        // Renderer data of the summary list
+  "rendererVersion": "",       // The renderer version
+  "designSystemsVersion": "",  // The design systems version
+  "service": "{}"               // Service info
+}
+```
+  - `submissionData` no longer has the `formData` part of the `pageUrl.formData.elementName`. It directly uses `pageUrl.elementName` for example:
+```json
+{
+  "index": {
+    "certificate_select": [
+      "birth",
+      "permanent_residence"
+    ]
+  },
+  "data-entry-radios": {
+    "mobile_select": "mobile",
+    "mobileTxt": ""
+  },
+  "data-entry-textinput": {
+    "mobile": "+35722404383",
+    "dateGot": "1212-01-12",
+    "appointment": "03/09/2025"
+  },
+  "data-entry-all": {
+    "txtMobile": "",
+    "txtName": "",
+    "txtEmail": "",
+    "txtNumeric": "",
+    "dateInput": "",
+    "datePicker": "",
+    "checkboxes": [],
+    "radios": "",
+    "textArea": "",
+    "textArea1": "",
+    "textArea2": "",
+    "select1": "",
+    "file1Attachment": {
+      "sha256": "mock-sha256-hash",
+      "fileId": "mock-file-id"
+    }
+  },
+  "radios-conditions": {
+    "id_select": "",
+    "id_number": "",
+    "id_country": "",
+    "arc_number": "",
+    "passport_number": "",
+    "passport_country": ""
+  }
+}
+```
+- `checkboxes` values are normalized to **arrays** (including `[]` when no options are selected).
+
+### Added
+- **Temporary save & load feature** for service submissions. See more on the [temporary save feature in README.md](./README.md#-temporary-save-feature).
+- **File upload feature** for service submissions. See more on the [files uploads feature in README.md](./README.md#%EF%B8%8F-files-uploads-feature).
+
+### Changed
+- Updated `govcy-frontend-renderer` for
+  - better screen reader support on the `summaryList` which is used in the `review` and `success` page
+  - `warning` component support
+  - `header title with links` support. To do that the `site.headerTitle` must look something like this:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "title": {
+                "en":"Header title", 
+                "el":"Τιτλός επικεφαλιδας"
+            },
+            "href": {
+                "en":"/service-id",
+                "el":"/service-id"
+            }
+        },
+        ...
+    }
+}
+```
+- `Header title link - Backward compatibility`: If `site.headerTitle.title` is not set, the `site.headerTitle` will be used instead, as was before v1.x.x , for example:
+```json
+{
+    "site" : {
+        ...
+        "headerTitle" : 
+        {
+            "en":"Header title", 
+            "el":"Τιτλός επικεφαλιδας"
+        }
+        ...
+    }
+}
+```
+
+### Security
+- Updated to handle [Axios is vulnerable to DoS attack through lack of data size check](https://github.com/advisories/GHSA-4hjh-wcwx-xvwj) issue
+
 ## [v1.0.0-alpha.20] - 2025-09-14
 ### Added
 - Added ability to add a link on the header title (from govcy-frontend-renderer). To do that the `site.headerTitle` must look something like this:

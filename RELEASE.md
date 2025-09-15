@@ -232,12 +232,21 @@ git push origin v1-dev --follow-tags
 ### 6. When `v1` is ready to be the default
 
 Later on, you do this:
-1. Merge `v1-dev` into `main`
-2. Run `npm version 1.0.0`
-3. Push to `main`
-4. Your **main workflow** will:
-    - ✅ Create tags
-    - ✅ Publish `v1.0.0` to NPM as `latest`
+1. Update changelog and code
+2. Bump to `v1.0.0` with `--no-git-tag-version`
+```bash
+npm version 1.0.0 --no-git-tag-version   # important: no tag created
+```
+3. Commit changes
+4. Push to changes
+```bash
+git push origin v1-dev
+```
+5. Open a PR v1-dev → main and merge it when green
+6. Your **main workflow**:
+    - ✅ Creates v1.0.0 tag (and your other tags like latest, v1.x.x)
+    - ✅ Publishes to npm as latest
+    - ✅ Creates the GitHub release
 
 Now:
 ```bash

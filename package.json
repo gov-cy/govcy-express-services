@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.0.0-alpha.20",
+  "version": "1.0.0",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -46,8 +46,9 @@
     "test:functional": "mocha --timeout 30000 --recursive tests/functional/**/*.test.mjs",
     "test:watch": "mocha --watch --timeout 60000 tests/**/*.test.mjs",
     "coverage": "c8 --reporter=html --reporter=text --reporter=lcov --reporter=json-summary npm test",
+    "coverage:copy": "node -e \"try{require('fs').copyFileSync('coverage/coverage-summary.json','./coverage-summary.json')}catch(e){process.exit(0)}\"",
     "coverage:report": "c8 report",
-    "coverage:badge": "coverage-badges --output ./coverage-badges.svg"
+    "coverage:badge": "coverage-badges --output ./coverage-badges.svg && npm run coverage:copy"
   },
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.0",

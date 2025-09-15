@@ -3,7 +3,7 @@
 ![License](https://img.shields.io/github/license/gov-cy/govcy-express-services)
 [![Unit test](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/unit-test.yml)
 [![tag-and-publish-on-version-change](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml/badge.svg)](https://github.com/gov-cy/govcy-express-services/actions/workflows/tag-and-publish-on-version-change.yml)
-![coverage](coverage-badges.svg)
+[![coverage](coverage-badges.svg)](coverage-summary.json)
 
 > ⚠️ **Warning:**  
 > This package is **under active development** and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only. 
@@ -2314,7 +2314,7 @@ Here is a sample code section of a page definition with a file input field:
       - API endpoints and environment variables are defined
       - The page is not skiped because of conditional logic
       - The file is not empty
-      - The file size must be less than 5MB
+      - The file size must be less than 4MB
       - The file type must be one of the following: pdf, jpg, jpeg, png
     - If `fileUploadAPIEndpoint` returns an success, the file is uploaded temporarilly and the `fileView` element is displayed, with links to `View` or `Delete` the file. The file infomation are store in the data layer of the page.
 - **On a form page after upload**:
