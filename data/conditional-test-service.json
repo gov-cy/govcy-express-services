@@ -42,9 +42,9 @@
     "cdn": {
       "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist"
     },
-    "submission_data_version": "1",
-    "renderer_version": "1.16.1",
-    "design_systems_version": "3.2.0",
+    "submissionDataVersion": "1",
+    "rendererVersion": "1.16.1",
+    "designSystemsVersion": "3.2.0",
     "copyrightText": {
       "el": "Κυπριακή Δημοκρατία, 2025",
       "en": "Republic of Cyprus, 2025",

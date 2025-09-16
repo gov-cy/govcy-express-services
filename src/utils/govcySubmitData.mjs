@@ -122,11 +122,11 @@ export function prepareSubmissionData(req, siteId, service) {
         submissionUsername: dataLayer.getUser(req.session).name,
         submissionEmail: dataLayer.getUser(req.session).email,
         submissionData: submissionData, // Raw data as submitted by the user in each page
-        submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+        submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version ||"", // The submission data version
         printFriendlyData: printFriendlyData, // Print-friendly data
         rendererData: reviewSummaryList, // Renderer data of the summary list
-        rendererVersion: service.site?.renderer_version || "", // The renderer version
-        designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
+        rendererVersion: service.site?.rendererVersion || service.site?.renderer_version || "", // The renderer version
+        designSystemsVersion: service.site?.designSystemsVersion || service.site?.design_systems_version || "", // The design systems version
         service: { // Service info
             id: service.site.id, // Service ID
             title: service.site.title // Service title multilingual object

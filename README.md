@@ -273,9 +273,9 @@ Here is an example JSON config:
       "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
       "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
     },
-    "submission_data_version": "1",     //<-- Submission data version
-    "renderer_version": "1.16.1",       //<-- govcy-frontend-renderer version
-    "design_systems_version": "3.2.0",  //<-- govcy-design-system version
+    "submissionDataVersion": "1",     //<-- Submission data version
+    "rendererVersion": "1.16.1",       //<-- govcy-frontend-renderer version
+    "designSystemsVersion": "3.2.0",  //<-- govcy-design-system version
     "homeRedirectPage": {               //<-- Home redirect page
       "el": "https://www.gov.cy/service/aitisi-gia-taftotita/",
       "en": "https://www.gov.cy/en/service/issue-an-id-card/",
@@ -694,9 +694,9 @@ Here is an example JSON config:
 Here are some details explaining the JSON structure:
 
 - `site` object: Contains information about the site, including the site ID, language, and footer links. See [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer/tree/main#site-and-page-meta-data-explained) for more details. Some fields that are only specific to the govcy-express-forms project are the following:
-  - `submission_data_version` : The submission data version,
-  - `renderer_version` : The govcy-frontend-renderer version,
-  - `design_systems_version` : The govcy-design-system version,
+  - `submissionDataVersion` : The submission data version,
+  - `rendererVersion` : The govcy-frontend-renderer version,
+  - `designSystemsVersion` : The govcy-design-system version,
   - `homeRedirectPage`: An object mapping language codes to URLs. When a user visits the root route (e.g., `https://whatever-your-service-is.service.gov.cy/`), the system redirects to the URL for the user's language. If the user's language is not found, it falls back to `"el"` or the first available URL. If not provided, a list of available sites is shown. Example:
   ```json 
   "homeRedirectPage": {
@@ -2074,10 +2074,13 @@ HTTP/1.1 200 OK
     "ErrorCode": 0,
     "ErrorMessage": null,
     "Data": {
-        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}",
+        "referenceValue": "0000000924107836"
     }
 }
 ```
+
+**NOTE**: The `Data` object contains the `submissionData` and `referenceValue` fields. The `referenceValue` is a unique identifier for the submission. It is used to identify the submission in the `submissionPutAPIEndpoint` and `fileDownloadAPIEndpoint` API requests.
 
 **When temporary submission data are NOT found:**
 
@@ -2149,7 +2152,8 @@ HTTP/1.1 200 OK
     "ErrorCode": 0,
     "ErrorMessage": null,
     "Data": {
-        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}"
+        "submissionData": "{\"index\":{\"formData\":{\"certificate_select\":[\"birth\",\"permanent_residence\"]}},\"data-entry-radios\":{\"formData\":{\"mobile_select\":\"other\",\"mobileTxt\":\"+35799484967\"}}}",
+        "referenceValue": "0000000924107836"
     }
 }
 ```
