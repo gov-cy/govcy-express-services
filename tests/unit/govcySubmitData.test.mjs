@@ -42,9 +42,9 @@ describe('govcySubmitData', () => {
                         label: "EN"
                     }
                 ],
-                submission_data_version: '1.0',
-                renderer_version: '1.14.2',
-                design_systems_version: '3.2.0',
+                submissionDataVersion: '1.0',
+                rendererVersion: '1.14.2',
+                designSystemsVersion: '3.2.0',
             },
             pages: [
                 {

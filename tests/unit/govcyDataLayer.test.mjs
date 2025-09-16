@@ -89,9 +89,9 @@ describe('govcyDataLayer', () => {
             site: {
                 id: 'service1',
                 title: 'Test Service',
-                submission_data_version: '1.0',
-                renderer_version: '2.0',
-                design_systems_version: '3.0',
+                submissionDataVersion: '1.0',
+                rendererVersion: '2.0',
+                designSystemsVersion: '3.0',
             },
         };
         // const referenceNumber = 'REF12345';
@@ -106,11 +106,11 @@ describe('govcyDataLayer', () => {
                 submissionUsername: "John Doe",
                 submissionEmail: "HtYyj@example.com",
                 submissionData: session.siteData.site1.inputData, // Raw data as submitted by the user in each page
-                submissionDataVersion: service.site?.submission_data_version || "", // The submission data version
+                submissionDataVersion: service.site?.submissionDataVersion || "", // The submission data version
                 printFriendlyData: printFriendlyData, // Print-friendly data
                 rendererData: reviewSummaryList, // Renderer data of the summary list
-                rendererVersion: service.site?.renderer_version || "", // The renderer version
-                designSystemsVersion: service.site?.design_systems_version || "", // The design systems version
+                rendererVersion: service.site?.rendererVersion || "", // The renderer version
+                designSystemsVersion: service.site?.designSystemsVersion || "", // The design systems version
                 service: { // Service info
                     id: service.site.id, // Service ID
                     title: service.site.title // Service title multilingual object

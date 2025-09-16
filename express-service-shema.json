@@ -105,9 +105,9 @@
             "jsIntegrity": { "type": "string" }
           }
         },
-        "submission_data_version": { "type": "string" },
-        "renderer_version": { "type": "string" },
-        "design_systems_version": { "type": "string" },
+        "submissionDataVersion": { "type": "string" },
+        "rendererVersion": { "type": "string" },
+        "designSystemsVersion": { "type": "string" },
         "eligibilityAPIEndpoints": {
           "type": "array",
           "items": {
