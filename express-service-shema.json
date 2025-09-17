@@ -3,32 +3,168 @@
   "title": "GovCy Express Service Config Schema",
   "description": "Schema for the configuration of an Express-based service that uses @gov-cy/govcy-frontend-renderer to dynamically render forms.",
   "type": "object",
+  "$defs": {
+    "multilang": {
+      "type": "object",
+      "properties": {
+        "el": { "type": "string" },
+        "en": { "type": "string" },
+        "tr": { "type": "string" }
+      }, 
+      "additionalProperties": false
+    },
+    "govcyElementType": {
+      "type": "string",
+      "enum": [
+        "backLink",
+        "button",
+        "checkboxes",
+        "dateInput",
+        "datePicker",
+        "details",
+        "errorMessage",
+        "errorSummary",
+        "fieldset",
+        "fileInput",
+        "fileView",
+        "form",
+        "formControl",
+        "hint",
+        "htmlElement",
+        "label",
+        "legend",
+        "markdown",
+        "panel",
+        "progressList",
+        "radios",
+        "select",
+        "stepByStepStatic",
+        "summaryList",
+        "table",
+        "tag",
+        "taskList",
+        "textElement",
+        "textArea",
+        "textInput",
+        "userName",
+        "warning"
+      ]
+    },
+    "govcyElement": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "$ref": "#/$defs/govcyElementType"
+        },
+        "params": {
+          "type": "object"
+        },
+        "validations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "check": {
+                "type": "string"
+              },
+              "params": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "conditionalElements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/govcyElement"
+          }
+        }
+      },
+      "required": [
+        "element"
+      ],
+      "not": {
+        "properties": {
+          "element": {
+            "const": "form"
+          }
+        }
+      }
+    },
+    "govcyFormElement": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "const": "form"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "elements": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/govcyElement"
+              },
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "element": {
+                    "const": "button"
+                  }
+                },
+                "required": [
+                  "element"
+                ]
+              }
+            }
+          },
+          "required": [
+            "elements"
+          ]
+        }
+      },
+      "required": [
+        "element",
+        "params"
+      ]
+    }
+  },
   "properties": {
     "site": {
       "type": "object",
       "properties": {
-        "id": { "type": "string" },
-        "lang": { "type": "string" },
-        "homeRedirectPage": {
-          "type": "object",
-          "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" },
-            "tr": { "type": "string" }
-          },
-          "additionalProperties": { "type": "string" }
+        "id": {
+          "type": "string"
         },
+        "lang": {
+          "type": "string"
+        },
+        "homeRedirectPage": { "$ref": "#/$defs/multilang" },
         "languages": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "code": { "type": "string" },
-              "label": { "type": "string" },
-              "alt": { "type": "string" },
-              "href": { "type": "string" }
+              "code": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "alt": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              }
             },
-            "required": ["code", "label", "alt", "href"]
+            "required": [
+              "code",
+              "label",
+              "alt",
+              "href"
+            ]
           }
         },
         "footerLinks": {
@@ -36,89 +172,105 @@
           "items": {
             "type": "object",
             "properties": {
-              "label": {
-                "type": "object",
-                "properties": {
-                  "el": { "type": "string" },
-                  "en": { "type": "string" },
-                  "tr": { "type": "string" }
-                }
-              },
-              "href": { "type": "string" }
+              "label": { "$ref": "#/$defs/multilang" },
+              "href": {
+                "type": "string"
+              }
             },
-            "required": ["label", "href"]
+            "required": [
+              "label",
+              "href"
+            ]
           }
         },
-        "copyrightText": {
-          "type": "object",
-          "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" }
-          }
-        },
-        "menu": {
-          "type": "object",
-          "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" },
-            "tr": { "type": "string" }
-          }
-        },
-        "title": {
-          "type": "object",
-          "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" },
-            "tr": { "type": "string" }
-          }
-        },
+        "copyrightText": { "$ref": "#/$defs/multilang" },
+        "menu": { "$ref": "#/$defs/multilang" },
+        "title": { "$ref": "#/$defs/multilang" },
         "headerTitle": {
           "type": "object",
           "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" },
-            "tr": { "type": "string" }
-          }
+            "title": { "$ref": "#/$defs/multilang" },
+            "href": { "$ref": "#/$defs/multilang" }
+          },
+          "required": [
+            "title"
+          ]
         },
-        "description": {
-          "type": "object",
-          "properties": {
-            "el": { "type": "string" },
-            "en": { "type": "string" },
-            "tr": { "type": "string" }
-          }
+        "description": { "$ref": "#/$defs/multilang" },
+        "url": {
+          "type": "string"
         },
-        "url": { "type": "string" },
         "matomo": {
           "type": "object",
           "properties": {
-            "url": { "type": "string" },
-            "siteId": { "type": "string" }
+            "url": {
+              "type": "string"
+            },
+            "siteId": {
+              "type": "string"
+            }
           }
         },
-        "isTesting": { "type": "boolean" },
+        "isTesting": {
+          "type": "boolean"
+        },
         "cdn": {
           "type": "object",
           "properties": {
-            "dist": { "type": "string" },
-            "cssIntegrity": { "type": "string" },
-            "jsIntegrity": { "type": "string" }
+            "dist": {
+              "type": "string"
+            },
+            "cssIntegrity": {
+              "type": "string"
+            },
+            "jsIntegrity": {
+              "type": "string"
+            }
           }
         },
-        "submissionDataVersion": { "type": "string" },
-        "rendererVersion": { "type": "string" },
-        "designSystemsVersion": { "type": "string" },
+        "submissionDataVersion": {
+          "type": "string"
+        },
+        "rendererVersion": {
+          "type": "string"
+        },
+        "designSystemsVersion": {
+          "type": "string"
+        },
         "eligibilityAPIEndpoints": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "url": { "type": "string" },
-              "method": { "type": "string", "enum": ["GET", "POST"] },
-              "clientKey": { "type": "string" },
-              "serviceId": { "type": "string" },
-              "cashingTimeoutMinutes": { "type": ["integer", "null"] },
-              "params": { "type": "object" },
+              "url": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST"
+                ]
+              },
+              "clientKey": {
+                "type": "string"
+              },
+              "serviceId": {
+                "type": "string"
+              },
+              "dsfgtwApiKey": {
+                "type": "string"
+              },
+              "cashingTimeoutMinutes": {
+                "type": [
+                  "integer",
+                  "string",
+                  "null"
+                ]
+              },
+              "params": {
+                "type": "object"
+              },
               "response": {
                 "type": "object",
                 "properties": {
@@ -127,23 +279,40 @@
                     "additionalProperties": {
                       "type": "object",
                       "properties": {
-                        "error": { "type": "string" },
-                        "page": { "type": "string" }
+                        "error": {
+                          "type": "string"
+                        },
+                        "page": {
+                          "type": "string"
+                        }
                       }
                     }
                   }
                 }
               }
             },
-            "required": ["url", "clientKey", "serviceId"]
+            "required": [
+              "url",
+              "clientKey",
+              "serviceId"
+            ]
           }
         },
         "submissionAPIEndpoint": {
           "type": "object",
           "properties": {
-            "url": { "type": "string" },
-            "clientKey": { "type": "string" },
-            "serviceId": { "type": "string" },
+            "url": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            },
             "response": {
               "type": "object",
               "properties": {
@@ -152,18 +321,165 @@
                   "additionalProperties": {
                     "type": "object",
                     "properties": {
-                      "error": { "type": "string" },
-                      "page": { "type": "string" }
+                      "error": {
+                        "type": "string"
+                      },
+                      "page": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
               }
             }
           },
-          "required": ["url", "clientKey", "serviceId"]
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
+        },
+        "submissionGetAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
+        },
+        "submissionPutAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
+        },
+        "fileUploadAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
+        },
+        "fileDownloadAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
+        },
+        "fileDeleteAPIEndpoint": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "serviceId": {
+              "type": "string"
+            },
+            "dsfgtwApiKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url",
+            "clientKey",
+            "serviceId"
+          ]
         }
       },
-      "required": ["id", "lang", "languages", "footerLinks", "title", "headerTitle", "description", "url"]
+      "required": [
+        "id",
+        "lang",
+        "languages",
+        "footerLinks",
+        "title",
+        "headerTitle",
+        "description",
+        "url",
+        "submissionAPIEndpoint",
+        "submissionDataVersion",
+        "rendererVersion",
+        "designSystemsVersion",
+        "cdn"
+      ]
     },
     "pages": {
       "type": "array",
@@ -173,18 +489,43 @@
           "pageData": {
             "type": "object",
             "properties": {
-              "url": { "type": "string" },
-              "title": {
-                "type": "object",
-                "properties": {
-                  "el": { "type": "string" },
-                  "en": { "type": "string" },
-                  "tr": { "type": "string" }
+              "url": {
+                "type": "string",
+                "not": {
+                  "enum": [
+                    "review",
+                    "success"
+                  ]
                 }
               },
-              "layout": { "type": "string" },
-              "mainLayout": { "type": "string" },
-              "nextPage": { "type": "string" }
+              "title": { "$ref": "#/$defs/multilang" },
+              "layout": {
+                "type": "string"
+              },
+              "mainLayout": {
+                "type": "string"
+              },
+              "nextPage": {
+                "type": "string"
+              },
+              "conditions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "expression": {
+                      "type": "string"
+                    },
+                    "redirect": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "expression",
+                    "redirect"
+                  ]
+                }
+              }
             }
           },
           "pageTemplate": {
@@ -195,32 +536,18 @@
                 "items": {
                   "type": "object",
                   "properties": {
-                    "name": { "type": "string" },
+                    "name": {
+                      "type": "string"
+                    },
                     "elements": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "element": { "type": "string" },
-                          "params": { "type": "object" },
-                          "validations": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "check": { "type": "string" },
-                                "params": { "type": "object" }
-                              }
-                            }
-                          },
-                          "conditionalElements": {
-                            "type": "array",
-                            "items": { "$ref": "#" }
-                          }
-                        }
+                        "oneOf": [
+                          { "$ref": "#/$defs/govcyElement" },
+                          { "$ref": "#/$defs/govcyFormElement" }
+                        ]
                       }
-                    },
-                    "params": { "type": "object" }
+                    }
                   }
                 }
               }
@@ -228,19 +555,10 @@
           }
         }
       }
-    },
-    "routes": { "type": "array" },
-    "localizations": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "el": { "type": "string" },
-          "en": { "type": "string" },
-          "tr": { "type": "string" }
-        }
-      }
     }
   },
-  "required": ["site", "pages"]
+  "required": [
+    "site",
+    "pages"
+  ]
 }

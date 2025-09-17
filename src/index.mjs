@@ -99,20 +99,20 @@ export default function initializeGovCyExpressService(){
   
   // 🛠️ Debugging routes -----------------------------------------------------
   // 🙍🏻‍♂️ -- ROUTE: Debugging route Protected Route
-  if (!isProdOrStaging()) {
-    app.get('/user', requireAuth, naturalPersonPolicy, (req, res) => {
-      res.send(`
-        User name: ${req.session.user.name}
-        <br> Sub: ${req.session.user.sub}
-        <br> Profile type: ${req.session.user.profile_type}
-        <br> Clinent ip: ${req.session.user.client_ip}
-        <br> Unique Identifier: ${req.session.user.unique_identifier}
-        <br> Email: ${req.session.user.email}
-        <br> Id Token: ${req.session.user.id_token}
-        <br> Access Token: ${req.session.user.access_token}
-        `);
-    });
-  }
+  // if (!isProdOrStaging()) {
+  //   app.get('/user', requireAuth, naturalPersonPolicy, (req, res) => {
+  //     res.send(`
+  //       User name: ${req.session.user.name}
+  //       <br> Sub: ${req.session.user.sub}
+  //       <br> Profile type: ${req.session.user.profile_type}
+  //       <br> Clinent ip: ${req.session.user.client_ip}
+  //       <br> Unique Identifier: ${req.session.user.unique_identifier}
+  //       <br> Email: ${req.session.user.email}
+  //       <br> Id Token: ${req.session.user.id_token}
+  //       <br> Access Token: ${req.session.user.access_token}
+  //       `);
+  //   });
+  // }
   //----------------------------------------------------------------------
   
   
