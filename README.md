@@ -262,6 +262,21 @@ Here is an example JSON config:
           "tr":"/service-id"
       }
     },
+    "reviewPageHeader": {  //<-- OPTIONAL - Review page header. Useful when directing users to the review page from gov.cy start page
+      "el": "Υπηρεσία τεστ",
+      "en": "Test service",
+      "tr": "Test service"
+    },
+    "successPageHeader": { //<-- OPTIONAL - Success page header
+      "el": "Έχουμε λάβει την προσφορά σας",
+      "en": "We have received your offer",
+      "tr": "We have received your offer"
+    },
+    "successEmailHeader": { //<-- OPTIONAL - Success email header
+      "el": "Έχουμε λάβει την προσφορά σας",
+      "en": "We have received your offer",
+      "tr": "We have received your offer"
+    },
     "description": {  //<-- Service description (meta)
       "el": "[Υποβάλετε αίτηση για ...]",
       "en": "[Submit an application ...]",

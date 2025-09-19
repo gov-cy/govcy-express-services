@@ -65,7 +65,13 @@ export function govcySuccessPageHandler(isPDF = false) {
             const successPanel = {
                 element: "panel",
                 params: {
-                    header: govcyResources.staticResources.text.submissionSuccessTitle,
+                    // if serviceCopy has site.successPageHeader use it otherwise use the static resource. it should test if serviceCopy.site.successPageHeader[req.globalLang] exists
+                    header: (
+                        serviceCopy?.site?.successPageHeader?.[req.globalLang]
+                        ? serviceCopy.site.successPageHeader
+                        : govcyResources.staticResources.text.submissionSuccessTitle
+                    ),
+                    // header: govcyResources.staticResources.text.submissionSuccessTitle,
                     body: govcyResources.staticResources.text.yourSubmissionId,
                     referenceNumber: govcyResources.getSameMultilingualObject(serviceCopy.site.languages,submissionData.referenceNumber)
                 }
