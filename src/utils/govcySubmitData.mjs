@@ -557,7 +557,8 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
             {
                 component: "bodySuccess",
                 params: {
-                    title: govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
+                    title: service?.site?.successEmailHeader?.[req.globalLang]
+                    || govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
                     body: `${govcyResources.getLocalizeContent(govcyResources.staticResources.text.yourSubmissionId, req.globalLang)} ${submissionId}`
                 }
             }

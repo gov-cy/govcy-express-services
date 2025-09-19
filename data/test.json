@@ -137,6 +137,21 @@
         "tr": "/service-id"
       }
     },
+    "reviewPageHeader": {
+      "el": "Υπηρεσία τεστ",
+      "en": "Test service",
+      "tr": "Test service"
+    },
+    "successPageHeader": {
+      "el": "Έχουμε λάβει την προσφορά σας",
+      "en": "We have received your offer",
+      "tr": "We have received your offer"
+    },
+    "successEmailHeader": {
+      "el": "Έχουμε λάβει την προσφορά σας",
+      "en": "We have received your offer",
+      "tr": "We have received your offer"
+    },
     "description": {
       "el": "[Υποβάλετε αίτηση για ...]",
       "en": "[Submit an application ...]",

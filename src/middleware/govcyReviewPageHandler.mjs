@@ -37,7 +37,12 @@ export function govcyReviewPageHandler() {
                 element: "textElement",
                 params: {
                     type: "h1",
-                    text: govcyResources.staticResources.text.checkYourAnswersTitle
+                    // if serviceCopy has site.reviewPageHeader use it otherwise use the static resource. it should test if serviceCopy.site.reviewPageHeader[req.globalLang] exists
+                    text: (
+                        serviceCopy?.site?.reviewPageHeader?.[req.globalLang]
+                        ? serviceCopy.site.reviewPageHeader
+                        : govcyResources.staticResources.text.checkYourAnswersTitle
+                    )
                 }
             };
             
