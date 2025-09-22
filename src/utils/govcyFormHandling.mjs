@@ -68,10 +68,16 @@ export function populateFormData(formElements, theData, validationErrors, store 
             } else if (element.element === "fileInput") {
                 // For fileInput, we change the element.element to "fileView" and set the 
                 // fileId and sha256 from the session store
-                // unneeded handle of `Attachment` at the end
-                // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName + "Attachment");
-                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
-                // TODO: Ask Andreas how to handle empty file inputs
+                // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
+                
+                // 1) Prefer file from theData (could be draft in add mode, or item object in edit)
+                let fileData = theData[fieldName];
+
+                // 2) If not found, fall back to dataLayer (normal page behaviour)
+                if (!fileData) {
+                    fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
+                }
+                
                 if (fileData) {
                     element.element = "fileView";
                     element.params.fileId = fileData.fileId;

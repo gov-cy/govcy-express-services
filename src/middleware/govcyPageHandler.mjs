@@ -4,6 +4,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
+import { govcyMultipleThingsHubHandler } from "./govcyMultipleThingsHubHandler.mjs";
 // import {flattenContext, evaluateExpressionWithFlattening, evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
@@ -38,11 +39,13 @@ export function govcyPageHandler() {
       if (result.result === false) {
         return res.redirect(`/${req.params.siteId}/${result.redirect}`);
       }
-      
-      //if user is logged in add the user nane section in the page template
-      if (dataLayer.getUser(req.session)) {
-        pageTemplateCopy.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
+
+      // ----- MultipleThings hub handling
+      if (page.multipleThings) {
+        logger.debug(`Rendering multipleThings hub for pageUrl: ${pageUrl}`, req);
+        return govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy);
       }
+      
       //⚙️ Process forms before rendering
       pageTemplateCopy.sections.forEach(section => {
         section.elements.forEach(element => {
@@ -87,7 +90,16 @@ export function govcyPageHandler() {
             }
             //--------- End of Handle Validation Errors ---------
             
-            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang, null, req.query.route);
+            populateFormData(
+              element.params.elements, 
+              theData,
+              validationErrors, 
+              req.session, 
+              siteId, 
+              pageUrl, 
+              req.globalLang, 
+              null, 
+              req.query.route);
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));

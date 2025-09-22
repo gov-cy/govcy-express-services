@@ -27,6 +27,7 @@ import { govcyLoadSubmissionData } from './middleware/govcyLoadSubmissionData.mj
 import { govcyFileUpload } from './middleware/govcyFileUpload.mjs';
 import { govcyFileDeletePageHandler, govcyFileDeletePostHandler } from './middleware/govcyFileDeleteHandler.mjs';
 import { govcyFileViewHandler } from './middleware/govcyFileViewHandler.mjs';
+import { govcyMultipleThingsAddHandler, govcyMultipleThingsEditHandler } from './middleware/govcyMultipleThingsItemPage.mjs';
 import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -152,6 +153,17 @@ export default function initializeGovCyExpressService(){
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
   app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
   
+  // ➕ -- ROUTE: Add item page (BEFORE the generic dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/add',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyLoadSubmissionData(),
+    govcyMultipleThingsAddHandler(),
+    renderGovcyPage()
+  );
+
   // 👀🗃️ -- ROUTE: View file (BEFORE the dynamic route)
   app.get('/:siteId/:pageUrl/view-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileViewHandler());
 

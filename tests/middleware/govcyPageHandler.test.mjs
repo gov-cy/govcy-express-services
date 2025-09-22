@@ -133,22 +133,22 @@ describe("govcyPageHandler", () => {
         expect(redirectUrl).to.equal("/test-site/some-other-page");
     });
 
-    it("3. should add user name section if user is logged in", () => {
-        const handler = govcyPageHandler();
-        handler(req, res, next);
+    // it("3. should add user name section if user is logged in", () => {
+    //     const handler = govcyPageHandler();
+    //     handler(req, res, next);
 
-        const processed = req.processedPage;
-        expect(processed).to.be.an("object");
+    //     const processed = req.processedPage;
+    //     expect(processed).to.be.an("object");
 
-        const hasUserNameSection = processed.pageTemplate.sections.some(section => {
-            return section.elements?.some(el =>
-                el.element === "userName" &&
-                el.params?.name?.el?.includes("Tester")
-            );
-        });
+    //     const hasUserNameSection = processed.pageTemplate.sections.some(section => {
+    //         return section.elements?.some(el =>
+    //             el.element === "userName" &&
+    //             el.params?.name?.el?.includes("Tester")
+    //         );
+    //     });
 
-        expect(hasUserNameSection).to.be.true;
-    });
+    //     expect(hasUserNameSection).to.be.true;
+    // });
 
     it("4. should show validation errors and repopulate form data", () => {
         // Add fake validation errors to session

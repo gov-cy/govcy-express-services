@@ -159,11 +159,6 @@ export function govcyFileDeletePageHandler() {
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });
 
-            //if user is logged in add he user bane section in the page template
-            if (dataLayer.getUser(req.session)) {
-                pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
-            }
-
             //prepare pageData
             pageData.site = serviceCopy.site;
             pageData.pageData.title = pageTitle;

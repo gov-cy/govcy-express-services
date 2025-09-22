@@ -389,11 +389,49 @@ export function getFormDataValue(store, siteId, pageUrl, elementName) {
  * @returns The user object from the store or null if it doesn't exist.
  */
 export function getUser(store) {
-    return store.user || null;
+    return store?.user || null;
 }
 
 export function clearSiteData(store, siteId) {
     delete store?.siteData[siteId];
+}
+
+/**
+ * Get multiple things draft data while adding a new multiple thing
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url
+ * @returns The multiple things draft data while adding a new multiple thing. 
+ */
+export function getMultipleDraft(store, siteId, pageUrl) {
+  return store?.siteData?.[siteId]?.inputData?.[pageUrl]?.multipleDraft || null;
+}
+
+/**
+ * Store multiple things draft data used while adding a new multiple thing
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url
+ * @param {*} obj The multiple things draft data to be stored
+ */
+export function setMultipleDraft(store, siteId, pageUrl, obj) {
+  initializeSiteData(store, siteId, pageUrl);
+  store.siteData[siteId].inputData[pageUrl].multipleDraft = obj || {};
+}
+
+/**
+ * Clear multiple things draft data used while adding a new multiple thing
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url 
+ */
+export function clearMultipleDraft(store, siteId, pageUrl) {
+  if (store?.siteData?.[siteId]?.inputData?.[pageUrl]) {
+    store.siteData[siteId].inputData[pageUrl].multipleDraft = null;
+  }
 }
 
 /**

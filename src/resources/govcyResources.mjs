@@ -26,6 +26,11 @@ export const staticResources = {
             el: "Αλλαγή", 
             tr: "Değişiklik" 
         },
+        delete : {
+            en: "Delete",
+            el: "Διαγραφή",
+            tr: "Delete"
+        },
         formSuccess: { 
             en: "Your form has been submitted!", 
             el: "Η φόρμα σας έχει υποβληθεί!" ,
@@ -150,6 +155,16 @@ export const staticResources = {
             en: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application.",
             el: "Έχετε ανεβάσει το αρχείο αυτό και σε άλλα σημεία της αίτησης. Αν το διαγράψετε, θα διαγραφεί από όλα τα σημεία.",
             tr: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application."
+        },
+        multipleThingsEnptyState: {
+            en: "You have not added any entries yet.",
+            el: "Δεν έχετε προσθέσει ακόμη κάποια κατάσταση.",
+            tr: "You have not added any entries yet."
+        },
+        multipleThingsAddEntry: {
+            en: "➕ Add new entry",
+            el: "➕ Προσθήκη νέας καταχώρησης",
+            tr: "➕ Add new entry"
         }
     },
     //remderer sections
@@ -510,4 +525,60 @@ export function getEmailObject( subject, preHeader, header, username, body, foot
             footerText: getLocalizeContent(footer, usedLang)
         }
     }
+}
+
+/**
+ * Get the link for multiple things hub and add/edit/delete pages
+ * @param {string} linkType The type of link. Can be `add`, `edit`, `delete`
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url
+ * @param {string} lang The page language
+ * @param {string} entryKey The entry key. If not provided, it will be set to an empty string.
+ * @param {string} route Whether it comes from the `review` route
+ * @param {string} linkText The link text. If not provided, it will be set to an empty string.
+ * @returns {string} The link htmlElement govcy-frontend-renderer object
+ */
+export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey = "", route = "", linkText = "") {
+    // Generate the action part of the URL based on the linkType
+    let actionPart = "";
+    let linkTextString = "";
+    switch (linkType) {
+        case "add":
+            actionPart = `multiple/add`;
+            // if linkText is not provided, use the default text from staticResources
+            linkTextString = (linkText 
+                ? linkText 
+                : staticResources.text.multipleThingsAddEntry[lang] || staticResources.text.multipleThingsAddEntry["el"]
+            );
+            break;
+        case "edit":
+            actionPart = `multiple/edit/${entryKey}`;
+            linkTextString = staticResources.text.change[lang] || staticResources.text.change["el"];
+            break;
+        case "delete":
+            actionPart = `multiple/delete/${entryKey}`;
+            linkTextString = staticResources.text.delete[lang] || staticResources.text.delete["el"];
+            break;
+        default:
+            actionPart = `multiple/add`;
+            // if linkText is not provided, use the default text from staticResources
+            linkTextString = (linkText 
+                ? linkText 
+                : staticResources.text.multipleThingsAddEntry[lang] || staticResources.text.multipleThingsAddEntry["el"]
+            );
+    }
+    // full part of the URL
+    const fullPath = `/${siteId}${pageUrl ? `/${pageUrl}` : ""}/${actionPart}/${route ? `?route=${route}` : ""}`;
+    // return the link htmlElement govcy-frontend-renderer object
+    return {
+        element: "htmlElement",
+        params: {
+            text: {
+                en: `<p><a href="${fullPath}">${linkTextString}</a></p>`,
+                el: `<p><a href="${fullPath}">${linkTextString}</a></p>`,
+                tr: `<p><a href="${fullPath}">${linkTextString}</a></p>`
+            }
+        }
+    };
+
 }

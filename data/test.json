@@ -5770,6 +5770,309 @@
           }
         ]
       }
+    },
+    {
+      "pageData": {
+        "url": "multiple-academic-details",
+        "title": {
+          "el": "Ακαδημαϊκό προσόν",
+          "en": "Academic detail",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "data-entry-all"
+      },
+      "multipleThings": {
+        "min": 1,    
+        "max": 10,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{title}} – {{institution}}",
+        "listPage": {
+          "title" : {
+            "el": "Ακαδημαϊκά προσόντα",
+            "en": "Academic details"
+          },
+          "topElements" : [
+            {
+              "element": "progressList",
+              "params": {
+                "id": "steps",
+                "current": "4",
+                "total": "4",
+                "showSteps": true,
+                "steps": [
+                  {
+                    "id": "step1",
+                    "text": {
+                      "el": "Επιλογή Εγγάφου",
+                      "en": "Document selection",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step2",
+                    "text": {
+                      "el": "Στοιχεία επικοινωνίας ",
+                      "en": "Contact details",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step3",
+                    "text": {
+                      "el": "Σταθερό τηλέφωνο",
+                      "en": "Landline number",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step4",
+                    "text": {
+                      "el": "Ακαδημαϊκά προσόντα",
+                      "en": "Academic details",
+                      "tr": ""
+                    }
+                  }
+                ]
+              }
+            },           
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ακαδημαϊκά προσόντα",
+                  "en": "Academic details",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "en": "Add at least one academic detail to proceed. You can up to 10.",
+                  "el": "Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 10."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "No academic details added yet.",
+            "el": "Δεν έχετε προσθέσει ακόμη ακαδημαϊκά προσόντα."
+          },
+          "addButtonText": {
+            "en": "➕ Add academic details",
+            "el": "➕ Προσθήκη ακαδημαϊκό προσόν"
+          },
+          "addButtonPlacement": "bottom", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "heading",
+                        "type": "h1",
+                        "text": {
+                          "el": "Προσθήκη ακαδημκού προσόντος",
+                          "en": "Add academic detail"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title",
+                        "name": "title",
+                        "label": {
+                          "el": "Ακαδημαϊκός τίτλος",
+                          "en": "Academic title"
+                        },
+                        "isPageHeading": false
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του ακδημαϊκου τίτλου",
+                              "en": "Enter τhe academic title name",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution",
+                        "name": "institution",
+                        "label": {
+                          "el": "Όνομα ινστιτούτου",
+                          "en": "Institution name"
+                        },
+                        "isPageHeading": false
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του ινστιτούτου",
+                              "en": "Enter τhe institution name",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institutionPhoneNumber",
+                        "name": "institutionPhoneNumber",
+                        "label": {
+                          "el": "Τηλέφωνο ινστιτούτου",
+                          "en": "Institution phone number"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "20",
+                        "type": "tel"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό τηλεφώνου του ινστιτούτου",
+                              "en": "Enter τhe institution phone number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "telCY",
+                            "message": {
+                              "el": "O αριθμό τηλεφώνου του ινστιτούτου πρέπει να είναι Κυπριακος αριθμός τηλεφώνου",
+                              "en": "The institution phone number must be a Cypriot telephone number",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "dateGot",
+                        "name": "dateGot",
+                        "legend": {
+                          "el": "Ημερομηνία απόκτησης τίτλου",
+                          "en": "Date of obtaining the degree"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία απόκτησης τίτλου πρέπει να είναι ημερομηνία [π.χ. 13 8 2007]",
+                              "en": "The date of obtaining the degree must be an date [e.g. 13 8 2007]",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "academicFile",
+                        "name": "academicFile",
+                        "label": {
+                          "el": "Ανεβάστε τον τίτλο",
+                          "en": "Upload the degree",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats ",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε τον τίτλο",
+                              "en": "Upload the degree",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../data-entry-all"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "routes": [],

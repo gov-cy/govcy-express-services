@@ -4,6 +4,11 @@ import { renderGovcyPage } from "../../src/middleware/govcyPageRender.mjs";
 describe("renderGovcyPage", () => {
     it("1. should render HTML and include afterBody elements", () => {
         const req = {
+            session: {
+                user: {
+                    name: "Test User"
+                }
+            },
             processedPage: {
                 pageTemplate: {
                     sections: [
@@ -55,7 +60,13 @@ describe("renderGovcyPage", () => {
     });
 
     it("2. should throw error if processedPage is missing", () => {
-        const req = {}; // no processedPage
+        const req = {
+            session: {
+                user: {
+                    name: "Test User"
+                }
+            }
+        }; // no processedPage
         const res = {
             send: () => {
                 throw new Error("res.send should not be called");
@@ -69,6 +80,11 @@ describe("renderGovcyPage", () => {
 
     it("3. should render correctly in Greek (lang: 'el')", () => {
         const req = {
+            session: {
+                user: {
+                    name: "Test User"
+                }
+            },
             processedPage: {
                 pageData: {
                     site: {
@@ -117,5 +133,62 @@ describe("renderGovcyPage", () => {
         expect(sentHtml).to.include("Καλώς Ήρθατε στη Δοκιμαστική Υπηρεσία");
         expect(sentHtml).to.include("govcy--loadingOverlay"); // from afterBody
     });
+
+    it("4. should render user name section when user is logged in", () => {
+        const req = {
+            session: {
+                user: {
+                    name: "Test User"
+                }
+            },
+            processedPage: {
+                pageTemplate: {
+                    sections: [
+                        {
+                            name: "main",
+                            elements: [
+                                {
+                                    element: "textElement",
+                                    params: {
+                                        type: "h1",
+                                        text: {
+                                            en: "Welcome",
+                                            el: "Καλώς Ήρθατε"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                pageData: {
+                    site: {
+                        lang: "en"
+                    },
+                    pageData: {
+                        title: {
+                            en: "Test Page",
+                            el: "Σελίδα Δοκιμής"
+                        }
+                    }
+                }
+            }
+        };
+
+        let renderedHtml = "";
+        const res = {
+            send: (html) => {
+                renderedHtml = html;
+            }
+        };
+
+        const handler = renderGovcyPage();
+        handler(req, res);
+
+        expect(renderedHtml).to.be.a("string");
+        expect(renderedHtml).to.include("Test User"); // Confirm user name is rendered
+        expect(renderedHtml).to.include("govcy--loadingOverlay"); // Still confirm other elements
+    });
+
 
 });
