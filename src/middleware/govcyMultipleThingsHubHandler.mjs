@@ -1,8 +1,10 @@
 // src/middleware/govcyMultipleThingsHubHandler.mjs
+import e from "express";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import nunjucks from "nunjucks";
 
 /**
  * Middleware to render a MultipleThings hub page. 
@@ -21,8 +23,8 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             logger.debug("🚨 multipleThings config not found in page config", req);
             return handleMiddlewareError(`🚨 multipleThings config not found in page config`, 500, next);
         }
-        if (!mtConfig.listPage 
-            || !mtConfig.listPage.title ) {
+        if (!mtConfig.listPage
+            || !mtConfig.listPage.title) {
             logger.debug("🚨 multipleThings.listPage.title is required", req);
             return handleMiddlewareError(`🚨 multipleThings.listPage.title is required`, 500, next);
         }
@@ -54,86 +56,112 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             hubTemplate.sections[0].elements.push(...mtConfig.listPage.topElements);
         }
 
-        // If addButtonPlacement is "top" or "both", add the "Add another" button at the top
-        if (mtConfig?.listPage?.addButtonPlacement === "top" || mtConfig?.listPage?.addButtonPlacement === "both") {
-            hubTemplate.sections[0].elements.push(
-                govcyResources.getMultipleThingsLink("add",siteId, pageUrl, req.globalLang,"", (req.query?.route === "review" ? "review" : "")
-                ,mtConfig?.listPage?.addButtonText?.[req.globalLang] ) 
-            );
-            addLinkCounter++;
+        //If items are less than max show the add another button
+        if (items.length < mtConfig.max) {
+            // If addButtonPlacement is "top" or "both", add the "Add another" button at the top
+            if (mtConfig?.listPage?.addButtonPlacement === "top" || mtConfig?.listPage?.addButtonPlacement === "both") {
+                hubTemplate.sections[0].elements.push(
+                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, req.globalLang, "", (req.query?.route === "review" ? "review" : "")
+                        , mtConfig?.listPage?.addButtonText?.[req.globalLang])
+                );
+                addLinkCounter++;
+            }
         }
         // 2. Add list of items or empty state
-        // if (items.length === 0) {
-            // hubTemplate.sections[0].elements.push({
-            //     element: "inset",
-            //     // if no emptyState provided use the static resource
-            //     params: {
-            //         text:(
-            //             mtConfig?.listPage?.emptyState?.[req.globalLang]
-            //             ? mtConfig.listPage.emptyState
-            //             : govcyResources.staticResources.text.multipleThingsEnptyState
-            //         )
-            //     }
-            // });
-        // } 
-        // else {
+        if (items.length === 0) {
             hubTemplate.sections[0].elements.push({
-                "element": "multipleThingsTable",
-                "params": {
-                    "id": "govcy-test-128",
-                    "classes": "govcy-test-class",
-                    "items": [
-                        {
-                            "text": { "en": "BSc Computer Science – University of Cyprus"
-                                    , "el": "BSc Computer Science – University of Cyprus" },
-                            "actions": [
-                            {
-                                "text": { "en": "Change", "el": "Αλλαγή" },
-                                "href": "#change1",
-                                "visuallyHiddenText": { "en": "+BSc Computer Science – University of Cyprus", "el": "+BSc Computer Science – University of Cyprus el" }
-                            },
-                            {
-                                "text": { "en": "Remove", "el": "Διαγραφή" },
-                                "href": "#remove1",
-                                "classes": "govcy-test-class",
-                                "visuallyHiddenText": { "en": "+BSc Computer Science – University of Cyprus", "el": "+BSc Computer Science – University of Cyprus el" }
-                            }
-                            ]
-                        },
-                        {
-                            "text": { "en": "MSc Artificial Intelligence – UCL", "el": "MSc Artificial Intelligence – UCL el" },
-                            "actions": [
-                            {
-                                "text": { "en": "Change", "el": "Αλλαγή" },
-                                "href": "#change2",
-                                "visuallyHiddenText": { "en": "MSc Artificial Intelligence – UCL", "el": "MSc Artificial Intelligence – UCL el" }
-                            },
-                            {
-                                "text": { "en": "Remove", "el": "Διαγραφή" },
-                                "href": "#remove2",
-                                "classes": "govcy-test-class",
-                                "visuallyHiddenText": { "en": "MSc Artificial Intelligence – UCL", "el": "MSc Artificial Intelligence – UCL el" }
-                            }
-                            ]
-                        }
-                    ]
+                element: "inset",
+                // if no emptyState provided use the static resource
+                params: {
+                    text: (
+                        mtConfig?.listPage?.emptyState?.[req.globalLang]
+                            ? mtConfig.listPage.emptyState
+                            : govcyResources.staticResources.text.multipleThingsEnptyState
+                    )
                 }
             });
-        // }
-        //else {
-        //     // TODO: build table from items + mtConfig.itemTitleTemplate
-        //     hubTemplate.sections[0].elements.push(
-        //         govcyResources.multipleThingsTable(items, mtConfig, pageUrl)
-        //     );
-        // }
+        }
+        else {
+            //nunjucks.renderString(template, item);
+            // Build dynamic table items using Nunjucks to render item titles
+            const tableItems = items.map((item, idx) => {
+                // Render the title string from the template (e.g. "{{title}} – {{institution}}")
+                // If item = { title: "BSc CS", institution: "UCY" }, it becomes "BSc CS – UCY"
+                const safeItem = (item && typeof item === "object") ? item : {};
+                const env = new nunjucks.Environment(null, { autoescape: false });
+                let title;
+                try{
+                    title = env.renderString(mtConfig.itemTitleTemplate, safeItem);
+                    // Fallback if Nunjucks returned empty or only whitespace
+                    if (!title || !title.trim()) {
+                        title = govcyResources.staticResources.text.untitled[req.globalLang] || govcyResources.staticResources.text.untitled["el"];
+                    }
+                }catch (err) {
+                    // Log the error and fallback
+                    logger.error(`Error rendering itemTitleTemplate for ${siteId}/${pageUrl}, index=${idx}: ${err.message}`, req);
+                    title = govcyResources.staticResources.text.untitled[req.globalLang] || govcyResources.staticResources.text.untitled["el"];
+                }
 
-        
-        // If addButtonPlacement is "bottom" or "both", add the "Add another" button at the bottom
-        if (mtConfig?.listPage?.addButtonPlacement === "bottom" || mtConfig?.listPage?.addButtonPlacement === "both" || addLinkCounter === 0) {
-            hubTemplate.sections[0].elements.push(
-                govcyResources.getMultipleThingsLink("add",siteId, pageUrl, req.globalLang,"", (req.query?.route === "review" ? "review" : "")
-                ,mtConfig?.listPage?.addButtonText?.[req.globalLang] ) 
-            );
+
+                return {
+                    // Table row text
+                    text: { [req.globalLang]: title },
+
+                    // Row actions (edit / remove)
+                    actions: [
+                        {
+                            text: govcyResources.staticResources.text.change,
+                            // Edit route for this item
+                            href: `/${siteId}/${pageUrl}/multiple/edit/${idx}${req.query?.route === "review" ? "?route=review" : ""}`,
+                            visuallyHiddenText: { [req.globalLang]: ` ${title}` }
+                        },
+                        {
+                            text: govcyResources.staticResources.text.delete,
+                            // Delete route for this item
+                            href: `/${siteId}/${pageUrl}/multiple/delete/${idx}${req.query?.route === "review" ? "?route=review" : ""}`,
+                            visuallyHiddenText: { [req.globalLang]: ` ${title}` }
+                        }
+                    ]
+                };
+            });
+
+            // Push the table into the hub template
+            hubTemplate.sections[0].elements.push({
+                element: "multipleThingsTable",
+                params: {
+                    id: `${pageUrl}-table`,             // Unique ID for table
+                    classes: "govcy-multiple-table",    // CSS hook
+                    items: tableItems                   // The rows we just built
+                }
+            });
+            
+        }
+
+        //If items are less than max show the add another button
+        if (items.length < mtConfig.max) {
+            // If addButtonPlacement is "bottom" or "both", add the "Add another" button at the bottom
+            if (mtConfig?.listPage?.addButtonPlacement === "bottom" || mtConfig?.listPage?.addButtonPlacement === "both" || addLinkCounter === 0) {
+                hubTemplate.sections[0].elements.push(
+                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, req.globalLang, "", (req.query?.route === "review" ? "review" : "")
+                        , mtConfig?.listPage?.addButtonText?.[req.globalLang])
+                );
+            }
+        } else {
+            // process message
+            // Deep copy page title (so we don’t mutate template)
+            let maxMsg = JSON.parse(JSON.stringify(govcyResources.staticResources.text.multipleThingsMaxMessage));
+
+            // Replace label placeholders on page title
+            for (const lang of Object.keys(maxMsg)) {
+                maxMsg[lang] = maxMsg[lang].replace("{{max}}", mtConfig.max);
+            }
+            hubTemplate.sections[0].elements.push({
+                element: "warning",
+                // if no emptyState provided use the static resource
+                params: {
+                    text:  maxMsg
+                }
+            });
         }
 
         // 5. Add Continue button
@@ -142,18 +170,29 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 element: "button",
                 // if no emptyState provided use the static resource
                 params: {
-                    text:(
+                    text: (
                         mtConfig?.listPage?.continueButtonText?.[req.globalLang]
-                        ? mtConfig.listPage.continueButtonText
-                        : govcyResources.staticResources.text.continue
+                            ? mtConfig.listPage.continueButtonText
+                            : govcyResources.staticResources.text.continue
                     ),
                     variant: "primary"
                 }
             }
         );
 
-        
-        //if user is logged in add the user nane section in the page template
+
+        //if mtConfig.hasBackLink == true add section beforeMain with backlink element
+        if (mtConfig.listPage?.hasBackLink == true) {
+            hubTemplate.sections.unshift({
+                name: "beforeMain",
+                elements: [
+                    {
+                        element: "backLink",
+                        params: {}
+                    }
+                ]
+            });
+        }
         // if (dataLayer.getUser(req.session)) {
         //     hubTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
         // }

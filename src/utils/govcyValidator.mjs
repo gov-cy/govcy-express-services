@@ -42,7 +42,7 @@ function validateValue(value, rules) {
     mobileCY: (val) => {
       const normalized = val.replace(/[\s\-()]/g, ''); // Remove spaces, hyphens, and parentheses
       return /^(?:\+357|00357)?9\d{7}$/.test(normalized); // Match Cypriot mobile numbers
-  },
+    },
     iban: (val) => {
       const cleanedIBAN = val.replace(/[\s-]/g, '').toUpperCase(); // Remove spaces/hyphens and convert to uppercase
       const regex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/;
@@ -95,6 +95,13 @@ function validateValue(value, rules) {
         return false; // Return false if val cannot be converted to a number
       }
       return normalizedVal <= max;
+    },
+    // ✅ New rule: maxCurrentYear
+    maxCurrentYear: (val) => {
+      const normalizedVal = normalizeNumber(val);
+      if (isNaN(normalizedVal)) return false;
+      const currentYear = new Date().getFullYear();
+      return normalizedVal <= currentYear;
     },
     minValueDate: (val, minDate) => {
       const valueDate = parseDate(val); // Parse the input date
@@ -162,12 +169,12 @@ function validateValue(value, rules) {
     if (check === 'minValue' && !validationRules.minValue(value, checkValue)) {
       return message;
     }
-
+    
     // Check for "maxValue"
     if (check === 'maxValue' && !validationRules.maxValue(value, checkValue)) {
       return message;
     }
-
+    
     // Check for "minValueDate"
     if (check === 'minValueDate' && !validationRules.minValueDate(value, checkValue)) {
       return message;
@@ -182,6 +189,7 @@ function validateValue(value, rules) {
     if (check === 'minLength' && !validationRules.minLength(value, checkValue)) {
       return message;
     }
+
 
   }
 
@@ -319,10 +327,10 @@ export function validateFormElements(elements, formData, pageUrl) {
                     .filter(Boolean) // Remove empty values
                     .join("-") // Join remaining parts
                   : (conditionalElement.element === "fileInput") // Handle fileInput
-                      // unneeded handle of `Attachment` at the end
-                      // ? formData[`${conditionalElement.params.name}Attachment`] || ""
-                      ? formData[`${conditionalElement.params.name}`] || ""
-                  : formData[conditionalElement.params.name] || ""; // Get submitted value
+                    // unneeded handle of `Attachment` at the end
+                    // ? formData[`${conditionalElement.params.name}Attachment`] || ""
+                    ? formData[`${conditionalElement.params.name}`] || ""
+                    : formData[conditionalElement.params.name] || ""; // Get submitted value
 
                 //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items`
                 if (["checkboxes", "radios", "select"].includes(conditionalElement.element) && conditionalFieldValue !== "") {

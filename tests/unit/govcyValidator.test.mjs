@@ -39,7 +39,7 @@ describe('govcyValidator', () => {
                 ]
             },
         ];
-        const formData = {contField1: 'yes', field1: '' };
+        const formData = { contField1: 'yes', field1: '' };
 
         //test without conditional
         let validationErrors = validateFormElements(elements, formData, 'page1');
@@ -110,13 +110,13 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '123' };
-    
+
         // Test without conditional
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid numeric
         formData.field1 = 'abc';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -127,7 +127,7 @@ describe('govcyValidator', () => {
                 pageUrl: 'page1',
             },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -160,13 +160,13 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'Hello' };
-    
+
         // Test without conditional
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid alpha
         formData.field1 = '123';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -177,7 +177,7 @@ describe('govcyValidator', () => {
                 pageUrl: 'page1',
             },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -210,13 +210,13 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'Hello123' };
-    
+
         // Test without conditional
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid alphaNum
         formData.field1 = 'Hello@123';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -227,7 +227,7 @@ describe('govcyValidator', () => {
                 pageUrl: 'page1',
             },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -251,13 +251,13 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '123,45' };
-    
+
         // Test valid numDecimal
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid numDecimal
         formData.field1 = '123.45';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -287,26 +287,26 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '123,45' };
-    
+
         // Test valid currency without conditional
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid currency without conditional
         formData.field1 = '123,456';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid currency format', pageUrl: 'page1' },
         });
-    
+
         // Test valid currency with conditional
         formData.field1 = '123,45';
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid currency with conditional
         formData.field1 = '123,456';
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -326,20 +326,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'Hello, world!' };
-    
+
         // Test valid noSpecialChars
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid noSpecialChars
         formData.field1 = 'Hello@world';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Contains invalid characters', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -347,7 +347,7 @@ describe('govcyValidator', () => {
             page1field1: { id: 'field1', message: 'Contains invalid characters', pageUrl: 'page1' },
         });
     });
-    
+
     //------------- valid name validation ---------------------
     it('9. should validate `name` fields correctly', () => {
         const elements = [
@@ -359,20 +359,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: "O'Connor" };
-    
+
         // Test valid name
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid name
         formData.field1 = '123';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -392,20 +392,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '(123) 456-7890' };
-    
+
         // Test valid tel
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid tel
         formData.field1 = '123';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid phone number', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -425,20 +425,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '12345678' };
-    
+
         // Test valid mobile
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid mobile
         formData.field1 = '123';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -458,20 +458,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '+357 22 123456' };
-    
+
         // Test valid telCY
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid telCY
         formData.field1 = '+357 12 123456';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid Cypriot phone number', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -491,20 +491,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '+357 99 123456' };
-    
+
         // Test valid mobileCY
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid mobileCY
         formData.field1 = '+357 22 123456';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid Cypriot mobile number', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -524,20 +524,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'CY17002001280000001200527600' };
-    
+
         // Test valid iban
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid iban
         formData.field1 = 'CY17002001280000001200527601';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid IBAN', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -546,8 +546,8 @@ describe('govcyValidator', () => {
         });
 
         const IBANList = [
-            "CY83007116100000000030071776", 
-            "CY31007116100000000040036843", 
+            "CY83007116100000000030071776",
+            "CY31007116100000000040036843",
             "CY20005001080001080107738801",
             "CY62002001110000000010012700",
             "CY15009002020002021010017791",
@@ -635,20 +635,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'test@example.com' };
-    
+
         // Test valid email
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid email
         formData.field1 = 'invalid-email';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid email address', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -667,20 +667,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '2023-04-15' };
-    
+
         // Test valid date
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid date
         formData.field1 = 'invalid-date';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid date', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -700,20 +700,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '2023-04-15' };
-    
+
         // Test valid dateISO
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid dateISO
         formData.field1 = '15/04/2023';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid ISO date', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -733,20 +733,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '15/04/2023' };
-    
+
         // Test valid dateDMY
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid dateDMY
         formData.field1 = '2023-04-15';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid DMY date', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -766,20 +766,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '12345' };
-    
+
         // Test valid numeric
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid numeric
         formData.field1 = 'abc123';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a numeric value', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -799,9 +799,9 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '123456' };
-    
+
         // Test valid currency inputs
         const validInputs = ['123456', '123456,12', '1234567', '12', '123,2', '125'];
         validInputs.forEach(input => {
@@ -809,7 +809,7 @@ describe('govcyValidator', () => {
             const validationErrors = validateFormElements(elements, formData, 'page1');
             expect(validationErrors).to.deep.equal({});
         });
-    
+
         // Test invalid currency inputs
         const invalidInputs = ['123,123', '123,1234', '123.45', 'abc'];
         invalidInputs.forEach(input => {
@@ -819,7 +819,7 @@ describe('govcyValidator', () => {
                 page1field1: { id: 'field1', message: 'Must be a valid currency format', pageUrl: 'page1' },
             });
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '123456,12';
@@ -838,9 +838,9 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '99 123456' };
-    
+
         // Test valid tel inputs
         const validInputs = ['99 123456', '+44-1234 567', '001 1234 567', '00357 99123456'];
         validInputs.forEach(input => {
@@ -848,7 +848,7 @@ describe('govcyValidator', () => {
             const validationErrors = validateFormElements(elements, formData, 'page1');
             expect(validationErrors).to.deep.equal({});
         });
-    
+
         // Test invalid tel inputs
         const invalidInputs = ['123', 'abc', '+123456789012345678901']; // Too short, non-numeric, too long
         invalidInputs.forEach(input => {
@@ -858,7 +858,7 @@ describe('govcyValidator', () => {
                 page1field1: { id: 'field1', message: 'Must be a valid phone number', pageUrl: 'page1' },
             });
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '+44-1234 567';
@@ -877,9 +877,9 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '00357 99123456' };
-    
+
         // Test valid mobile inputs
         const validInputs = ['99 123456', '+44-1234 567', '00357 99123456'];
         validInputs.forEach(input => {
@@ -887,7 +887,7 @@ describe('govcyValidator', () => {
             const validationErrors = validateFormElements(elements, formData, 'page1');
             expect(validationErrors).to.deep.equal({});
         });
-    
+
         // Test invalid mobile inputs
         const invalidInputs = ['123', 'abc', '+123456789012345678901']; // Too short, non-numeric, too long
         invalidInputs.forEach(input => {
@@ -897,7 +897,7 @@ describe('govcyValidator', () => {
                 page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
             });
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '00357 99123456';
@@ -916,9 +916,9 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '00357 22 123456' };
-    
+
         // Test valid telCY inputs
         const validInputs = ['00357 22 123456', '+357 22 123456', '22 123456', '+(357)-99-123456'];
         validInputs.forEach(input => {
@@ -926,7 +926,7 @@ describe('govcyValidator', () => {
             const validationErrors = validateFormElements(elements, formData, 'page1');
             expect(validationErrors).to.deep.equal({});
         });
-    
+
         // Test invalid telCY inputs
         const invalidInputs = ['123', 'abc', '+1234567890123456', ' 22 1234561', '+357 22 1234561', '+358 22 123456']; // Too short, non-numeric, too long
         invalidInputs.forEach(input => {
@@ -936,7 +936,7 @@ describe('govcyValidator', () => {
                 page1field1: { id: 'field1', message: 'Must be a valid Cypriot phone number', pageUrl: 'page1' },
             });
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '00357 22 123456';
@@ -955,9 +955,9 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '00357 99 123456' };
-    
+
         // Test valid mobileCY inputs
         const validInputs = ['00357 99 123456', '+357 99 123456', '99 123456', '+(357)-99-123456'];
         validInputs.forEach(input => {
@@ -965,9 +965,9 @@ describe('govcyValidator', () => {
             const validationErrors = validateFormElements(elements, formData, 'page1');
             expect(validationErrors).to.deep.equal({});
         });
-    
+
         // Test invalid mobileCY inputs
-        const invalidInputs = ['123', 'abc','+1234567890123456', ' 99 1234561', '+357 99 1234561', '+358 99 123456']; // Too short, non-numeric, too long
+        const invalidInputs = ['123', 'abc', '+1234567890123456', ' 99 1234561', '+357 99 1234561', '+358 99 123456']; // Too short, non-numeric, too long
         invalidInputs.forEach(input => {
             formData.field1 = input;
             const validationErrors = validateFormElements(elements, formData, 'page1');
@@ -975,7 +975,7 @@ describe('govcyValidator', () => {
                 page1field1: { id: 'field1', message: 'Must be a valid Cypriot mobile number', pageUrl: 'page1' },
             });
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '00357 99 123456';
@@ -994,26 +994,26 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '12345' };
-    
+
         // Test valid length
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid length (too long)
         formData.field1 = '123456';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Input is too long', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '12345';
         validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid length with conditional
         formData.field1 = '123456';
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -1033,26 +1033,26 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '12345' };
-    
+
         // Test valid minLength
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid minLength (too short)
         formData.field1 = '1234';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
         });
-    
+
         // Test conditional
         contElements[0].params.items[0].conditionalElements = elements;
         formData.field1 = '12345';
         validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid minLength with conditional
         formData.field1 = '1234';
         validationErrors = validateFormElements(contElements, formData, 'page1');
@@ -1073,20 +1073,20 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '50' };
-    
+
         // Test valid range
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test below minValue
         formData.field1 = '5';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Value is too small', pageUrl: 'page1' },
         });
-    
+
         // Test above maxValue
         formData.field1 = '150';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -1106,13 +1106,13 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: 'ABC123' };
-    
+
         // Test valid regex
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test invalid regex
         formData.field1 = 'abc123';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -1133,39 +1133,39 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '2023-06-15' };
-    
+
         // Test valid date range
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test below minValueDate
         formData.field1 = '2022-12-31';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Date is too early', pageUrl: 'page1' },
         });
-        
+
         // Test valid dd/mm/yyyy format
         formData.field1 = '15/6/2023';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-        
+
         // Test below minValueDate with dd/mm/yyyy format
         formData.field1 = '31/12/2022';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Date is too early', pageUrl: 'page1' },
         });
-        
+
         // Test above maxValueDate
         formData.field1 = '2024-01-01';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Date is too late', pageUrl: 'page1' },
         });
-        
+
         // Test above maxValueDate with dd/mm/yyyy format
         formData.field1 = '1/1/2024';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -1187,27 +1187,27 @@ describe('govcyValidator', () => {
                 ],
             },
         ];
-    
+
         const formData = { contField1: 'yes', field1: '12345' };
-    
+
         // Test valid input
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
-    
+
         // Test missing input
         formData.field1 = '';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Field is required', pageUrl: 'page1' },
         });
-    
+
         // Test too short
         formData.field1 = '1234';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Input is too short', pageUrl: 'page1' },
         });
-    
+
         // Test too long
         formData.field1 = '12345678901';
         validationErrors = validateFormElements(elements, formData, 'page1');
@@ -1217,163 +1217,335 @@ describe('govcyValidator', () => {
     });
 
     it('32. should fail `required` validation for missing fileInput', () => {
-  const elements = [
-    {
-      element: 'fileInput',
-      params: { name: 'myUpload', id: 'myUpload' },
-      validations: [
-        {
-          check: 'required',
-          params: {
-            checkValue: '',
-            message: 'You must upload a file'
-          }
-        }
-      ]
-    }
-  ];
-
-  const formData = {
-    // no myUploadAttachment provided
-  };
-
-  const result = validateFormElements(elements, formData, 'page1');
-
-  expect(result).to.deep.equal({
-    page1myUpload: {
-      id: 'myUpload',
-      message: 'You must upload a file',
-      pageUrl: 'page1'
-    }
-  });
-});
-
-it('33. should pass `required` validation for existing fileInput metadata', () => {
-  const elements = [
-    {
-      element: 'fileInput',
-      params: { name: 'myUpload', id: 'myUpload' },
-      validations: [
-        {
-          check: 'required',
-          params: {
-            checkValue: '',
-            message: 'You must upload a file'
-          }
-        }
-      ]
-    }
-  ];
-
-  const formData = {
-    // unneeded handle of `Attachment` at the end
-    // myUploadAttachment: {
-    myUpload: {
-      fileId: 'abc123',
-      sha256: 'xyz456'
-    }
-  };
-
-  const result = validateFormElements(elements, formData, 'page1');
-
-  expect(result).to.deep.equal({});
-});
-
-it('34. should fail `required` validation for conditional fileInput when selected but no file uploaded', () => {
-  const elements = [
-    {
-      element: 'radios',
-      params: {
-        name: 'fileChoice',
-        id: 'fileChoice',
-        items: [
-          {
-            value: 'yes',
-            conditionalElements: [
-              {
+        const elements = [
+            {
                 element: 'fileInput',
-                params: { name: 'supportingDoc', id: 'supportingDoc' },
+                params: { name: 'myUpload', id: 'myUpload' },
                 validations: [
-                  {
-                    check: 'required',
-                    params: {
-                      checkValue: '',
-                      message: 'Please upload a supporting document'
+                    {
+                        check: 'required',
+                        params: {
+                            checkValue: '',
+                            message: 'You must upload a file'
+                        }
                     }
-                  }
                 ]
-              }
-            ]
-          },
-          { value: 'no' }
-        ]
-      }
-    }
-  ];
+            }
+        ];
 
-  const formData = {
-    fileChoice: 'yes'
-    // supportingDocAttachment missing
-  };
+        const formData = {
+            // no myUploadAttachment provided
+        };
 
-  const result = validateFormElements(elements, formData, 'page1');
+        const result = validateFormElements(elements, formData, 'page1');
 
-  expect(result).to.deep.equal({
-    page1supportingDoc: {
-      id: 'supportingDoc',
-      message: 'Please upload a supporting document',
-      pageUrl: 'page1'
-    }
-  });
-});
+        expect(result).to.deep.equal({
+            page1myUpload: {
+                id: 'myUpload',
+                message: 'You must upload a file',
+                pageUrl: 'page1'
+            }
+        });
+    });
 
-it('35. should pass `required` validation for conditional fileInput when file is uploaded', () => {
-  const elements = [
-    {
-      element: 'radios',
-      params: {
-        name: 'fileChoice',
-        id: 'fileChoice',
-        items: [
-          {
-            value: 'yes',
-            conditionalElements: [
-              {
+    it('33. should pass `required` validation for existing fileInput metadata', () => {
+        const elements = [
+            {
                 element: 'fileInput',
-                params: { name: 'supportingDoc', id: 'supportingDoc' },
+                params: { name: 'myUpload', id: 'myUpload' },
                 validations: [
-                  {
-                    check: 'required',
-                    params: {
-                      checkValue: '',
-                      message: 'Please upload a supporting document'
+                    {
+                        check: 'required',
+                        params: {
+                            checkValue: '',
+                            message: 'You must upload a file'
+                        }
                     }
-                  }
                 ]
-              }
-            ]
-          },
-          { value: 'no' }
-        ]
-      }
-    }
-  ];
+            }
+        ];
 
-  const formData = {
-    fileChoice: 'yes',
-    // unneeded handle of `Attachment` at the end
-    // supportingDocAttachment: {
-    supportingDoc: {
-      fileId: 'abc123',
-      sha256: 'def456'
-    }
-  };
+        const formData = {
+            // unneeded handle of `Attachment` at the end
+            // myUploadAttachment: {
+            myUpload: {
+                fileId: 'abc123',
+                sha256: 'xyz456'
+            }
+        };
 
-  const result = validateFormElements(elements, formData, 'page1');
+        const result = validateFormElements(elements, formData, 'page1');
 
-  expect(result).to.deep.equal({});
-});
+        expect(result).to.deep.equal({});
+    });
 
+    it('34. should fail `required` validation for conditional fileInput when selected but no file uploaded', () => {
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'fileChoice',
+                    id: 'fileChoice',
+                    items: [
+                        {
+                            value: 'yes',
+                            conditionalElements: [
+                                {
+                                    element: 'fileInput',
+                                    params: { name: 'supportingDoc', id: 'supportingDoc' },
+                                    validations: [
+                                        {
+                                            check: 'required',
+                                            params: {
+                                                checkValue: '',
+                                                message: 'Please upload a supporting document'
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        { value: 'no' }
+                    ]
+                }
+            }
+        ];
+
+        const formData = {
+            fileChoice: 'yes'
+            // supportingDocAttachment missing
+        };
+
+        const result = validateFormElements(elements, formData, 'page1');
+
+        expect(result).to.deep.equal({
+            page1supportingDoc: {
+                id: 'supportingDoc',
+                message: 'Please upload a supporting document',
+                pageUrl: 'page1'
+            }
+        });
+    });
+
+    it('35. should pass `required` validation for conditional fileInput when file is uploaded', () => {
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'fileChoice',
+                    id: 'fileChoice',
+                    items: [
+                        {
+                            value: 'yes',
+                            conditionalElements: [
+                                {
+                                    element: 'fileInput',
+                                    params: { name: 'supportingDoc', id: 'supportingDoc' },
+                                    validations: [
+                                        {
+                                            check: 'required',
+                                            params: {
+                                                checkValue: '',
+                                                message: 'Please upload a supporting document'
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        { value: 'no' }
+                    ]
+                }
+            }
+        ];
+
+        const formData = {
+            fileChoice: 'yes',
+            // unneeded handle of `Attachment` at the end
+            // supportingDocAttachment: {
+            supportingDoc: {
+                fileId: 'abc123',
+                sha256: 'def456'
+            }
+        };
+
+        const result = validateFormElements(elements, formData, 'page1');
+
+        expect(result).to.deep.equal({});
+    });
+
+    it('36. should skip `valid` check when value is empty and no `required`', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: { checkValue: 'numeric', message: 'Must be numeric' }
+                    }
+                ]
+            }
+        ];
+
+        // Empty field should pass because it's not required
+        const formData = { field1: '' };
+        const result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({});
+    });
+
+    it('37. should still enforce both `required` and `valid` when present', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    {
+                        check: 'required',
+                        params: { checkValue: '', message: 'Field is required' }
+                    },
+                    {
+                        check: 'valid',
+                        params: { checkValue: 'numeric', message: 'Must be numeric' }
+                    }
+                ]
+            }
+        ];
+
+        // Empty field → required fails
+        let formData = { field1: '' };
+        let result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Field is required', pageUrl: 'page1' }
+        });
+
+        // Non-numeric value → valid fails
+        formData = { field1: 'abc' };
+        result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be numeric', pageUrl: 'page1' }
+        });
+
+        // Numeric value → passes
+        formData = { field1: '123' };
+        result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({});
+    });
+
+    //------------- maxCurrentYear validation ---------------------
+    it('38. should validate `maxCurrentYear` correctly', () => {
+        const currentYear = new Date().getFullYear();
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'yearField', id: 'yearField' },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'maxCurrentYear',
+                            message: 'Year must not be in the future'
+                        }
+                    }
+                ],
+            },
+        ];
+
+        const formData = { yearField: String(currentYear) };
+
+        // ✅ current year passes
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ✅ past year passes
+        formData.yearField = String(currentYear - 1);
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ❌ future year fails
+        formData.yearField = String(currentYear + 1);
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1yearField: {
+                id: 'yearField',
+                message: 'Year must not be in the future',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ❌ non-numeric fails
+        formData.yearField = 'abcd';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1yearField: {
+                id: 'yearField',
+                message: 'Year must not be in the future',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ✅ empty value should pass (since not required)
+        formData.yearField = '';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    it('39. should validate `maxCurrentYear` inside conditional elements', () => {
+        const currentYear = new Date().getFullYear();
+
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'choice',
+                    id: 'choice',
+                    items: [
+                        {
+                            value: 'yes',
+                            conditionalElements: [
+                                {
+                                    element: 'textInput',
+                                    params: { name: 'yearField', id: 'yearField' },
+                                    validations: [
+                                        {
+                                            check: 'valid',
+                                            params: {
+                                                checkValue: 'maxCurrentYear',
+                                                message: 'Year must not be in the future'
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        { value: 'no' }
+                    ]
+                }
+            }
+        ];
+
+        // ✅ valid case when selected "yes" with current year
+        let formData = { choice: 'yes', yearField: String(currentYear) };
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ❌ invalid case when selected "yes" with future year
+        formData = { choice: 'yes', yearField: String(currentYear + 1) };
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1yearField: {
+                id: 'yearField',
+                message: 'Year must not be in the future',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ✅ no validation triggered when "no" is chosen
+        formData = { choice: 'no' };
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
 
     //TODO: test more validation rules
 });

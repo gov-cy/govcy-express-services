@@ -20,24 +20,53 @@ import * as govcyResources from "../resources/govcyResources.mjs";
  * @param {string} lang The language
  * @param {Object} fileInputElements The file input elements
  * @param {string} routeParam The route parameter
+ * @param {string} mode The mode, either "single" (default), "add", or "edit"
+ * @param {number|null} index The index of the item being edited (null for single or add mode)
  */
-export function populateFormData(formElements, theData, validationErrors, store = {}, siteId = "", pageUrl = "", lang = "el", fileInputElements = null, routeParam = "") {
+export function populateFormData(
+    formElements,
+    theData,
+    validationErrors,
+    store = {},
+    siteId = "",
+    pageUrl = "",
+    lang = "el",
+    fileInputElements = null,
+    routeParam = "",
+    mode = "single",
+    index = null
+) {
     const inputElements = ALLOWED_FORM_ELEMENTS;
     const isRootCall = !fileInputElements;
+    let elementId = "";
+    let firstElementId = "";
+
     if (isRootCall) {
         fileInputElements = {};
     }
     // Recursively populate form data with session data
     formElements.forEach(element => {
         if (inputElements.includes(element.element)) {
+            // Get the element ID and field name
+            elementId = (element.element === "checkboxes" || element.element === "radios") // if checkboxes or radios
+                ? `${element.params.id}-option-1` // use the id of the first option
+                : (element.element === "dateInput") //if dateInput
+                    ? `${element.params.id}_day`  // use the id of the day input
+                    : element.params.id; // else use the id of the element
+
             const fieldName = element.params.name;
+
+            // Store the ID of the first input element (for error summary link)
+            if (!firstElementId) {
+                firstElementId = elementId;
+            }
 
             // Handle `dateInput` separately
             if (element.element === "dateInput") {
                 element.params.dayValue = theData[`${fieldName}_day`] || "";
                 element.params.monthValue = theData[`${fieldName}_month`] || "";
                 element.params.yearValue = theData[`${fieldName}_year`] || "";
-            //Handle `datePicker` separately
+                //Handle `datePicker` separately
             } else if (element.element === "datePicker") {
                 const val = theData[fieldName];
 
@@ -69,7 +98,7 @@ export function populateFormData(formElements, theData, validationErrors, store 
                 // For fileInput, we change the element.element to "fileView" and set the 
                 // fileId and sha256 from the session store
                 // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
-                
+
                 // 1) Prefer file from theData (could be draft in add mode, or item object in edit)
                 let fileData = theData[fieldName];
 
@@ -77,22 +106,34 @@ export function populateFormData(formElements, theData, validationErrors, store 
                 if (!fileData) {
                     fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
                 }
-                
+
                 if (fileData) {
                     element.element = "fileView";
                     element.params.fileId = fileData.fileId;
                     element.params.sha256 = fileData.sha256;
                     element.params.visuallyHiddenText = element.params.label;
-                    // TODO: Also need to set the `view` and `download` URLs 
-                    element.params.viewHref = `/${siteId}/${pageUrl}/view-file/${fieldName}`;
+
+                    // Build base path based on mode
+                    let basePath = `/${siteId}/${pageUrl}`;
+                    if (mode === "add") {
+                        basePath += "/multiple/add";
+                    } else if (mode === "edit" && index !== null) {
+                        basePath += `/multiple/edit/${index}`;
+                    }
+
+                    // View link
+                    element.params.viewHref = `${basePath}/view-file/${fieldName}`;
                     element.params.viewTarget = "_blank";
-                    element.params.deleteHref  = `/${siteId}/${pageUrl}/delete-file/${fieldName}${(routeParam) ? `?route=${routeParam}` : ''}`;
+                    // Delete link (preserve ?route=review if present)
+                    element.params.deleteHref = `${basePath}/delete-file/${fieldName}${(routeParam) ? `?route=${routeParam}` : ''}`
+
+                   
                 } else {
                     // TODO: Ask Andreas how to handle empty file inputs
                     element.params.value = "";
-                }       
+                }
                 fileInputElements[fieldName] = element;
-            // Handle all other input elements (textInput, checkboxes, radios, etc.)
+                // Handle all other input elements (textInput, checkboxes, radios, etc.)
             } else {
                 element.params.value = theData[fieldName] || "";
             }
@@ -101,11 +142,11 @@ export function populateFormData(formElements, theData, validationErrors, store 
             if (validationErrors?.errors?.[fieldName]) {
                 element.params.error = validationErrors.errors[fieldName].message;
                 //populate the error summary
-                const elementId = (element.element === "checkboxes" || element.element === "radios") // if checkboxes or radios
-                    ? `${element.params.id}-option-1` // use the id of the first option
-                    : (element.element === "dateInput") //if dateInput
-                    ? `${element.params.id}_day`  // use the id of the day input
-                    : element.params.id; // else use the id of the element
+                // const elementId = (element.element === "checkboxes" || element.element === "radios") // if checkboxes or radios
+                //     ? `${element.params.id}-option-1` // use the id of the first option
+                //     : (element.element === "dateInput") //if dateInput
+                //     ? `${element.params.id}_day`  // use the id of the day input
+                //     : element.params.id; // else use the id of the element
                 validationErrors.errorSummary.push({
                     link: `#${elementId}`,
                     text: validationErrors.errors[fieldName].message
@@ -117,8 +158,8 @@ export function populateFormData(formElements, theData, validationErrors, store 
         if (element.element === "radios" && element.params.items) {
             element.params.items.forEach(item => {
                 if (item.conditionalElements) {
-                    populateFormData(item.conditionalElements, theData, validationErrors,store, siteId , pageUrl, lang, fileInputElements, routeParam);
-                  
+                    populateFormData(item.conditionalElements, theData, validationErrors, store, siteId, pageUrl, lang, fileInputElements, routeParam);
+
                     // Check if any conditional element has an error and add to the parent "conditionalHasErrors": true
                     if (item.conditionalElements.some(condEl => condEl.params?.error)) {
                         item.conditionalHasErrors = true;
@@ -127,6 +168,25 @@ export function populateFormData(formElements, theData, validationErrors, store 
             });
         }
     });
+
+    // 🔴 Handle _global validation errors (collection-level, not tied to a field)
+    if (isRootCall && validationErrors?.errors?._global) {
+        validationErrors.errorSummary = validationErrors.errorSummary || [];
+
+        // Decide where the link should point
+        let linkTarget = `#${firstElementId}`; // default anchor at top of the form
+        if (validationErrors.errors._global.pageUrl) {
+            // If pageUrl is provided (e.g. for max items), point back to hub
+            linkTarget = `${validationErrors.errors._global.pageUrl}`;
+        }
+
+        // Push into the error summary
+        validationErrors.errorSummary.push({
+            link: linkTarget,
+            text: validationErrors.errors._global.message
+        });
+    }
+
     // add file input elements's definition in js object
     if (isRootCall && Object.keys(fileInputElements).length > 0) {
         const scriptTag = `
@@ -161,9 +221,10 @@ export function populateFormData(formElements, theData, validationErrors, store 
  * @param {Object} store - The session store .
  * @param {string} siteId - The site ID .
  * @param {string} pageUrl - The page URL .
+ * @param {number|null} index - The index of the item being edited for multiple items
  * @returns {Object} filteredData - The filtered form data.
  */
-export function getFormData(elements, formData, store = {}, siteId = "", pageUrl = "") {
+export function getFormData(elements, formData, store = {}, siteId = "", pageUrl = "", index = null) {
     const filteredData = {};
     elements.forEach(element => {
         const { name } = element.params || {};
@@ -180,12 +241,12 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
                         if (item.conditionalElements) {
                             Object.assign(
                                 filteredData,
-                                getFormData(item.conditionalElements, formData, store, siteId, pageUrl)
+                                getFormData(item.conditionalElements, formData, store, siteId, pageUrl, index)
                             );
                         }
                     });
                 }
-                
+
             }
             // Handle dateInput
             else if (element.element === "dateInput") {
@@ -195,13 +256,13 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
                 filteredData[`${name}_day`] = day !== undefined && day !== null ? day : "";
                 filteredData[`${name}_month`] = month !== undefined && month !== null ? month : "";
                 filteredData[`${name}_year`] = year !== undefined && year !== null ? year : "";
-            // handle fileInput
+                // handle fileInput
             } else if (element.element === "fileInput") {
                 // fileInput elements are already stored in the store when it was uploaded
                 // so we just need to check if the file exists in the dataLayer in the store and add it the filteredData
                 // unneeded handle of `Attachment` at the end
                 // const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name + "Attachment");
-                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name);
+                const fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, name, index);
                 if (fileData) {
                     // unneeded handle of `Attachment` at the end
                     // filteredData[name + "Attachment"] = fileData;
@@ -212,7 +273,7 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
                     // filteredData[name + "Attachment"] = ""; // or handle as needed
                     filteredData[name] = ""; // or handle as needed
                 }
-            // Handle other elements (e.g., textInput, textArea, datePicker)
+                // Handle other elements (e.g., textInput, textArea, datePicker)
             } else {
                 filteredData[name] = formData[name] !== undefined && formData[name] !== null ? formData[name] : "";
             }
@@ -222,9 +283,9 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
             //     Object.assign(filteredData, getFormData(element.conditionalElements, formData));
             // }
         }
-    
+
     });
-    
+
 
     return filteredData;
 }

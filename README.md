@@ -1740,6 +1740,7 @@ The validation rules for each element are defined in the `"validations` array fo
     - `date`: Date input (DD/MM/YYYY)
     - `dateISO`: ISO date input `YYYY-M-D`
     - `dateDMY`: European/Common Format date input `D/M/YYYY`
+    - `maxCurrentYear`: Maximum current year input
 - `required`: Checks if the value is not null, undefined, or an empty string (after trimming).
 - `length`: Checks if the value has a maximum length passed in the `checkValue` parameter.
 - `regCheck`: Checks if the value matches the specified regular expression passed in the `checkValue` parameter.

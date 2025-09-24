@@ -59,18 +59,32 @@ export function initializeSiteData(store, siteId, pageUrl = null) {
  * @param {string} pageUrl The page url 
  * @param {object} validationErrors The validation errors 
  * @param {object} formData The form data that produced the errors 
+ * @param {string} key The key to store the errors under. Used for multiple items. Defaults to null
  */
-export function storePageValidationErrors(store, siteId, pageUrl, validationErrors, formData) {
-    // Ensure session structure is initialized
-    initializeSiteData(store, siteId, pageUrl);
+export function storePageValidationErrors(store, siteId, pageUrl, validationErrors, formData, key = null) {
+  // Ensure session structure is initialized
+  initializeSiteData(store, siteId, pageUrl);
 
-    // Store the validation errors
+  // Build the error object
+  const errorObj = {
+    errors: validationErrors,
+    formData: formData,
+    errorSummary: []
+  };
+
+  // If a key is provided (e.g., "add" or "2"), store under that key
+  if (key !== null) {
+    const existing = store.siteData[siteId].inputData[pageUrl]["validationErrors"] || {};
     store.siteData[siteId].inputData[pageUrl]["validationErrors"] = {
-        errors: validationErrors,
-        formData: formData,
-        errorSummary: []
+      ...existing,
+      [key]: errorObj
     };
+  } else {
+    // Normal page (no key)
+    store.siteData[siteId].inputData[pageUrl]["validationErrors"] = errorObj;
+  }
 }
+
 
 /**
  * Stores the page's form data in the data layer
@@ -378,9 +392,28 @@ export function getSiteSubmissionData(store, siteId) {
  * @param {string} elementName The element name
  * @returns The value of the form data for the element or an empty string if none exist.
  */
-export function getFormDataValue(store, siteId, pageUrl, elementName) {
-    return store?.siteData?.[siteId]?.inputData?.[pageUrl]?.formData?.[elementName] || "";
+export function getFormDataValue(store, siteId, pageUrl, elementName, index = null) {
+    const pageData = store?.siteData?.[siteId]?.inputData?.[pageUrl];
+    if (!pageData) return "";
+
+    // Case 1: formData is a flat object
+    if (pageData.formData && !Array.isArray(pageData.formData)) {
+        return pageData?.formData?.[elementName] || "";
+    }
+
+    // Case 2: formData is an array (multipleThings)
+    if (Array.isArray(pageData.formData) && index !== null) {
+        return pageData?.formData[index]?.[elementName] || "";
+    }
+
+    // Case 3: multipleDraft (used in add flow)
+    if (pageData.multipleDraft && typeof pageData.multipleDraft === "object") {
+        return pageData?.multipleDraft?.[elementName] || "";
+    }
+
+    return "";
 }
+
 
 /**
  * Get the user object from the session store
@@ -469,33 +502,54 @@ export function isFileUsedInSiteInputDataAgain(store, siteId, { fileId, sha256 }
 
     // Loop all pages under the site
     for (const pageKey of Object.keys(site)) {
-        const formData = site[pageKey]?.formData;
-        if (!formData || typeof formData !== 'object') continue;
+        const pageData = site[pageKey];
+        if (!pageData) continue;
 
-        // Loop all fields on the page
-        for (const [_, value] of Object.entries(formData)) {
-            if (value == null) continue;
-
-            // Normalize to an array to also support multi-value fields (e.g., multiple file inputs)
-            const candidates = Array.isArray(value) ? value : [value];
-
-            for (const candidate of candidates) {
-                // We only consider objects that look like file references
-                if (
-                    candidate &&
-                    typeof candidate === 'object' &&
-                    'fileId' in candidate &&
-                    'sha256' in candidate
-                ) {
-                    const idMatches = fileId ? candidate.fileId === fileId : true;
-                    const shaMatches = sha256 ? candidate.sha256 === sha256 : true;
-
-                    if (idMatches && shaMatches) {
-                        hits += 1;
-                        // As soon as we see it in more than one place, we can answer true
-                        if (hits > 1) return true;
+        // Helper to scan an object for file matches
+        const scanObject = (obj) => {
+            for (const value of Object.values(obj)) {
+                if (value == null) continue;
+                const candidates = Array.isArray(value) ? value : [value];
+                for (const candidate of candidates) {
+                    if (
+                        candidate &&
+                        typeof candidate === "object" &&
+                        "fileId" in candidate &&
+                        "sha256" in candidate
+                    ) {
+                        const idMatches = fileId ? candidate.fileId === fileId : true;
+                        const shaMatches = sha256 ? candidate.sha256 === sha256 : true;
+                        if (idMatches && shaMatches) {
+                            hits += 1;
+                            if (hits > 1) return true;
+                        }
                     }
                 }
+            }
+            return false;
+        };
+
+        // Case 1: flat formData object
+        if (pageData.formData && !Array.isArray(pageData.formData)) {
+            if (scanObject(pageData.formData)) return true;
+        }
+
+        // Case 2: multipleDraft
+        if (pageData.multipleDraft) {
+            if (scanObject(pageData.multipleDraft)) return true;
+        }
+
+        // Case 3: formData as array (multiple items)
+        if (Array.isArray(pageData.formData)) {
+            for (const item of pageData.formData) {
+                if (scanObject(item)) return true;
+            }
+        }
+        
+        // Case 4: formData.multipleItems array (your current design)
+        if (Array.isArray(pageData.formData?.multipleItems)) {
+            for (const item of pageData.formData.multipleItems) {
+                if (scanObject(item)) return true;
             }
         }
     }
@@ -536,6 +590,7 @@ export function removeAllFilesFromSite(
 ) {
     // Ensure session structure is initialized
     initializeSiteData(store, siteId);
+
     // --- Guard rails ---------------------------------------------------------
 
     // Nothing to remove if neither identifier is provided.
@@ -572,43 +627,77 @@ export function removeAllFilesFromSite(
     // --- Main traversal over all pages --------------------------------------
 
     for (const page of Object.values(site)) {
-        // Each page should be an object with a formData object
-        const formData =
-            page &&
-                typeof page === "object" &&
-                page.formData &&
-                typeof page.formData === "object"
-                ? page.formData
-                : null;
+        if (!page || typeof page !== "object") continue;
 
-        if (!formData) continue; // skip content-only pages, etc.
+        // --- Case 1: flat formData object -----------------------------------
+        if (page.formData && !Array.isArray(page.formData)) {
+            const formData = page.formData;
+            for (const key of Object.keys(formData)) {
+                const val = formData[key];
 
-        // For each field on this page…
-        for (const key of Object.keys(formData)) {
-            const val = formData[key];
+                // Case A: a single file object → replace with "" if it matches.
+                if (isMatch(val)) {
+                    formData[key] = "";
+                    continue;
+                }
 
-            // Case A: a single file object → replace with "" if it matches.
-            if (isMatch(val)) {
-                formData[key] = "";
-                continue;
+                // Case B: an array → replace ONLY the matching items with "".
+                if (Array.isArray(val)) {
+                    let changed = false;
+                    const mapped = val.map((item) => {
+                        if (isMatch(item)) {
+                            changed = true;
+                            return "";
+                        }
+                        return item;
+                    });
+                    if (changed) formData[key] = mapped;
+                }
             }
-
-            // Case B: an array → replace ONLY the matching items with "".
-            if (Array.isArray(val)) {
-                let changed = false;
-                const mapped = val.map((item) => {
-                    if (isMatch(item)) {
-                        changed = true;
-                        return "";
-                    }
-                    return item;
-                });
-                if (changed) formData[key] = mapped;
-            }
-
-            // Note: If you later store file-like objects deeper in nested objects,
-            // add a recursive visitor here (with cycle protection / max depth).
         }
+
+        // --- Case 2: formData as array (multiple items) ---------------------
+        if (Array.isArray(page.formData)) {
+            for (const item of page.formData) {
+                if (!item || typeof item !== "object") continue;
+                for (const key of Object.keys(item)) {
+                    const val = item[key];
+                    if (isMatch(val)) {
+                        item[key] = "";
+                        continue;
+                    }
+                    if (Array.isArray(val)) {
+                        let changed = false;
+                        const mapped = val.map((sub) =>
+                            isMatch(sub) ? "" : sub
+                        );
+                        if (changed) item[key] = mapped;
+                    }
+                }
+            }
+        }
+
+        // --- Case 3: multipleDraft ------------------------------------------
+        if (page.multipleDraft && typeof page.multipleDraft === "object") {
+            for (const key of Object.keys(page.multipleDraft)) {
+                const val = page.multipleDraft[key];
+                if (isMatch(val)) {
+                    page.multipleDraft[key] = "";
+                    continue;
+                }
+                if (Array.isArray(val)) {
+                    let changed = false;
+                    const mapped = val.map((sub) =>
+                        isMatch(sub) ? "" : sub
+                    );
+                    if (changed) page.multipleDraft[key] = mapped;
+                }
+            }
+        }
+
+        // Note: If you later store file-like objects deeper in nested objects,
+        // add a recursive visitor here (with cycle protection / max depth).
     }
 }
+
 

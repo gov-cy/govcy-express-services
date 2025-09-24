@@ -5785,9 +5785,9 @@
       },
       "multipleThings": {
         "min": 1,    
-        "max": 10,   
+        "max": 5,   
         "dedupe": true, 
-        "itemTitleTemplate": "{{title}} – {{institution}}",
+        "itemTitleTemplate": "{{dateGot_year}} - {{title | trim}}",
         "listPage": {
           "title" : {
             "el": "Ακαδημαϊκά προσόντα",
@@ -5855,8 +5855,8 @@
                 "id": "instructions",
                 "type": "p",
                 "text": {
-                  "en": "Add at least one academic detail to proceed. You can up to 10.",
-                  "el": "Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 10."
+                  "en": "Add at least one academic detail to proceed. You can up to 5.",
+                  "el": "Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5."
                 }
               }
             }
@@ -5896,13 +5896,22 @@
                 "params": {
                   "elements": [
                     {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "4",
+                        "total": "4",
+                        "showSteps": false
+                      }
+                    }, 
+                    {
                       "element": "textElement",
                       "params": {
                         "id": "heading",
                         "type": "h1",
                         "text": {
-                          "el": "Προσθήκη ακαδημκού προσόντος",
-                          "en": "Add academic detail"
+                          "el": "Ακαδημαϊκό προσόντον",
+                          "en": "Academic detail"
                         }
                       }
                     },
@@ -6039,20 +6048,7 @@
                           "en": "PDF, JPG, JPEG, PNG are the acceptable formats ",
                           "tr": ""
                         }
-                      },
-                      "validations": [
-                        {
-                          "check": "required",
-                          "params": {
-                            "checkValue": "",
-                            "message": {
-                              "el": "Ανεβάστε τον τίτλο",
-                              "en": "Upload the degree",
-                              "tr": ""
-                            }
-                          }
-                        }
-                      ]
+                      }
                     },
                     {
                       "element": "button",

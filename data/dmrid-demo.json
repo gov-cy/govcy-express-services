@@ -97,15 +97,15 @@
       "tr": "Menu"
     },
     "title": {
-      "el": "Αίτηση για διοικητικό συμβούλιο ΘΟΚ",
-      "en": "Apply for THOK Board",
+      "el": "Εκδήλωση ενδιαφέροντος για διορισμό στο Διοικητικό Συμβούλιο του ΘΟΚ",
+      "en": "Application for appointment to the THOK Board of Directors",
       "tr": ""
     },
     "headerTitle": {
       "title": {
-        "el": "Εκδήλωση ενδιαφέροντος για διορισμό στο Διοικητικό Συμβούλιο του ΘΟΚ",
-        "en": "Application for appointment to the THOK Board of Directors",
-        "tr": "Application for appointment to the THOK Board of Directors"
+        "el": "Αίτηση για διοικητικό συμβούλιο ΘΟΚ",
+        "en": "Apply for THOK Board",
+        "tr": "Apply for THOK Board"
       },
       "href": {
         "el": "/dmrid-demo",
@@ -469,7 +469,7 @@
         },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "review"
+        "nextPage": "qualifications"
       },
       "pageTemplate": {
         "sections": [
@@ -507,7 +507,42 @@
                         },
                         "isPageHeading": false,
                         "type": "name"
-                      }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Το όνομα σας είναι υποχρεωτικό",
+                              "en": "Your name is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα σας πρέπει να αποτελείται μόνο γράμματα, αριθμοί και ορισμένοι άλλοι χαρακτήρες",
+                              "en": "Your name must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα σας πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "Your name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "element": "htmlElement",
@@ -558,6 +593,17 @@
                               "tr": ""
                             }
                           }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "20",
+                            "message": {
+                              "el": "Ο αριθμός κινητού τηλεφώνου πρέπει να είναι 20 χαρακτήρες ή λιγότεροι",
+                              "en": "The mobile number must be 20 characters or less",
+                              "tr": ""
+                            }
+                          }
                         }
                       ]
                     },
@@ -592,6 +638,17 @@
                             "message": {
                               "el": "Το email πρέπει να έχει μορφή email. Για παράδειγμα `name@provider.com`",
                               "en": "Email must be of email format. For example `name@provider.com`",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "254",
+                            "message": {
+                              "el": "Το email πρέπει να είναι 254 χαρακτήρες ή λιγότεροι",
+                              "en": "Email must be 254 characters or less",
                               "tr": ""
                             }
                           }
@@ -642,6 +699,17 @@
                               "tr": ""
                             }
                           }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Η γραμμή διεύθυνσης 1 πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "Address line 1 must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
                         }
                       ]
                     },
@@ -661,10 +729,21 @@
                         {
                           "check": "valid",
                           "params": {
-                            "checkValue": "email",
+                            "checkValue": "noSpecialChars",
                             "message": {
                               "el": "Η γραμμή διεύθυνσης 2 πρέπει να αποτελείται μόνο γράμματα, αριθμοί και ορισμένοι άλλοι χαρακτήρες",
                               "en": "Address line 2 must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Η γραμμή διεύθυνσης 2 πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "Address line 2 must be 600 characters or less",
                               "tr": ""
                             }
                           }
@@ -705,6 +784,17 @@
                               "tr": ""
                             }
                           }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Η πόλη ή κοινότητα πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "The town or community must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
                         }
                       ]
                     },
@@ -736,10 +826,21 @@
                         {
                           "check": "valid",
                           "params": {
-                            "checkValue": "noSpecialChars",
+                            "checkValue": "numeric",
                             "message": {
-                              "el": "Ο ταχυδρομικός κώδικας πρέπει να αποτελείται μόνο γράμματα, αριθμοί και ορισμένοι άλλοι χαρακτήρες",
-                              "en": "The postal code must consist only of letters, numbers and some other characters",
+                              "el": "Ο ταχυδρομικός κώδικας πρέπει να είναι αριθμός",
+                              "en": "The postal code must be a number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "4",
+                            "message": {
+                              "el": "Ο ταχυδρομικός κώδικας πρέπει να είναι 4 χαρακτήρες ή λιγότεροι",
+                              "en": "The postal code must be 4 characters or less",
                               "tr": ""
                             }
                           }
@@ -755,7 +856,564 @@
                           "el": "Αποθήκευση και συνέχεια",
                           "en": "Save and continue"
                         },
-                        "prototypeNavigate": "../data-entry-radios"
+                        "prototypeNavigate": "../qualifications"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "qualifications",
+        "title": {
+          "el": "Ακαδημαϊκά και επαγγελματικά προσόντα",
+          "en": "Academic and professional qualifications",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Ποια είναι τα προσόντα σας;",
+                          "en": "What are your qualifications?"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "intro",
+                        "text": {
+                          "el": "<p>Δηλώστε τα ακαδημαϊκά ή επαγγελματικά σας προσόντα πιο κάτω. Πρέπει να δηλώσετε τουλάχιστον ένα. Ξεκινήστε με το πιο πρόσφατο.</p>",
+                          "en": "<p>Please list your academic or professional qualifications below. You must list at least one. Start with the most recent.</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "academic1",
+                        "text": {
+                          "el": "<h2>Προσόν #1</h2>",
+                          "en": "<h2>Qualification #1</h2>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution1",
+                        "name": "institution1",
+                        "label": {
+                          "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #1",
+                          "en": "Name of academic institution - Qualification #1"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Το όνομα ακαδημαϊκού ιδρύματος για το προσόν #1 είναι υποχρεωτικό",
+                              "en": "The institute name for qualification #1 is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα ακαδημαϊκού ιδρύματος πρέπει να αποτελείται μόνο γράμματα, αριθμοί και ορισμένοι άλλοι χαρακτήρες",
+                              "en": "The institute name must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα ακαδημαϊκού ιδρύματος πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "The institute name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title1",
+                        "name": "title1",
+                        "label": {
+                          "el": "Όνομα τίτλου - Προσόν #1",
+                          "en": "Title name - Qualification #1"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Το όνομα τίτλου για το προσόν #1 είναι υποχρεωτικό",
+                              "en": "The title name for qualification #1 is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα τίτλου πρέπει να αποτελείται μόνο γράμματα, αριθμοί και ορισμένοι άλλοι χαρακτήρες",
+                              "en": "The title name must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα τίτλου πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "The title name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year1",
+                        "name": "year1",
+                        "label": {
+                          "el": "Έτος απόκτησης - Προσόν #1",
+                          "en": "Year obtained - Qualification #1"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Το έτος απόκτησης για το προσόν #1 είναι υποχρεωτικό",
+                              "en": "The year obtained for qualification #1 is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "numeric",
+                            "message": {
+                              "el": "Το έτος απόκτησης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValue",
+                          "params": {
+                            "checkValue": "1900",
+                            "message": {
+                              "el": "Το έτος απόκτησης πρέπει να είναι 1900 ή περισσοτερο",
+                              "en": "The year obtained must be 1900 or more",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "4",
+                            "message": {
+                              "el": "Το έτος απόκτησης πρέπει να είναι 4 χαρακτήρες ή λιγότεροι",
+                              "en": "The year obtained must be 4 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof1",
+                        "name": "proof1",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου - Προσόν #1",
+                          "en": "Proof of title file - Qualification #1",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε το Αποδεικτικό αρχείο τίτλου",
+                              "en": "Upload the Proof of title file",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "academic2",
+                        "text": {
+                          "el": "<h2>Προσόν #2 (Προαιρετικό)</h2>",
+                          "en": "<h2>Qualification #2 (Optional)</h2>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution2",
+                        "name": "institution2",
+                        "label": {
+                          "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #2",
+                          "en": "Name of academic institution - Qualification #2"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title2",
+                        "name": "title2",
+                        "label": {
+                          "el": "Όνομα τίτλου - Προσόν #2",
+                          "en": "Title name - Qualification #2"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year2",
+                        "name": "year2",
+                        "label": {
+                          "el": "Έτος απόκτησης - Προσόν #2",
+                          "en": "Year obtained - Qualification #2"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof2",
+                        "name": "proof2",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου - Προσόν #2",
+                          "en": "Proof of title file - Qualification #2",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "academic3",
+                        "text": {
+                          "el": "<h2>Προσόν #3 (Προαιρετικό)</h2>",
+                          "en": "<h2>Qualification #3 (Optional)</h2>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution3",
+                        "name": "institution3",
+                        "label": {
+                          "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #3",
+                          "en": "Name of academic institution - Qualification #3"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title3",
+                        "name": "title3",
+                        "label": {
+                          "el": "Όνομα τίτλου - Προσόν #3",
+                          "en": "Title name - Qualification #3"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year3",
+                        "name": "year3",
+                        "label": {
+                          "el": "Έτος απόκτησης - Προσόν #3",
+                          "en": "Year obtained - Qualification #3"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof3",
+                        "name": "proof3",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου - Προσόν #3",
+                          "en": "Proof of title file - Qualification #3",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "academic4",
+                        "text": {
+                          "el": "<h2>Προσόν #4 (Προαιρετικό)</h2>",
+                          "en": "<h2>Qualification #4 (Optional)</h2>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution4",
+                        "name": "institution4",
+                        "label": {
+                          "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #4",
+                          "en": "Name of academic institution - Qualification #4"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title4",
+                        "name": "title4",
+                        "label": {
+                          "el": "Όνομα τίτλου - Προσόν #4",
+                          "en": "Title name - Qualification #4"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year4",
+                        "name": "year4",
+                        "label": {
+                          "el": "Έτος απόκτησης - Προσόν #4",
+                          "en": "Year obtained - Qualification #4"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof4",
+                        "name": "proof4",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου - Προσόν #4",
+                          "en": "Proof of title file - Qualification #4",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "academic5",
+                        "text": {
+                          "el": "<h2>Προσόν #5 (Προαιρετικό)</h2>",
+                          "en": "<h2>Qualification #5 (Optional)</h2>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution5",
+                        "name": "institution5",
+                        "label": {
+                          "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #5",
+                          "en": "Name of academic institution - Qualification #5"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title5",
+                        "name": "title5",
+                        "label": {
+                          "el": "Όνομα τίτλου - Προσόν #5",
+                          "en": "Title name - Qualification #5"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year5",
+                        "name": "year5",
+                        "label": {
+                          "el": "Έτος απόκτησης - Προσόν #5",
+                          "en": "Year obtained - Qualification #5"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof5",
+                        "name": "proof5",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου - Προσόν #5",
+                          "en": "Proof of title file - Qualification #5",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Save and continue"
+                        },
+                        "prototypeNavigate": "../review"
                       }
                     }
                   ]
@@ -770,6 +1428,81 @@
   ],
   "routes": [],
   "localizations": {
+    "qualifications.institution1": {
+      "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #1",
+      "en": "Name of academic institution - Qualification #1",
+      "tr": ""
+    },
+    "qualifications.title1": {
+      "el": "Όνομα τίτλου - Προσόν #1",
+      "en": "Title name - Qualification #1",
+      "tr": ""
+    },
+    "qualifications.year1": {
+      "el": "Έτος απόκτησης - Προσόν #1",
+      "en": "Year obtained - Qualification #1",
+      "tr": ""
+    },
+    "qualifications.institution2": {
+      "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #2",
+      "en": "Name of academic institution - Qualification #2",
+      "tr": ""
+    },
+    "qualifications.title2": {
+      "el": "Όνομα τίτλου - Προσόν #2",
+      "en": "Title name - Qualification #2",
+      "tr": ""
+    },
+    "qualifications.year2": {
+      "el": "Έτος απόκτησης - Προσόν #2",
+      "en": "Year obtained - Qualification #2",
+      "tr": ""
+    },
+    "qualifications.institution3": {
+      "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #3",
+      "en": "Name of academic institution - Qualification #3",
+      "tr": ""
+    },
+    "qualifications.title3": {
+      "el": "Όνομα τίτλου - Προσόν #3",
+      "en": "Title name - Qualification #3",
+      "tr": ""
+    },
+    "qualifications.year3": {
+      "el": "Έτος απόκτησης - Προσόν #3",
+      "en": "Year obtained - Qualification #3",
+      "tr": ""
+    },
+    "qualifications.institution4": {
+      "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #4",
+      "en": "Name of academic institution - Qualification #4",
+      "tr": ""
+    },
+    "qualifications.title4": {
+      "el": "Όνομα τίτλου - Προσόν #4",
+      "en": "Title name - Qualification #4",
+      "tr": ""
+    },
+    "qualifications.year4": {
+      "el": "Έτος απόκτησης - Προσόν #4",
+      "en": "Year obtained - Qualification #4",
+      "tr": ""
+    },
+    "qualifications.institution5": {
+      "el": "Όνομα ακαδημαϊκού ιδρύματος - Προσόν #5",
+      "en": "Name of academic institution - Qualification #5",
+      "tr": ""
+    },
+    "qualifications.title5": {
+      "el": "Όνομα τίτλου - Προσόν #5",
+      "en": "Title name - Qualification #5",
+      "tr": ""
+    },
+    "qualifications.year5": {
+      "el": "Έτος απόκτησης - Προσόν #5",
+      "en": "Year obtained - Qualification #5",
+      "tr": ""
+    },
     "index.name": {
       "el": "Ονοματεπώνυμο",
       "en": "Full name",

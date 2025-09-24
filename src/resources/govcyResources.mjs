@@ -31,6 +31,11 @@ export const staticResources = {
             el: "Διαγραφή",
             tr: "Delete"
         },
+        untitled : {
+            en: "Untitled",
+            el: "Χωρίς τίτλο",
+            tr: "Untitled"
+        },
         formSuccess: { 
             en: "Your form has been submitted!", 
             el: "Η φόρμα σας έχει υποβληθεί!" ,
@@ -165,6 +170,36 @@ export const staticResources = {
             en: "➕ Add new entry",
             el: "➕ Προσθήκη νέας καταχώρησης",
             tr: "➕ Add new entry"
+        },
+        multipleThingsDedupeMessage: {
+            en: "This entry already exists",
+            el: "Αυτή η καταχώριση υπάρχει ήδη",
+            tr: "This entry already exists"
+        },
+        multipleThingsMaxMessage: {
+            en: "You have reached the maximum number of entries. You can only add up to {{max}} entries",
+            el: "Έχετε φτάσει το μέγιστο αριθμό καταχωρίσεων. Μπορείτε να προσθέσετε μόνο έως {{max}} καταχωρίσεις",
+            tr: "You have reached the maximum number of entries. You can only add up to {{max}} entries"
+        },
+        multipleThingsAddSuffix: {
+            en: " (Add)",
+            el: " (Προσθήκη)",
+            tr: " (Add)"
+        },
+        multipleThingsEditSuffix: {
+            en: " (Change)",
+            el: " (Αλλαγή)",
+            tr: " (Change)"
+        },
+        multipleThingsDeleteTitle: {
+            en: "Are you sure you want to delete the item \"{{item}}\"",
+            el: "Σίγουρα θέλετε να διαγράψετε την εγγραφή \"{{item}}\"",
+            tr: "Are you sure you want to delete the item \"{{item}}\""
+        },
+        multipleThingsdeleteValidationError: {
+            en: "Select if you want to delete this item",
+            el: "Επιλέξτε αν θέλετε να διαγράψετε αυτή την εγγραφή",
+            tr: "Select if you want to delete the item"
         }
     },
     //remderer sections

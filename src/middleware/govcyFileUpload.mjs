@@ -17,13 +17,26 @@ export const govcyFileUpload = [
     upload.single('file'), // multer parses the uploaded file and stores it in req.file
 
     async function govcyUploadHandler(req, res) {
+        let mode = "single";
+        let index = null;
+
+        // Detect MultipleThings modes based on URL
+        if (req.originalUrl.includes("/multiple/add")) {
+            mode = "multipleThingsDraft";
+        } else if (req.originalUrl.includes("/multiple/edit/")) {
+            mode = "multipleThingsEdit";
+            index = parseInt(req.params.index, 10);
+        }
+
         const result = await handleFileUpload({
             service: req.serviceData,
             store: req.session,
             siteId: req.params.siteId,
             pageUrl: req.params.pageUrl,
             elementName: req.body?.elementName,
-            file: req.file
+            file: req.file,
+            mode,
+            index
         });
 
         if (result.status !== 200) {

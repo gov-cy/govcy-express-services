@@ -71,7 +71,8 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
                         }
                     }
                 }
-            },
+            },            
+            originalUrl: "site/page/",
             csrfToken: () => "mock-csrf"
         };
 
@@ -473,5 +474,98 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
         expect(res.redirect.firstCall.args[0]).to.include("redirected-from-post");
     });
 
+    it("18. GET should resolve file from multipleDraft (add flow)", async () => {
+        // Setup a multipleDraft with file reference
+        req.session.siteData["test-site"].inputData.index = {
+            multipleDraft: {
+                upload: { fileId: "draft123", sha256: "sha-draft" }
+            }
+        };
 
+        const handler = govcyFileDeletePageHandler();
+        await handler(req, res, next);
+
+        expect(next.calledOnce).to.be.true;
+        expect(req.processedPage.pageData.pageData.title.en).to.include("Test File");
+    });
+
+    it("19. GET should resolve file from formData array (edit flow)", async () => {
+        // Simulate multipleThings array with two items
+        req.params.index = "1";
+        req.session.siteData["test-site"].inputData.index = {
+            formData: [
+                { otherField: "keep" },
+                { upload: { fileId: "edit123", sha256: "sha-edit" } }
+            ]
+        };
+
+        const handler = govcyFileDeletePageHandler();
+        await handler(req, res, next);
+
+        expect(next.calledOnce).to.be.true;
+        expect(req.processedPage.pageData.pageData.title.en).to.include("Test File");
+    });
+
+    it("20. POST should remove file from multipleDraft and redirect", async () => {
+        req.session.siteData["test-site"].inputData.index = {
+            multipleDraft: {
+                upload: { fileId: "draft123", sha256: "sha-draft" }
+            }
+        };
+
+        
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+        req.originalUrl = "/test-site/index/multiple/add"; // simulate add flow
+
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+
+        req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        // The draft file should be cleared site-wide
+        expect(req.session.siteData["test-site"].inputData.index.multipleDraft.upload).to.equal("");
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.equal("/test-site/index/multiple/add");
+    });
+
+    it("21. POST should remove file from array item (edit flow)", async () => {
+        req.params.index = "0";
+        req.session.siteData["test-site"].inputData.index = {
+            formData: [
+                { upload: { fileId: "edit123", sha256: "sha-edit" } }
+            ]
+        };
+
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+            dsfgtwApiKey: "TEST_SUBMISSION_DSF_GTW_KEY"
+        };
+
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/success"; // or any dummy
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        process.env.TEST_SUBMISSION_DSF_GTW_KEY = "x";
+
+        req.body = { deleteFile: "yes" };
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        expect(req.session.siteData["test-site"].inputData.index.formData[0].upload).to.equal("");
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.equal("/test-site/index/multiple/edit/0");
+    });
+    
 });

@@ -69,6 +69,7 @@ describe("govcyFileViewHandler", () => {
                     access_token: "mock-token"
                 }
             },
+            originalUrl: "site/page/",
             _pageRedirectDepth: 0
         };
 

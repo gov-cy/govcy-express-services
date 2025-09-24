@@ -13,6 +13,17 @@ export function govcyFileViewHandler() {
         try {
             const { siteId, pageUrl, elementName } = req.params;
 
+            // Detect MultipleThings modes based on URL
+            let mode = "single";
+            let index = null;
+
+            if (req.originalUrl.includes("/multiple/add")) {
+                mode = "multipleThingsDraft";
+            } else if (req.originalUrl.includes("/multiple/edit/")) {
+                mode = "multipleThingsEdit";
+                index = parseInt(req.params.index, 10);
+            }
+
             // Create a deep copy of the service to avoid modifying the original
             let serviceCopy = req.serviceData;
 
@@ -64,7 +75,15 @@ export function govcyFileViewHandler() {
             }
 
             //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
+            let elementData;
+            if (mode === "single") {
+                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
+            } else if (mode === "multipleThingsDraft") {
+                elementData = dataLayer.getMultipleDraft(req.session, siteId, pageUrl)?.[elementName];
+            } else if (mode === "multipleThingsEdit") {
+                const items = dataLayer.getPageData(req.session, siteId, pageUrl) || [];
+                elementData = items[index]?.[elementName];
+            }
 
             // If the element data is not found, return an error response
             if (!elementData || !elementData?.sha256 || !elementData?.fileId) {

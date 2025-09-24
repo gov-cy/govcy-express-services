@@ -47,11 +47,37 @@ export function govcyFileDeletePageHandler() {
                 return handleMiddlewareError(`File input [${elementName}] does not have a label`, 404, next);
             }
 
-            //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
+            // --- Resolve file element data (normal + multipleThings add/edit) ---
+            let elementData = null;
+            const pageSessionData = req.session?.siteData?.[siteId]?.inputData?.[pageUrl];
 
-            // If the element data is not found, return an error response
-            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
+            // Case 1: normal formData
+            if (pageSessionData?.formData && !Array.isArray(pageSessionData.formData)) {
+                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
+            }
+
+            // Case 2: multipleDraft (add)
+            if (!elementData && pageSessionData?.multipleDraft) {
+                const draftVal = pageSessionData.multipleDraft[elementName];
+                if (draftVal?.fileId && draftVal?.sha256) {
+                    elementData = draftVal;
+                }
+            }
+
+            // Case 3: formData array (edit)
+            if (!elementData && Array.isArray(pageSessionData?.formData)) {
+                const { index } = req.params;
+                const idx = parseInt(index, 10);
+                if (!Number.isNaN(idx) && idx >= 0 && idx < pageSessionData.formData.length) {
+                    const val = pageSessionData.formData[idx]?.[elementName];
+                    if (val?.fileId && val?.sha256) {
+                        elementData = val;
+                    }
+                }
+            }
+
+            // Guard if still nothing found
+            if (!elementData) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 
@@ -92,7 +118,7 @@ export function govcyFileDeletePageHandler() {
             const showSameFileWarning = dataLayer.isFileUsedInSiteInputDataAgain(
                 req.session,
                 siteId,
-                elementData 
+                elementData
             );
 
             // Construct page title
@@ -119,12 +145,23 @@ export function govcyFileDeletePageHandler() {
                 }
             };
             //-------------
-
+            // Build proper action based on context (normal / multiple add / multiple edit)
+            let actionPath;
+            if (typeof req.params.index !== "undefined") {
+                // multiple edit
+                actionPath = `${pageUrl}/multiple/edit/${req.params.index}/delete-file/${elementName}`;
+            } else if (req.originalUrl.includes("/multiple/add")) {
+                // multiple add
+                actionPath = `${pageUrl}/multiple/add/delete-file/${elementName}`;
+            } else {
+                // normal page
+                actionPath = `${pageUrl}/delete-file/${elementName}`;
+            }
             // Construct submit button
             const formElement = {
                 element: "form",
                 params: {
-                    action: govcyResources.constructPageUrl(siteId, `${pageUrl}/delete-file/${elementName}`, (req.query.route === "review" ? "review" : "")),
+                    action: govcyResources.constructPageUrl(siteId, actionPath, (req.query.route === "review" ? "review" : "")),
                     method: "POST",
                     elements: [
                         pageRadios,
@@ -210,16 +247,55 @@ export function govcyFileDeletePostHandler() {
                 return handleMiddlewareError(`File input [${elementName}] not allowed on this page`, 404, next);
             }
 
-            //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
+            // --- Resolve file element data (normal + multipleThings add/edit) ---
+            let elementData = null;
+            const pageSessionData = req.session?.siteData?.[siteId]?.inputData?.[pageUrl];
 
-            // If the element data is not found, return an error response
-            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
+            // Case 1: normal formData
+            if (pageSessionData?.formData && !Array.isArray(pageSessionData.formData)) {
+                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
+            }
+
+            // Case 2: multipleDraft (add)
+            if (!elementData && pageSessionData?.multipleDraft) {
+                const draftVal = pageSessionData.multipleDraft[elementName];
+                if (draftVal?.fileId && draftVal?.sha256) {
+                    elementData = draftVal;
+                }
+            }
+
+            // Case 3: formData array (edit)
+            if (!elementData && Array.isArray(pageSessionData?.formData)) {
+                const { index } = req.params;
+                const idx = parseInt(index, 10);
+                if (!Number.isNaN(idx) && idx >= 0 && idx < pageSessionData.formData.length) {
+                    const val = pageSessionData.formData[idx]?.[elementName];
+                    if (val?.fileId && val?.sha256) {
+                        elementData = val;
+                    }
+                }
+            }
+
+            // Guard if still nothing found
+            if (!elementData) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 
+            // Build proper action based on context (normal / multiple add / multiple edit)
+            let actionPath;
+            if (typeof req.params.index !== "undefined") {
+                // multiple edit
+                actionPath = `${pageUrl}/multiple/edit/${req.params.index}`;
+            } else if (req.originalUrl.includes("/multiple/add")) {
+                // multiple add
+                actionPath = `${pageUrl}/multiple/add`;
+            } else {
+                // normal page
+                actionPath = `${pageUrl}`;
+            }
+
             // the page base return url
-            const pageBaseReturnUrl = `http://localhost:3000/${siteId}/${pageUrl}`;
+            const pageBaseReturnUrl = `http://localhost:3000/${siteId}/${actionPath}`;
 
             //check if input `deleteFile` has a value
             if (!req?.body?.deleteFile ||
