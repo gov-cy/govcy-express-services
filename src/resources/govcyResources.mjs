@@ -162,9 +162,14 @@ export const staticResources = {
             tr: "Υou have uploaded the same file more than once in this application. If you delete it, it will be deleted from all places in the application."
         },
         multipleThingsEnptyState: {
-            en: "You have not added any entries yet.",
-            el: "Δεν έχετε προσθέσει ακόμη κάποια κατάσταση.",
-            tr: "You have not added any entries yet."
+            en: "You did not add any entries.",
+            el: "Δεν έχετε προσθέσει ακόμη κάποια καταχώρηση.",
+            tr: "You did not add any entries."
+        },
+        multipleThingsEmptyStateReview: {
+            en: "You did not add any entries.",
+            el: "Δεν έχετε προσθέσει κάποια καταχώρηση.",
+            tr: "You did not add any entries yet."
         },
         multipleThingsAddEntry: {
             en: "➕ Add new entry",
@@ -193,13 +198,18 @@ export const staticResources = {
         },
         multipleThingsDeleteTitle: {
             en: "Are you sure you want to delete the item \"{{item}}\"",
-            el: "Σίγουρα θέλετε να διαγράψετε την εγγραφή \"{{item}}\"",
+            el: "Σίγουρα θέλετε να διαγράψετε την καταχώρηση \"{{item}}\"",
             tr: "Are you sure you want to delete the item \"{{item}}\""
         },
-        multipleThingsdeleteValidationError: {
+        multipleThingsDeleteValidationError: {
             en: "Select if you want to delete this item",
-            el: "Επιλέξτε αν θέλετε να διαγράψετε αυτή την εγγραφή",
+            el: "Επιλέξτε αν θέλετε να διαγράψετε αυτή την καταχώρηση",
             tr: "Select if you want to delete the item"
+        },
+        multipleThingsEntries: {
+            en: "Entries",
+            el: "Καταχωρήσεις",
+            tr: "Entries"
         }
     },
     //remderer sections
@@ -525,6 +535,7 @@ export function getMultilingualObject(el, en, tr) {
  */
 export function getSameMultilingualObject(languages, value) {
     const obj = {};
+    if (!Array.isArray(languages)) return {el: value, en: value, tr: value};
     for (const lang of languages) {
         obj[lang.code] = value || "";
     }

@@ -46,35 +46,48 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             sections: [
                 {
                     name: "main",
-                    elements: []
+                    elements: [
+                        // TODO: Add form element here
+                        {
+                            element: "form",
+                            params: {
+                                action: govcyResources.constructPageUrl(siteId, page.pageData.url, (req.query.route === "review" ? "review" : "")),
+                                method: "POST",
+                                elements: []
+                            }
+                        }
+                    ]
                 }
             ]
         };
 
+         // ➕ Add CSRF token
+        hubTemplate.sections[0].elements[0].params.elements.push(govcyResources.csrfTokenInput(req.csrfToken()));
+
         // 1. Add topElements if provided
         if (Array.isArray(mtConfig.listPage.topElements)) {
-            hubTemplate.sections[0].elements.push(...mtConfig.listPage.topElements);
+            hubTemplate.sections[0].elements[0].params.elements.push(...mtConfig.listPage.topElements);
         }
 
         //If items are less than max show the add another button
         if (items.length < mtConfig.max) {
             // If addButtonPlacement is "top" or "both", add the "Add another" button at the top
             if (mtConfig?.listPage?.addButtonPlacement === "top" || mtConfig?.listPage?.addButtonPlacement === "both") {
-                hubTemplate.sections[0].elements.push(
-                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, req.globalLang, "", (req.query?.route === "review" ? "review" : "")
-                        , mtConfig?.listPage?.addButtonText?.[req.globalLang])
+                hubTemplate.sections[0].elements[0].params.elements.push(
+                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, serviceCopy.site.lang, "", (req.query?.route === "review" ? "review" : "")
+                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang])
                 );
                 addLinkCounter++;
             }
         }
         // 2. Add list of items or empty state
         if (items.length === 0) {
-            hubTemplate.sections[0].elements.push({
+            hubTemplate.sections[0].elements[0].params.elements.push({
                 element: "inset",
                 // if no emptyState provided use the static resource
                 params: {
                     text: (
-                        mtConfig?.listPage?.emptyState?.[req.globalLang]
+                        mtConfig?.listPage?.emptyState?.[serviceCopy.site.lang]
                             ? mtConfig.listPage.emptyState
                             : govcyResources.staticResources.text.multipleThingsEnptyState
                     )
@@ -94,18 +107,18 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                     title = env.renderString(mtConfig.itemTitleTemplate, safeItem);
                     // Fallback if Nunjucks returned empty or only whitespace
                     if (!title || !title.trim()) {
-                        title = govcyResources.staticResources.text.untitled[req.globalLang] || govcyResources.staticResources.text.untitled["el"];
+                        title = govcyResources.staticResources.text.untitled[serviceCopy.site.lang] || govcyResources.staticResources.text.untitled["el"];
                     }
                 }catch (err) {
                     // Log the error and fallback
                     logger.error(`Error rendering itemTitleTemplate for ${siteId}/${pageUrl}, index=${idx}: ${err.message}`, req);
-                    title = govcyResources.staticResources.text.untitled[req.globalLang] || govcyResources.staticResources.text.untitled["el"];
+                    title = govcyResources.staticResources.text.untitled[serviceCopy.site.lang] || govcyResources.staticResources.text.untitled["el"];
                 }
 
 
                 return {
                     // Table row text
-                    text: { [req.globalLang]: title },
+                    text: { [serviceCopy.site.lang]: title },
 
                     // Row actions (edit / remove)
                     actions: [
@@ -113,20 +126,20 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                             text: govcyResources.staticResources.text.change,
                             // Edit route for this item
                             href: `/${siteId}/${pageUrl}/multiple/edit/${idx}${req.query?.route === "review" ? "?route=review" : ""}`,
-                            visuallyHiddenText: { [req.globalLang]: ` ${title}` }
+                            visuallyHiddenText: { [serviceCopy.site.lang]: ` ${title}` }
                         },
                         {
                             text: govcyResources.staticResources.text.delete,
                             // Delete route for this item
                             href: `/${siteId}/${pageUrl}/multiple/delete/${idx}${req.query?.route === "review" ? "?route=review" : ""}`,
-                            visuallyHiddenText: { [req.globalLang]: ` ${title}` }
+                            visuallyHiddenText: { [serviceCopy.site.lang]: ` ${title}` }
                         }
                     ]
                 };
             });
 
             // Push the table into the hub template
-            hubTemplate.sections[0].elements.push({
+            hubTemplate.sections[0].elements[0].params.elements.push({
                 element: "multipleThingsTable",
                 params: {
                     id: `${pageUrl}-table`,             // Unique ID for table
@@ -141,9 +154,9 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
         if (items.length < mtConfig.max) {
             // If addButtonPlacement is "bottom" or "both", add the "Add another" button at the bottom
             if (mtConfig?.listPage?.addButtonPlacement === "bottom" || mtConfig?.listPage?.addButtonPlacement === "both" || addLinkCounter === 0) {
-                hubTemplate.sections[0].elements.push(
-                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, req.globalLang, "", (req.query?.route === "review" ? "review" : "")
-                        , mtConfig?.listPage?.addButtonText?.[req.globalLang])
+                hubTemplate.sections[0].elements[0].params.elements.push(
+                    govcyResources.getMultipleThingsLink("add", siteId, pageUrl, serviceCopy.site.lang, "", (req.query?.route === "review" ? "review" : "")
+                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang])
                 );
             }
         } else {
@@ -155,7 +168,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             for (const lang of Object.keys(maxMsg)) {
                 maxMsg[lang] = maxMsg[lang].replace("{{max}}", mtConfig.max);
             }
-            hubTemplate.sections[0].elements.push({
+            hubTemplate.sections[0].elements[0].params.elements.push({
                 element: "warning",
                 // if no emptyState provided use the static resource
                 params: {
@@ -165,17 +178,18 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
         }
 
         // 5. Add Continue button
-        hubTemplate.sections[0].elements.push(
+        hubTemplate.sections[0].elements[0].params.elements.push(
             {
                 element: "button",
                 // if no emptyState provided use the static resource
                 params: {
                     text: (
-                        mtConfig?.listPage?.continueButtonText?.[req.globalLang]
+                        mtConfig?.listPage?.continueButtonText?.[serviceCopy.site.lang]
                             ? mtConfig.listPage.continueButtonText
                             : govcyResources.staticResources.text.continue
                     ),
-                    variant: "primary"
+                    variant: "primary",
+                    type: "submit"
                 }
             }
         );

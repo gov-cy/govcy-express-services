@@ -1462,10 +1462,10 @@
         "conditions": [
           {
             "expression": "[].concat(dataLayer['test.inputData.index.formData.certificate_select'] || []).includes('birth')",
-            "redirect": "review"
+            "redirect": "multiple-academic-details"
           }
         ],
-        "nextPage": "review"
+        "nextPage": "multiple-academic-details"
       },
       "pageTemplate": {
         "sections": [
@@ -5781,11 +5781,11 @@
         },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "data-entry-all"
+        "nextPage": "review"
       },
       "multipleThings": {
         "min": 1,    
-        "max": 5,   
+        "max": 2,   
         "dedupe": true, 
         "itemTitleTemplate": "{{dateGot_year}} - {{title | trim}}",
         "listPage": {
@@ -5869,7 +5869,7 @@
             "en": "➕ Add academic details",
             "el": "➕ Προσθήκη ακαδημαϊκό προσόν"
           },
-          "addButtonPlacement": "bottom", 
+          "addButtonPlacement": "both", 
           "continueButtonText": {    
             "en": "Save and continue",
             "el": "Αποθήκευση και συνέχεια"
@@ -6048,7 +6048,20 @@
                           "en": "PDF, JPG, JPEG, PNG are the acceptable formats ",
                           "tr": ""
                         }
-                      }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε τον τίτλο",
+                              "en": "Upload the title",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "element": "button",

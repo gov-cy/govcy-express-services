@@ -26,10 +26,10 @@ export function govcyReviewPageHandler() {
             // Base page template structure
             let pageTemplate = {
                 sections: [
-                    {
-                        name: "beforeMain",
-                        elements: [govcyResources.staticResources.elements.backLink]
-                    }
+                    // {
+                    //     name: "beforeMain",
+                    //     elements: [govcyResources.staticResources.elements.backLink]
+                    // }
                 ]
             };
             // Construct page title

@@ -114,10 +114,10 @@ export function govcyMultipleThingsDeletePageHandler() {
             if (req?.query?.hasError) {
                 validationErrors.push({
                     link: "#deleteItem-option-1",
-                    text: govcyResources.staticResources.text.multipleThingsdeleteValidationError
+                    text: govcyResources.staticResources.text.multipleThingsDeleteValidationError
                 });
                 mainElements.push(govcyResources.errorSummary(validationErrors));
-                formElement.params.elements[0].params.error = govcyResources.staticResources.text.multipleThingsdeleteValidationError;
+                formElement.params.elements[0].params.error = govcyResources.staticResources.text.multipleThingsDeleteValidationError;
             }
             //--------- End Handle Validation Errors ---------
 

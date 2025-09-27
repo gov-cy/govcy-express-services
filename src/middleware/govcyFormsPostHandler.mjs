@@ -41,50 +41,64 @@ export function govcyFormsPostHandler() {
             if (!formElement) {
                 return handleMiddlewareError("🚨 Form definition not found.", 500, next);
             }
-    
-            // const formData = req.body; // Submitted data
-            const formData = getFormData(formElement.params.elements, req.body, req.session, siteId, pageUrl); // Submitted data
 
-            // ☑️ Start validation from top-level form elements
-            const validationErrors = validateFormElements(formElement.params.elements, formData);
-    
-            // ❌ Return validation errors if any exist
-            if (Object.keys(validationErrors).length > 0) {
-                logger.debug("🚨 Validation errors:", validationErrors, req);
-                logger.info("🚨 Validation errors on:", req.originalUrl);
-                // store the validation errors
-                dataLayer.storePageValidationErrors(req.session, siteId, pageUrl, validationErrors, formData);
-                //redirect to the same page with error summary
-                return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
-            }
-    
-            //⤴️ Store validated form data in session
-            dataLayer.storePageData(req.session, siteId, pageUrl, formData);
-            
-            // 🔄 Fire-and-forget temporary save (non-blocking)
-            (async () => {
-                try { await tempSaveIfConfigured(req.session, service, siteId); }
-                catch (e) { /* already logged internally */ }
-            })();
-            
-            logger.debug("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl), req);
-            logger.info("✅ Form submitted successfully:", req.originalUrl);
-            
-            // 🔍 Determine next page (if applicable)
             let nextPage = null;
-            for (const section of page.pageTemplate.sections) {
-                const form = section.elements.find(el => el.element === "form");
-                if (form) {
-                    //handle review route
-                    if (req.query.route === "review") {
-                        nextPage = govcyResources.constructPageUrl(siteId, "review");
-                    } else {
-                        nextPage = page.pageData.nextPage;
-                        //nextPage = form.params.elements.find(el => el.element === "button" && el.params?.prototypeNavigate)?.params.prototypeNavigate;
+            
+            // ----- MultipleThings hub handling -----
+            if (page.multipleThings) {
+                // 🔍 Determine next page (if applicable)
+                //handle review route
+                if (req.query.route === "review") {
+                    nextPage = govcyResources.constructPageUrl(siteId, "review");
+                } else {
+                    nextPage = page.pageData.nextPage;
+                }
+
+            } else { // Regular form page
+
+                // const formData = req.body; // Submitted data
+                const formData = getFormData(formElement.params.elements, req.body, req.session, siteId, pageUrl); // Submitted data
+    
+                // ☑️ Start validation from top-level form elements
+                const validationErrors = validateFormElements(formElement.params.elements, formData);
+        
+                // ❌ Return validation errors if any exist
+                if (Object.keys(validationErrors).length > 0) {
+                    logger.debug("🚨 Validation errors:", validationErrors, req);
+                    logger.info("🚨 Validation errors on:", req.originalUrl);
+                    // store the validation errors
+                    dataLayer.storePageValidationErrors(req.session, siteId, pageUrl, validationErrors, formData);
+                    //redirect to the same page with error summary
+                    return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
+                }
+        
+                //⤴️ Store validated form data in session
+                dataLayer.storePageData(req.session, siteId, pageUrl, formData);
+                
+                // 🔄 Fire-and-forget temporary save (non-blocking)
+                (async () => {
+                    try { await tempSaveIfConfigured(req.session, service, siteId); }
+                    catch (e) { /* already logged internally */ }
+                })();
+                
+                logger.debug("✅ Form submitted successfully:", dataLayer.getPageData(req.session, siteId, pageUrl), req);
+                logger.info("✅ Form submitted successfully:", req.originalUrl);
+                
+                // 🔍 Determine next page (if applicable)
+                for (const section of page.pageTemplate.sections) {
+                    const form = section.elements.find(el => el.element === "form");
+                    if (form) {
+                        //handle review route
+                        if (req.query.route === "review") {
+                            nextPage = govcyResources.constructPageUrl(siteId, "review");
+                        } else {
+                            nextPage = page.pageData.nextPage;
+                            //nextPage = form.params.elements.find(el => el.element === "button" && el.params?.prototypeNavigate)?.params.prototypeNavigate;
+                        }
                     }
                 }
+                
             }
-            
             // ➡️ Redirect to the next page if defined, otherwise return success
             if (nextPage) {
                 logger.debug("🔄 Redirecting to next page:", nextPage, req);
@@ -92,6 +106,7 @@ export function govcyFormsPostHandler() {
                 return res.redirect(govcyResources.constructPageUrl(siteId, `${nextPage.split('/').pop()}`));
             }
             res.json({ success: true, message: "Form submitted successfully" });
+
         } catch (error) {
             return next(error); // Pass error to govcyHttpErrorHandler
         }

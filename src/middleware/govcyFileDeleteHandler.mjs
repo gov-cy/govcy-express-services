@@ -48,38 +48,14 @@ export function govcyFileDeletePageHandler() {
             }
 
             // --- Resolve file element data (normal + multipleThings add/edit) ---
-            let elementData = null;
-            const pageSessionData = req.session?.siteData?.[siteId]?.inputData?.[pageUrl];
-
-            // Case 1: normal formData
-            if (pageSessionData?.formData && !Array.isArray(pageSessionData.formData)) {
-                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
-            }
-
-            // Case 2: multipleDraft (add)
-            if (!elementData && pageSessionData?.multipleDraft) {
-                const draftVal = pageSessionData.multipleDraft[elementName];
-                if (draftVal?.fileId && draftVal?.sha256) {
-                    elementData = draftVal;
-                }
-            }
-
-            // Case 3: formData array (edit)
-            if (!elementData && Array.isArray(pageSessionData?.formData)) {
-                const { index } = req.params;
-                const idx = parseInt(index, 10);
-                if (!Number.isNaN(idx) && idx >= 0 && idx < pageSessionData.formData.length) {
-                    const val = pageSessionData.formData[idx]?.[elementName];
-                    if (val?.fileId && val?.sha256) {
-                        elementData = val;
-                    }
-                }
-            }
-
+            const { index } = req.params;
+            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName, index);
+        
             // Guard if still nothing found
-            if (!elementData) {
+            if (!elementData || !elementData.fileId || !elementData.sha256) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
+
 
             // Deep copy page title (so we don’t mutate template)
             const pageTitle = JSON.parse(JSON.stringify(govcyResources.staticResources.text.deleteFileTitle));
@@ -248,36 +224,11 @@ export function govcyFileDeletePostHandler() {
             }
 
             // --- Resolve file element data (normal + multipleThings add/edit) ---
-            let elementData = null;
-            const pageSessionData = req.session?.siteData?.[siteId]?.inputData?.[pageUrl];
-
-            // Case 1: normal formData
-            if (pageSessionData?.formData && !Array.isArray(pageSessionData.formData)) {
-                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
-            }
-
-            // Case 2: multipleDraft (add)
-            if (!elementData && pageSessionData?.multipleDraft) {
-                const draftVal = pageSessionData.multipleDraft[elementName];
-                if (draftVal?.fileId && draftVal?.sha256) {
-                    elementData = draftVal;
-                }
-            }
-
-            // Case 3: formData array (edit)
-            if (!elementData && Array.isArray(pageSessionData?.formData)) {
-                const { index } = req.params;
-                const idx = parseInt(index, 10);
-                if (!Number.isNaN(idx) && idx >= 0 && idx < pageSessionData.formData.length) {
-                    const val = pageSessionData.formData[idx]?.[elementName];
-                    if (val?.fileId && val?.sha256) {
-                        elementData = val;
-                    }
-                }
-            }
-
+            const { index } = req.params;
+            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName, index);
+        
             // Guard if still nothing found
-            if (!elementData) {
+            if (!elementData || !elementData.fileId || !elementData.sha256) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 

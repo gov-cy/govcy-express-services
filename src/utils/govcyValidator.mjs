@@ -136,13 +136,12 @@ function validateValue(value, rules) {
       }
     }
 
+    // Skip validation if the value is empty
+    if (value === null || value === undefined || (typeof value === 'string' && value.trim() === "")) {
+      continue; // let "required" handle emptiness
+    } 
     // Check for "valid" rules (e.g., numeric, telCY, etc.)
     if (check === "valid" && validationRules[checkValue]) {
-      // Skip validation if the value is empty
-      if (value === null || value === undefined || (typeof value === 'string' && value.trim() === "")) {
-        continue; // let "required" handle emptiness
-      }
-
       const isValid = validationRules[checkValue](value);
       if (!isValid) {
         return message;

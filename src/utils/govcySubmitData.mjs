@@ -5,6 +5,7 @@ import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import { evaluatePageConditions } from "./govcyExpressions.mjs";
 import { logger } from "./govcyLogger.mjs";
+import nunjucks from "nunjucks";
 
 /**
  * Prepares the submission data for the service, including raw data, print-friendly data, and renderer data.
@@ -122,7 +123,7 @@ export function prepareSubmissionData(req, siteId, service) {
         submissionUsername: dataLayer.getUser(req.session).name,
         submissionEmail: dataLayer.getUser(req.session).email,
         submissionData: submissionData, // Raw data as submitted by the user in each page
-        submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version ||"", // The submission data version
+        submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version || "", // The submission data version
         printFriendlyData: printFriendlyData, // Print-friendly data
         rendererData: reviewSummaryList, // Renderer data of the summary list
         rendererVersion: service.site?.rendererVersion || service.site?.renderer_version || "", // The renderer version
@@ -174,7 +175,9 @@ export function preparePrintFriendlyData(req, siteId, service) {
     // and extract the form data from the session
     for (const page of service.pages) {
         const fields = [];
+        const items = []; // ✅ new
         // const currentPageUrl = page.pageData.url;
+
         // ----- Conditional logic comes here
         // Skip page if conditions indicate it should redirect (i.e. not be shown)
         const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
@@ -196,7 +199,11 @@ export function preparePrintFriendlyData(req, siteId, service) {
 
                     //create the field object and push it to the fields array
                     // value of the field is handled by getValueLabel function
-                    const field = createFieldObject(formElement, rawValue, getValueLabel(formElement, rawValue, page.pageData.url, req, siteId, service), service);
+                    const field = createFieldObject(
+                        formElement,
+                        rawValue,
+                        getValueLabel(formElement, rawValue, page.pageData.url, req, siteId, service),
+                        service);
                     fields.push(field);
 
                     // Handle conditional elements (only for radios for now)
@@ -223,11 +230,24 @@ export function preparePrintFriendlyData(req, siteId, service) {
             }
         }
 
+        // Special case: multipleThings page → extract item titles // ✅ new
+        if (page.multipleThings) {
+            let mtItems = dataLayer.getPageData(req.session, siteId, page.pageData.url);
+            if (Array.isArray(mtItems)) {
+                const env = new nunjucks.Environment(null, { autoescape: false });
+                for (const item of mtItems) {
+                    const itemTitle = env.renderString(page.multipleThings.itemTitleTemplate, item);
+                    items.push({ itemTitle, ...item });
+                }
+            }
+        }
+
         if (fields.length > 0) {
             submissionData.push({
                 pageUrl: page.pageData.url,
                 pageTitle: page.pageData.title,
-                fields
+                fields,
+                items: (page.multipleThings ? items : null) // ✅ new
             });
         }
     }
@@ -486,26 +506,49 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
 
 
 
+    const env = new nunjucks.Environment(null, { autoescape: true });
+    // One template renders multiple things
+    const multipleThingsTemplate = `
+        <div><strong>${govcyResources.staticResources.text.multipleThingsEntries[req.globalLang ] || govcyResources.staticResources.text.multipleThingsEntries["el"]}</strong></div>
+        <ol class="govcy-mt-2">
+        {% for it in items -%}
+            <li>{{ it.itemTitle | trim }}</li>
+        {%- endfor %}
+        </ol>
+        `;
 
     // Loop through each page in the submission data
     for (const page of submissionData) {
         // Get the page URL, title, and fields
-        const { pageUrl, pageTitle, fields } = page;
+        const { pageUrl, pageTitle, fields, items } = page;
 
 
         let summaryListInner = { element: "summaryList", params: { items: [] } };
 
-        // loop through each field and add it to the summary entry
-        for (const field of fields) {
-            const label = field.label;
-            const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            // --- HACK --- to see if this is a file element
-            // check if field.value is an object with `sha256` and `fileId` properties
-            if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
-                summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+        // Special handling: multipleThings page → show <ol> of itemTitle only
+        if (Array.isArray(items)) {
+            summaryListInner = { element: "htmlElement", params: { text: {} } };
+            if (items.length == 0) {
+                summaryListInner.params.text = govcyResources.staticResources.text.multipleThingsEmptyStateReview
             } else {
-                // add the field to the summary entry
-                summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+                // Build ordered list HTML
+                let htmlByLang = env.renderString(multipleThingsTemplate, {items});
+                // Set the HTML for each language
+                summaryListInner.params.text = govcyResources.getMultilingualObject(htmlByLang, htmlByLang, htmlByLang);
+            }
+        } else { // Normal page → keep old behavior
+            // loop through each field and add it to the summary entry
+            for (const field of fields) {
+                const label = field.label;
+                const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
+                // --- HACK --- to see if this is a file element
+                // check if field.value is an object with `sha256` and `fileId` properties
+                if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
+                    summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+                } else {
+                    // add the field to the summary entry
+                    summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+                }
             }
         }
 
@@ -558,7 +601,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
                 component: "bodySuccess",
                 params: {
                     title: service?.site?.successEmailHeader?.[req.globalLang]
-                    || govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
+                        || govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
                     body: `${govcyResources.getLocalizeContent(govcyResources.staticResources.text.yourSubmissionId, req.globalLang)} ${submissionId}`
                 }
             }

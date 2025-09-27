@@ -101,6 +101,7 @@ describe('govcySubmitData', () => {
                 {
                     pageUrl: 'page1',
                     pageTitle: { en: 'Page 1', el: 'Σελίδα 1' },
+                    items: null,
                     fields: [
                         {
                             id: 'field1',

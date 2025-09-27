@@ -396,17 +396,31 @@ export function getFormDataValue(store, siteId, pageUrl, elementName, index = nu
     const pageData = store?.siteData?.[siteId]?.inputData?.[pageUrl];
     if (!pageData) return "";
 
-    // Case 1: formData is a flat object
-    if (pageData.formData && !Array.isArray(pageData.formData)) {
-        return pageData?.formData?.[elementName] || "";
-    }
-
-    // Case 2: formData is an array (multipleThings)
+    // Case 1: formData is an array (multipleThings edit)
     if (Array.isArray(pageData.formData) && index !== null) {
         return pageData?.formData[index]?.[elementName] || "";
     }
 
-    // Case 3: multipleDraft (used in add flow)
+    // Case 2: formData is a flat object (single page or multipleThings add seed)
+    if (pageData.formData && !Array.isArray(pageData.formData)) {
+        const val = pageData.formData[elementName];
+        // If the flat value exists and is non-empty, prefer it.
+        const hasNonEmptyFlat =
+            val !== undefined &&
+            val !== "" &&
+            !(typeof val === "object" && val !== null && Object.keys(val).length === 0);
+        if (hasNonEmptyFlat) return val;
+
+        // Otherwise, fall back to multipleDraft (used in add flow) if present.
+        if (pageData.multipleDraft && typeof pageData.multipleDraft === "object") {
+            const draftVal = pageData.multipleDraft[elementName];
+            if (draftVal !== undefined && draftVal !== "") return draftVal;
+        }
+        // If neither exists, return an empty string
+        return "";
+    }
+
+    // Case 3: no flat formData; fall back to multipleDraft (used in add flow)
     if (pageData.multipleDraft && typeof pageData.multipleDraft === "object") {
         return pageData?.multipleDraft?.[elementName] || "";
     }
