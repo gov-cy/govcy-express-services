@@ -27,7 +27,7 @@ export function govcyMultipleThingsDeletePageHandler() {
             if (!mtConfig.listPage || !mtConfig.listPage.title) {
                 return handleMiddlewareError(`🚨 multipleThings.listPage.title is required for ${siteId}/${pageUrl}`, 404, next);
             }
-            if (!mtConfig.itemTitleTemplate || !mtConfig.min || !mtConfig.max) {
+            if (!mtConfig.itemTitleTemplate || !mtConfig.min === undefined || !mtConfig.min === null || !mtConfig.max) {
                 return handleMiddlewareError(`🚨 multipleThings.itemTitleTemplate, .min and .max are required for ${siteId}/${pageUrl}`, 404, next);
             }
 

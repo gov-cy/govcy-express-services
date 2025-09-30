@@ -110,14 +110,22 @@ describe("govcyReviewPageHandler", () => {
     it("2. should render error summary when submissionErrors exist", () => {
         // Add submissionErrors to session
         req.session.siteData["site123"].submissionErrors = {
-            errors: {
+        errors: {
+            "test-page": {
+                type: "normal",
                 "test-pagefullName": {
+                    id: "fullName",
                     pageUrl: "test-page",
-                    message: "Το όνομα είναι υποχρεωτικό"
+                    message: {
+                        el: "Το όνομα είναι υποχρεωτικό",
+                        en: "Name is required",
+                        tr: ""
+                    }
                 }
-            },
-            errorSummary: []
-        };
+            }
+        },
+        errorSummary: []
+    };
 
         const handler = govcyReviewPageHandler();
         handler(req, res, next);
@@ -134,7 +142,7 @@ describe("govcyReviewPageHandler", () => {
         const errorSummary = mainSection.elements.find(el => el.element === "errorSummary");
         expect(errorSummary.params).to.be.an("object");
         expect(errorSummary.params.errors).to.be.an("array");
-        expect(errorSummary.params.errors[0].text).to.include("Το όνομα είναι υποχρεωτικό");
+        expect(errorSummary.params.errors[0].text.el).to.include("Το όνομα είναι υποχρεωτικό");
         expect(errorSummary.params.errors[0].link).to.include("/site123/test-page?route=review");
     });
 

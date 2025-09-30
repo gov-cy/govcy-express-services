@@ -186,6 +186,16 @@ export const staticResources = {
             el: "Έχετε φτάσει το μέγιστο αριθμό καταχωρίσεων. Μπορείτε να προσθέσετε μόνο έως {{max}} καταχωρίσεις",
             tr: "You have reached the maximum number of entries. You can only add up to {{max}} entries"
         },
+        multipleThingsMinMessage: {
+            en: "You have not added the minimum number of entries. You must add at least {{min}} entries",
+            el: "Δεν έχετε προσθέσει τον ελάχιστο αριθμό καταχωρίσεων. Πρέπει να προσθέσετε τουλάχιστον {{min}} καταχωρίσεις",
+            tr: "You have not added the minimum number of entries. You must add at least {{min}} entries"
+        },
+        multipleThingsItemsValidationPrefix: {
+            en: "Entry {{index}} - ",
+            el: "Καταχώρηση {{index}} - ",
+            tr: "Entry {{index}} - "
+        },
         multipleThingsAddSuffix: {
             en: " (Add)",
             el: " (Προσθήκη)",
@@ -582,9 +592,10 @@ export function getEmailObject( subject, preHeader, header, username, body, foot
  * @param {string} entryKey The entry key. If not provided, it will be set to an empty string.
  * @param {string} route Whether it comes from the `review` route
  * @param {string} linkText The link text. If not provided, it will be set to an empty string.
+ * @param {number} count The current count of entries. If not provided, it will be set to null.
  * @returns {string} The link htmlElement govcy-frontend-renderer object
  */
-export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey = "", route = "", linkText = "") {
+export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey = "", route = "", linkText = "", count = null) {
     // Generate the action part of the URL based on the linkType
     let actionPart = "";
     let linkTextString = "";
@@ -620,9 +631,9 @@ export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey
         element: "htmlElement",
         params: {
             text: {
-                en: `<p><a href="${fullPath}">${linkTextString}</a></p>`,
-                el: `<p><a href="${fullPath}">${linkTextString}</a></p>`,
-                tr: `<p><a href="${fullPath}">${linkTextString}</a></p>`
+                en: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
+                el: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
+                tr: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`
             }
         }
     };

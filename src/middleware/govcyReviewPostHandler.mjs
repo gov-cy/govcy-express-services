@@ -1,13 +1,14 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
-import { validateFormElements  } from "../utils/govcyValidator.mjs"; // Import your validator
+import { validateFormElements } from "../utils/govcyValidator.mjs"; // Import your validator
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {prepareSubmissionData, prepareSubmissionDataAPI, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
+import { prepareSubmissionData, prepareSubmissionDataAPI, generateSubmitEmail } from "../utils/govcySubmitData.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { getEnvVariable, getEnvVariableBool } from "../utils/govcyEnvVariables.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { sendEmail } from "../utils/govcyNotification.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
+import { validateMultipleThings } from "../utils/govcyMultipleThingsValidation.mjs";
 
 /**
  * Middleware to handle review page form submission
@@ -17,7 +18,7 @@ export function govcyReviewPostHandler() {
     return async (req, res, next) => {
         try {
             const { siteId } = req.params;
-    
+
             // ✅ Load service and check if it exists
             const service = req.serviceData;
             let validationErrors = {};
@@ -26,7 +27,7 @@ export function govcyReviewPostHandler() {
             for (const page of service.pages) {
                 //get page url
                 const pageUrl = page.pageData.url;
-                
+
                 // ----- Conditional logic comes here
                 // ✅ Skip validation if page is conditionally excluded
                 const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
@@ -46,9 +47,32 @@ export function govcyReviewPostHandler() {
 
                 // Get stored form data for this page (or default to empty)
                 const formData = dataLayer.getPageData(req.session, siteId, pageUrl) || {};
-                
-                // Run validations
-                const errors = validateFormElements(formElement.params.elements, formData, pageUrl);
+
+                let errors = {};
+                // ----- MultipleThings hub handling -----
+                if (page.multipleThings) {
+                    // Use multiple things validator
+                    const items = Array.isArray(formData) ? formData : [];
+                    const mtErrors = validateMultipleThings(page, items, service.site.lang);
+
+                    if (Object.keys(mtErrors).length > 0) {
+                        errors[pageUrl] = {
+                            type: "multipleThings",   // ✅ mark it
+                            hub: { errors: mtErrors } // keep hub-style structure
+                        };
+                    }
+                } else { // ----- Normal form handling -----
+                    // Normal page validation
+                    const v = validateFormElements(formElement.params.elements, formData, pageUrl);
+                    if (Object.keys(v).length > 0) {
+                        errors[pageUrl] = {
+                            type: "normal",           // ✅ mark it
+                            ...v
+                        };
+                    }
+                    // // Run validations
+                    // errors = validateFormElements(formElement.params.elements, formData, pageUrl);
+                }
 
                 // Add errors to the validationErrors object
                 validationErrors = { ...validationErrors, ...errors };
@@ -68,7 +92,7 @@ export function govcyReviewPostHandler() {
                 const clientKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.clientKey || "", false);
                 const serviceId = getEnvVariable(service?.site?.submissionAPIEndpoint?.serviceId || "", false);
                 const dsfGtwApiKey = getEnvVariable(service?.site?.submissionAPIEndpoint?.dsfgtwApiKey || "", "");
-                const allowSelfSignedCerts = getEnvVariableBool("ALLOW_SELF_SIGNED_CERTIFICATES",false) ; // Default to false if not set
+                const allowSelfSignedCerts = getEnvVariableBool("ALLOW_SELF_SIGNED_CERTIFICATES", false); // Default to false if not set
                 if (!submissionUrl) {
                     return handleMiddlewareError("🚨 Submission API endpoint URL is missing", 500, next);
                 }
@@ -78,13 +102,13 @@ export function govcyReviewPostHandler() {
                 if (!serviceId) {
                     return handleMiddlewareError("🚨 Submission API serviceId is missing", 500, next);
                 }
-                
+
                 // Prepare submission data
                 const submissionData = prepareSubmissionData(req, siteId, service);
 
                 // Prepare submission data for API
                 const submissionDataAPI = prepareSubmissionDataAPI(submissionData);
-                
+
                 logger.debug("Prepared submission data for API:", submissionDataAPI);
 
                 // Call the API to submit the data
@@ -94,7 +118,7 @@ export function govcyReviewPostHandler() {
                     submissionDataAPI,                 // Pass the prepared submission data
                     true,                           // Use access token authentication
                     dataLayer.getUser(req.session), // Get the user from the session
-                    { 
+                    {
                         accept: "text/plain",       // Set Accept header to text/plain
                         "client-key": clientKey,    // Set the client key header
                         "service-id": serviceId,    // Set the service ID header
@@ -103,44 +127,44 @@ export function govcyReviewPostHandler() {
                     3,
                     allowSelfSignedCerts
                 );
-                
+
                 // Check if the response is successful
                 if (response.Succeeded) {
                     let referenceNo = response?.Data?.referenceValue || "";
                     // Add the reference number to the submission data
-                    submissionData.referenceNumber = referenceNo; 
+                    submissionData.referenceNumber = referenceNo;
                     logger.info("✅ Data submitted", siteId, referenceNo);
                     // handle data layer submission
                     dataLayer.storeSiteSubmissionData(
                         req.session,
-                        siteId, 
+                        siteId,
                         submissionData);
-                        
+
                     //-- Send email to user
                     // Generate the email body
                     let emailBody = generateSubmitEmail(service, submissionData.printFriendlyData, referenceNo, req);
                     logger.debug("Email generated:", emailBody);
                     // Send the email
-                    sendEmail(service.site.title[service.site.lang],emailBody,[dataLayer.getUser(req.session).email], "eMail").catch(err => {
+                    sendEmail(service.site.title[service.site.lang], emailBody, [dataLayer.getUser(req.session).email], "eMail").catch(err => {
                         logger.error("Email sending failed (async):", err);
                     });
                     // --- End of email sending
-                    
-                    logger.debug("🔄 Redirecting to success page:",  req);
+
+                    logger.debug("🔄 Redirecting to success page:", req);
                     // redirect to success
                     return res.redirect(govcyResources.constructPageUrl(siteId, `success`));
-                    
+
                     // logger.debug("The submission data prepared:", printFriendlyData);
                     // let reviewSummary = generateReviewSummary(printFriendlyData,req, siteId, false);
                     // res.send(emailBody);
-                    
+
                     // // Clear any existing submission errors from the session
                     // dataLayer.clearSiteSubmissionErrors(req.session, siteId);
                 } else {
                     // Handle submission failure
                     const errorCode = response.ErrorCode;
                     const errorPage = service.site?.submissionAPIEndpoint?.response?.errorResponse?.[errorCode]?.page;
-                    
+
                     if (errorPage) {
                         logger.info("🚨 Submission returned failed:", response.ErrorCode);
                         return res.redirect(errorPage);
@@ -148,7 +172,7 @@ export function govcyReviewPostHandler() {
                         return handleMiddlewareError("🚨 Unknown error code received from API.", 500, next);
                     }
                 }
-                
+
             }
 
             // Proceed to final submission if no errors
@@ -159,5 +183,5 @@ export function govcyReviewPostHandler() {
             return next(error);
         }
     };
-    
+
 }

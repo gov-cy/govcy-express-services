@@ -42,7 +42,7 @@ function multiplePageBuilder(req, res, next, initialData, actionUrl, mode, index
         logger.debug(`🚨 multipleThings.listPage.title is required for ${siteId}/${pageUrl}`, req);
         return handleMiddlewareError(`🚨 multipleThings.listPage.title is required for ${siteId}/${pageUrl}`, 404, next);
     }
-    if (!mtConfig.itemTitleTemplate || !mtConfig.min || !mtConfig.max) {
+    if (!mtConfig.itemTitleTemplate || !mtConfig.min === undefined || !mtConfig.min === null || !mtConfig.max) {
         logger.debug(`🚨 multipleThings.itemTitleTemplate, .min and .max are required for ${siteId}/${pageUrl}`, req);
         return handleMiddlewareError(`🚨 multipleThings.itemTitleTemplate, .min and .max are required for ${siteId}/${pageUrl}`, 404, next);
     }

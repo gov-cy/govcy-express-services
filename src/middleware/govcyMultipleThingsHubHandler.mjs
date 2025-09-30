@@ -4,6 +4,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import { buildMultipleThingsValidationSummary } from "../utils/govcyMultipleThingsValidation.mjs";
 import nunjucks from "nunjucks";
 
 /**
@@ -29,7 +30,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             return handleMiddlewareError(`🚨 multipleThings.listPage.title is required`, 500, next);
         }
         if (!mtConfig.itemTitleTemplate
-            || !mtConfig.min
+            || !mtConfig.min === undefined || !mtConfig.min === null
             || !mtConfig.max) {
             logger.debug("🚨 multipleThings.itemTitleTemplate, .min and .max are required", req);
             return handleMiddlewareError(`🚨 multipleThings.itemTitleTemplate, .min and .max are required`, 500, next);
@@ -61,8 +62,21 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             ]
         };
 
-         // ➕ Add CSRF token
+        // ➕ Add CSRF token
         hubTemplate.sections[0].elements[0].params.elements.push(govcyResources.csrfTokenInput(req.csrfToken()));
+
+        //--------- Handle Validation Errors ---------
+        // check if there are validation errors from the session (from POST handler)
+        const v = dataLayer.getPageValidationErrors(req.session, siteId, pageUrl, "hub");
+        const hubErrors = v?.hub?.errors;
+
+        if (hubErrors && Object.keys(hubErrors).length > 0) {
+            // Build validation error summary
+            let validationErrors = buildMultipleThingsValidationSummary( serviceCopy, hubErrors, siteId, pageUrl, req, req.query?.route || "");
+            // Add error summary to the top of the form
+            hubTemplate.sections[0].elements[0].params.elements.unshift(govcyResources.errorSummary(validationErrors));
+        }
+        //--------- End of Handle Validation Errors ---------
 
         // 1. Add topElements if provided
         if (Array.isArray(mtConfig.listPage.topElements)) {
@@ -75,7 +89,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             if (mtConfig?.listPage?.addButtonPlacement === "top" || mtConfig?.listPage?.addButtonPlacement === "both") {
                 hubTemplate.sections[0].elements[0].params.elements.push(
                     govcyResources.getMultipleThingsLink("add", siteId, pageUrl, serviceCopy.site.lang, "", (req.query?.route === "review" ? "review" : "")
-                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang])
+                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang], addLinkCounter)
                 );
                 addLinkCounter++;
             }
@@ -86,6 +100,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 element: "inset",
                 // if no emptyState provided use the static resource
                 params: {
+                    id: "multipleThingsList",
                     text: (
                         mtConfig?.listPage?.emptyState?.[serviceCopy.site.lang]
                             ? mtConfig.listPage.emptyState
@@ -103,13 +118,13 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 const safeItem = (item && typeof item === "object") ? item : {};
                 const env = new nunjucks.Environment(null, { autoescape: false });
                 let title;
-                try{
+                try {
                     title = env.renderString(mtConfig.itemTitleTemplate, safeItem);
                     // Fallback if Nunjucks returned empty or only whitespace
                     if (!title || !title.trim()) {
                         title = govcyResources.staticResources.text.untitled[serviceCopy.site.lang] || govcyResources.staticResources.text.untitled["el"];
                     }
-                }catch (err) {
+                } catch (err) {
                     // Log the error and fallback
                     logger.error(`Error rendering itemTitleTemplate for ${siteId}/${pageUrl}, index=${idx}: ${err.message}`, req);
                     title = govcyResources.staticResources.text.untitled[serviceCopy.site.lang] || govcyResources.staticResources.text.untitled["el"];
@@ -142,12 +157,12 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             hubTemplate.sections[0].elements[0].params.elements.push({
                 element: "multipleThingsTable",
                 params: {
-                    id: `${pageUrl}-table`,             // Unique ID for table
+                    id: `multipleThingsList`,
                     classes: "govcy-multiple-table",    // CSS hook
                     items: tableItems                   // The rows we just built
                 }
             });
-            
+
         }
 
         //If items are less than max show the add another button
@@ -156,7 +171,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
             if (mtConfig?.listPage?.addButtonPlacement === "bottom" || mtConfig?.listPage?.addButtonPlacement === "both" || addLinkCounter === 0) {
                 hubTemplate.sections[0].elements[0].params.elements.push(
                     govcyResources.getMultipleThingsLink("add", siteId, pageUrl, serviceCopy.site.lang, "", (req.query?.route === "review" ? "review" : "")
-                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang])
+                        , mtConfig?.listPage?.addButtonText?.[serviceCopy.site.lang], addLinkCounter)
                 );
             }
         } else {
@@ -172,7 +187,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 element: "warning",
                 // if no emptyState provided use the static resource
                 params: {
-                    text:  maxMsg
+                    text: maxMsg
                 }
             });
         }

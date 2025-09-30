@@ -149,9 +149,18 @@ describe("govcyReviewPostHandler", () => {
         const handler = govcyReviewPostHandler();
         await handler(req, res, next);
 
+        // 🔍 Check redirect
         expect(res.redirectedTo).to.include("errorSummary-title");
-        expect(req.session.siteData["site123"].submissionErrors.errors).to.have.property("test-pagefullName");
+
+        // 🔍 Check submissionErrors structure
+        const errors = req.session.siteData["site123"].submissionErrors.errors;
+        console.log("Stored validation errors:---------------------", errors);
+        expect(errors).to.have.property("test-page");
+        expect(errors["test-page"]).to.have.property("type", "normal");
+        expect(errors["test-page"]).to.have.property("test-pagefullName");
+
     });
+
 
     it("3. should return error if submission API returns unknown error code", async () => {
         // ✅ Fill required form field so validation passes
