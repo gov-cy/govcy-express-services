@@ -6550,7 +6550,7 @@
         "nextPage": "review"
       },
       "multipleThings": {
-        "min": 1,    
+        "min": 0,    
         "max": 5,   
         "dedupe": true, 
         "itemTitleTemplate": "{% if id_select == \"id\" %}ID - {{id_number | trim}} - {{id_country | trim}}{% elseif id_select == \"arc\" %}ARC - {{arc_number | trim}}{% elseif id_select == \"passport\" %}Passport - {{passport_number | trim}} - {{passport_country | trim}}{% endif %}",
