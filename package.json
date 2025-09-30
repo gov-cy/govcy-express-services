@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.2.0",
+  "version": "1.3.0-alpha",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
