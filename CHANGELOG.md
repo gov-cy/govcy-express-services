@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.3.0-alpha.0] - 2025-09-30
+### Added
+- validation for `valid`, `maxCurrentYear`: Maximum current year input
+- **Multiple Items feature**:
+  - **Routes added** to support multiple items in `index.mjs`:
+    - POST `/apis/:siteId/:pageUrl/multiple/add/upload`
+    - POST `/apis/:siteId/:pageUrl/multiple/edit/:index/upload`
+    - GET `/:siteId/:pageUrl/multiple/add/view-file/:elementName`
+    - GET `/:siteId/:pageUrl/multiple/add/delete-file/:elementName`
+    - GET `/:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName`
+    - POST `/:siteId/:pageUrl/multiple/add/delete-file/:elementName`
+    - POST `/:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName`
+    - GET `/:siteId/:pageUrl/multiple/edit/:index/view-file/:elementName`
+    - GET `/:siteId/:pageUrl/multiple/add`
+    - POST `/:siteId/:pageUrl/multiple/add`
+    - GET `/:siteId/:pageUrl/multiple/edit/:index`
+    - POST `/:siteId/:pageUrl/multiple/edit/:index`
+    - GET `/:siteId/:pageUrl/multiple/delete/:index`
+    - POST `/:siteId/:pageUrl/multiple/delete/:index`
+  - **Middlewares and utilities added** to support multiple items:
+    - `src/middleware/govcyMultipleThingsDeleteHandler.mjs`
+    - `src/middleware/govcyMultipleThingsHubHandler.mjs`
+    - `src/middleware/govcyMultipleThingsItemPage.mjs`
+    - `src/utils/govcyMultipleThingsValidation.mjs`
+  - **Middlewares changed** to support multiple items:
+    - `src/middleware/govcyFileDeleteHandler.mjs`
+    - `src/middleware/govcyFileUpload.mjs`
+    - `src/middleware/govcyFileViewHandler.mjs`
+    - `src/middleware/govcyFormsPostHandler.mjs`
+    - `src/middleware/govcyPageHandler.mjs`
+    - `src/middleware/govcyPageRender.mjs`
+    - `src/middleware/govcyReviewPageHandler.mjs`
+    - `src/middleware/govcyReviewPostHandler.mjs`
+  - **Utility changes** to support multiple items:
+    - `src/utils/govcyApiDetection.mjs`
+    - `src/utils/govcyDataLayer.mjs`
+    - `src/utils/govcyFormHandling.mjs`
+    - `src/utils/govcyHandleFiles.mjs`
+    - `src/utils/govcySubmitData.mjs`
+    - `src/utils/govcyValidator.mjs`
+  - **Client side js changes** to support multiple items:
+    - `src/public/js/govcyFiles.js`
+  - **Other changes** to support multiple items:
+    - `src/resources/govcyResources.mjs`
+
+### Changed
+- `govcy-frontend-renderer` updated to v1.25.0
+- Updated `validations` to skip validations empty values, except for `required`
+
 ## [v1.2.0] - 2025-09-19
 ### Added
 - `site.reviewPageHeader` , `site.successPageHeader` and `site.successEmailHeader` to be used for the `review` and `success` pages and `email`. 
