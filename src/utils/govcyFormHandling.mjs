@@ -104,7 +104,13 @@ export function populateFormData(
 
                 // 2) If not found, fall back to dataLayer (normal page behaviour)
                 if (!fileData) {
-                    fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
+                    if (mode === "edit" && index !== null) {
+                        // In edit mode, try to get the file for the specific item index
+                        fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName, index);
+                    } else {
+                        // In single or add mode, get the file normally
+                        fileData = dataLayer.getFormDataValue(store, siteId, pageUrl, fieldName);
+                    }
                 }
 
                 if (fileData) {
