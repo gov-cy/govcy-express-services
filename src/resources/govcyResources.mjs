@@ -220,6 +220,16 @@ export const staticResources = {
             en: "Entries",
             el: "Καταχωρήσεις",
             tr: "Entries"
+        },
+        multipleThingsDeleteYesOption: {
+            el:"Ναι, θέλω να διαγράψω την καταχώρηση",
+            en:"Yes, I want to delete this entry",
+            tr:"Yes, I want to delete this entry"
+        },
+        multipleThingsDeleteNoOption: {
+            el:"Όχι, δεν θέλω να διαγράψω την καταχώρηση",
+            en:"No, I don't want to delete this entry",
+            tr:"No, I don't want to delete this entry"
         }
     },
     //remderer sections

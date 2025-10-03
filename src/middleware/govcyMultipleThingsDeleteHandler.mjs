@@ -81,8 +81,8 @@ export function govcyMultipleThingsDeletePageHandler() {
                     isPageHeading: true,
                     classes: "govcy-mb-6",
                     items: [
-                        { value: "yes", text: govcyResources.staticResources.text.deleteYesOption },
-                        { value: "no", text: govcyResources.staticResources.text.deleteNoOption }
+                        { value: "yes", text: govcyResources.staticResources.text.multipleThingsDeleteYesOption },
+                        { value: "no", text: govcyResources.staticResources.text.multipleThingsDeleteNoOption }
                     ]
                 }
             };
