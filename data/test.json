@@ -5866,8 +5866,8 @@
             "el": "Δεν έχετε προσθέσει ακόμη ακαδημαϊκά προσόντα."
           },
           "addButtonText": {
-            "en": "➕ Add academic details",
-            "el": "➕ Προσθήκη ακαδημαϊκό προσόν"
+            "en": "Add academic details",
+            "el": "Προσθήκη ακαδημαϊκό προσόν"
           },
           "addButtonPlacement": "both", 
           "continueButtonText": {    

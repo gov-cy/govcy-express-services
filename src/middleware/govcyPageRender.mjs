@@ -24,6 +24,8 @@ export function renderGovcyPage() {
         if (dataLayer.getUser(req.session)) {
             processedPage.pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
         }
+        // Add custom CSS path
+        processedPage.pageData.site.customCSSFile = `/css/govcyExpress.css`;
         const html = renderer.renderFromJSON(processedPage.pageTemplate, processedPage.pageData);
         res.send(html);
     };

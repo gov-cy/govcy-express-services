@@ -63,6 +63,8 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     if (dataLayer.getUser(req.session)) {
         pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
     }
+    // Add custom CSS path
+    pageData.site.customCSSFile = `/css/govcyExpress.css`;
     const html = renderer.renderFromJSON(pageTemplate, pageData);
     res.send(html);
 }

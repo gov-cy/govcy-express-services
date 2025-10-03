@@ -172,9 +172,9 @@ export const staticResources = {
             tr: "You did not add any entries yet."
         },
         multipleThingsAddEntry: {
-            en: "➕ Add new entry",
-            el: "➕ Προσθήκη νέας καταχώρησης",
-            tr: "➕ Add new entry"
+            en: "Add new entry",
+            el: "Προσθήκη νέας καταχώρησης",
+            tr: "Add new entry"
         },
         multipleThingsDedupeMessage: {
             en: "This entry already exists",
@@ -631,9 +631,9 @@ export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey
         element: "htmlElement",
         params: {
             text: {
-                en: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
-                el: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
-                tr: `<p><a${(count !== null && linkType === "add" ? ` id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`
+                en: `<p><a${(count !== null && linkType === "add" ? ` class="govcy-add-new-item" id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
+                el: `<p><a${(count !== null && linkType === "add" ? ` class="govcy-add-new-item" id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`,
+                tr: `<p><a${(count !== null && linkType === "add" ? ` class="govcy-add-new-item" id="addNewItem${count}"` : "")} href="${fullPath}">${linkTextString}</a></p>`
             }
         }
     };

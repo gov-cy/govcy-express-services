@@ -835,10 +835,10 @@
             "el": "Δεν έχετε προσθέσει ακόμη προσόντα."
           },
           "addButtonText": {
-            "en": "➕ Add qualifications",
-            "el": "➕ Προσθήκη προσόντος"
+            "en": "Add qualifications",
+            "el": "Προσθήκη προσόντος"
           },
-          "addButtonPlacement": "top", 
+          "addButtonPlacement": "both", 
           "continueButtonText": {    
             "en": "Save and continue",
             "el": "Αποθήκευση και συνέχεια"
@@ -1116,8 +1116,8 @@
             "el": "Δεν έχετε προσθέσει ακόμη κάποιο σύνδεσμο, ινστιτούτο ή επιμελητήριο."
           },
           "addButtonText": {
-            "en": "➕ ...",
-            "el": "➕ Προσθήκη συνδέσμου"
+            "en": "...",
+            "el": "Προσθήκη συνδέσμου"
           },
           "addButtonPlacement": "top", 
           "continueButtonText": {    
