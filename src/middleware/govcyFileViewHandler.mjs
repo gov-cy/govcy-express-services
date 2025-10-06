@@ -62,6 +62,11 @@ export function govcyFileViewHandler() {
             //     return handleMiddlewareError(`Page condition evaluated to true on POST — skipping form save and redirecting`, 404, next);
             // }
 
+
+            // If mode is `single` make sure it has no multipleThings
+            if (mode === "single" && page?.multipleThings) {
+                return handleMiddlewareError(`Single mode file view not allowed on multipleThings pages`, 404, next)
+            }
             // Validate the field: Only allow delete if the page contains a fileInput with the given name
             const fileInputElement = pageContainsFileInput(pageTemplateCopy, elementName);
             if (!fileInputElement) {

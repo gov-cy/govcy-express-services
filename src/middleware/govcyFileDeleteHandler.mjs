@@ -132,6 +132,10 @@ export function govcyFileDeletePageHandler() {
             } else {
                 // normal page
                 actionPath = `${pageUrl}/delete-file/${elementName}`;
+                // if normal page but has multipleThings, block it
+                if (page?.multipleThings) {
+                    return handleMiddlewareError(`Single mode delete file not allowed on multipleThings pages`, 404, next)
+                }
             }
             // Construct submit button
             const formElement = {
@@ -243,6 +247,10 @@ export function govcyFileDeletePostHandler() {
             } else {
                 // normal page
                 actionPath = `${pageUrl}`;
+                // if normal page but has multipleThings, block it
+                if (page?.multipleThings) {
+                    return handleMiddlewareError(`Single mode delete file not allowed on multipleThings pages`, 404, next)
+                }
             }
 
             // the page base return url

@@ -100,6 +100,16 @@ export async function handleFileUpload({
 
     // deep copy the page template to avoid modifying the original
     const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
+    
+    // If mode is `single` make sure it has no multipleThings
+    if (mode === "single" && page?.multipleThings) {
+      return {
+        status: 400,
+        dataStatus: 413,
+        errorMessage: 'Single mode upload not allowed on multipleThings pages'
+      };
+    }
+    
     // Validate the field: Only allow upload if the page contains a fileInput with the given name
     const isAllowed = pageContainsFileInput(pageTemplateCopy, elementName);
     if (!isAllowed) {
