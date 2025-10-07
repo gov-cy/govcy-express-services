@@ -601,5 +601,263 @@ describe('getFormData', () => {
         });
     });
 
+    // -------------------------------------------------------------------------
+    // Additional tests for getFormData in multiple-items (edit) scenarios
+    // -------------------------------------------------------------------------
+    it('18. should fetch indexed file data correctly in edit mode', () => {
+        const elements = [
+            { element: 'fileInput', params: { name: 'proof', id: 'proof' } }
+        ];
+
+        // Simulate a store where multiple entries are saved under a repeating structure
+        const store = {
+            siteData: {
+                site1: {
+                    inputData: {
+                        'page-1': {
+                            formData: [
+                                // Simulate multiple entries as an array
+                                   {proof: { fileId: 'fileA', sha256: 'shaA' }},
+                                   {proof: { fileId: 'fileB', sha256: 'shaB' }},
+                                   {proof: { fileId: 'fileC', sha256: 'shaC' }}
+                            ]
+                        }
+                    }
+                }
+            }
+        };
+
+        // Test fetching the file for index 1 (second item)
+        const result = getFormData(elements, {}, store, 'site1', 'page-1', 1);
+
+        expect(result).to.deep.equal({
+            proof: { fileId: 'fileB', sha256: 'shaB' },
+        });
+
+    });
+
+    it('19. should return empty string if indexed file data missing', () => {
+        const elements = [
+            { element: 'fileInput', params: { name: 'uploadDoc' } }
+        ];
+
+        const store = {
+            siteData: {
+                site1: {
+                    inputData: {
+                        'page-1': {
+                            formData: {
+                                uploadDoc: [] // No entries in array
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Try to get index 0 (nothing there)
+        const result = getFormData(elements, {}, store, 'site1', 'page-1', 0);
+
+        expect(result).to.deep.equal({
+            uploadDoc: ''
+        });
+    });
+
+    it('20. should not break when store or site data is missing entirely', () => {
+        const elements = [
+            { element: 'fileInput', params: { name: 'uploadDoc' } }
+        ];
+
+        // Completely missing store data
+        const store = {};
+
+        const result = getFormData(elements, {}, store, 'nosite', 'nopage', 0);
+
+        expect(result).to.deep.equal({
+            uploadDoc: ''
+        });
+    });
+
+
+});
+
+// -----------------------------------------------------------------------------
+// New tests for multiple items mode (add/edit) support — using theData directly
+// -----------------------------------------------------------------------------
+describe('govcyFormHandling - multiple items mode', () => {
+
+    it('1. should populate fileInput correctly in "add" mode with proper URLs', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    id: 'uploadDoc',
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' }
+                }
+            }
+        ];
+
+        // Simulate direct data object provided to populateFormData
+        const theData = {
+            uploadDoc: { fileId: 'abc123', sha256: 'def456' }
+        };
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+        const store = {}; // not used in this case
+
+        populateFormData(formElements, theData, validationErrors, store, 'site1', 'page-1', 'en', null, '', 'add');
+
+        const el = formElements[0];
+        expect(el.element).to.equal('fileView');
+        expect(el.params.fileId).to.equal('abc123');
+        expect(el.params.sha256).to.equal('def456');
+        expect(el.params.viewHref).to.equal('/site1/page-1/multiple/add/view-file/uploadDoc');
+        expect(el.params.deleteHref).to.equal('/site1/page-1/multiple/add/delete-file/uploadDoc');
+    });
+
+    it('2. should populate fileInput correctly in "edit" mode with index and proper URLs', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    id: 'uploadDoc',
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' }
+                }
+            }
+        ];
+
+        // Simulate theData that represents the selected item being edited
+        const theData = {
+            uploadDoc: { fileId: 'xyz999', sha256: 'hash123' }
+        };
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+        const store = {}; // not needed since we provide theData directly
+
+        populateFormData(formElements, theData, validationErrors, store, 'site1', 'page-1', 'en', null, '', 'edit', 2);
+
+        const el = formElements[0];
+        expect(el.element).to.equal('fileView');
+        expect(el.params.fileId).to.equal('xyz999');
+        expect(el.params.viewHref).to.equal('/site1/page-1/multiple/edit/2/view-file/uploadDoc');
+        expect(el.params.deleteHref).to.equal('/site1/page-1/multiple/edit/2/delete-file/uploadDoc');
+    });
+
+    it('3. should leave fileInput unchanged in "edit" mode when file data missing in theData', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    id: 'uploadDoc',
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' }
+                }
+            }
+        ];
+
+        // Simulate missing file data
+        const theData = {};
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+        const store = {};
+
+        populateFormData(formElements, theData, validationErrors, store, 'site1', 'page-1', 'en', null, '', 'edit', 1);
+
+        const el = formElements[0];
+        expect(el.element).to.equal('fileInput');
+        expect(el.params.value).to.equal('');
+    });
+
+    it('4. should include routeParam in deleteHref when provided', () => {
+        const formElements = [
+            {
+                element: 'fileInput',
+                params: {
+                    id: 'uploadDoc',
+                    name: 'uploadDoc',
+                    label: { el: 'Αποστολή', en: 'Upload' }
+                }
+            }
+        ];
+
+        const theData = {
+            uploadDoc: { fileId: 'file555', sha256: 'sha555' }
+        };
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+        const store = {};
+
+        populateFormData(formElements, theData, validationErrors, store, 'mysite', 'mypage', 'el', null, 'review', 'edit', 1);
+
+        const el = formElements[0];
+        expect(el.params.deleteHref).to.equal('/mysite/mypage/multiple/edit/1/delete-file/uploadDoc?route=review');
+    });
+
+});
+
+
+// -----------------------------------------------------------------------------
+// Tests for _global validation errors in populateFormData
+// -----------------------------------------------------------------------------
+describe('populateFormData - _global validation errors', () => {
+
+    it('1. should append a _global error to the error summary with default link', () => {
+        const formElements = [
+            {
+                element: 'textInput',
+                params: { id: 'firstName', name: 'firstName' }
+            },
+            {
+                element: 'textInput',
+                params: { id: 'lastName', name: 'lastName' }
+            }
+        ];
+
+        // Simulate _global error
+        const validationErrors = {
+            errors: {
+                _global: { message: 'You must complete all items' }
+            },
+            errorSummary: []
+        };
+
+        populateFormData(formElements, {}, validationErrors);
+
+        // Expect the errorSummary to include the message
+        expect(validationErrors.errorSummary).to.have.lengthOf(1);
+        expect(validationErrors.errorSummary[0].text).to.equal('You must complete all items');
+        // Default link should point to the first field’s id
+        expect(validationErrors.errorSummary[0].link).to.equal('#firstName');
+    });
+
+    it('2. should use provided pageUrl as the link target when available', () => {
+        const formElements = [
+            {
+                element: 'textInput',
+                params: { id: 'field1', name: 'field1' }
+            }
+        ];
+
+        // Simulate _global error with pageUrl (e.g. redirect to hub)
+        const validationErrors = {
+            errors: {
+                _global: {
+                    message: 'You cannot add more items',
+                    pageUrl: '/mysite/hub-page'
+                }
+            },
+            errorSummary: []
+        };
+
+        populateFormData(formElements, {}, validationErrors);
+
+        expect(validationErrors.errorSummary).to.have.lengthOf(1);
+        const summaryItem = validationErrors.errorSummary[0];
+        expect(summaryItem.text).to.equal('You cannot add more items');
+        expect(summaryItem.link).to.equal('/mysite/hub-page');
+    });
+
 
 });

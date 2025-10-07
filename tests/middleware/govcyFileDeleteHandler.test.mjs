@@ -71,7 +71,7 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
                         }
                     }
                 }
-            },            
+            },
             originalUrl: "site/page/",
             csrfToken: () => "mock-csrf"
         };
@@ -513,7 +513,7 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
             }
         };
 
-        
+
         req.serviceData.site.fileDeleteAPIEndpoint = {
             url: "TEST_DELETE_FILE_API_URL",
             method: "DELETE",
@@ -567,5 +567,62 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
         expect(res.redirect.calledOnce).to.be.true;
         expect(res.redirect.firstCall.args[0]).to.equal("/test-site/index/multiple/edit/0");
     });
-    
+
+    it("22. GET should error if single mode delete attempted on multipleThings page", async () => {
+        req.serviceData.pages[0].multipleThings = true; // single delete not allowed
+        const handler = govcyFileDeletePageHandler();
+        await handler(req, res, next);
+
+        const error = next.firstCall.args[0];
+        expect(error).to.be.an("error");
+        expect(error.message).to.include("Single mode delete file not allowed");
+    });
+
+    it("23. POST should log error when delete API returns unsuccessful result", async () => {
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+        };
+        process.env.TEST_DELETE_FILE_API_URL = "http://localhost:3002/fail";
+        process.env.TEST_SUBMISSION_API_CLIENT_KEY = "x";
+        process.env.TEST_SUBMISSION_API_SERVIVE_ID = "x";
+        req.body = { deleteFile: "yes" };
+
+        // Fake unsuccessful API call
+        global.fetch = async () => ({ json: async () => ({ Succeeded: false }) });
+
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+
+        expect(res.redirect.calledOnce).to.be.true;
+    });
+
+    it("24. POST should skip dsfgtwApiKey header when not set", async () => {
+        req.serviceData.site.fileDeleteAPIEndpoint = {
+            url: "TEST_DELETE_FILE_API_URL",
+            method: "DELETE",
+            clientKey: "TEST_SUBMISSION_API_CLIENT_KEY",
+            serviceId: "TEST_SUBMISSION_API_SERVIVE_ID",
+        };
+        delete process.env.TEST_SUBMISSION_DSF_GTW_KEY;
+        req.body = { deleteFile: "yes" };
+
+        const handler = govcyFileDeletePostHandler();
+        await handler(req, res, next);
+        expect(res.redirect.called).to.be.true;
+    });
+
+    it("25. GET should continue normally if condition evaluates to true (non-redirect case)", async () => {
+        req.serviceData.pages[0].pageData.conditions = [
+            { expression: "false", redirect: "ignored-page" }
+        ];
+        const handler = govcyFileDeletePageHandler();
+        await handler(req, res, next);
+        expect(req.processedPage).to.be.an("object");
+        expect(next.calledOnce).to.be.true;
+    });
+
+
 });

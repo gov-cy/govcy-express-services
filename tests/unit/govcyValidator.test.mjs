@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { validateFormElements } from '../../src/utils/govcyValidator.mjs';
+import * as govcyResources from '../../src/resources/govcyResources.mjs';
 
 describe('govcyValidator', () => {
     // define a conditional radio element for testing
@@ -1546,6 +1547,77 @@ describe('govcyValidator', () => {
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
     });
+
+    it('40. should normalize European-style numbers correctly', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'amount', id: 'amount' },
+                validations: [
+                    { check: 'minValue', params: { checkValue: 1000, message: 'Below minimum' } },
+                ],
+            },
+        ];
+        const formData = { amount: '1.234,56' }; // → 1234.56
+        const result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({});
+    });
+
+    it('41. should reject impossible dates like 31/02/2024', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'dateField', id: 'dateField' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'dateDMY', message: 'Invalid date' } },
+                ],
+            },
+        ];
+        const formData = { dateField: '31/02/2024' };
+        const result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Invalid date', pageUrl: 'page1' },
+        });
+    });
+
+    it('42. should fail IBAN validation when checksum is invalid', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'ibanField', id: 'ibanField' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'iban', message: 'Invalid IBAN' } },
+                ],
+            },
+        ];
+        const formData = { ibanField: 'CY17002001280000001200527601' }; // Fails checksum
+        const result = validateFormElements(elements, formData, 'page1');
+        expect(result).to.deep.equal({
+            page1ibanField: { id: 'ibanField', message: 'Invalid IBAN', pageUrl: 'page1' },
+        });
+    });
+
+    it('43. should return valueNotOnList error for radios with invalid value', () => {
+        const elements = [
+            {
+                element: 'radios',
+                params: {
+                    name: 'colorChoice',
+                    id: 'colorChoice',
+                    items: [
+                        { value: 'red' },
+                        { value: 'blue' },
+                    ],
+                },
+            },
+        ];
+        const formData = { colorChoice: 'green' }; // not in items
+        const result = validateFormElements(elements, formData, 'page1');
+        expect(Object.values(result)[0].message).to.equal(
+            govcyResources.staticResources.text.valueNotOnList
+        );
+    });
+
 
     //TODO: test more validation rules
 });

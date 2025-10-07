@@ -239,5 +239,57 @@ describe("govcyReviewPostHandler", () => {
         expect(submission.printFriendlyData).to.be.an("array");
     });
 
+    it("6. should handle multipleThings hub validation errors correctly", async () => {
+        // ✅ Service setup with multipleThings page
+        req.serviceData.pages = [
+            {
+                pageData: { url: "academic-details", title: { en: "Academic Details" } },
+                multipleThings: {
+                    itemTitleTemplate: "{{ qualification }}",
+                    min: 1, // require at least one
+                    max: 5,
+                    listPage: { title: { en: "Your qualifications" } }
+                },
+                pageTemplate: {
+                    sections: [
+                        {
+                            name: "main",
+                            elements: [
+                                {
+                                    element: "form",
+                                    params: { elements: [] }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // ✅ Session: empty array (violates min requirement)
+        req.session.siteData["site123"].inputData["academic-details"] = { formData: [] };
+
+        // ✅ Env vars — ensure submission path is reachable but we trigger validation before it
+        process.env.MOCK_URL = "http://localhost:3002/success";
+        process.env.CLIENT_KEY = "CLIENT_KEY";
+        process.env.SERVICE_ID = "SERVICE_ID";
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ It should redirect to the review error summary
+        expect(res.redirectedTo).to.include("errorSummary");
+
+        // ✅ It should have stored validation errors in session
+        const siteErrors = req.session.siteData["site123"].validationErrors || req.session.siteData["site123"].submissionErrors;
+        expect(siteErrors).to.be.an("object");
+
+        // ✅ The structure should match multipleThings type
+        const pageErrors = siteErrors.errors || siteErrors;
+        expect(pageErrors["academic-details"].type).to.equal("multipleThings");
+        expect(pageErrors["academic-details"]).to.have.property("hub");
+    });
+
+
 
 });

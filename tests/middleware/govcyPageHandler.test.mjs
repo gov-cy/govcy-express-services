@@ -264,6 +264,82 @@ describe("govcyPageHandler", () => {
         expect(hasForm).to.be.true;
     });
 
+    // -----------------------------------------------------------------------------
+    // MultipleThings hub integration test (data-driven, no stubbing)
+    // -----------------------------------------------------------------------------
+    it('7. should build a multipleThings hub page when page.multipleThings is defined', async () => {
+        // Simulate route parameters
+        req.params.pageUrl = 'academic-details';
+        req.params.siteId = 'test-site';
+
+        // Build service data with multipleThings configuration
+        req.serviceData.pages = [
+            {
+                pageData: { url: 'academic-details', title: { en: 'Academic Details' } },
+                multipleThings: {
+                    itemTitleTemplate: '{{ qualification }} – {{ institution }}',
+                    min: 0,
+                    max: 3,
+                    listPage: {
+                        title: { en: 'Your qualifications' },
+                        addButtonPlacement: 'bottom',
+                        addButtonText: { en: 'Add another qualification' },
+                        continueButtonText: { en: 'Continue' },
+                        hasBackLink: true
+                    }
+                },
+                pageTemplate: {
+                    sections: [
+                        {
+                            name: 'main',
+                            elements: [
+                                {
+                                    element: 'form',
+                                    params: {
+                                        elements: [
+                                            { element: 'textInput', params: { id: 'qualification', name: 'qualification' } },
+                                            { element: 'textInput', params: { id: 'institution', name: 'institution' } }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // Emulate items already added by the user
+        req.session.siteData['test-site'].inputData['academic-details'] = {
+            formData: [
+                { qualification: 'BSc Computer Science', institution: 'UCY' },
+                { qualification: 'MSc AI', institution: 'UCL' }
+            ]
+        };
+
+
+        const handler = govcyPageHandler();
+        await handler(req, res, next);
+
+        // ✅ The hub handler should have populated req.processedPage
+        expect(req.processedPage).to.be.an('object');
+        expect(req.processedPage.pageTemplate).to.have.property('sections');
+        expect(req.processedPage.pageTemplate.sections).to.be.an('array').that.is.not.empty;
+
+        // ✅ The hub should contain a multipleThingsTable and a Continue button
+        const hubElements = JSON.stringify(req.processedPage.pageTemplate.sections);
+        expect(hubElements).to.include('multipleThingsTable');
+        expect(hubElements).to.include('Continue');
+        expect(hubElements).to.include('Add another qualification');
+
+        // ✅ The hub should include a beforeMain section with a backLink
+        const beforeMain = req.processedPage.pageTemplate.sections.find(s => s.name === 'beforeMain');
+        expect(beforeMain).to.be.an('object');
+        expect(beforeMain.elements[0].element).to.equal('backLink');
+
+        // ✅ The middleware should call next() (since hub handler ends with next())
+        expect(next.calledOnce).to.be.true;
+    });
 
 
 });

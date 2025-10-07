@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { govcyFileViewHandler } from "../../src/middleware/govcyFileViewHandler.mjs";
+import * as dataLayer from "../../src/utils/govcyDataLayer.mjs";
 
 describe("govcyFileViewHandler", () => {
     let req, res, next;
@@ -302,6 +303,80 @@ describe("govcyFileViewHandler", () => {
         expect(error).to.be.an("error");
         expect(error.message).to.include("magic byte mismatch");
     });
+
+    it("10. should handle multipleThingsDraft mode correctly", async () => {
+        req.originalUrl = "/apis/test-site/index/multiple/add/view-file/upload";
+
+        req.serviceData.site.fileDownloadAPIEndpoint = {
+            url: "TEST_URL",
+            clientKey: "TEST_CLIENT_KEY",
+            serviceId: "TEST_SERVICE_ID",
+        };
+        process.env.TEST_URL = "http://localhost:3002/fileDownload";
+        process.env.TEST_CLIENT_KEY = "mock-client-key";
+        process.env.TEST_SERVICE_ID = "mock-service-id";
+
+        // ✅ Use the API to set the draft for pageUrl "index"
+        dataLayer.setMultipleDraft(
+            req.session,
+            "test-site",
+            "index",
+            { upload: { sha256: "abc123", fileId: "file-xyz" } } // use the known-good pair
+        );
+
+        const handler = govcyFileViewHandler();
+        await handler(req, res, next);
+
+        expect(res.send.calledOnce).to.be.true;
+    });
+
+
+    it("11. should handle multipleThingsEdit mode correctly", async () => {
+        req.originalUrl = "/apis/test-site/index/multiple/edit/0/view-file/upload";
+        req.params.index = "0";
+
+        req.serviceData.site.fileDownloadAPIEndpoint = {
+            url: "TEST_URL",
+            clientKey: "TEST_CLIENT_KEY",
+            serviceId: "TEST_SERVICE_ID",
+        };
+        process.env.TEST_URL = "http://localhost:3002/fileDownload";
+        process.env.TEST_CLIENT_KEY = "mock-client-key";
+        process.env.TEST_SERVICE_ID = "mock-service-id";
+
+        // items[index][elementName]
+        req.session.siteData["test-site"].inputData.index = {
+            formData: [{ upload: { sha256: "abc123", fileId: "file-xyz" } }]
+        };
+
+        const handler = govcyFileViewHandler();
+        await handler(req, res, next);
+
+        expect(res.send.calledOnce).to.be.true;
+    });
+
+
+
+    it("12. should reject single mode file view on multipleThings page", async () => {
+        req.serviceData.pages[0].multipleThings = true;
+        req.serviceData.site.fileDownloadAPIEndpoint = {
+            url: "TEST_URL",
+            clientKey: "TEST_CLIENT_KEY",
+            serviceId: "TEST_SERVICE_ID",
+        };
+
+        process.env.TEST_URL = "http://localhost:3002/fileDownload";
+        process.env.TEST_CLIENT_KEY = "mock-key";
+        process.env.TEST_SERVICE_ID = "mock-service";
+
+        const handler = govcyFileViewHandler();
+        await handler(req, res, next);
+
+        const error = next.firstCall.args[0];
+        expect(error.message).to.include("Single mode file view not allowed");
+    });
+
+
 
 
 });

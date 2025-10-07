@@ -408,4 +408,82 @@ describe("govcyFormsPostHandler", () => {
     });
 
 
+// -----------------------------------------------------------------------------
+// Additional tests for multipleThings hub handling (no function reassignment)
+// -----------------------------------------------------------------------------
+describe('govcyFormsPostHandler - multipleThings handling (emulated data)', () => {
+
+  beforeEach(() => {
+    req.serviceData.pages[0].multipleThings = { min: 1, max: 3 };
+    req.serviceData.pages[0].pageData.nextPage = 'next-page';
+    req.query = {};
+    res.redirectCalled = null;
+    res.redirect = (url) => { res.redirectCalled = url; };
+  });
+
+it('8. should redirect with error summary when multipleThings validation fails', async () => {
+
+  req.session.siteData['test-site'] = {
+    inputData: {
+      'test-page': { formData: []}
+    }
+  };
+  
+
+  res.redirectCalled = null;
+  res.redirect = (url) => { res.redirectCalled = url; };
+
+  const handler = govcyFormsPostHandler();
+  await handler(req, res, next);
+
+  console.log('Redirect URL: -------------', res.redirectCalled); // Debug log
+
+  expect(res.redirectCalled).to.include('errorSummary');
+});
+
+
+  it('9. should redirect to next page when multipleThings validation passes', async () => {
+    // ✅ valid number of items (within min/max)
+    req.session.siteData['test-site'].inputData['test-page'].formData = [
+      { fieldA: 'One' },
+      { fieldA: 'Two' }
+    ];
+
+    const handler = govcyFormsPostHandler();
+    await handler(req, res, next);
+
+    expect(res.redirectCalled).to.include('next-page');
+  });
+
+  it('10. should redirect to /review when multipleThings passes and route=review', async () => {
+    req.query.route = 'review';
+    // ✅ valid list for review route
+    req.session.siteData['test-site'].inputData['test-page'].formData = [
+      { fieldA: 'Item A' }
+    ];
+
+    const handler = govcyFormsPostHandler();
+    await handler(req, res, next);
+
+    expect(res.redirectCalled).to.include('/test-site/review');
+  });
+
+  it('11. should still redirect with errorSummary when exceeding maxItems', async () => {
+    // ❌ too many items (above maxItems)
+    req.session.siteData['test-site'].inputData['test-page'].formData = [
+      { fieldA: 'A' },
+      { fieldA: 'B' },
+      { fieldA: 'C' },
+      { fieldA: 'D' }
+    ];
+
+    const handler = govcyFormsPostHandler();
+    await handler(req, res, next);
+
+    expect(res.redirectCalled).to.include('errorSummary');
+  });
+
+});
+
+
 });
