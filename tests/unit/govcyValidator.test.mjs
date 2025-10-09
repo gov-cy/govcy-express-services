@@ -1618,6 +1618,193 @@ describe('govcyValidator', () => {
         );
     });
 
+    //------------- minCurrentYear validation ---------------------
+    it('44. should validate `minCurrentYear` correctly', () => {
+        const currentYear = new Date().getFullYear();
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'yearField', id: 'yearField' },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'minCurrentYear',
+                            message: 'Year must not be before the current year'
+                        }
+                    }
+                ],
+            },
+        ];
+
+        const formData = { yearField: String(currentYear) };
+
+        // ✅ current year passes
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ✅ future year passes
+        formData.yearField = String(currentYear + 1);
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ❌ past year fails
+        formData.yearField = String(currentYear - 1);
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1yearField: {
+                id: 'yearField',
+                message: 'Year must not be before the current year',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ❌ non-numeric fails
+        formData.yearField = 'abcd';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1yearField: {
+                id: 'yearField',
+                message: 'Year must not be before the current year',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ✅ empty value passes (not required)
+        formData.yearField = '';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- maxCurrentDate validation ---------------------
+    it('45. should validate `maxCurrentDate` correctly', () => {
+        const today = new Date();
+        const todayISO = today.toISOString().split('T')[0];
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'dateField', id: 'dateField' },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'maxCurrentDate',
+                            message: 'Date cannot be in the future'
+                        }
+                    }
+                ],
+            },
+        ];
+
+        const formData = { dateField: todayISO };
+
+        // ✅ today passes
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ✅ past date passes
+        formData.dateField = yesterday.toISOString().split('T')[0];
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ❌ future date fails
+        formData.dateField = tomorrow.toISOString().split('T')[0];
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1dateField: {
+                id: 'dateField',
+                message: 'Date cannot be in the future',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ❌ invalid format fails
+        formData.dateField = 'not-a-date';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1dateField: {
+                id: 'dateField',
+                message: 'Date cannot be in the future',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ✅ empty passes
+        formData.dateField = '';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- minCurrentDate validation ---------------------
+    it('46. should validate `minCurrentDate` correctly', () => {
+        const today = new Date();
+        const todayISO = today.toISOString().split('T')[0];
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'dateField', id: 'dateField' },
+                validations: [
+                    {
+                        check: 'valid',
+                        params: {
+                            checkValue: 'minCurrentDate',
+                            message: 'Date cannot be in the past'
+                        }
+                    }
+                ],
+            },
+        ];
+
+        const formData = { dateField: todayISO };
+
+        // ✅ today passes
+        let validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ✅ future passes
+        formData.dateField = tomorrow.toISOString().split('T')[0];
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+
+        // ❌ past fails
+        formData.dateField = yesterday.toISOString().split('T')[0];
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1dateField: {
+                id: 'dateField',
+                message: 'Date cannot be in the past',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ❌ invalid format fails
+        formData.dateField = 'not-a-date';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1dateField: {
+                id: 'dateField',
+                message: 'Date cannot be in the past',
+                pageUrl: 'page1',
+            },
+        });
+
+        // ✅ empty passes
+        formData.dateField = '';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
 
     //TODO: test more validation rules
 });

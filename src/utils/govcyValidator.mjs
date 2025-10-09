@@ -96,13 +96,39 @@ function validateValue(value, rules) {
       }
       return normalizedVal <= max;
     },
-    // ✅ New rule: maxCurrentYear
+    // ✅ Year based current rules
     maxCurrentYear: (val) => {
       const normalizedVal = normalizeNumber(val);
       if (isNaN(normalizedVal)) return false;
       const currentYear = new Date().getFullYear();
       return normalizedVal <= currentYear;
     },
+    minCurrentYear: (val) => {
+      const normalizedVal = normalizeNumber(val);
+      if (isNaN(normalizedVal)) return false;
+      const currentYear = new Date().getFullYear();
+      return normalizedVal >= currentYear;
+    },
+    // ✅ Date-based current rules
+    minCurrentDate: (val) => {
+      const valueDate = parseDate(val);
+      const today = new Date();
+      if (isNaN(valueDate)) return false;
+      // strip time components from both
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return valueOnly >= todayOnly;
+    },
+
+    maxCurrentDate: (val) => {
+      const valueDate = parseDate(val);
+      const today = new Date();
+      if (isNaN(valueDate)) return false;
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return valueOnly <= todayOnly;
+    },
+
     minValueDate: (val, minDate) => {
       const valueDate = parseDate(val); // Parse the input date
       const min = parseDate(minDate); // Parse the minimum date
@@ -139,7 +165,7 @@ function validateValue(value, rules) {
     // Skip validation if the value is empty
     if (value === null || value === undefined || (typeof value === 'string' && value.trim() === "")) {
       continue; // let "required" handle emptiness
-    } 
+    }
     // Check for "valid" rules (e.g., numeric, telCY, etc.)
     if (check === "valid" && validationRules[checkValue]) {
       const isValid = validationRules[checkValue](value);
@@ -168,12 +194,12 @@ function validateValue(value, rules) {
     if (check === 'minValue' && !validationRules.minValue(value, checkValue)) {
       return message;
     }
-    
+
     // Check for "maxValue"
     if (check === 'maxValue' && !validationRules.maxValue(value, checkValue)) {
       return message;
     }
-    
+
     // Check for "minValueDate"
     if (check === 'minValueDate' && !validationRules.minValueDate(value, checkValue)) {
       return message;
