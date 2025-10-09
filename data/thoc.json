@@ -1299,7 +1299,7 @@
                           "el": "Αποθήκευση και συνέχεια",
                           "en": "Αποθήκευση και συνέχεια"
                         },
-                        "prototypeNavigate": "../interest"
+                        "prototypeNavigate": "../additional-info"
                       }
                     }
                   ]
@@ -2031,7 +2031,7 @@
         },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "interest"
+        "nextPage": "additional-info"
       }, 
 	    "multipleThings": {
         "min": 0,    
@@ -2366,6 +2366,119 @@
                             "message": {
                               "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
                               "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "additional-info",
+        "title": {
+          "el": "Επιπλέον στοιχεία βιογραφικού",
+          "en": "Additional CV details",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "interest"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "7",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επιπλέον στοιχεία βιογραφικού",
+                          "en": "Επιπλέον στοιχεία βιογραφικού"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "additionalInfo",
+                        "name": "additionalInfo",
+                        "rows": 5,
+                        "label": {
+                          "el": "Προσθέστε τυχόν επιπλέον στοιχεία ή πληροφορίες για το βιογραφικό σας, που δεν έχετε ήδη αναφέρει στην αίτηση",
+                          "en": "Προσθέστε τυχόν επιπλέον στοιχεία ή πληροφορίες για το βιογραφικό σας, που δεν έχετε ήδη αναφέρει στην αίτηση"
+                        },
+                        "isPageHeading": false,
+                        "characterCount": {
+                          "type": "char",
+                          "max": 600
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία βιογραφικού πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία βιογραφικού πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 600 characters or less",
                               "tr": ""
                             }
                           }

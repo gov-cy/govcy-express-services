@@ -223,7 +223,7 @@
         "method": "GET",
         "clientKey": "DSF_API_GTW_CLIENT_ID",
         "serviceId": "DSF_API_GTW_SERVICE_ID",
-        "cashingTimeoutMinutes": "60",
+        "cashingTimeoutMinutes": "0",
         "dsfgtwApiKey": "DSF_API_GTW_SECRET",
         "params": {
           "checkFor": "isIdentifierFound,isAlive,isCypriot"

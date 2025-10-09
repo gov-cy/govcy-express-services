@@ -51,7 +51,7 @@
     "coverage:badge": "coverage-badges --output ./coverage-badges.svg && npm run coverage:copy"
   },
   "dependencies": {
-    "@gov-cy/dsf-email-templates": "^2.1.0",
+    "@gov-cy/dsf-email-templates": "^2.1.1",
     "@gov-cy/govcy-frontend-renderer": "^1.26.0",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
