@@ -388,7 +388,7 @@
                       "params": {
                         "id": "progress",
                         "current": "1",
-                        "total": "6",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
@@ -802,7 +802,7 @@
               "params": {
                 "id": "progress",
                 "current": "2",
-                "total": "6",
+                "total": "10",
                 "showSteps": true
               }
             },
@@ -870,7 +870,7 @@
                       "params": {
                         "id": "progress",
                         "current": "2",
-                        "total": "6",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
@@ -1065,7 +1065,7 @@
         },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "interest"
+        "nextPage": "experience"
       },
       "multipleThings": {
         "min": 1,    
@@ -1083,7 +1083,7 @@
               "params": {
                 "id": "progress",
                 "current": "3",
-                "total": "6",
+                "total": "10",
                 "showSteps": true
               }
             },
@@ -1151,7 +1151,7 @@
                       "params": {
                         "id": "progress",
                         "current": "3",
-                        "total": "6",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
@@ -1313,6 +1313,1088 @@
     },
     {
       "pageData": {
+        "url": "experience",
+        "title": {
+          "el": "Επαγγελματική εμπειρία",
+          "en": "Work experience",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "council-of-ministers-organisations"
+      },
+      "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Επαγγελματική εμπειρία",
+            "en": "..."
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "4",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ποια είναι η επαγγελματική σας εμπειρία;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποια επαγγελματική εμπειρία."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη επαγγελματικής εμπειρίας"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "4",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επαγγελματική εμπειρία",
+                          "en": "Επαγγελματική εμπειρία"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Εργοδότης",
+                          "en": "Εργοδότης"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του εργοδότη",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα του εργοδότη πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα του εργοδότη πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στον οργανισμό",
+                          "en": "H θέση σας στον οργανισμό"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση",
+                          "en": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση"
+                        },
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στον οργανισμό",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "council-of-ministers-organisations",
+        "title": {
+          "el": "Συμμετοχή σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο",
+          "en": "Participation in councils assigned by the Council of Ministers",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "other-organisations"
+      },
+      "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Συμμετοχή σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο",
+            "en": "..."
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "5",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Συμμετείχατε σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποιο συμβούλιο."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη συμβουλίου"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "5",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Συμβούλια που διορίζονται από το Υπουργικό συμβούλιο",
+                          "en": "..."
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Ονομασία συμβουλίου",
+                          "en": "..."
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του οργανισμού",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα του οργανισμού πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα του οργανισμού πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στον συμβούλιο",
+                          "en": "..."
+                        },
+                        "isPageHeading": false,
+                        "type": "text",
+                        "hint": {
+                          "en": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στον οργανισμό",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "other-organisations",
+        "title": {
+          "el": "Συμμετοχή σε άλλες οργανώσεις, συνδέσμους ή συμβούλια",
+          "en": "Other councils",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "interest"
+      }, 
+	    "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Άλλες οργανώσεις, σύνδεσμοι ή συμβούλια",
+            "en": "Other councils"
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "6",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Συμμετείχατε σε άλλες οργανώσεις, συνδέσμους ή συμβούλια;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "type": "p",
+                "text": {
+                  "el": "Αφορά οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο",
+                  "en": "..."
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποιο συμβούλιο."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη συμβουλίου"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "6",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Άλλες οργανώσεις, συνδέσμοι ή συμβούλια",
+                          "en": "Άλλες οργανώσεις, συνδέσμοι ή συμβούλια"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "intro",
+                        "text": {
+                          "el": "<p>Δηλώστε οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο.</p><p>Για παράδειγμα `Σύνδεσμος γονέων Α Δημοτικού Στροβόλου`</p>",
+                          "en": "<p>Δηλώστε οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο.</p><p>Για παράδειγμα `Σύνδεσμος γονέων Α Δημοτικού Στροβόλου`</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Ονομασία οργάνωσης, συνδέσμου ή συμβουλίου",
+                          "en": "Ονομασία οργάνωσης, συνδέσμου ή συμβουλίου"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα της οργάνωσης, συνδέσμου ή συμβουλίου",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα της οργάνωσης, συνδέσμου ή συμβουλίου πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα οργάνωσης, συνδέσμου ή συμβουλίου πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο",
+                          "en": "H θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
         "url": "interest",
         "title": {
           "el": "Εκδήλωση ενδιαφέροντος για θέσεις",
@@ -1346,8 +2428,8 @@
                       "element": "progressList",
                       "params": {
                         "id": "progress",
-                        "current": "4",
-                        "total": "6",
+                        "current": "8",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
@@ -1463,8 +2545,8 @@
                       "element": "progressList",
                       "params": {
                         "id": "progress",
-                        "current": "5",
-                        "total": "6",
+                        "current": "9",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
@@ -1692,8 +2774,8 @@
                       "element": "progressList",
                       "params": {
                         "id": "progress",
-                        "current": "6",
-                        "total": "6",
+                        "current": "10",
+                        "total": "10",
                         "showSteps": true
                       }
                     },
