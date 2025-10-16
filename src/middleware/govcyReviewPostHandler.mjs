@@ -23,11 +23,19 @@ export function govcyReviewPostHandler() {
             // ✅ Load service and check if it exists
             const service = req.serviceData;
             let validationErrors = {};
-
+            // to be used for sending email
+            let updateMyDetailsData = null;
+            
             // Loop through all pages in the service
             for (const page of service.pages) {
                 //get page url
                 const pageUrl = page.pageData.url;
+                
+                // to be used for sending email 
+                // get updateMyDetails data if not found before
+                if (!updateMyDetailsData) {
+                    updateMyDetailsData = dataLayer.getPageUpdateMyDetails(req.session, siteId, pageUrl);
+                }
 
                 // ----- Conditional logic comes here
                 // ✅ Skip validation if page is conditionally excluded
@@ -165,9 +173,22 @@ export function govcyReviewPostHandler() {
                     // Generate the email body
                     let emailBody = generateSubmitEmail(service, submissionData.printFriendlyData, referenceNo, req);
                     logger.debug("Email generated:", emailBody);
+
+                    let emailAddress = "";
+                    // if Update my details not provided the use user email
+                    if (!updateMyDetailsData || !updateMyDetailsData.email) {
+                        emailAddress = dataLayer.getUser(req.session).email;
+                    } else {
+                        emailAddress = updateMyDetailsData.email;
+                    }
+
                     // Send the email
-                    sendEmail(service.site.title[service.site.lang], emailBody, [dataLayer.getUser(req.session).email], "eMail").catch(err => {
-                        logger.error("Email sending failed (async):", err);
+                    sendEmail(
+                        service.site.title[service.site.lang], 
+                        emailBody, 
+                        [emailAddress], 
+                        "eMail").catch(err => {
+                            logger.error("Email sending failed (async):", err);
                     });
                     // --- End of email sending
 

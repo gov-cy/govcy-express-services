@@ -249,6 +249,34 @@ export function getSiteEligibilityResult(store, siteId, endpointKey, maxAgeMs = 
 }
 
 /**
+ * Stores the update my details data for contact purposes, outside the scope of formData
+ * 
+ * For example `store.siteData[siteId].inputData[pageUrl]["updateMyDetails"] = value`
+ * 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url 
+ * @param {object} userData The user's update my details data 
+ */
+export function storePageUpdateMyDetails(store, siteId, pageUrl, userData) {
+    // Ensure session structure is initialized
+    initializeSiteData(store, siteId, pageUrl);
+
+    store.siteData[siteId].inputData[pageUrl]["updateMyDetails"] = userData;
+}
+
+/**
+ * Get the update my details data for contact purposes, outside the scope of formData 
+ * @param {object} store The session store 
+ * @param {string} siteId The site id
+ * @param {string} pageUrl The page url 
+ * @returns The user's update my details data 
+ */
+export function getPageUpdateMyDetails(store, siteId, pageUrl) {
+    return store?.siteData?.[siteId]?.inputData?.[pageUrl]?.["updateMyDetails"] || null;
+}
+
+/**
  * Get the page validation errors from the store and clear them
  * 
  * @param {object} store The session store

@@ -1420,3 +1420,71 @@ describe("getFormDataValue()", () => {
     expect(() => dataLayer.getFormDataValue(malformed, "x", "y", "z")).not.to.throw();
   });
 });
+
+// ---------------------------------------------------------
+// storePageUpdateMyDetails & getPageUpdateMyDetails
+// ---------------------------------------------------------
+describe("storePageUpdateMyDetails() and getPageUpdateMyDetails()", () => {
+    let store;
+
+    beforeEach(() => {
+        store = { siteData: {} };
+    });
+
+    it("1. should store updateMyDetails data correctly for a page", () => {
+        dataLayer.storePageUpdateMyDetails(store, "site1", "update-my-details", {
+            email: "user@example.com",
+            mobile: "+35799123456",
+            addressText: "1st April 17K, 5523 Achna"
+        });
+
+        const result = store.siteData["site1"].inputData["update-my-details"].updateMyDetails;
+        expect(result).to.deep.equal({
+            email: "user@example.com",
+            mobile: "+35799123456",
+            addressText: "1st April 17K, 5523 Achna"
+        });
+    });
+
+    it("2. should retrieve stored updateMyDetails data correctly", () => {
+        // First store data
+        dataLayer.storePageUpdateMyDetails(store, "site1", "update-my-details", {
+            email: "test@domain.com",
+            mobile: "99999999"
+        });
+
+        // Retrieve it
+        const result = dataLayer.getPageUpdateMyDetails(store, "site1", "update-my-details");
+        expect(result).to.deep.equal({
+            email: "test@domain.com",
+            mobile: "99999999"
+        });
+    });
+
+    it("3. should return null if updateMyDetails not set", () => {
+        const result = dataLayer.getPageUpdateMyDetails(store, "site1", "update-my-details");
+        expect(result).to.be.null;
+    });
+
+    it("4. should not affect existing formData or multipleDraft", () => {
+        // Initialize full page data with formData + multipleDraft
+        dataLayer.initializeSiteData(store, "site1", "update-my-details");
+        store.siteData.site1.inputData["update-my-details"].formData = { field1: "value1" };
+        store.siteData.site1.inputData["update-my-details"].multipleDraft = { title: "Old" };
+
+        // Store UMD data
+        dataLayer.storePageUpdateMyDetails(store, "site1", "update-my-details", {
+            email: "new@example.com"
+        });
+
+        expect(store.siteData.site1.inputData["update-my-details"].formData).to.deep.equal({ field1: "value1" });
+        expect(store.siteData.site1.inputData["update-my-details"].multipleDraft).to.deep.equal({ title: "Old" });
+
+        // Only updateMyDetails key should be added
+        expect(store.siteData.site1.inputData["update-my-details"].updateMyDetails).to.deep.equal({
+            email: "new@example.com"
+        });
+    });
+
+});
+

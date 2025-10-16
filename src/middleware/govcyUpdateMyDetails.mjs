@@ -442,12 +442,14 @@ export function govcyUpdateMyDetailsPostHandler() {
                 // --------------- Page variant 1:Manual form for non-eligible users
                 //⤴️ Store validated form data in session
                 dataLayer.storePageData(req.session, siteId, pageUrl, formData);
+                dataLayer.storePageUpdateMyDetails(req.session, siteId, pageUrl, formData);
             } else if (pageVariant === 2) {
                 // --------------- Page variant 2: Confirmation radio for eligible users with data
                 const userChoice = req.body?.useTheseDetails?.trim().toLowerCase();
                 if (userChoice === "yes") {
                     //⤴️ Store validated form data in session
                     dataLayer.storePageData(req.session, siteId, pageUrl, userDetails);
+                    dataLayer.storePageUpdateMyDetails(req.session, siteId, pageUrl, userDetails);
                 } else if (userChoice === "no") {
                     // construct the return url to go to `:siteId/:pageUrl` + `?route=` + `review`
                     const returnUrl = `${req.protocol}://${req.get("host")}${govcyResources.constructPageUrl(siteId, page.pageData.url, (req.query.route === "review" ? "review" : ""))}`;
