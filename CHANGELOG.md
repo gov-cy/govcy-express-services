@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.3.0-alpha.3] - 2025-10-16
+### Added
+- `Update my details` feature.
+
+### Changed
+- Changed the title on review and email for `Multiple things` to show `multipleThings.listPage.title` 
+
 ## [v1.3.0-alpha.2] - 2025-10-09
 ### Added
 - validation for `valid`: `minCurrentYear`, `minCurrentDate` and `maxCurrentDate` 
