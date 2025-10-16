@@ -8,6 +8,7 @@ import { getEnvVariable, getEnvVariableBool } from "../utils/govcyEnvVariables.m
 import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 import { sendEmail } from "../utils/govcyNotification.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
+import { createUmdManualPageTemplate } from "./govcyUpdateMyDetails.mjs"
 import { validateMultipleThings } from "../utils/govcyMultipleThingsValidation.mjs";
 
 /**
@@ -38,9 +39,29 @@ export function govcyReviewPostHandler() {
 
                 // Find the form definition inside `pageTemplate.sections`
                 let formElement = null;
-                for (const section of page.pageTemplate.sections) {
-                    formElement = section.elements.find(el => el.element === "form");
-                    if (formElement) break;
+
+                // ----- `updateMyDetails` handling
+                if (page.updateMyDetails) {
+                    logger.debug("Validating UpdateMyDetails page during review POST", { siteId, pageUrl });
+                    // Build the manual UMD page template
+                    const umdTemplate  = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+                    
+                    // Extract the form element
+                    formElement = umdTemplate .sections
+                        .flatMap(section => section.elements)
+                        .find(el => el.element === "form");
+                    
+                    if (!formElement) {
+                        logger.error("🚨 UMD form element not found during review validation", { siteId, pageUrl });
+                        return handleMiddlewareError("🚨 UMD form element not found during review validation", 500, next);
+                    }
+                    // ----- `updateMyDetails` handling
+                } else {
+                    // Normal flow 
+                    for (const section of page.pageTemplate.sections) {
+                        formElement = section.elements.find(el => el.element === "form");
+                        if (formElement) break;
+                    }
                 }
 
                 if (!formElement) continue; // Skip pages without forms

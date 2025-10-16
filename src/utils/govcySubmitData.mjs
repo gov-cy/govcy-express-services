@@ -44,9 +44,30 @@ export function prepareSubmissionData(req, siteId, service) {
 
         // Find the <form> element in the page
         let formElement = null;
-        for (const section of page.pageTemplate.sections || []) {
-            formElement = section.elements.find(el => el.element === "form");
-            if (formElement) break;
+
+        // ----- `updateMyDetails` handling
+        // 🔹 Case C: updateMyDetails
+        if (page.updateMyDetails) {
+            logger.debug("Preparing submission data for UpdateMyDetails page", { siteId, pageUrl });
+            // Build the manual UMD page template
+            const umdTemplate  = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+            
+            // Extract the form element
+            formElement = umdTemplate .sections
+                .flatMap(section => section.elements)
+                .find(el => el.element === "form");
+            
+            if (!formElement) {
+                logger.error("🚨 UMD form element not found during prepareSubmissionData", { siteId, pageUrl });
+                return handleMiddlewareError("🚨 UMD form element not found during prepareSubmissionData", 500, next);
+            }
+            // ----- `updateMyDetails` handling
+        } else {
+            // Normal flow 
+            for (const section of page.pageTemplate.sections || []) {
+                formElement = section.elements.find(el => el.element === "form");
+                if (formElement) break;
+            }
         }
 
         if (!formElement) continue; // ⛔ Skip pages without a <form> element

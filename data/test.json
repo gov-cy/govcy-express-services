@@ -6511,7 +6511,8 @@
         "scope": [
           "fullName",
           "email",
-          "mobile"
+          "mobile",
+          "address"
         ],
         "hasBackLink": true
       }

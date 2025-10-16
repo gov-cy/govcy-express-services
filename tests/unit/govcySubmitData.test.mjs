@@ -688,6 +688,104 @@ describe('govcySubmitData', () => {
 
     });
 
+    it('19. should prepare submission data correctly for updateMyDetails page', () => {
+        // Add an UpdateMyDetails page
+        service.pages.push({
+            pageData: { url: 'update-my-details', title: { en: 'Update My Details', el: 'Ενημέρωση στοιχείων' } },
+            updateMyDetails: {
+                APIEndpoint: {
+                    url: 'CIVIL_REGISTRY_CONTACT_API_URL',
+                    clientKey: 'CIVIL_REGISTRY_CLIENT_KEY',
+                    serviceId: 'CIVIL_REGISTRY_SERVICE_ID'
+                },
+                updateMyDetailsURL: 'https://update-my-details.service.gov.cy',
+                scope: ['email', 'mobile'],
+                topElements: []
+            },
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        { element: 'textInput', params: { id: 'email', name: 'email', label: { en: 'Email', el: 'Ηλ. ταχυδρομείο' } } },
+                                        { element: 'textInput', params: { id: 'mobile', name: 'mobile', label: { en: 'Mobile', el: 'Κινητό' } } }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        // Simulate stored session data
+        req.session.siteData.testSite.inputData['update-my-details'] = {
+            formData: { email: 'user@example.com', mobile: '99999999' }
+        };
+        // ✅ Add this
+        req.query = {}; // <-- prevents the route undefined error
+        req.csrfToken = () => "mock"; // avoid CSRF undefined function
+
+        const result = prepareSubmissionData(req, siteId, service);
+
+        expect(result.submissionData).to.have.property('update-my-details');
+        expect(result.submissionData['update-my-details']).to.include({
+            email: 'user@example.com',
+            mobile: '99999999'
+        });
+    });
+
+
+    it('20. should prepare print-friendly data correctly for updateMyDetails page', () => {
+        service.pages.push({
+            pageData: { url: 'update-my-details', title: { en: 'Update My Details', el: 'Ενημέρωση στοιχείων' } },
+            updateMyDetails: {
+                APIEndpoint: {
+                    url: 'CIVIL_REGISTRY_CONTACT_API_URL',
+                    clientKey: 'CIVIL_REGISTRY_CLIENT_KEY',
+                    serviceId: 'CIVIL_REGISTRY_SERVICE_ID'
+                },
+                updateMyDetailsURL: 'https://update-my-details.service.gov.cy',
+                scope: ['email', 'mobile'],
+                topElements: []
+            },
+            pageTemplate: { sections: [] } // replaced later by createUmdManualPageTemplate()
+        });
+
+        req.session.siteData.testSite.inputData['update-my-details'] = {
+            formData: { email: 'user@example.com', mobile: '99999999' }
+        };
+        
+        // ✅ Add this
+        req.query = {}; // <-- prevents the route undefined error
+        req.csrfToken = () => "mock"; // avoid CSRF undefined function
+
+        const printFriendly = preparePrintFriendlyData(req, siteId, service);
+        const umdPage = printFriendly.find(p => p.pageUrl === 'update-my-details');
+
+        expect(umdPage).to.exist;
+        expect(umdPage.fields).to.deep.include.members([
+            {
+                id: 'email',
+                name: 'email',
+                label: { en: 'Email', el: 'Email', tr: '' },
+                value: 'user@example.com',
+                valueLabel: { en: 'user@example.com', el: 'user@example.com' }
+            },
+            {
+                id: 'mobile',
+                name: 'mobile',
+                label: { en: 'Mobile phone number', el: 'Αριθμός κινητού τηλεφώνου', tr: '' },
+                value: '99999999',
+                valueLabel: { en: '99999999', el: '99999999' }
+            }
+        ]);
+    });
+
+
 
 });
 

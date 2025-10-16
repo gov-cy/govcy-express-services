@@ -290,6 +290,123 @@ describe("govcyReviewPostHandler", () => {
         expect(pageErrors["academic-details"]).to.have.property("hub");
     });
 
+    it("7. should validate updateMyDetails fields and redirect to error summary when missing", async () => {
+        // ✅ Add UpdateMyDetails page configuration
+        req.serviceData.pages = [
+            {
+                pageData: { url: "update-my-details", title: { en: "Update My Details" } },
+                updateMyDetails: {
+                    APIEndpoint: {
+                        url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                        clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                        serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                    },
+                    updateMyDetailsURL: "https://update-my-details.service.gov.cy",
+                    scope: ["email", "mobile"],
+                    topElements: []
+                },
+                pageTemplate: {
+                    sections: [
+                        {
+                            name: "main",
+                            elements: [
+                                {
+                                    element: "form",
+                                    params: { elements: [] }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // ✅ Missing required fields
+        req.session.siteData["site123"].inputData["update-my-details"] = {
+            formData: {}
+        };
+
+        // ✅ Env vars for submission path
+        process.env.MOCK_URL = "http://localhost:3002/success";
+        process.env.CLIENT_KEY = "CLIENT_KEY";
+        process.env.SERVICE_ID = "SERVICE_ID";
+
+        
+        // ✅ Add this
+        req.query = {}; // <-- prevents the route undefined error
+        req.csrfToken = () => "mock"; // avoid CSRF undefined function
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Expect redirect to error summary
+        expect(res.redirectedTo).to.include("errorSummary");
+
+        // ✅ Check stored errors
+        const siteErrors = req.session.siteData["site123"].submissionErrors || req.session.siteData["site123"].validationErrors;
+        const pageErrors = siteErrors.errors || siteErrors;
+        expect(pageErrors["update-my-details"]).to.exist;
+        expect(pageErrors["update-my-details"].type).to.equal("normal");
+    });
+
+    it("8. should allow successful submission when updateMyDetails fields are valid", async () => {
+        // ✅ Configure same UMD page
+        req.serviceData.pages = [
+            {
+                pageData: { url: "update-my-details", title: { en: "Update My Details" } },
+                updateMyDetails: {
+                    APIEndpoint: {
+                        url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                        clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                        serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                    },
+                    updateMyDetailsURL: "https://update-my-details.service.gov.cy",
+                    scope: ["email", "mobile"],
+                    topElements: []
+                },
+                pageTemplate: {
+                    sections: [
+                        {
+                            name: "main",
+                            elements: [
+                                {
+                                    element: "form",
+                                    params: { elements: [] }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // ✅ Fill required fields in session
+        req.session.siteData["site123"].inputData["update-my-details"] = {
+            formData: {
+                email: "user@example.com",
+                mobile: "+35799123456"
+            }
+        };
+
+        // ✅ Add this
+        req.query = {}; // <-- prevents the route undefined error
+        req.csrfToken = () => "mock"; // avoid CSRF undefined function
+
+        // ✅ Env vars for submission success
+        process.env.MOCK_URL = "http://localhost:3002/success";
+        process.env.CLIENT_KEY = "CLIENT_KEY";
+        process.env.SERVICE_ID = "SERVICE_ID";
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Expect redirect to success page
+        expect(res.redirectedTo).to.equal("/site123/success");
+
+        // ✅ Submission data should include updateMyDetails
+        const submission = req.session.siteData["site123"].submissionData;
+        expect(submission.submissionData["update-my-details"]).to.have.property("email", "user@example.com");
+    });
 
 
 });
