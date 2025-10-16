@@ -393,7 +393,7 @@
           "email",
           "mobile"
         ],
-        "hasBackLink": true
+        "hasBackLink": false
       }
     },
     {

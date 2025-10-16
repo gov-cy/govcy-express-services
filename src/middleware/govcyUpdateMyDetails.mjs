@@ -162,6 +162,9 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
             }
         }
 
+        // Deep copy pageTemplate to avoid modifying the original
+        const pageTemplateCopy = JSON.parse(JSON.stringify(pageTemplate));
+
         // if the page variant is 1 or 2 which means it has a form
         if (pageVariant === 1 || pageVariant === 2) {
             // Handle form data
@@ -181,7 +184,7 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
 
 
             populateFormData(
-                pageTemplate.sections[0].elements[0].params.elements,
+                pageTemplateCopy.sections[0].elements[0].params.elements,
                 theData,
                 validationErrors,
                 req.session,
@@ -194,18 +197,18 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
 
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
-                pageTemplate.sections[0].elements[0].params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));
+                pageTemplateCopy.sections[0].elements[0].params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));
             }
         }
 
         // Add topElements if provided
         if (Array.isArray(umdConfig.topElements)) {
-            pageTemplate.sections[0].elements[0].params.elements.unshift(...umdConfig.topElements);
+            pageTemplateCopy.sections[0].elements[0].params.elements.unshift(...umdConfig.topElements);
         }
 
         //if hasBackLink == true add section beforeMain with backlink element
         if (umdConfig?.hasBackLink == true) {
-            pageTemplate.sections.unshift({
+            pageTemplateCopy.sections.unshift({
                 name: "beforeMain",
                 elements: [
                     {
@@ -226,7 +229,7 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
                     mainLayout: page?.pageData?.mainLayout || "two-third"
                 }
             },
-            pageTemplate: pageTemplate
+            pageTemplate: pageTemplateCopy
         };
 
         logger.debug("Processed `govcyUpdateMyDetailsHandler` page data:", req.processedPage, req);
