@@ -103,6 +103,198 @@ app.post("/:key", (req, res) => {
 });
 
 // Mock endpoint for submission
+app.get("/:key/:lang", (req, res) => {
+    const { key, lang } = req.params;
+    const authHeader = req.headers['authorization'] || null;
+    console.log(`Received request with key: ${key}`);
+    console.log(`Authorization header: ${authHeader}`);
+    console.log(`Query params: ${JSON.stringify(req.query, null, 2)}`);
+    console.log(`Request body: ${JSON.stringify(req.body, null, 2)}`);
+    if (key === "umdUnverified") {
+        return res.status(200).json({
+            "errorCode": 401,
+            "errorMessage": "Unauthorized: No identity found",
+            "data": {
+                "fullName": null,
+                "dob": null,
+                "dod": null,
+                "pin": null,
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": false
+        });
+    } else if (key === "umdForeign") {
+        return res.status(200).json({
+            "errorCode": 0,
+            "errorMessage": null,
+            "data": {
+                "fullName": "KOSTIS GIANNIS",
+                "dob": "1995-11-01",
+                "dod": null,
+                "pin": "",
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": true
+        });
+    } else if (key === "umdPinUnknown") {
+        return res.status(200).json({
+            "errorCode": -100,
+            "errorMessage": "PIN_UNKNOWN_OR_INVALID",
+            "data": {
+                "fullName": null,
+                "dob": null,
+                "dod": null,
+                "pin": null,
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": false
+        });
+    } else if (key === "umdAgeEligibility") {
+        return res.status(200).json({
+            "errorCode": -104,
+            "errorMessage": "AGE_ELIGIBILITY_FAILURE",
+            "data": {
+                "fullName": null,
+                "dob": null,
+                "dod": null,
+                "pin": null,
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": false
+        });
+    } else if (key === "umdCitizenNonActive") {
+        return res.status(200).json({
+            "errorCode": -101,
+            "errorMessage": "CITIZEN_NOT_ACTIVE",
+            "data": {
+                "fullName": null,
+                "dob": null,
+                "dod": null,
+                "pin": null,
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": false
+        });
+    } else if (key === "umdCitizenUpdated") {
+        return res.status(200).json({
+            "errorCode": 0,
+            "errorMessage": null,
+            "data": {
+                "fullName": "COSTIS GIANNIS WITH DATA 1",
+                "dob": "1992-10-16",
+                "dod": null,
+                "pin": "0001234567",
+                "email": "dsftesting1@gmail.com",
+                "emailVerified": true,
+                "mobile": "0035799123456",
+                "mobileVerified": true,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": [
+                    {
+                        "type": null,
+                        "postalCode": 1101,
+                        "language": null,
+                        "item": {
+                            "street": {
+                                "apartmentNumber": "",
+                                "streetNumber": "12"
+                            },
+                            "code": 48,
+                            "name": "ΙΩΝΩΝ",
+                            "parish": {
+                                "code": 100001,
+                                "name": "ΑΓΙΟΣ ΑΝΔΡΕΑΣ"
+                            }
+                        },
+                        "town": {
+                            "code": 1000,
+                            "name": "ΛΕΥΚΩΣΙΑ"
+                        },
+                        "district": {
+                            "code": 1,
+                            "name": "ΛΕΥΚΩΣΙΑ"
+                        },
+                        "country": {
+                            "code": 600,
+                            "name": "ΚΥΠΡΟΣ",
+                            "alpha2": null,
+                            "alpha3": null
+                        },
+                        "addressVerified": false,
+                        "addressText": "ΙΩΝΩΝ  12  \n1101 ΛΕΥΚΩΣΙΑ\nΛΕΥΚΩΣΙΑ\nΚΥΠΡΟΣ"
+                    }
+                ],
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": true
+        });
+    } else if (key === "umdCitizenNotUpdated") {
+        return res.status(200).json({
+            "errorCode": 0,
+            "errorMessage": null,
+            "data": {
+                "fullName": "COSTIS GIANNIS NOT UPDATED",
+                "dob": "2007-08-25",
+                "dod": null,
+                "pin": "0001234567",
+                "email": null,
+                "emailVerified": false,
+                "mobile": null,
+                "mobileVerified": false,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": null
+            },
+            "succeeded": true
+        });
+    }
+});
+
+// Mock endpoint for submission
 app.get("/:key", (req, res) => {
     const { key } = req.params;
     const authHeader = req.headers['authorization'] || null;

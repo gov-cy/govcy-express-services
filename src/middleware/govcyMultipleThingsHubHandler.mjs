@@ -48,7 +48,6 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 {
                     name: "main",
                     elements: [
-                        // TODO: Add form element here
                         {
                             element: "form",
                             params: {

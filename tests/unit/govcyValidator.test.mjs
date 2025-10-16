@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { validateFormElements } from '../../src/utils/govcyValidator.mjs';
+import { validateFormElements, isValidCypriotCitizen, isValidForeignResident } from '../../src/utils/govcyValidator.mjs';
 import * as govcyResources from '../../src/resources/govcyResources.mjs';
 
 describe('govcyValidator', () => {
@@ -432,9 +432,115 @@ describe('govcyValidator', () => {
         // Test valid mobile
         let validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '99123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '+35799123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '0035799123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '(22) 123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '00 44 7123 456789';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '00 (44) (7123) 456789';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile
+        formData.field1 = '+357-99-123-4567-891';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile UK
+        formData.field1 = '+447911123456';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile GR
+        formData.field1 = '+00306941234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile DL
+        formData.field1 = '+4915123456789';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile FR
+        formData.field1 = '+33612345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile IT
+        formData.field1 = '00 393471234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile US
+        formData.field1 = '+12025550123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Canada
+        formData.field1 = '0016471234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile India
+        formData.field1 = '00 91-9812345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Pakistan
+        formData.field1 = '00923151234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Australia
+        formData.field1 = '+61412345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile South Africa
+        formData.field1 = '+27821234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Japan
+        formData.field1 = '+819012345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile China
+        formData.field1 = '+8613812345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Nigeria
+        formData.field1 = '+2348012345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+        // Test value mobile Egypt
+        formData.field1 = '00201012345678';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
 
         // Test invalid mobile
         formData.field1 = '123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+        });
+        // Test invalid mobile
+        formData.field1 = '1234567';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+        });
+        // Test invalid mobile
+        formData.field1 = '+abc123';
+        validationErrors = validateFormElements(elements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
+        });
+        // Test invalid mobile
+        formData.field1 = '0012345678901234567890123';
         validationErrors = validateFormElements(elements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid mobile number', pageUrl: 'page1' },
@@ -1807,4 +1913,33 @@ describe('govcyValidator', () => {
 
 
     //TODO: test more validation rules
+});
+
+describe("cyLogin validations", () => {
+ 
+  it("1. recognize if the user is a cypriot citizen with `isValidCypriotCitizen`", () => {
+
+    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '0012345678' })).to.be.true;
+    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '9912345678' })).to.be.false;
+    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '5512345678' })).to.be.false;
+    expect(isValidCypriotCitizen({ profile_type: 'Company', unique_identifier: '0012345678' })).to.be.false;
+    expect(isValidCypriotCitizen({})).to.be.false;
+
+  });
+  
+  it("2. recognize if the user is a foreign resident with `isValidForeignResident`", () => {
+
+    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0512345678" }))
+      .to.equal(true);
+    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0012345678" }))
+      .to.equal(false);
+    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "9912345678" }))
+      .to.equal(false);
+    expect(isValidForeignResident({ profile_type: "Company", unique_identifier: "0512345678" }))
+      .to.equal(false);
+    expect(isValidForeignResident({}))
+      .to.equal(false);
+
+  });
+
 });

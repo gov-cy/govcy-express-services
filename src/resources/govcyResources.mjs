@@ -1,50 +1,50 @@
 export const staticResources = {
     //text content
     text: {
-        submit: { 
-            en: "Submit", 
-            el: "Υποβολή", 
-            tr: "Gönder" 
+        submit: {
+            en: "Submit",
+            el: "Υποβολή",
+            tr: "Gönder"
         },
-        continue: { 
-            en: "Continue", 
-            el: "Συνέχεια", 
-            tr: "Continue" 
+        continue: {
+            en: "Continue",
+            el: "Συνέχεια",
+            tr: "Continue"
         },
-        cancel: { 
-            en: "Cancel", 
-            el: "Ακύρωση", 
-            tr: "İptal" 
+        cancel: {
+            en: "Cancel",
+            el: "Ακύρωση",
+            tr: "İptal"
         },
-        back: { 
-            en: "Back", 
-            el: "Πίσω", 
-            tr: "Geri" 
+        back: {
+            en: "Back",
+            el: "Πίσω",
+            tr: "Geri"
         },
-        change: { 
-            en: "Change", 
-            el: "Αλλαγή", 
-            tr: "Değişiklik" 
+        change: {
+            en: "Change",
+            el: "Αλλαγή",
+            tr: "Değişiklik"
         },
-        delete : {
+        delete: {
             en: "Delete",
             el: "Διαγραφή",
             tr: "Delete"
         },
-        untitled : {
+        untitled: {
             en: "Untitled",
             el: "Χωρίς τίτλο",
             tr: "Untitled"
         },
-        formSuccess: { 
-            en: "Your form has been submitted!", 
-            el: "Η φόρμα σας έχει υποβληθεί!" ,
+        formSuccess: {
+            en: "Your form has been submitted!",
+            el: "Η φόρμα σας έχει υποβληθεί!",
             tr: "Formunuz gönderild"
         },
-        errorOccurred: { 
-            en: "An error occurred. Please try again.", 
+        errorOccurred: {
+            en: "An error occurred. Please try again.",
             el: "Παρουσιάστηκε σφάλμα. Παρακαλώ δοκιμάστε ξανά.",
-            tr: "Bir hata oluştu. Lutfen tekrar deneyiniz." 
+            tr: "Bir hata oluştu. Lutfen tekrar deneyiniz."
         },
         errorPage404Title: {
             el: "Δεν βρέθηκε η σελίδα",
@@ -81,70 +81,70 @@ export const staticResources = {
             en: "<p>Sign out and try again later.</p>",
             tr: "<p>Giriş yapmadan sonra tekrar deneyiniz.</p>"
         },
-        checkYourAnswersTitle : {
+        checkYourAnswersTitle: {
             en: "Check your answers",
             el: "Ελέγξτε τις απαντήσεις σας",
             tr: "Cevaplarınızı kontrol edin"
         },
-        valueNotOnList : {
+        valueNotOnList: {
             en: "Select one of the available options",
             el: "Επιλέξτε μία από τις διαθέσιμες επιλογές",
             tr: "Mevcut seçeneklerden birini seçin"
         },
-        submissionSuccessTitle : {
+        submissionSuccessTitle: {
             en: "We have received your request",
             el: "Έχουμε λάβει την αίτησή σας",
             tr: "We have received your request"
         },
-        yourSubmissionId : {
+        yourSubmissionId: {
             en: "Your reference number: ",
             el: "Ο αριθμός αναφοράς: ",
             tr: "Your reference number: "
         },
-        weHaveSendYouAnEmail : {
+        weHaveSendYouAnEmail: {
             en: "We have sent you a confirmation email.",
             el: "Έχουμε στείλει email επιβεβαιωσης.",
             tr: "We have sent you a confirmation email."
         },
-        theDataFromYourRequest : {
+        theDataFromYourRequest: {
             en: "The data from your request: ",
             el: "Τα δεδομένα της αίτησής σας: ",
             tr: "The data from your request: "
         },
-        emailSubmissionPreHeader : {
+        emailSubmissionPreHeader: {
             en: "We have received your request. ",
             el: "Έχουμε λάβει την αίτησή σας. ",
             tr: "We have received your request. "
         },
-        fileUploaded : {
+        fileUploaded: {
             en: "File uploaded",
             el: "Το αρχείο ανεβάστηκε",
             tr: "File uploaded"
         },
-        fileNotUploaded : {
+        fileNotUploaded: {
             en: "File has not been uploaded. ",
             el: "Το αρχείο δεν ανεβάστηκε. ",
             tr: "File has not been uploaded. "
         },
-        fileYouHaveUploaded : {
+        fileYouHaveUploaded: {
             en: "You have uploaded the file for \"{{file}}\"",
             el: "Έχετε ανεβάσει το αρχείο \"{{file}}\"",
             tr: "You have uploaded the file for \"{{file}}\""
         },
-        deleteFileTitle : {
+        deleteFileTitle: {
             en: "Are you sure you want to delete the file \"{{file}}\"? ",
             el: "Σίγουρα θέλετε να διαγράψετε το αρχείο \"{{file}}\";",
             tr: "Are you sure you want to delete the file \"{{file}}\"? "
         },
         deleteYesOption: {
-            el:"Ναι, θέλω να διαγράψω το αρχείο",
-            en:"Yes, I want to delete this file",
-            tr:"Yes, I want to delete this file"
+            el: "Ναι, θέλω να διαγράψω το αρχείο",
+            en: "Yes, I want to delete this file",
+            tr: "Yes, I want to delete this file"
         },
         deleteNoOption: {
-            el:"Όχι, δεν θέλω να διαγράψω το αρχείο",
-            en:"No, I don't want to delete this file",
-            tr:"No, I don't want to delete this file"
+            el: "Όχι, δεν θέλω να διαγράψω το αρχείο",
+            en: "No, I don't want to delete this file",
+            tr: "No, I don't want to delete this file"
         },
         deleteFileValidationError: {
             en: "Select if you want to delete the file",
@@ -222,23 +222,389 @@ export const staticResources = {
             tr: "Entries"
         },
         multipleThingsDeleteYesOption: {
-            el:"Ναι, θέλω να διαγράψω την καταχώρηση",
-            en:"Yes, I want to delete this entry",
-            tr:"Yes, I want to delete this entry"
+            el: "Ναι, θέλω να διαγράψω την καταχώρηση",
+            en: "Yes, I want to delete this entry",
+            tr: "Yes, I want to delete this entry"
         },
         multipleThingsDeleteNoOption: {
-            el:"Όχι, δεν θέλω να διαγράψω την καταχώρηση",
-            en:"No, I don't want to delete this entry",
-            tr:"No, I don't want to delete this entry"
+            el: "Όχι, δεν θέλω να διαγράψω την καταχώρηση",
+            en: "No, I don't want to delete this entry",
+            tr: "No, I don't want to delete this entry"
+        },
+        updateMyDetailsTitle: {
+            el: "Τα στοιχεία σας",
+            en: "Your details",
+            tr: "Your details"
+        },
+        updateMyDetailsScopes : {
+            fullName : 
+            {
+                el: "Ονοματεπωνυμο",
+                en: "Full name",
+                tr: "Full name"
+            }, 
+            email : 
+            {
+                el: "Email",
+                en: "Email",
+                tr: "Email"
+            }, 
+            mobile : 
+            {
+                el: "Αριθμός κινητού τηλεφώνου",
+                en: "Mobile phone number",
+                tr: "Mobile phone number"
+            }, 
+            address : 
+            {
+                el: "Διεύθυνση αλληλογραφίας",
+                en: "Mailing address",
+                tr: "Mailing address"
+            },
         }
     },
     //remderer sections
     sections: {
-        beforeMain : {name: "beforeMain", elements: []},
-        main : {name: "main", elements: []}
+        beforeMain: { name: "beforeMain", elements: [] },
+        main: { name: "main", elements: [] }
     },
     //renderer elements
     elements: {
+        continueButton: {
+            element: "button",
+            params: {
+                id: "continue",
+                variant: "primary",
+                type: "submit",
+                text: {
+                    el: "Αποθήκευση",
+                    en: "Save"
+                }
+            }
+        },
+        umdHasData: {
+            header: {
+                element: "textElement",
+                params: {
+                    id: "header",
+                    type: "h1",
+                    text: {
+                        el: "Τα στοιχεία σας",
+                        en: "Your details"
+                    }
+                }
+            },
+            instructions: {
+                element: "textElement",
+                params: {
+                    id: "instructions",
+                    type: "p",
+                    text: {
+                        el: "Για να επεξεργαστούμε την αίτησή σας, θα χρησιμοποιήσουμε τα στοιχεία σας από το Αρχείο Πληθυσμού",
+                        en: "In order to process your application, we’ll your details in the Civil Registry:"
+                    }
+                }
+            },
+            question: {
+                element: "radios",
+                params: {
+                    id: "useTheseDetails",
+                    name: "useTheseDetails",
+                    legend: {
+                        el: "Να χρησιμοποιήσουμε αυτά τα στοιχεία;",
+                        en: "Should we use these elements?"
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: {
+                                el: "Ναι, χρησιμοποιήστε τα στοιχεία που φαίνονται εδώ",
+                                en: "Yes, use the details shown here",
+                                tr: ""
+                            }
+                        },
+                        {
+                            value: "no",
+                            text: {
+                                el: "Όχι, θα αλλάξω αυτά τα στοιχεία",
+                                en: "No, I will change these details",
+                                tr: ""
+                            }
+                        }
+                    ],
+                    isPageHeading: false
+                },
+                validations: [
+                    {
+                        check: "required",
+                        params: {
+                            checkValue: "",
+                            message: {
+                                el: "Επιλέξτε ναι εάν θέλετε να χρησιμοποιήσουμε τα στοιχεία σας",
+                                en: "Select yes if you want us to use your details",
+                                tr: ""
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        umdHasNoData: {
+            header: {
+                element: "textElement",
+                params: {
+                    id: "header",
+                    type: "h1",
+                    text: {
+                        el: "Τα στοιχεία σας",
+                        en: "Your details"
+                    }
+                }
+            },
+            instructions: {
+                element: "textElement",
+                params: {
+                    id: "instructions",
+                    type: "p",
+                    text: {
+                        el: "Για να επεξεργαστούμε την αίτησή σας, θα χρειαστεί να μας δώσετε τα στοιχεία σας.",
+                        en: "In order to process your application, you’ll need to give us your details."
+                    }
+                }
+            }
+        },
+        umdManual: {
+            header: {
+                element: "textElement",
+                params: {
+                    id: "header",
+                    type: "h1",
+                    text: {
+                        el: "Τα στοιχεία σας",
+                        en: "Your details",
+                        tr: ""
+                    }
+                }
+            },
+            instructions: {
+                element: "textElement",
+                params: {
+                    id: "instructions",
+                    type: "p",
+                    text: {
+                        el: "Για να επεξεργαστούμε την αίτησή σας, θα χρησιμοποιήσουμε τα πιο κάτω στοιχεία:",
+                        en: "In order to process your application, we’ll use the information below:",
+                        tr: ""
+                    }
+                }
+            },
+            fullName: {
+                element: "textInput",
+                params: {
+                    id: "fullName",
+                    name: "fullName",
+                    label: {
+                        el: "Ονοματεπώνυμο",
+                        en: "Full name",
+                        tr: ""
+                    },
+                    isPageHeading: false,
+                    type: "name"
+                },
+                validations: [
+                    {
+                        check: "required",
+                        params: {
+                            checkValue: "",
+                            message: {
+                                el: "Εισαγάγετε το όνομα σας",
+                                en: "Enter your name",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "valid",
+                        params: {
+                            checkValue: "noSpecialChars",
+                            message: {
+                                el: "Το όνομα σας πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                                en: "Your name must consist only of letters, numbers and some other characters",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "length",
+                        params: {
+                            checkValue: "300",
+                            message: {
+                                el: "Το όνομα σας πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                                en: "Your name must be 300 characters or less",
+                                tr: ""
+                            }
+                        }
+                    }
+                ]
+            },
+            mobile: {
+                element: "textInput",
+                params: {
+                    id: "mobile",
+                    name: "mobile",
+                    label: {
+                        el: "Αριθμός κινητού τηλεφώνου",
+                        en: "Mobile phone number",
+                        tr: ""
+                    },
+                    isPageHeading: false,
+                    hint: {
+                        el: "Μόνο για αριθμούς εκτός Κύπρου χρειάζεται ο κωδικός χώρας",
+                        en: "Country code only needed for numbers outside of Cyprus",
+                        tr: ""
+                    },
+                    fixedWidth: "20",
+                    type: "tel"
+                },
+                validations: [
+                    {
+                        check: "required",
+                        params: {
+                            checkValue: "",
+                            message: {
+                                el: "Εισαγάγετε τον αριθμό κινητού τηλεφώνου",
+                                en: "Enter your mobile number",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "valid",
+                        params: {
+                            checkValue: "mobile",
+                            message: {
+                                el: "Ο αριθμός κινητού τηλεφώνου πρέπει έχει μορφή αριθμός κινητού τηλεφώνου. Για πράδειγμα `99123456`",
+                                en: "The mobile number must have a mobile telephone number format. For example `99123456`",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "length",
+                        params: {
+                            checkValue: "40",
+                            message: {
+                                el: "Ο αριθμός κινητού τηλεφώνου πρέπει να είναι 20 χαρακτήρες ή λιγότεροι",
+                                en: "The mobile number must be 20 characters or less",
+                                tr: ""
+                            }
+                        }
+                    }
+                ]
+            },
+            email: {
+                element: "textInput",
+                params: {
+                    id: "email",
+                    name: "email",
+                    label: {
+                        el: "Email",
+                        en: "Email",
+                        tr: ""
+                    },
+                    isPageHeading: false,
+                    type: "email"
+                },
+                validations: [
+                    {
+                        check: "required",
+                        params: {
+                            checkValue: "",
+                            message: {
+                                el: "Εισαγάγετε το email σας",
+                                en: "Enter your email",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "valid",
+                        params: {
+                            checkValue: "email",
+                            message: {
+                                el: "Το email πρέπει να έχει μορφή email. Για παράδειγμα `name@provider.com`",
+                                en: "Email must be of email format. For example `name@provider.com`",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "length",
+                        params: {
+                            checkValue: "254",
+                            message: {
+                                el: "Το email πρέπει να είναι 254 χαρακτήρες ή λιγότεροι",
+                                en: "Email must be 254 characters or less",
+                                tr: ""
+                            }
+                        }
+                    }
+                ]
+            },
+            address: {
+                element: "textArea",
+                params: {
+                    id: "address",
+                    name: "address",
+                    rows: 5,
+                    label: {
+                        el: "Διεύθυνση αλληλογραφίας",
+                        en: "Mailing address",
+                        tr: ""
+                    },
+                    isPageHeading: false,
+                    characterCount: {
+                        type: "char",
+                        max: 300
+                    }
+                },
+                validations: [
+                    {
+                        check: "required",
+                        params: {
+                            checkValue: "",
+                            message: {
+                                el: "Εισαγάγετε τη διεύθυνσης αλληλογραφίας σας",
+                                en: "Enter your mailing address",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "valid",
+                        params: {
+                            checkValue: "noSpecialChars",
+                            message: {
+                                el: "Η διεύθυνση αλληλογραφίας πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                                en: "The mailing address must consist only of letters, numbers and some other characters",
+                                tr: ""
+                            }
+                        }
+                    },
+                    {
+                        check: "length",
+                        params: {
+                            checkValue: "300",
+                            message: {
+                                el: "Η διεύθυνση αλληλογραφίας πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                                en: "The mailing address must be 300 characters or less",
+                                tr: ""
+                            }
+                        }
+                    }
+                ]
+            }
+        },
         govcyFormsJs: {
             element: "htmlElement",
             params: {
@@ -262,29 +628,29 @@ export const staticResources = {
         backLink: { element: "backLink", params: {} }
     },
     //renderer page data template
-    rendererPageData : 
+    rendererPageData:
     {
         site: {
             lang: "el",
-            title: { 
-                en: "govcy Express Services", 
+            title: {
+                en: "govcy Express Services",
                 el: "govcy Express Services",
-                tr: "govcy Express Services" 
+                tr: "govcy Express Services"
             },
-            headerTitle: { 
-                en: "", 
+            headerTitle: {
+                en: "",
                 el: "",
                 tr: ""
             },
-            description: { 
-                en: "govcy Express Services", 
+            description: {
+                en: "govcy Express Services",
                 el: "govcy Express Services",
-                tr: "govcy Express Services" 
+                tr: "govcy Express Services"
             },
-            copyrightText :{
-                en:"Republic of Cyprus, 2025", 
-                el:"Κυπριακή Δημοκρατία, 2025",
-                tr:"Kıbrıs Cumhuriyeti, 2025"
+            copyrightText: {
+                en: "Republic of Cyprus, 2025",
+                el: "Κυπριακή Δημοκρατία, 2025",
+                tr: "Kıbrıs Cumhuriyeti, 2025"
             },
             url: "https://gov.cy",
             cdn: {
@@ -294,8 +660,8 @@ export const staticResources = {
             }
         },
         pageData: {
-            title: { 
-                en: "govcy Express Services", 
+            title: {
+                en: "govcy Express Services",
                 el: "govcy Express Services",
                 tr: "govcy Express Services"
             },
@@ -305,10 +671,10 @@ export const staticResources = {
     },
     //renderer page template
     emptySections: {
-        sections : []
-    }, 
+        sections: []
+    },
     //all other
-    other : {
+    other: {
         noPrintClass: "govcy-d-print-none"
     }
 };
@@ -368,18 +734,18 @@ export function simpleHtmlPageTemplate(title, body) {
                     {
                         element: "textElement",
                         params: {
-                          id: "title",
-                          type: "h1",
-                          text: title
+                            id: "title",
+                            type: "h1",
+                            text: title
                         }
-                      },
-                      {
+                    },
+                    {
                         element: "htmlElement",
                         params: {
-                          id: "instructions",
-                          text: body
+                            id: "instructions",
+                            text: body
                         }
-                      }
+                    }
                 ]
             }
         ]
@@ -426,13 +792,13 @@ export function constructErrorSummaryUrl(url) {
  */
 export function userNameSection(userName) {
     return {
-        name: "userName", 
+        name: "userName",
         elements: [
             {
                 "element": "userName",
                 "params": {
-                    "name":{"en":userName,"el":userName, "tr":userName}
-                    ,"signOutLink":"/logout"
+                    "name": { "en": userName, "el": userName, "tr": userName }
+                    , "signOutLink": "/logout"
                 }
             }
         ]
@@ -446,7 +812,7 @@ export function userNameSection(userName) {
  * @param {string} lang The desired language code. For example `en`, `el`, `tr`
  * @returns {string|undefined} Localized string or empty string if nothing available.
  */
-export function getLocalizeContent(content,lang){
+export function getLocalizeContent(content, lang) {
     if (!content || typeof content !== 'object') return "";
 
     return content[lang] || content["el"] || content["en"] || content["tr"] || "";
@@ -458,7 +824,7 @@ export function getLocalizeContent(content,lang){
  * @param {string} siteId 
  * @returns The html for the submission pdf link
  */
-export function getSubmissionPDFLinkHtml (siteId = "") {
+export function getSubmissionPDFLinkHtml(siteId = "") {
     return getMultilingualObject(
         `<p><a class="govcy-d-print-none govcy-d-flex govcy-align-items-center" href="javascript:window.print()">
             <img alt="" aria-hidden="true" src="/img/Certificate_A4.svg" style="width:30px; margin-right:10px; margin-bottom:0px;aspect-ratio: auto !important;">
@@ -485,7 +851,7 @@ export function availableServicesPageTemplate(listOfAvailableSites, lang = "el")
     // Supported languages
     const supportedLangs = ["el", "en", "tr"];
     const usedLang = supportedLangs.includes(lang) ? lang : "el";
-    
+
     // Localized titles
     const titles = {
         el: "Διαθέσιμες Υπηρεσίες",
@@ -503,7 +869,7 @@ export function availableServicesPageTemplate(listOfAvailableSites, lang = "el")
     let siteLinks = "";
     if (Array.isArray(listOfAvailableSites) && listOfAvailableSites.length > 0) {
         siteLinks = `<ul>` + listOfAvailableSites.map(site =>
-        `<li><a href="/${site.filename}">${site.title?.[usedLang] || site.filename}</a></li>`
+            `<li><a href="/${site.filename}">${site.title?.[usedLang] || site.filename}</a></li>`
         ).join('') + `</ul>`;
     } else {
         // No services available
@@ -513,7 +879,7 @@ export function availableServicesPageTemplate(listOfAvailableSites, lang = "el")
             tr: `<div class="govcy-warning-text"><span class="govcy-warning-text-icon" aria-hidden="true">!</span><span class="govcy-warning-text-message"><p>Şu anda mevcut hizmet yok.</span></div>`
         }[usedLang];
     }
-    
+
     // Localized footer
     const footers = {
         el: `<p>Για περισσότερες υπηρεσίες επισκεφτείτε το <a href="https://gov.cy">gov.cy</a></p>`,
@@ -543,7 +909,7 @@ ${footers[lang] || footers.el}`;
  * @returns {object} The multilingual object with the text in all languages 
  */
 export function getMultilingualObject(el, en, tr) {
-    return {el: el || "", en: en || "", tr: tr || ""};
+    return { el: el || "", en: en || "", tr: tr || "" };
 }
 
 /**
@@ -555,7 +921,7 @@ export function getMultilingualObject(el, en, tr) {
  */
 export function getSameMultilingualObject(languages, value) {
     const obj = {};
-    if (!Array.isArray(languages)) return {el: value, en: value, tr: value};
+    if (!Array.isArray(languages)) return { el: value, en: value, tr: value };
     for (const lang of languages) {
         obj[lang.code] = value || "";
     }
@@ -574,7 +940,7 @@ export function getSameMultilingualObject(languages, value) {
  * @param {string} lang The desired language code. For example `en`, `el`, `tr`
  * @returns {object} The email object with the subject, preHeader, header, username and footer in the desired language 
  */
-export function getEmailObject( subject, preHeader, header, username, body, footer, lang) {
+export function getEmailObject(subject, preHeader, header, username, body, footer, lang) {
 
     const usedLang = lang || "el";
 
@@ -583,7 +949,7 @@ export function getEmailObject( subject, preHeader, header, username, body, foot
         subject: getLocalizeContent(subject, usedLang),
         pre: getLocalizeContent(preHeader, usedLang),
         header: {
-            serviceName: getLocalizeContent(header, usedLang), 
+            serviceName: getLocalizeContent(header, usedLang),
             name: username || ""
         },
         body: body || [],
@@ -605,7 +971,7 @@ export function getEmailObject( subject, preHeader, header, username, body, foot
  * @param {number} count The current count of entries. If not provided, it will be set to null.
  * @returns {string} The link htmlElement govcy-frontend-renderer object
  */
-export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey = "", route = "", linkText = "", count = null) {
+export function getMultipleThingsLink(linkType, siteId, pageUrl, lang, entryKey = "", route = "", linkText = "", count = null) {
     // Generate the action part of the URL based on the linkType
     let actionPart = "";
     let linkTextString = "";
@@ -613,8 +979,8 @@ export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey
         case "add":
             actionPart = `multiple/add`;
             // if linkText is not provided, use the default text from staticResources
-            linkTextString = (linkText 
-                ? linkText 
+            linkTextString = (linkText
+                ? linkText
                 : staticResources.text.multipleThingsAddEntry[lang] || staticResources.text.multipleThingsAddEntry["el"]
             );
             break;
@@ -629,8 +995,8 @@ export function getMultipleThingsLink(linkType, siteId, pageUrl, lang , entryKey
         default:
             actionPart = `multiple/add`;
             // if linkText is not provided, use the default text from staticResources
-            linkTextString = (linkText 
-                ? linkText 
+            linkTextString = (linkText
+                ? linkText
                 : staticResources.text.multipleThingsAddEntry[lang] || staticResources.text.multipleThingsAddEntry["el"]
             );
     }

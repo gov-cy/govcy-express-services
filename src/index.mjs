@@ -29,6 +29,7 @@ import { govcyFileDeletePageHandler, govcyFileDeletePostHandler } from './middle
 import { govcyFileViewHandler } from './middleware/govcyFileViewHandler.mjs';
 import { govcyMultipleThingsAddHandler, govcyMultipleThingsEditHandler, govcyMultipleThingsAddPostHandler, govcyMultipleThingsEditPostHandler } from './middleware/govcyMultipleThingsItemPage.mjs';
 import { govcyMultipleThingsDeletePageHandler, govcyMultipleThingsDeletePostHandler } from './middleware/govcyMultipleThingsDeleteHandler.mjs';
+import { govcyUpdateMyDetailsPostHandler } from './middleware/govcyUpdateMyDetails.mjs';
 import { isProdOrStaging, getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
@@ -230,7 +231,6 @@ export default function initializeGovCyExpressService() {
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
   app.get('/:siteId/success', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
 
-
   // 👀🗃️ -- ROUTE: View file (BEFORE the dynamic route)
   app.get('/:siteId/:pageUrl/view-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileViewHandler());
 
@@ -298,6 +298,16 @@ export default function initializeGovCyExpressService() {
     govcyMultipleThingsDeletePostHandler()
   );
 
+  // ----- `updateMyDetails` handling
+  
+  // 🔀➡️ -- ROUTE coming from incoming update my details /:siteId/:pageUrl/update-my-details-response
+  app.post('/:siteId/:pageUrl/update-my-details-response', 
+    serviceConfigDataMiddleware, 
+    requireAuth, 
+    naturalPersonPolicy, 
+    govcyServiceEligibilityHandler(true), 
+    govcyUpdateMyDetailsPostHandler());
+  // ----- `updateMyDetails` handling
 
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
   app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());

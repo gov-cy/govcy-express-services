@@ -1,4 +1,3 @@
-
 {
   "site": {
     "id": "test",
@@ -6205,108 +6204,9 @@
     {
       "pageData": {
         "url": "multiple-academic-details",
-        "title": {
-          "el": "Ακαδημαϊκό προσόν",
-          "en": "Academic detail",
-          "tr": ""
-        },
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "multiple-data-entry-all"
-      },
-      "multipleThings": {
-        "min": 1,    
-        "max": 2,   
-        "dedupe": true, 
-        "itemTitleTemplate": "{{dateGot_year}} - {{title | trim}}",
-        "listPage": {
-          "title" : {
-            "el": "Ακαδημαϊκά προσόντα",
-            "en": "Academic details"
-          },
-          "topElements" : [
-            {
-              "element": "progressList",
-              "params": {
-                "id": "steps",
-                "current": "4",
-                "total": "4",
-                "showSteps": true,
-                "steps": [
-                  {
-                    "id": "step1",
-                    "text": {
-                      "el": "Επιλογή Εγγάφου",
-                      "en": "Document selection",
-                      "tr": ""
-                    }
-                  },
-                  {
-                    "id": "step2",
-                    "text": {
-                      "el": "Στοιχεία επικοινωνίας ",
-                      "en": "Contact details",
-                      "tr": ""
-                    }
-                  },
-                  {
-                    "id": "step3",
-                    "text": {
-                      "el": "Σταθερό τηλέφωνο",
-                      "en": "Landline number",
-                      "tr": ""
-                    }
-                  },
-                  {
-                    "id": "step4",
-                    "text": {
-                      "el": "Ακαδημαϊκά προσόντα",
-                      "en": "Academic details",
-                      "tr": ""
-                    }
-                  }
-                ]
-              }
-            },           
-            {
-              "element": "textElement",
-              "params": {
-                "id": "header",
-                "type": "h1",
-                "text": {
-                  "el": "Ακαδημαϊκά προσόντα",
-                  "en": "Academic details",
-                  "tr": ""
-                }
-              }
-            },
-            {
-              "element": "textElement",
-              "params": {
-                "id": "instructions",
-                "type": "p",
-                "text": {
-                  "en": "Add at least one academic detail to proceed. You can up to 5.",
-                  "el": "Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5."
-                }
-              }
-            }
-          ],
-          "emptyState": { 
-            "en": "No academic details added yet.",
-            "el": "Δεν έχετε προσθέσει ακόμη ακαδημαϊκά προσόντα."
-          },
-          "addButtonText": {
-            "en": "Add academic details",
-            "el": "Προσθήκη ακαδημαϊκό προσόν"
-          },
-          "addButtonPlacement": "both", 
-          "continueButtonText": {    
-            "en": "Save and continue",
-            "el": "Αποθήκευση και συνέχεια"
-          }, 
-          "hasBackLink": true
-        }
+        "nextPage": "update-my-details"
       },
       "pageTemplate": {
         "sections": [
@@ -6329,16 +6229,16 @@
                     {
                       "element": "progressList",
                       "params": {
-                        "id": "steps",
+                        "id": "progress",
                         "current": "4",
                         "total": "4",
-                        "showSteps": false
+                        "showSteps": true
                       }
-                    }, 
+                    },
                     {
                       "element": "textElement",
                       "params": {
-                        "id": "heading",
+                        "id": "header",
                         "type": "h1",
                         "text": {
                           "el": "Ακαδημαϊκό προσόντον",
@@ -6353,9 +6253,10 @@
                         "name": "title",
                         "label": {
                           "el": "Ακαδημαϊκός τίτλος",
-                          "en": "Academic title"
+                          "en": "What is your id?"
                         },
-                        "isPageHeading": false
+                        "isPageHeading": false,
+                        "type": "text"
                       },
                       "validations": [
                         {
@@ -6380,7 +6281,8 @@
                           "el": "Όνομα ινστιτούτου",
                           "en": "Institution name"
                         },
-                        "isPageHeading": false
+                        "isPageHeading": false,
+                        "type": "text"
                       },
                       "validations": [
                         {
@@ -6476,7 +6378,7 @@
                         "isPageHeading": false,
                         "hint": {
                           "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
-                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats ",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
                           "tr": ""
                         }
                       },
@@ -6502,8 +6404,7 @@
                         "text": {
                           "el": "Συνέχεια",
                           "en": "Continue"
-                        },
-                        "prototypeNavigate": "../data-entry-all"
+                        }
                       }
                     }
                   ]
@@ -6512,6 +6413,107 @@
             ]
           }
         ]
+      },
+      "multipleThings": {
+        "min": "1",
+        "max": "2",
+        "dedupe": true,
+        "itemTitleTemplate": "{{dateGot_year}} - {{title | trim}}",
+        "listPage": {
+          "title": {
+            "el": "Ακαδημαϊκά προσόντα",
+            "en": "Academic details",
+            "tr": ""
+          },
+          "emptyState": {
+            "el": "Δεν έχετε προσθέσει ακόμη ακαδημαϊκά προσόντα.",
+            "en": "No academic details added yet.",
+            "tr": ""
+          },
+          "addButtonText": {
+            "el": "Προσθήκη ακαδημαϊκό προσόν",
+            "en": "Add academic details",
+            "tr": ""
+          },
+          "addButtonPlacement": "both",
+          "continueButtonText": {
+            "el": "Αποθήκευση και συνέχεια",
+            "en": "Save and continue",
+            "tr": ""
+          },
+          "hasBackLink": true,
+          "topElements": [
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "4",
+                "total": "4",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ακαδημαϊκά προσόντα",
+                  "en": "Academic details"
+                }
+              }
+            },
+            {
+              "element": "htmlElement",
+              "params": {
+                "id": "instructions",
+                "text": {
+                  "el": "<p>Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5.</p>",
+                  "en": "<p>Add at least one academic detail to proceed. You can up to 5.</p>"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "pageData": {
+        "url": "update-my-details",
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "multiple-data-entry-all"
+      },
+      "updateMyDetails": {
+        "APIEndpoint": {
+          "url": "CIVIL_REGISTRY_CONTACT_API_URL",
+          "method": "GET",
+          "clientKey": "DSF_API_GTW_CLIENT_ID",
+          "serviceId": "DSF_API_GTW_SERVICE_ID",
+          "dsfgtwApiKey": "DSF_API_GTW_SECRET"
+        },
+        "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",
+        "topElements": [
+          {
+            "element": "progressList",
+            "params": {
+              "id": "steps",
+              "current": "4",
+              "total": "4",
+              "showSteps": true
+            }
+          }
+        ],
+        "continueButtonText": {
+          "en": "Save and continue",
+          "el": "Αποθήκευση και συνέχεια"
+        },
+        "scope": [
+          "fullName",
+          "email",
+          "mobile"
+        ],
+        "hasBackLink": true
       }
     },
     {
@@ -6527,16 +6529,16 @@
         "nextPage": "multiple-radios-conditions"
       },
       "multipleThings": {
-        "min": 1,    
-        "max": 5,   
-        "dedupe": true, 
+        "min": 1,
+        "max": 5,
+        "dedupe": true,
         "itemTitleTemplate": "{{txtMobile | trim}} - {{txtName | trim}}",
         "listPage": {
-          "title" : {
+          "title": {
             "el": "Multiple Όλα τα inputs",
             "en": "Multiple all inputs"
           },
-          "topElements" : [
+          "topElements": [
             {
               "element": "textElement",
               "params": {
@@ -6981,16 +6983,16 @@
         "nextPage": "review"
       },
       "multipleThings": {
-        "min": 0,    
-        "max": 5,   
-        "dedupe": true, 
+        "min": 0,
+        "max": 5,
+        "dedupe": true,
         "itemTitleTemplate": "{% if id_select == \"id\" %}ID - {{id_number | trim}} - {{id_country | trim}}{% elseif id_select == \"arc\" %}ARC - {{arc_number | trim}}{% elseif id_select == \"passport\" %}Passport - {{passport_number | trim}} - {{passport_country | trim}}{% endif %}",
         "listPage": {
-          "title" : {
+          "title": {
             "el": "Multiple τρόποι ταυτοποίησης",
             "en": "Multiple ways of verification"
           },
-          "topElements" : [
+          "topElements": [
             {
               "element": "textElement",
               "params": {

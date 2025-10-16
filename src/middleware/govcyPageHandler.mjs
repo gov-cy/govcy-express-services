@@ -5,6 +5,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { govcyMultipleThingsHubHandler } from "./govcyMultipleThingsHubHandler.mjs";
+import { govcyUpdateMyDetailsHandler } from "./govcyUpdateMyDetails.mjs";
 // import {flattenContext, evaluateExpressionWithFlattening, evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
@@ -12,7 +13,7 @@ import { govcyMultipleThingsHubHandler } from "./govcyMultipleThingsHubHandler.m
  * This middleware processes the page template, populates form data, and shows validation errors.
  */
 export function govcyPageHandler() {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
       // Extract siteId and pageUrl from request
       let { siteId, pageUrl } = req.params; 
@@ -30,9 +31,6 @@ export function govcyPageHandler() {
       // 🔍 Find the page by pageUrl
       const page = getPageConfigData(serviceCopy, pageUrl);
 
-      // Deep copy pageTemplate to avoid modifying the original
-      const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
-
       // ----- Conditional logic comes here
       // Check if the page has conditions and apply logic
       const result = evaluatePageConditions(page, req.session, req.params.siteId, req);
@@ -40,11 +38,20 @@ export function govcyPageHandler() {
         return res.redirect(`/${req.params.siteId}/${result.redirect}`);
       }
 
+      // ----- `updateMyDetails` handling
+      if (page.updateMyDetails) {
+        return await govcyUpdateMyDetailsHandler(req, res, next, page, serviceCopy);
+      }
+      // ----- `updateMyDetails` handling
+
       // ----- MultipleThings hub handling
       if (page.multipleThings) {
         logger.debug(`Rendering multipleThings hub for pageUrl: ${pageUrl}`, req);
         return govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy);
       }
+
+      // Deep copy pageTemplate to avoid modifying the original
+      const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
       
       //⚙️ Process forms before rendering
       pageTemplateCopy.sections.forEach(section => {

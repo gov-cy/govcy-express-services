@@ -6,6 +6,7 @@ import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import { evaluatePageConditions } from "./govcyExpressions.mjs";
 import { getPageConfigData } from "./govcyLoadConfigData.mjs";
 import { logger } from "./govcyLogger.mjs";
+import { createUmdManualPageTemplate } from "../middleware/govcyUpdateMyDetails.mjs"
 import nunjucks from "nunjucks";
 
 /**
@@ -235,8 +236,20 @@ export function preparePrintFriendlyData(req, siteId, service) {
             continue; // ⛔ Skip this page from print-friendly data
         }
 
+        let pageTemplate = page.pageTemplate;
+        let pageTitle = page.pageData.title || {};
+        
+
+        // ----- MultipleThings hub handling
+        if (page.updateMyDetails) {
+            // create the page template
+            pageTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req );
+            // set the page title
+            pageTitle = govcyResources.staticResources.text.updateMyDetailsTitle;
+        }
+
         // find the form element in the page template
-        for (const section of page.pageTemplate.sections || []) {
+        for (const section of pageTemplate.sections || []) {
             for (const element of section.elements || []) {
                 if (element.element !== "form") continue;
 
@@ -282,6 +295,7 @@ export function preparePrintFriendlyData(req, siteId, service) {
 
         // Special case: multipleThings page → extract item titles // ✅ new
         if (page.multipleThings) {
+            pageTitle = page.multipleThings?.listPage?.title || pageTitle;
             let mtItems = dataLayer.getPageData(req.session, siteId, page.pageData.url);
             if (Array.isArray(mtItems)) {
                 const env = new nunjucks.Environment(null, { autoescape: false });
@@ -295,7 +309,7 @@ export function preparePrintFriendlyData(req, siteId, service) {
         if (fields.length > 0) {
             submissionData.push({
                 pageUrl: page.pageData.url,
-                pageTitle: page.pageData.title,
+                pageTitle: pageTitle,
                 fields,
                 items: (page.multipleThings ? items : null) // ✅ new
             });
@@ -674,8 +688,12 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
     // For each page in the submission data
     for (const page of submissionData) {
         // Get the page URL, title, and fields
-        const { pageUrl, pageTitle, fields, items } = page;
+        let { pageUrl, pageTitle, fields, items } = page;
 
+        // 🔹 MultipleThings page
+        if (page.multipleThings) {
+            pageTitle = page.multipleThings?.listPage?.title || pageTitle;
+        }
         // Add data title to the body
         body.push(
             {

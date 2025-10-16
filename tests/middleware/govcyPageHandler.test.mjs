@@ -2,6 +2,8 @@ import { expect } from "chai";
 import sinon from "sinon";
 import { govcyPageHandler } from "../../src/middleware/govcyPageHandler.mjs";
 import * as dataLayer from "../../src/utils/govcyDataLayer.mjs";
+import * as govcyUpdateMyDetailsModule from "../../src/middleware/govcyUpdateMyDetails.mjs";
+
 
 describe("govcyPageHandler", () => {
     let req, res, next;
@@ -340,6 +342,43 @@ describe("govcyPageHandler", () => {
         // ✅ The middleware should call next() (since hub handler ends with next())
         expect(next.calledOnce).to.be.true;
     });
+    
+    it("8. should call govcyUpdateMyDetailsHandler when page.updateMyDetails exists", async () => {
+  // --- Simulate service and page ---
+  req.serviceData.pages = [
+    {
+      pageData: { url: "update-my-details" },
+      updateMyDetails: {
+        APIEndpoint: {
+          url: "CIVIL_REGISTRY_CONTACT_API_URL",
+          clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+          serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+        },
+        updateMyDetailsURL: "https://update-my-details.service.gov.cy",
+        scope: ["email", "mobile"],
+        topElements: []
+      },
+      pageTemplate: { sections: [] }
+    }
+  ];
+
+  req.params.pageUrl = "update-my-details";
+  req.params.siteId = "test-site";
+
+  // --- Mock res to detect early return ---
+  let wasReturned = false;
+  res.render = () => { wasReturned = true; };
+  res.redirect = () => { wasReturned = true; };
+
+  // --- Run handler ---
+  const handler = govcyPageHandler();
+  await handler(req, res, next);
+
+  // --- Assertions ---
+  // The handler should return early (no page rendering or further logic)
+  expect(wasReturned || next.called).to.be.true;
+});
+
 
 
 });

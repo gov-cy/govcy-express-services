@@ -6,3 +6,15 @@ export const ALLOWED_FILE_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/
 export const ALLOWED_FILE_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png'];
 export const ALLOWED_FILE_SIZE_MB = 4; // Maximum file size in MB
 export const ALLOWED_MULTER_FILE_SIZE_MB = 10; // Maximum file size in MB
+// UPDATE MY DETAILS 
+// Only allow certain hosts
+export const UPDATE_MY_DETAILS_ALLOWED_HOSTS = [
+        "update-my-details.staging.service.gov.cy",
+        "update-my-details.service.gov.cy",
+        "localhost"
+    ];
+// Possible incoming routes 
+export const UPDATE_MY_DETAILS_REDIRECT_HOSTS = [
+        "update-my-details.staging.service.gov.cy",
+        "update-my-details.service.gov.cy"
+    ];
