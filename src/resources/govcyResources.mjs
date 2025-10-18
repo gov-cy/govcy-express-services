@@ -312,7 +312,7 @@ export const staticResources = {
                     name: "useTheseDetails",
                     legend: {
                         el: "Να χρησιμοποιήσουμε αυτά τα στοιχεία;",
-                        en: "Should we use these elements?"
+                        en: "Should we use these details?"
                     },
                     items: [
                         {

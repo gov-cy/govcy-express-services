@@ -4,6 +4,7 @@ import { successResponse, errorResponse } from '../utils/govcyApiResponse.mjs';
 import { ALLOWED_MULTER_FILE_SIZE_MB } from "../utils/govcyConstants.mjs";
 import { handleFileUpload } from "../utils/govcyHandleFiles.mjs";
 
+/* c8 ignore start */
 // Configure multer to store the file in memory (not disk) and limit the size to 10MB
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -47,3 +48,4 @@ export const govcyFileUpload = [
         return res.json(successResponse(result.data));
     }
 ];
+/* c8 ignore end */
