@@ -6504,10 +6504,6 @@
             }
           }
         ],
-        "continueButtonText": {
-          "en": "Save and continue",
-          "el": "Αποθήκευση και συνέχεια"
-        },
         "scope": [
           "fullName",
           "email",

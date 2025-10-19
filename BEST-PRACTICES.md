@@ -136,7 +136,113 @@ Example:
 - Use pull requests and code reviews before merging to main.
 - Tag releases using semantic versioning (e.g., v1.0.0).
 
-## 7. Additional Guidelines
+## 7. Use appropriate `textInput` types
+
+Text inputs can have different types (https://gov-cy.github.io/govcy-design-system-docs/components/text_input/#text-input-patterns). Use the `textInput` element `params.type` to set the appropriate type. I can be:
+- text (default)
+- numeric
+- email
+- name
+- tel
+
+For example the `mobile` input field can be set to `tel`:
+
+```json
+{
+    "element": "textInput",
+    "params": {
+        "id": "mobile",
+        "name": "mobile",
+        "type": "tel",
+        "label": {
+            "el": "Αριθμός κινητού τηλεφώνου",
+            "en": "Mobile phone number",
+            "tr": ""
+        },
+        "isPageHeading": false,
+        "hint": {
+            "el": "Μόνο για αριθμούς εκτός Κύπρου χρειάζεται ο κωδικός χώρας",
+            "en": "Country code only needed for numbers outside of Cyprus",
+            "tr": ""
+        },
+        "fixedWidth": "20"
+    }
+}
+```
+
+## 8. Input validations
+
+Always set the appropriate input validations. 
+
+For text based inputs: 
+- use `required` validation when the field is required.
+- use the `maxLength` validation to limit the length of the input.
+- and use and appropriate `valid` validation. When there is no clear valid validation, use the `noSpecialChars` validation to limit the allowed characters.
+
+Check out the example below for the `email` input field:
+
+```json
+{
+    "element": "textInput",
+    "params": {
+        "id": "email",
+        "name": "email",
+        "label": {
+            "el": "Email",
+            "en": "Email",
+            "tr": ""
+        },
+        "isPageHeading": false,
+        "type": "email"
+    },
+    "validations": [
+        {
+            "check": "required",
+            "params": {
+                "checkValue": "",
+                "message": {
+                    "el": "Εισαγάγετε το email σας",
+                    "en": "Enter your email",
+                    "tr": ""
+                }
+            }
+        },
+        {
+            "check": "valid",
+            "params": {
+                "checkValue": "email",
+                "message": {
+                    "el": "Το email πρέπει να έχει μορφή email. Για παράδειγμα `name@provider.com`",
+                    "en": "Email must be of email format. For example `name@provider.com`",
+                    "tr": ""
+                }
+            }
+        },
+        {
+            "check": "length",
+            "params": {
+                "checkValue": "254",
+                "message": {
+                    "el": "Το email πρέπει να είναι 254 χαρακτήρες ή λιγότεροι",
+                    "en": "Email must be 254 characters or less",
+                    "tr": ""
+                }
+            }
+        }
+    ]
+}
+
+```
+
+## 9. Use Update my Details pages
+
+Prefer to use [Update my details pages](README.md#update-my-details-pages) instead of gathering contact details from the user.
+
+## 10. Civil Registry eligibility checks
+
+When applicable, implement the appropriate [civil registry eligibility checks](docs/Eligibility-civil-registry.md).
+
+## Additional Guidelines
 
 - Test all service flows (eligibility → form → review → submission → success).
 - Include contact or feedback links where appropriate.

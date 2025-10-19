@@ -33,6 +33,7 @@ The APIs used for submission, temporary save and file uploads are not part of th
   - [🧩 Dynamic services](#-dynamic-services)
     - [Pages](#pages)
     - [Form vs static pages](#form-vs-static-pages)
+    - [Update my details pages](#update-my-details-pages)
     - [Multiple things pages (repeating group of inputs)](#multiple-things-pages-repeating-group-of-inputs)
     - [Review page](#review-page)
     - [Success page](#success-page)
@@ -908,6 +909,138 @@ The [start page](https://gov-cy.github.io/govcy-design-system-docs/patterns/serv
 **Notes**:
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
 - Check out the [input validations section](#-input-validations) for more details on how to add validations to the JSON file.
+
+#### Update my details pages
+
+![Update my details seamless](docs/img/express-UMD-Seamless.png)
+
+Update my details pages are pages that can integrate the [Update My Personal Details service](https://update-my-details.service.gov.cy/) to fetch or update a user’s name, email, mobile number, or correspondence address, without breaking the user journey. The implementation of these pages follow the instructuctions described in the [Use ‘Update my personal details’ in Your Service](https://dsf.dmrid.gov.cy/2025/05/20/use-update-my-personal-details-in-your-service/) post.
+
+If the `scope` also includes the `email` element, the system will also use that email address to send the email to the user on submition.
+
+**Update my details - example JSON config**
+```json
+{
+  "pageData": {
+    "url": "index",     // Page URL
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "next-page" 
+  },
+  "updateMyDetails": {
+    "APIEndpoint": {    // API endpoint for fetching user details from the Update My Details service
+      "url": "CIVIL_REGISTRY_CONTACT_API_URL", // URL
+      "method": "GET",                         // HTTP method
+      "clientKey": "DSF_API_GTW_CLIENT_ID",    // Client key
+      "serviceId": "DSF_API_GTW_SERVICE_ID",   // Service ID
+      "dsfgtwApiKey": "DSF_API_GTW_SECRET"     // DSF GTW API key 
+    },
+    "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",  // DOMAIN URL for redirecting to the Update My Details service
+  "topElements": [                             // Elements to be displayed on the top of the page
+      {
+        "element": "progressList",
+        "params": {
+          "id": "steps",
+          "current": "4",
+          "total": "4",
+          "showSteps": true
+        }
+      }
+    ],
+    "scope": [                                  // Scope of the form. What elenents to collect
+      "fullName",
+      "email",
+      "mobile",
+      "address"
+    ],
+    "hasBackLink": true                         // Whether the hub page has a back link
+  }
+}
+
+```
+
+Lets break down the JSON config for Update my details:
+
+- **updateMyDetails** are the page's definition for the integration with the Update My Details service.
+  - `updateMyDetails.APIEndpoint` is the API endpoint for fetching user details from the Update My Details service.
+  - `updateMyDetails.updateMyDetailsURL` is the DOMAIN URL for redirecting to the Update My Details service.
+  - `updateMyDetails.scope` is the scope of the form. What elenents to collect. It can be one or more of the following:
+    - `fullName`
+    - `email`
+    - `mobile`
+    - `address` 
+  - `updateMyDetails.hasBackLink` is a boolean that indicates whether the hub page has a back link.
+
+
+The above config references the following environment variables that need to be set:
+
+```dotenv
+### Update my details
+CIVIL_REGISTRY_CONTACT_API_URL=http://localhost:3002/get-update-my-details
+DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
+DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
+DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
+
+UPDATE_MY_DETAILS_URL=https://update-my-details.staging.service.gov.cy # FOR TESTING
+```
+
+The DSF team has developed an API that performs standard eligibility checks against the Civil Registry. More details at [Update-my-details.md](docs/Update-my-details.md)
+
+**Update my details - users' flow**
+The update my details behaves like a normal page and it is accessed through the url `:siteId/:pageUrl`. As a best practice you should set this as your `index` page and the first one in your pages array. Depending on the user it can have 3 variants:
+
+**Variant 1: Manual form for non-eligible users (no access to UMD)**
+When a user is either: 
+- Not a Cypriot citizen 
+- Or Cypriot citizen under 18 
+
+The user gets a data entry page.
+
+![variant 1 screenshot](docs/img/express-UMD-variant1.png)
+
+**Variant 2: Eligible users (access to UMD) with existing details**
+When a user is : 
+- A Cypriot citizen over 18  
+- AND has data in Update my Details 
+
+The users get a page with the data from UMD and asks if its ok to use those data.
+
+![variant 2 screenshot](docs/img/express-UMD-variant2.png)
+
+If the user selects:
+- `YES`: the data are stored in the data layer and continues to the next page (or review page depending where the user came from)
+- `NO`: the users are redirected to the Update my details service in seamless mode. When users finish with that, they are redirected back to the page with variant 2 and are asked again if it's ok to use the updated data.
+
+**Variant 3: Eligible users (access to UMD) without existing details**  
+When a user is : 
+- A Cypriot citizen over 18  
+- AND has no data in Update my Details
+
+The users get a continue button that redirects to the Update my details service in seamless mode. 
+
+![variant 3 screenshot](docs/img/express-UMD-variant3.png)
+
+When users finish with that, they are redirected back to the page with variant 2 and are asked if it's ok to use the updated data. 
+
+**Update my details - data storage**
+
+The form data for a `updateMyDetails` page is stored as a normal page as an **object** in the session data layer:
+```json
+{
+  "index": {
+    "formData": 
+    {
+      "fullName": "John Smith",
+      "email": "email@example.com",
+      "mobile": "+35712345678",
+      "address": "123 Some Street\n Nicosia\nCyprus",
+    }
+  }
+}
+```
+
+**Notes on Update my details**
+- There `pageData.title` is not used. Instead the page title is generated by the system.
 
 #### Multiple things pages (repeating group of inputs)
 ![Multiple things pages](docs/img/express-mt.png)
@@ -2479,7 +2612,7 @@ The environment variables are defined in:
    - `.env.production` for production
 
 #### Secret environment variables
-The following secret environment variables are used to configure the server:
+The following secret environment variables are used to configure the server (note the values below are examples, you need to replace them with your own values):
 
 ```dotenv
 # 🔐 Session
@@ -2553,9 +2686,13 @@ TEST_FILE_DELETE_API_URL=http://localhost:3002/fileDelete
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1
 TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/eligibility2
+
+# Update my details
+CIVIL_REGISTRY_CONTACT_API_URL=http://localhost:3002/get-update-my-details
+UPDATE_MY_DETAILS_URL=https://update-my-details.staging.service.gov.cy
 ```
 #### Non secret environment variables
-The following non-secret environment variables are used to configure the server defined in `.env.development` for local development, `.env.staging` for staging, and `.env.production` for production.:
+The following non-secret environment variables are used to configure the server defined in `.env.development` for local development, `.env.staging` for staging, and `.env.production` for production:
 
 ```dotenv
 #### Matomo web analytics environment variables
