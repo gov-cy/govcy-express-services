@@ -239,7 +239,7 @@ export const staticResources = {
         updateMyDetailsScopes : {
             fullName : 
             {
-                el: "Ονοματεπωνυμο",
+                el: "Ονοματεπώνυμο",
                 en: "Full name",
                 tr: "Full name"
             }, 
@@ -260,6 +260,12 @@ export const staticResources = {
                 el: "Διεύθυνση αλληλογραφίας",
                 en: "Mailing address",
                 tr: "Mailing address"
+            },
+            dob : 
+            {
+                el: "Ημερομηνία γέννησης",
+                en: "Date of birth",
+                tr: "Date of birth"
             },
         }
     },
@@ -328,6 +334,11 @@ export const staticResources = {
                             text: {
                                 el: "Όχι, θα αλλάξω αυτά τα στοιχεία",
                                 en: "No, I will change these details",
+                                tr: ""
+                            },
+                            hint: {
+                                el: "Μπορείτε να αλλάξετε μόνο τα στοιχεία επικοινωνίας",
+                                en: "You can only change your contact details",
                                 tr: ""
                             }
                         }
@@ -602,6 +613,68 @@ export const staticResources = {
                             }
                         }
                     }
+                ]
+            }, 
+            "dob" : {
+                element: "dateInput",
+                params: {
+                id: "dob",
+                name: "dob",
+                legend: {
+                    el: "Ημερομηνία γέννησης",
+                    en: "Date of birth"
+                },
+                isPageHeading: false,
+                hint: {
+                    el: "Για παράδειγμα, 13 8 2001",
+                    en: "For example, 13 8 2001"
+                }
+                },
+                validations: [
+                {
+                    check: "required",
+                    params: {
+                    checkValue: "",
+                    message: {
+                        el: "Εισαγάγετε την ημερομηνία γέννησης",
+                        en: "Enter the date of birth",
+                        tr: ""
+                    }
+                    }
+                },
+                {
+                    check: "valid",
+                    params: {
+                    checkValue: "dateISO",
+                    message: {
+                        el: "Η ημερομηνία γέννησης πρέπει να είναι σωστή ημερομηνία",
+                        en: "The date of birth must be an valid date",
+                        tr: ""
+                    }
+                    }
+                },
+                {
+                    check: "minValueDate",
+                    params: {
+                    checkValue: "1900-01-01",
+                    message: {
+                        el: "Η ημερομηνία γέννησης πρέπει να είναι μετά από τις 1/1/1990",
+                        en: "The date of birth must be after 1/1/1900",
+                        tr: ""
+                    }
+                    }
+                },
+                {
+                    check: "valid",
+                    params: {
+                    checkValue: "maxCurrentDate",
+                    message: {
+                        el: "Η ημερομηνία γέννησης δεν πρέπει να είναι στο μέλλον",
+                        en: "The date of birth must not be in the future",
+                        tr: ""
+                    }
+                    }
+                }
                 ]
             }
         },

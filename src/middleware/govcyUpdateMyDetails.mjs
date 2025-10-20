@@ -14,7 +14,7 @@ import { getEnvVariable, getEnvVariableBool, isProdOrStaging } from "../utils/go
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from '../utils/govcyLogger.mjs';
-import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
+import { handleMiddlewareError, dateStringISOtoDMY } from "../utils/govcyUtils.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
 import { isUnder18, isValidCypriotCitizen, validateFormElements } from "../utils/govcyValidator.mjs";
 import { populateFormData, getFormData } from "../utils/govcyFormHandling.mjs";
@@ -128,8 +128,21 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
                     // Special case for address
                     if (element === "address") {
                         key = "addressInfo";
-                        value = response.Data?.addressInfo?.[0]?.addressText || "";
-                    }
+                        //if response.Data.addressInfo is an array
+                        if (response.Data.addressInfo && Array.isArray(response.Data.addressInfo)) {
+                            value = response.Data?.addressInfo?.[0]?.addressText || "";
+                        } 
+                        // else if response.Data.addressInfoUnstructured is not null and is an array
+                        else if (response.Data.addressInfoUnstructured && Array.isArray(response.Data.addressInfoUnstructured)) {
+                            value = response.Data?.addressInfoUnstructured?.[0]?.addressText || "";
+                        }
+                        // else if response.Data.poBoxAddress is not null and is not an array
+                        else if (response.Data.poBoxAddress && Array.isArray(response.Data.poBoxAddress)) {
+                            value = response.Data?.poBoxAddress?.[0]?.poBoxText || "";
+                        } else {
+                            value = "";
+                        }
+                    } 
 
                     // Check if the key exists
                     if (!Object.prototype.hasOwnProperty.call(response.Data || {}, key)) {
@@ -375,8 +388,21 @@ export function govcyUpdateMyDetailsPostHandler() {
                         // Special case for address
                         if (element === "address") {
                             key = "addressInfo";
-                            value = response.Data?.addressInfo?.[0]?.addressText || "";
-                        }
+                            //if response.Data.addressInfo is an array
+                            if (response.Data.addressInfo && Array.isArray(response.Data.addressInfo)) {
+                                value = response.Data?.addressInfo?.[0]?.addressText || "";
+                            } 
+                            // else if response.Data.addressInfoUnstructured is not null and is an array
+                            else if (response.Data.addressInfoUnstructured && Array.isArray(response.Data.addressInfoUnstructured)) {
+                                value = response.Data?.addressInfoUnstructured?.[0]?.addressText || "";
+                            }
+                            // else if response.Data.poBoxAddress is not null and is not an array
+                            else if (response.Data.poBoxAddress && Array.isArray(response.Data.poBoxAddress)) {
+                                value = response.Data?.poBoxAddress?.[0]?.poBoxText || "";
+                            } else {
+                                value = "";
+                            }
+                        } 
 
                         // Check if the key exists
                         if (!Object.prototype.hasOwnProperty.call(response.Data || {}, key)) {
@@ -390,8 +416,18 @@ export function govcyUpdateMyDetailsPostHandler() {
                             hasData = false;
                             userDetails[element] = "";
                         } else {
-                            // Set the value
-                            userDetails[element] = value;
+                            if (element === "dob") {
+                                key = "dob";
+                                // value = response.Data?.[key] || "";
+                                // Store different for ${element}_day, ${element}_month, ${element}_year
+                                const [year, month, day] = value.split("-").map(Number);
+                                userDetails[`${element}_day`] = day;
+                                userDetails[`${element}_month`] = month;
+                                userDetails[`${element}_year`] = year;
+                            } else {
+                                // Set the value as it is 
+                                userDetails[element] = value;
+                            }
                         }
                     }
 
@@ -570,6 +606,12 @@ function createUmdHasDataPageTemplate(siteId, lang, page, req, userDetails) {
     }
     //for each element in the scope array
     umdConfig?.scope.forEach(element => {
+        let value = userDetails?.[element] || "";
+
+        //if element is dob
+        if (element === "dob") {
+            value = dateStringISOtoDMY(value);
+        }
         // add the key and value to the summaryList
         summaryList.params.items.push({
             key: govcyResources.staticResources.text.updateMyDetailsScopes[element],
@@ -579,7 +621,7 @@ function createUmdHasDataPageTemplate(siteId, lang, page, req, userDetails) {
                     params: {
                         type: "span",
                         classes: "govcy-whitespace-pre-line",
-                        text: govcyResources.getSameMultilingualObject(null, userDetails[element])
+                        text: govcyResources.getSameMultilingualObject(null, value)
                     }
                 }
             ]
@@ -747,3 +789,4 @@ export function constructUpdateMyDetailsRedirect(req, userId, umdBaseURL, return
     // Construct redirect URL
     return `${umdBaseURL}/ReturnUrl/SetReturnUrl?Url=${encodedReturnUrl}&UserProfileId=${encodedUserId}&lang=${lang}`;
 }
+
