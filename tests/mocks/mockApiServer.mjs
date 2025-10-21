@@ -291,6 +291,75 @@ app.get("/:key/:lang", (req, res) => {
             },
             "succeeded": true
         });
+    } else if (key === "umdCitizenUpdatedUnstructured") {
+        return res.status(200).json({
+            "errorCode": 0,
+            "errorMessage": null,
+            "data": {
+                "fullName": "ALI ISMAIL",
+                "dob": "1979-05-24",
+                "dod": null,
+                "pin": "0001013317",
+                "email": "dsftesting1@gmail.com",
+                "emailVerified": true,
+                "mobile": "0035799413163",
+                "mobileVerified": true,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": [
+                    {
+                        "type": null,
+                        "addressLine1": "Potsi poda",
+                        "addressLine2": "",
+                        "town": "BBKing",
+                        "postalCode": "2460",
+                        "language": null,
+                        "country": {
+                            "code": 816,
+                            "name": "ΒΑΝΟΥΑΤΟΥ",
+                            "alpha2": null,
+                            "alpha3": null
+                        },
+                        "addressVerified": false,
+                        "addressText": "Potsi poda\n2460 BBKing\nΒΑΝΟΥΑΤΟΥ"
+                    }
+                ],
+                "poBoxAddress": null
+            },
+            "succeeded": true
+        });
+    } else if (key === "umdCitizenUpdatedPOBox") {
+        return res.status(200).json({
+            "errorCode": 0,
+            "errorMessage": null,
+            "data": {
+                "fullName": "ΣΤΕΛΛΑ ΣΤΥΛΙΑΝΟΥ",
+                "dob": "1977-07-07",
+                "dod": null,
+                "pin": "0000766588",
+                "email": "dsftesting1@gmail.com",
+                "emailVerified": true,
+                "mobile": "0035797667201",
+                "mobileVerified": true,
+                "landline": null,
+                "landlineVerified": false,
+                "addressInfo": null,
+                "addressInfoUnstructured": null,
+                "poBoxAddress": [
+                    {
+                        "type": null,
+                        "language": "el",
+                        "poBoxNumber": "12452",
+                        "poBoxDistrictCode": "",
+                        "poBoxDistrictDesc": "",
+                        "poBoxPostalCode": "2244",
+                        "poBoxText": "PO box 12452\n2244"
+                    }
+                ]
+            },
+            "succeeded": true
+        });
     }
 });
 

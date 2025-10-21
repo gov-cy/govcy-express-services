@@ -805,5 +805,273 @@ describe("govcyUpdateMyDetailsHandler() and govcyUpdateMyDetailsPostHandler()", 
     });
 
 
+    it("17. should handle structured addressInfo array correctly", async () => {
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdated";
+
+        // Mock Express request props
+        req.protocol = "https";
+        req.get = (header) => (header === "host" ? "localhost:44319" : "");
+        req.originalUrl = `/service/${siteId}/${page.pageData.url}`;
+
+        // Include address in scope
+        page.updateMyDetails.scope = ["address"];
+
+        await govcyUpdateMyDetailsHandler(req, res, next, page, service);
+
+        // ✅ Should call next() and populate processedPage
+        expect(next.calledOnce).to.be.true;
+        const { pageTemplate } = req.processedPage;
+        const summaryList = pageTemplate.sections[0].elements[0].params.elements.find(
+            el => el.element === "summaryList"
+        );
+
+        // ✅ Should have structured address text
+        const addressItem = summaryList.params.items.find(i => i.key.en === "Mailing address");
+        const valueText = addressItem?.value?.[0]?.params?.text?.en || addressItem?.value?.[0]?.params?.text;
+        expect(valueText).to.include("ΙΩΝΩΝ  12");
+    });
+
+    it("18. should handle unstructured addressInfoUnstructured array correctly", async () => {
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdatedUnstructured";
+
+        req.protocol = "https";
+        req.get = (header) => (header === "host" ? "localhost:44319" : "");
+        req.originalUrl = `/service/${siteId}/${page.pageData.url}`;
+
+        page.updateMyDetails.scope = ["address"];
+
+        await govcyUpdateMyDetailsHandler(req, res, next, page, service);
+
+        expect(next.calledOnce).to.be.true;
+        const { pageTemplate } = req.processedPage;
+        const summaryList = pageTemplate.sections[0].elements[0].params.elements.find(
+            el => el.element === "summaryList"
+        );
+
+        const addressItem = summaryList.params.items.find(i => i.key.en === "Mailing address");
+        const valueText = addressItem?.value?.[0]?.params?.text?.en || addressItem?.value?.[0]?.params?.text;
+        expect(valueText).to.include("Potsi poda");
+    });
+
+    it("19. should handle poBoxAddress array correctly", async () => {
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdatedPOBox";
+
+        req.protocol = "https";
+        req.get = (header) => (header === "host" ? "localhost:44319" : "");
+        req.originalUrl = `/service/${siteId}/${page.pageData.url}`;
+
+        page.updateMyDetails.scope = ["address"];
+
+        await govcyUpdateMyDetailsHandler(req, res, next, page, service);
+
+        expect(next.calledOnce).to.be.true;
+        const { pageTemplate } = req.processedPage;
+        const summaryList = pageTemplate.sections[0].elements[0].params.elements.find(
+            el => el.element === "summaryList"
+        );
+
+        const addressItem = summaryList.params.items.find(i => i.key.en === "Mailing address");
+        const valueText = addressItem?.value?.[0]?.params?.text?.en || addressItem?.value?.[0]?.params?.text;
+        expect(valueText).to.include("PO box 12452");
+    });
+
+    it("20. should store structured addressInfo correctly when user selects Yes (variant 2 POST)", async () => {
+        const postHandler = govcyUpdateMyDetailsPostHandler();
+
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdated";
+
+        // ✅ Minimal page config
+        req.serviceData = {
+            site: { lang: "en" },
+            pages: [
+                {
+                    pageData: { url: "update-my-details" },
+                    updateMyDetails: {
+                        APIEndpoint: {
+                            url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                            clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                            serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                        },
+                        updateMyDetailsURL: "UPDATE_MY_DETAILS_URL",
+                        scope: ["address"]
+                    }
+                }
+            ]
+        };
+
+        // ✅ POST body → user chooses Yes
+        req.body = { useTheseDetails: "yes", _csrf: "mock-csrf" };
+
+        res = { json: sinon.spy(), redirect: sinon.spy(), status: sinon.stub().returnsThis() };
+
+        await postHandler(req, res, next);
+
+        // ✅ Check session data
+        const storedData = req.session.siteData?.[siteId]?.inputData?.["update-my-details"]?.formData;
+        expect(storedData).to.have.property("address", "ΙΩΝΩΝ  12  \n1101 ΛΕΥΚΩΣΙΑ\nΛΕΥΚΩΣΙΑ\nΚΥΠΡΟΣ");
+
+        // ✅ Should respond with success JSON
+        expect(res.json.calledOnce).to.be.true;
+        const payload = res.json.firstCall.args[0];
+        expect(payload).to.have.property("success", true);
+    });
+
+    it("21. should store unstructured addressInfoUnstructured correctly when user selects Yes (variant 2 POST)", async () => {
+        const postHandler = govcyUpdateMyDetailsPostHandler();
+
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdatedUnstructured";
+
+        req.serviceData = {
+            site: { lang: "en" },
+            pages: [
+                {
+                    pageData: { url: "update-my-details" },
+                    updateMyDetails: {
+                        APIEndpoint: {
+                            url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                            clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                            serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                        },
+                        updateMyDetailsURL: "UPDATE_MY_DETAILS_URL",
+                        scope: ["address"]
+                    }
+                }
+            ]
+        };
+
+        req.body = { useTheseDetails: "yes", _csrf: "mock-csrf" };
+
+        res = { json: sinon.spy(), redirect: sinon.spy(), status: sinon.stub().returnsThis() };
+
+        await postHandler(req, res, next);
+
+        const storedData = req.session.siteData?.[siteId]?.inputData?.["update-my-details"]?.formData;
+        expect(storedData).to.have.property("address", "Potsi poda\n2460 BBKing\nΒΑΝΟΥΑΤΟΥ");
+
+        expect(res.json.calledOnce).to.be.true;
+        const payload = res.json.firstCall.args[0];
+        expect(payload).to.have.property("success", true);
+    });
+
+    it("22. should store poBoxAddress correctly when user selects Yes (variant 2 POST)", async () => {
+        const postHandler = govcyUpdateMyDetailsPostHandler();
+
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdatedPOBox";
+
+        req.serviceData = {
+            site: { lang: "en" },
+            pages: [
+                {
+                    pageData: { url: "update-my-details" },
+                    updateMyDetails: {
+                        APIEndpoint: {
+                            url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                            clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                            serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                        },
+                        updateMyDetailsURL: "UPDATE_MY_DETAILS_URL",
+                        scope: ["address"]
+                    }
+                }
+            ]
+        };
+
+        req.body = { useTheseDetails: "yes", _csrf: "mock-csrf" };
+
+        res = { json: sinon.spy(), redirect: sinon.spy(), status: sinon.stub().returnsThis() };
+
+        await postHandler(req, res, next);
+
+        const storedData = req.session.siteData?.[siteId]?.inputData?.["update-my-details"]?.formData;
+        expect(storedData).to.have.property("address", "PO box 12452\n2244");
+
+        expect(res.json.calledOnce).to.be.true;
+        const payload = res.json.firstCall.args[0];
+        expect(payload).to.have.property("success", true);
+    });
+
+    it("23. should format date of birth correctly in summary list (GET handler)", async () => {
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdated";
+
+        // Mock Express request props
+        req.protocol = "https";
+        req.get = (header) => (header === "host" ? "localhost:44319" : "");
+        req.originalUrl = `/service/${siteId}/${page.pageData.url}`;
+
+        // Include DOB in scope
+        page.updateMyDetails.scope = ["dob"];
+
+        await govcyUpdateMyDetailsHandler(req, res, next, page, service);
+
+        expect(next.calledOnce).to.be.true;
+        const { pageTemplate } = req.processedPage;
+
+        // Find summary list element
+        const summaryList = pageTemplate.sections[0].elements[0].params.elements.find(
+            el => el.element === "summaryList"
+        );
+
+        // Check DOB formatting (e.g. 1989-10-23 → 23/10/1989)
+        const dobItem = summaryList.params.items.find(i => i.key.en === "Date of birth");
+        const valueText = dobItem?.value?.[0]?.params?.text?.en || dobItem?.value?.[0]?.params?.text;
+        expect(valueText).to.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/);
+    });
+
+    it("24. should split DOB into day, month, and year fields in formData (POST handler)", async () => {
+        const postHandler = govcyUpdateMyDetailsPostHandler();
+
+        req.session.user.unique_identifier = "0012345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenUpdated";
+
+        // ✅ Minimal page config with dob in scope
+        req.serviceData = {
+            site: { lang: "en" },
+            pages: [
+                {
+                    pageData: { url: "update-my-details" },
+                    updateMyDetails: {
+                        APIEndpoint: {
+                            url: "CIVIL_REGISTRY_CONTACT_API_URL",
+                            clientKey: "CIVIL_REGISTRY_CLIENT_KEY",
+                            serviceId: "CIVIL_REGISTRY_SERVICE_ID"
+                        },
+                        updateMyDetailsURL: "UPDATE_MY_DETAILS_URL",
+                        scope: ["dob"]
+                    }
+                }
+            ]
+        };
+
+        // ✅ Simulate user selecting Yes (variant 2)
+        req.body = { useTheseDetails: "yes", _csrf: "mock-csrf" };
+
+        res = { json: sinon.spy(), redirect: sinon.spy(), status: sinon.stub().returnsThis() };
+
+        await postHandler(req, res, next);
+
+        // ✅ Verify session data
+        const storedData = req.session.siteData?.[siteId]?.inputData?.["update-my-details"]?.formData;
+        expect(storedData).to.have.property("dob_day");
+        expect(storedData).to.have.property("dob_month");
+        expect(storedData).to.have.property("dob_year");
+
+        // ✅ Example: 1989-10-23 → 23 / 10 / 1989
+        expect(storedData.dob_day).to.be.within(1, 31);
+        expect(storedData.dob_month).to.be.within(1, 12);
+        expect(storedData.dob_year).to.be.greaterThan(1900);
+
+        // ✅ Should respond with JSON success
+        expect(res.json.calledOnce).to.be.true;
+        const payload = res.json.firstCall.args[0];
+        expect(payload).to.have.property("success", true);
+    });
+
 
 });
