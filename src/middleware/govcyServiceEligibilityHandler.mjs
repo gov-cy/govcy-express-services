@@ -26,19 +26,22 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                 if (!pageUrl) pageUrl = "index";
                 // 🔍 Find the page by pageUrl
                 const page = getPageConfigData(service, pageUrl);
-                if (!page || !page.pageTemplate) return next(); // Defensive: skip if no template
-                // Deep copy pageTemplate to avoid modifying the original
-                const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
-
-                // Check if any section contains a form element
-                const hasForm = pageTemplateCopy.sections?.some(section =>
-                    section.elements?.some(el => el.element === "form")
-                );
-                if (!hasForm) {
-                    // No form found, skip eligibility check
-                    return next();
+                // ----- `updateMyDetails` handling. always run eligibility for updateMyDetails
+                if (!page.updateMyDetails) {
+                    if (!page || !page.pageTemplate) return next(); // Defensive: skip if no template
+                    // Deep copy pageTemplate to avoid modifying the original
+                    const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
+    
+                    // Check if any section contains a form element
+                    const hasForm = pageTemplateCopy.sections?.some(section =>
+                        section.elements?.some(el => el.element === "form")
+                    );
+                    if (!hasForm) {
+                        // No form found, skip eligibility check
+                        return next();
+                    }
+                    // else: continue with eligibility check
                 }
-                // else: continue with eligibility check
             }
             const eligibilityEndpoints = service?.site?.eligibilityAPIEndpoints || [];
             const user = dataLayer.getUser(req.session); // Get the user from the session;
