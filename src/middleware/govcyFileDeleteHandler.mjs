@@ -53,7 +53,9 @@ export function govcyFileDeletePageHandler() {
         
             // Guard if still nothing found
             if (!elementData || !elementData.fileId || !elementData.sha256) {
-                return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
+                logger.info(`govcyFileDeletePageHandler: File data not found for element [${elementName}] on page [${pageUrl}] in site [${siteId}]. Redirecting to "${siteId}/${pageUrl}".`);
+                return res.redirect(govcyResources.constructPageUrl(siteId, pageUrl, (req.query.route === "review" ? "review" : "")))
+                // return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 
 

@@ -147,9 +147,10 @@ describe("govcyFileDeletePageHandler & govcyFileDeletePostHandler", () => {
         const handler = govcyFileDeletePageHandler();
         await handler(req, res, next);
 
-        const error = next.firstCall.args[0];
-        expect(error).to.be.an("error");
-        expect(error.message).to.include("data not found on this page");
+        // ✅ Expect a redirect instead of an error
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.equal(`/test-site/index`);
+        expect(next.called).to.be.false; // should not call next with an error anymore
     });
 
     it("6. GET should include validation error summary when hasError is set", async () => {
