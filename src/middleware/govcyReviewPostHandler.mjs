@@ -163,6 +163,18 @@ export function govcyReviewPostHandler() {
                     // Add the reference number to the submission data
                     submissionData.referenceNumber = referenceNo;
                     logger.info("✅ Data submitted", siteId, referenceNo);
+                    
+                    // Get the user email address
+                    let emailAddress = "";
+                    // if Update my details not provided the use user email
+                    if (!updateMyDetailsData || !updateMyDetailsData.email) {
+                        emailAddress = dataLayer.getUser(req.session).email;
+                    } else {
+                        emailAddress = updateMyDetailsData.email;
+                    }
+                    // add contact email to submission data
+                    submissionData.contactEmailAddress = emailAddress;
+                    
                     // handle data layer submission
                     dataLayer.storeSiteSubmissionData(
                         req.session,
@@ -172,16 +184,7 @@ export function govcyReviewPostHandler() {
                     //-- Send email to user
                     // Generate the email body
                     let emailBody = generateSubmitEmail(service, submissionData.printFriendlyData, referenceNo, req);
-                    logger.debug("Email generated:", emailBody);
-
-                    let emailAddress = "";
-                    // if Update my details not provided the use user email
-                    if (!updateMyDetailsData || !updateMyDetailsData.email) {
-                        emailAddress = dataLayer.getUser(req.session).email;
-                    } else {
-                        emailAddress = updateMyDetailsData.email;
-                    }
-
+                   
                     // Send the email
                     sendEmail(
                         service.site.title[service.site.lang], 

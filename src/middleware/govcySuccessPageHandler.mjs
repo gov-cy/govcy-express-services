@@ -44,12 +44,21 @@ export function govcySuccessPageHandler(isPDF = false) {
                     // }
                 ]
             };
+
+            let weHaveSendYouAnEmailText = JSON.parse(JSON.stringify(govcyResources.staticResources.text.weHaveSendYouAnEmail));
+            // Replace label placeholders for email
+            for (const lang of Object.keys(weHaveSendYouAnEmailText)) {
+                weHaveSendYouAnEmailText[lang] = weHaveSendYouAnEmailText[lang].replace("{{email}}", 
+                    submissionData.contactEmailAddress || ""
+                );
+            }
+
             // Construct page title
             const weHaveSendYouAnEmail = {
                 element: "textElement",
                 params: {
                     type: "p",
-                    text: govcyResources.staticResources.text.weHaveSendYouAnEmail
+                    text: weHaveSendYouAnEmailText
                 }
             };
             

@@ -102,9 +102,9 @@ export const staticResources = {
             tr: "Your reference number: "
         },
         weHaveSendYouAnEmail: {
-            en: "We have sent you a confirmation email.",
-            el: "Έχουμε στείλει email επιβεβαιωσης.",
-            tr: "We have sent you a confirmation email."
+            en: "We have sent you a confirmation email at \"{{email}}\".",
+            el: "Έχουμε στείλει email επιβεβαιωσης στο \"{{email}}\".",
+            tr: "We have sent you a confirmation email at \"{{email}}\"."
         },
         theDataFromYourRequest: {
             en: "The data from your request: ",
