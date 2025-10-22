@@ -182,14 +182,14 @@ export const staticResources = {
             tr: "This entry already exists"
         },
         multipleThingsMaxMessage: {
-            en: "You have reached the maximum number of entries. You can only add up to {{max}} entries",
-            el: "Έχετε φτάσει το μέγιστο αριθμό καταχωρίσεων. Μπορείτε να προσθέσετε μόνο έως {{max}} καταχωρίσεις",
-            tr: "You have reached the maximum number of entries. You can only add up to {{max}} entries"
+            en: "You have reached the maximum number of entries. You can only add up to {{max}}",
+            el: "Έχετε φτάσει το μέγιστο αριθμό καταχωρίσεων. Μπορείτε να προσθέσετε μόνο έως {{max}}",
+            tr: "You have reached the maximum number of entries. You can only add up to {{max}}"
         },
         multipleThingsMinMessage: {
-            en: "You have not added the minimum number of entries. You must add at least {{min}} entries",
-            el: "Δεν έχετε προσθέσει τον ελάχιστο αριθμό καταχωρίσεων. Πρέπει να προσθέσετε τουλάχιστον {{min}} καταχωρίσεις",
-            tr: "You have not added the minimum number of entries. You must add at least {{min}} entries"
+            en: "You have not added the minimum number of entries. You must add at least {{min}}",
+            el: "Δεν έχετε προσθέσει τον ελάχιστο αριθμό καταχωρίσεων. Πρέπει να προσθέσετε τουλάχιστον {{min}}",
+            tr: "You have not added the minimum number of entries. You must add at least {{min}}"
         },
         multipleThingsItemsValidationPrefix: {
             en: "Entry {{index}} - ",
