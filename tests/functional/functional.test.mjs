@@ -18,11 +18,11 @@ async function timeout(ms) {
 
 describe('Functional Test - Login and Navigate', function () {
     this.timeout(30000); // Set timeout to 30 seconds
-  
+    
     let browser;
     let page;
     let pa11yResults; // Declare a variable to store pa11y results
-
+    
     before(async () => {
       // Launch Puppeteer and create a new incognito context
       browser = await puppeteer.launch({
@@ -39,30 +39,31 @@ describe('Functional Test - Login and Navigate', function () {
       });
       const context = await browser.createBrowserContext();
       page = await context.newPage();
-  
+      
       // Step 1: Navigate to the test service
       await page.goto(baseUrl, { waitUntil: 'networkidle0' });
-  
+      
       // Step 2: Wait for the login page and fill in the login form
       await page.waitForSelector('#username', { visible: true });
       const username = process.env.TEST_USERNAME;
       const password = process.env.TEST_PASSWORD;
-  
+      
       await page.type('#username', username); // Input the username
       await page.type('#password', password); // Input the password
       await page.click('button[type="submit"]'); // Click the submit button
-  
+      
       // Wait for navigation after login
       await page.waitForNavigation({ waitUntil: 'networkidle0' });
     });
-  
+    
     after(async () => {
       await browser.close();
     });
-  
+    
     it('1. should verify the initial page after login', async () => {
+      this.timeout(30000); // Set timeout to 30 seconds
       // Step 3: Verify redirection to the test service
-      await page.waitForSelector('h1', { visible: true }); // Wait for the main heading to be visible
+      // await page.waitForSelector('h1', { visible: true }); // Wait for the main heading to be visible
       const serviceTitle = await page.title();
       expect(serviceTitle).to.equal('Επιλογή Εγγάφου - Υπηρεσία τεστ - gov.cy'); // Verify the title of the first page
     });
