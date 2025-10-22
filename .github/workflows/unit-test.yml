@@ -37,6 +37,8 @@ jobs:
         DSF_API_GTW_NOTIFICATION_API_URL: ${{ secrets.DSF_API_GTW_NOTIFICATION_API_URL }}
         TEST_ELIGIBILITY_1_API_URL: ${{ secrets.TEST_ELIGIBILITY_1_API_URL }}
         TEST_ELIGIBILITY_2_API_URL: ${{ secrets.TEST_ELIGIBILITY_2_API_URL }}
+        CRMD_ELIGIBILITY_API_URL: ${{ secrets.CRMD_ELIGIBILITY_API_URL }}
+        CIVIL_REGISTRY_CONTACT_API_URL: ${{ secrets.CIVIL_REGISTRY_CONTACT_API_URL }}
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js

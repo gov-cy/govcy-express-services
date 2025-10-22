@@ -31,6 +31,12 @@ The APIs used for submission, temporary save and file uploads are not part of th
 - [📦 Full installation guide](#-full-installation-guide)
 - [🛠️ Usage](#%EF%B8%8F-usage)
   - [🧩 Dynamic services](#-dynamic-services)
+    - [Pages](#pages)
+    - [Form vs static pages](#form-vs-static-pages)
+    - [Update my details pages](#update-my-details-pages)
+    - [Multiple things pages (repeating group of inputs)](#multiple-things-pages-repeating-group-of-inputs)
+    - [Review page](#review-page)
+    - [Success page](#success-page)
   - [🛡️ Site eligibility checks](#%EF%B8%8F-site-eligibility-checks)
   - [📤 Site submissions](#-site-submissions)
   - [✅ Input validations](#-input-validations)
@@ -750,6 +756,8 @@ flowchart LR
 
 Some pages are generated automatically by the project, such as the `review` and `success` pages.
 
+------------------------------------------
+
 #### Pages
 
 Pages defined in the JSON file under the `pages` array, they rendered based on the [govcy-frontend-renderer](https://github.com/gov-cy/govcy-frontend-renderer) library, and they are served by the `/:siteId/:pageUrl` route. The `pageData.nextPage` field is used to determine the next page to render.
@@ -854,7 +862,7 @@ Here's an example of a page defined in the JSON file:
 
 The above `page` JSON generates a page that looks like the following screenshot:
 
-![Screenshot of sample page](express-page.png)
+![Screenshot of sample page](docs/img/express-page.png)
 
 The JSON structure is based on the [govcy-frontend-renderer's JSON template](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md#json-template-example).
 
@@ -871,7 +879,9 @@ Lets break down the JSON config for this page:
   - `sections` is an array of sections, which is an array of elements. Sections allowed: `beforeMain`, `main`, `afterMain`.
     - `elements` is an array of elements for the said section. Seem more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md).
 
-**Forms vs static content**
+------------------------------------------
+
+#### Form vs static pages
 
 - If the `pageTemplate` includes a `form` element in the `main` section and `button` element, the system will treat it as form and will:
   - Perform the eligibility checks
@@ -904,6 +914,369 @@ The [start page](https://gov-cy.github.io/govcy-design-system-docs/patterns/serv
 - Check out the [govcy-frontend-renderer's design elements](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md) for more details on the supported elements and their parameters.
 - Check out the [input validations section](#-input-validations) for more details on how to add validations to the JSON file.
 
+-------------------------------------------
+
+#### Update my details pages
+
+![Update my details seamless](docs/img/express-UMD-Seamless.png)
+
+Update my details pages are pages that can integrate the [Update My Personal Details service](https://update-my-details.service.gov.cy/) to fetch or update a user’s name, email, mobile number, or correspondence address, without breaking the user journey. The implementation of these pages follow the instructuctions described in the [Use ‘Update my personal details’ in Your Service](https://dsf.dmrid.gov.cy/2025/05/20/use-update-my-personal-details-in-your-service/) post.
+
+If the `scope` also includes the `email` element, the system will also use that email address to send the email to the user on submition.
+
+**Update my details - example JSON config**
+```json
+{
+  "pageData": {
+    "url": "index",     // Page URL
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "next-page" 
+  },
+  "updateMyDetails": {
+    "APIEndpoint": {    // API endpoint for fetching user details from the Update My Details service
+      "url": "CIVIL_REGISTRY_CONTACT_API_URL", // URL
+      "method": "GET",                         // HTTP method
+      "clientKey": "DSF_API_GTW_CLIENT_ID",    // Client key
+      "serviceId": "DSF_API_GTW_SERVICE_ID",   // Service ID
+      "dsfgtwApiKey": "DSF_API_GTW_SECRET"     // DSF GTW API key 
+    },
+    "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",  // DOMAIN URL for redirecting to the Update My Details service
+  "topElements": [                             // Elements to be displayed on the top of the page
+      {
+        "element": "progressList",
+        "params": {
+          "id": "steps",
+          "current": "4",
+          "total": "4",
+          "showSteps": true
+        }
+      }
+    ],
+    "scope": [                                  // Scope of the form. What elenents to collect
+      "fullName",
+      "email",
+      "mobile",
+      "address"
+    ],
+    "hasBackLink": true                         // Whether the hub page has a back link
+  }
+}
+
+```
+
+Lets break down the JSON config for Update my details:
+
+- **updateMyDetails** are the page's definition for the integration with the Update My Details service.
+  - `updateMyDetails.APIEndpoint` is the API endpoint for fetching user details from the Update My Details service.
+  - `updateMyDetails.updateMyDetailsURL` is the DOMAIN URL for redirecting to the Update My Details service.
+  - `updateMyDetails.scope` is the scope of the form. What elenents to collect. It can be one or more of the following:
+    - `fullName`
+    - `dob`
+    - `email`
+    - `mobile`
+    - `address` 
+  - `updateMyDetails.hasBackLink` is a boolean that indicates whether the hub page has a back link.
+
+
+The above config references the following environment variables that need to be set:
+
+```dotenv
+### Update my details
+CIVIL_REGISTRY_CONTACT_API_URL=http://localhost:3002/get-update-my-details
+DSF_API_GTW_CLIENT_ID=your-DSF-API-gateway-client-id
+DSF_API_GTW_SERVICE_ID=your-DSF-API-gateway-service-id
+DSF_API_GTW_SECRET=your-DSF-API-gateway-secret
+
+UPDATE_MY_DETAILS_URL=https://update-my-details.staging.service.gov.cy # FOR TESTING
+```
+
+The DSF team has developed an API that performs standard eligibility checks against the Civil Registry. More details at [Update-my-details.md](docs/Update-my-details.md)
+
+**Update my details - users' flow**
+
+The update my details behaves like a normal page and it is accessed through the url `:siteId/:pageUrl`. As a best practice you should set this as your `index` page and the first one in your pages array. Depending on the user it can have 3 variants:
+
+**Variant 1: Manual form for non-eligible users (no access to UMD)**
+
+When a user is either: 
+- Not a Cypriot citizen 
+- Or Cypriot citizen under 18 
+
+The user gets a data entry page.
+
+![variant 1 screenshot](docs/img/express-UMD-variant1.png)
+
+**Variant 2: Eligible users (access to UMD) with existing details**
+
+When a user is : 
+- A Cypriot citizen over 18  
+- AND has data in Update my Details 
+
+The users get a page with the data from UMD and asks if its ok to use those data.
+
+![variant 2 screenshot](docs/img/express-UMD-variant2.png)
+
+If the user selects:
+- `YES`: the data are stored in the data layer and continues to the next page (or review page depending where the user came from)
+- `NO`: the users are redirected to the Update my details service in seamless mode. When users finish with that, they are redirected back to the page with variant 2 and are asked again if it's ok to use the updated data.
+
+**Variant 3: Eligible users (access to UMD) without existing details** 
+
+When a user is : 
+- A Cypriot citizen over 18  
+- AND has no data in Update my Details
+
+The users get a continue button that redirects to the Update my details service in seamless mode. 
+
+![variant 3 screenshot](docs/img/express-UMD-variant3.png)
+
+When users finish with that, they are redirected back to the page with variant 2 and are asked if it's ok to use the updated data. 
+
+**Update my details - data storage**
+
+The form data for a `updateMyDetails` page is stored as a normal page as an **object** in the session data layer:
+```json
+{
+  "index": {
+    "formData": 
+    {
+      "fullName": "John Smith",
+      "email": "email@example.com",
+      "mobile": "+35712345678",
+      "address": "123 Some Street\n Nicosia\nCyprus",
+    }
+  }
+}
+```
+
+**Notes on Update my details**
+- There `pageData.title` is not used. Instead the page title is generated by the system.
+
+------------------------------------------
+
+#### Multiple things pages (repeating group of inputs)
+![Multiple things pages](docs/img/express-mt.png)
+
+Some services need to collect **multiple entries of the same structure**, for example, academic qualifications, addresses, or dependents. The framework supports this through the `multipleThings` block in a page config. It uses the same input method of a normal form page, but the user can add more than one entries.
+
+When enabled, the framework automatically generates a **hub page** when the user visits the:
+
+```ruby
+/:siteId/:pageUrl
+```
+
+This hub page allows users to:
+- 📋 **View the list** of entries (hub page)
+- ➕ **Add** a new entry
+- ✏️ **Change** an existing entry
+- ❌ **Remove** an existing entry
+- ✅ **Continue** when they are finished
+
+**Multiple things - example JSON config**
+Here’s how to define a page that collects multiple academic qualifications:
+
+```json
+{
+  "pageData": {
+    "url": "qualifications",    // Page URL
+    "title": {                  // Page title of the input pages (add, edit)
+      "el": "Ακαδημαϊκά και επαγγελματικά προσόντα",
+      "en": "Academic and professional qualifications",
+      "tr": ""
+    },
+    "layout": "layouts/govcyBase.njk",  // Page layout for all pages (add, edit, hub page)
+    "mainLayout": "two-third",          // Page main layout for all pages (add, edit, hub page)
+    "nextPage": "memberships"           // The next page's URL
+  },
+  "pageTemplate" : {  // Page template for the input pages (add, edit)
+    ...
+  },
+  "multipleThings": { // Multiple things configuration
+    "min": 1,     // the minimum number of entries
+    "max": 5,     // the maximum number of entries
+    "dedupe": true, // whether to check for duplicates
+    "itemTitleTemplate": "{{title | trim}}  - {{year | trim}}", // the title template for each entry
+    "listPage": { // the hub page
+      "title": { // the hub page title
+        "el": "Ακαδημαϊκά προσόντα",
+        "en": "Academic details"
+      },
+      "topElements": [ // the hub page top elements
+        {
+          "element": "progressList",
+          "params": {
+            "id": "progress",
+            "current": "2",
+            "total": "6",
+            "showSteps": true
+          }
+        },
+        {
+          "element": "textElement",
+          "params": {
+            "id": "header",
+            "type": "h1",
+            "text": {
+              "el": "Ποια είναι τα προσόντα σας;",
+              "en": "What are your qualifications?",
+              "tr": ""
+            }
+          }
+        },
+        {
+          "element": "textElement",
+          "params": {
+            "id": "instructions",
+            "type": "p",
+            "text": {
+              "el": "Προσθέστε τουλάχιστον ένα τα ακαδημαϊκό ή επαγγελματικό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5.",
+              "en": "Add at least one academic or professional qualifications to proceed. You can up to 5."
+            }
+          }
+        }
+      ],
+      "emptyState": { // the hub page empty state
+        "en": "No qualifications added yet.",
+        "el": "Δεν έχετε προσθέσει ακόμη προσόντα."
+      },
+      "addButtonText": { // the hub page add button text
+        "en": "➕ Add qualifications",
+        "el": "➕ Προσθήκη προσόντος"
+      },
+      "addButtonPlacement": "top", // the hub page add button placement
+      "continueButtonText": { // the hub page continue button text
+        "en": "Save and continue",
+        "el": "Αποθήκευση και συνέχεια"
+      },
+      "hasBackLink": true // whether the hub page has a back link
+    }
+  }
+}
+```
+
+Lets break down the JSON config for multiple things:
+- **multipleThings** are the page's definition for repeated group of inputs
+	- `multipleThings.min` : The minimum items rule
+	- `multipleThings.max` : The maximum items rule
+	- `multipleThings.dedupe`: When `true` prevents duplicates, using the `itemTitleTemplate` template. Optional with default value `false`
+	- `multipleThings.itemTitleTemplate`: The template (in Nunjucks form) used to display the items' on a list in the hub, review, success pages and email. Also used by the `dedupe` to compare for duplicates
+	- `multipleThings.listPage`: The definition the list (hub) page that shows the list of items, with the actions (add, edit, delete, continue)
+		- `multipleThings.listPage.title`: The title used in the hub page's meta data
+		- `multipleThings.listPage.topElements`: The elements to be displayed on the top of the page (more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md)):
+		- `multipleThings.listPage.emptyState`: The message displayed when the count of items == 0. Optional, when not defined generic text is shown
+		- `multipleThings.listPage.addButtonText`: The text displayed on the add link. Optional, when not defined generic text is shown
+		- `multipleThings.listPage.addButtonPlacement`: Where to show the add link. Can be `top`,  `bottom` or `both`. Optional, default is `bottom`
+		- `multipleThings.listPage.continueButtonText`: The text displayed on the continue button text. Optional, default is `Continue`, `Συνέχεια`
+		- `multipleThings.listPage.hasBackLink`: When `true` shows the standard back button. Optional, default is `true
+
+
+**Multiple things - How it works**
+With multiple things pages, the system collects multiple set of the same type of data. The set of data are collected by a single page (similar to a normal page). The multiple things consist of 4 type of pages, the `hub`, `add`, `edit` and `delete` pages
+
+**Hub page**: When the user navigates through the service at `/:siteId/:pageUrl` (either coming from _review_ or _linear_ flow), the system shows the hub page. The hub page in general shows the list of entries, add links, continue button and validates the input (see below more details)
+
+`Hub page add links`: If the user has not reached the maximum number of allowed entries, the system shows add links on the hub page. There is an option for a custom add link text with `multipleThings.listPage.addButtonText`. There is an option for `top`, `bottom` or `both` placement with `multipleThings.listPage.addButtonPlacement`
+
+![Multiple things hub - add links](docs/img/express-mt-hub-add.png)
+
+`Hub empty state`: When no data are yet entered the hub shows an empty state message with an add link. There is an option for a custom empty state
+
+![Multiple things hub - empty state](docs/img/express-mt-hub-empty.png)
+
+`Hub list state`: When data exist, they are shown as a list with `change` and `delete` links. The list is created based on an the `multipleThings.itemTitleTemplate`, for example ` {{institution}} - {{title}} - {{year}}`
+
+![Multiple things hub - list](docs/img/express-mt-hub-list.png)
+
+`Hub max state`: If the data entries reached the maximum limit, the `add links` are removed and a `max limit reached` message is shown.
+
+![Multiple things hub - max](docs/img/express-mt-hub-max.png)
+
+`Hub page continue`: on Continue the system continues to the next page defined in the `pageData.nextPage`. If user came from the review page, it returns to the review.
+
+`Hub page validations`: The hub page validates the following when the continue button is pressed.
+  - `Minimum entries` have been entered. This is based on the `multipleThings.min`.
+  - `Maximum limit` has not been exceeded.. This is based on the `multipleThings.max`.
+  - `All entries validations pass`. This is based on the `pageTemplate` element validations.
+  
+  ![Multiple things hub - validations](docs/img/express-mt-hub-validagion.png)
+
+**Add pages**
+
+![Multiple things add](docs/img/express-mt-add.png)
+
+- Accessible through the add link or through the `/:siteId/:pageUrl/multiple/add` route
+- User is shown the item page (e.g. `academic-details`)
+- Files' data are stored in a **draft** until they click `Continue`
+- On `Continue`, the data and draft is pushed into the list
+- Behaves like a normal form page
+- On `Continue` if there are no validation errors, the user is navigated back to the hub and the added data is displayed on the list. If the user’s journey started from the review page, after clicking continue on the hub, it goes back to the review.
+- It performs all configured input validations defined PLUS
+  - `Maximum limit` has not been exceeded.
+  - `Dedupe validation`. If defined in the configuration the service checks if there is an identical entry. The check is made based on the item title template
+
+**Edit pages**
+
+![Multiple things edit](docs/img/express-mt-hub-edit.png)
+
+- Accessible through the change link or through the `/:siteId/:pageUrl/multiple/edit/:index` route
+- User selects an existing item from the hub page
+- The item page loads pre-filled data
+- Behaves like a normal form page
+- On `Continue` if there are no validation errors, the entry is updated and the user is navigated back to the hub and the updated data is displayed on the list. If the user’s journey started from the review page, after clicking continue on the hub, it goes back to the review.
+-  It performs all configured input validations defined PLUS
+  - `Dedupe validation`. If defined in the configuration the service checks if there is an identical entry. The check is made based on the item title template
+  
+**Delete pages**
+
+![Multiple things delete](docs/img/express-mt-delete.png)
+
+- Accessible through the remove link or through the `/:siteId/:pageUrl/multiple/delete/:index` route
+- A confirmation page is shown
+- On _Yes_, the item is removed from the list
+
+**Review & Success pages**
+
+![Multiple things review](docs/img/express-mt-review.png)
+
+  - Each item is displayed in the summary list, grouped under the hub’s title
+
+**Multiple things - data storage**
+
+Form data for a `multipleThings` page is stored as an **array** in the session data layer:
+```json
+{
+  "academic-details": {
+    "formData": [
+      {
+        "title": "BSc Computer Science",
+        "academicFile": {
+          "fileId": "12345",
+          "sha256": "abcdef..."
+        }
+      },
+      {
+        "title": "MSc Information Systems",
+        "academicFile": {
+          "fileId": "67890",
+          "sha256": "ghijkl..."
+        }
+      }
+    ]
+  }
+}
+```
+
+**Notes on multiple things**
+
+- Each `multipleThings` page must define its own item page (with fields and validations), used for the `add` add `edit` routes.
+- The hub page is generated automatically. It uses the `multipleThings.listPage` for the UI
+- Empty state is handled automatically.
+- `multipleDraft` is used internally to store file's data while the user is adding a new item.
+
+
+------------------------------------------
+
 #### Review page
 
 The `review` page is automatically generated by the project and includes the following sections:
@@ -914,11 +1287,13 @@ The `review` page is automatically generated by the project and includes the fol
 
 Here's an example screenshot of review page
 
-![Screenshot of review page](express-review.png)
+![Screenshot of review page](docs/img/express-review.png)
 
 When the user clicks a change link, the user is redirected to the corresponding page in the service. After the user clicks on `continue` button the user is redirected back to the `review` page.
 
 When the user clicks the `Submit` button, all the data gathered from the site's forms within this session are validated based on the validation definition in the JSON file, and if they pass they are submitted to the configured API endpoint.
+
+------------------------------------------
 
 #### Success page
 
@@ -930,7 +1305,9 @@ The `success` page is automatically generated by the project, is accessible only
 
 Here's an example screenshot of success page
 
-![Screenshot of success page](express-success.png)
+![Screenshot of success page](docs/img/express-success.png)
+
+--------------------------------
 
 ### 🛡️ Site eligibility checks
 
@@ -1101,6 +1478,8 @@ HTTP/1.1 200 OK
 - If no `eligibilityAPIEndpoints` are configured, the system will not check for service eligibility for the specific site.
 - The response is normalized to always use PascalCase keys (`Succeeded`, `ErrorCode`, etc.), regardless of the backend’s casing.
 - If `Succeeded` is false, the system will look up the `ErrorCode` in your config to determine which error page to show.
+- For standard eligibility checks see:
+  - [Elegibility with Civil Registry](docs/Eligibility-civil-registry.md)
 
 **Caching**
 - The response from each eligibility endpoint is cached in the session for the number of minutes specified by `cashingTimeoutMinutes`.
@@ -1321,378 +1700,30 @@ The data is collected from the form elements and the data layer and are sent via
       "date_on_contract": "date_other",
       "date_contract": "16/04/2025",
       "reason": "24324dssf"
-    }
+    }, 
+    "academic-details": [                   // Multiple things page
+      {
+        "title": "BSc Computer Science",
+        "academicFile": {
+          "fileId": "12345",
+          "sha256": "abcdef..."
+        }
+      },
+      {
+        "title": "MSc Information Systems",
+        "academicFile": {
+          "fileId": "67890",
+          "sha256": "ghijkl..."
+        }
+      }
+    ]
   },
   "submissionDataVersion": "1",           // Submission data version
   "rendererData": {                        // Summary list renderer data ready for rendering . Object, will be stringified
-    "element": "summaryList",
-    "params": {
-      "items": [
-        {
-          "key": {
-            "el": "Στοιχεία του  εκπαιδευτικού",
-            "en": "Educator's details",
-            "tr": ""
-          },
-          "value": [
-            {
-              "element": "summaryList",
-              "params": {
-                "items": [
-                  {
-                    "key": {
-                      "el": "Ταυτοποίηση",
-                      "en": "Identification"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "Ταυτότητα, ARC",
-                            "el": "Ταυτότητα, ARC",
-                            "tr": "Ταυτότητα, ARC"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "key": {
-                      "el": "Εισαγάγετε αριθμό ταυτότητας",
-                      "en": "Enter ID number"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "121212",
-                            "el": "121212",
-                            "tr": "121212"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "key": {
-                      "el": "Αριθμός κοινωνικών ασφαλίσεων",
-                      "en": "Social Insurance Number"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "112121",
-                            "el": "112121",
-                            "tr": "112121"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "key": {
-            "el": "Διορισμός εκπαιδευτικού",
-            "en": "Teachers appointment",
-            "tr": ""
-          },
-          "value": [
-            {
-              "element": "summaryList",
-              "params": {
-                "items": [
-                  {
-                    "key": {
-                      "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
-                      "en": "What type of appointment does the teacher have?"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "Συμβασιούχος",
-                            "el": "Συμβασιούχος",
-                            "tr": "Συμβασιούχος"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "key": {
-                      "el": "Αριθμός φακέλου (ΠΜΠ)",
-                      "en": "File Number"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "1212",
-                            "el": "1212",
-                            "tr": "1212"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "key": {
-                      "el": "Ειδικότητα",
-                      "en": "Specialty"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "Καθηγητής",
-                            "el": "Καθηγητής",
-                            "tr": "Καθηγητής"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "key": {
-            "el": "Ημερομηνία ανάληψης",
-            "en": "Takeover date",
-            "tr": ""
-          },
-          "value": [
-            {
-              "element": "summaryList",
-              "params": {
-                "items": [
-                  {
-                    "key": {
-                      "el": "Ημερομηνία ανάληψης",
-                      "en": "Start Date"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "16/04/2025",
-                            "el": "16/04/2025",
-                            "tr": "16/04/2025"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "key": {
-                      "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
-                      "en": "Is this date the same as the contract date?"
-                    },
-                    "value": [
-                      {
-                        "element": "textElement",
-                        "params": {
-                          "text": {
-                            "en": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
-                            "el": "Ναι, είναι η ίδια με αυτή του συμβολαίου",
-                            "tr": "Ναι, είναι η ίδια με αυτή του συμβολαίου"
-                          },
-                          "type": "span"
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+    ...
   },
   "printFriendlyData": [                  // Print friendly data. Object, will be stringified
-    {
-      "pageUrl": "index",                     // Page URL
-      "pageTitle": {                          // Page title
-        "el": "Στοιχεία του  εκπαιδευτικού",
-        "en": "Educator's details",
-        "tr": ""
-      },
-      "fields": [                             // Fields
-        {
-          "id": "id_select",                    // Field ID
-          "label": {                            // Field label
-            "el": "Ταυτοποίηση",
-            "en": "Identification"
-          },
-          "value": ["id", "arc"],          // Field value. // field level: checkboxes are ALWAYS arrays (may be []); radios/select/text are strings
-          "valueLabel": [                       // Field value label
-            {
-              "el": "Ταυτότητα",
-              "en": "ID",
-              "tr": ""
-            },
-            {
-              "el": "ARC",
-              "en": "ARC",
-              "tr": ""
-            }
-          ]
-        },
-        {
-          "id": "id_number",
-          "label": {
-            "el": "Εισαγάγετε αριθμό ταυτότητας",
-            "en": "Enter ID number"
-          },
-          "value": "654654",
-          "valueLabel": {
-            "el": "654654",
-            "en": "654654"
-          }
-        },
-        {
-          "id": "aka",
-          "label": {
-            "el": "Αριθμός κοινωνικών ασφαλίσεων",
-            "en": "Social Insurance Number"
-          },
-          "value": "232323",
-          "valueLabel": {
-            "el": "232323",
-            "en": "232323"
-          }
-        }
-      ]
-    },
-    {
-      "pageUrl": "appointment",
-      "pageTitle": {
-        "el": "Διορισμός εκπαιδευτικού",
-        "en": "Teachers appointment",
-        "tr": ""
-      },
-      "fields": [
-        {
-          "id": "diorismos",
-          "label": {
-            "el": "Τι διορισμό έχει ο εκπαιδευτικός;",
-            "en": "What type of appointment does the teacher have?"
-          },
-          "value": "monimos",
-          "valueLabel": {
-            "el": "Μόνιμος επί δοκιμασία",
-            "en": "Permanent on probation",
-            "tr": ""
-          }
-        },
-        {
-          "id": "fileno_monimos",
-          "label": {
-            "el": "Αριθμός φακέλου (ΠΜΠ)",
-            "en": "File Number"
-          },
-          "value": "3233",
-          "valueLabel": {
-            "el": "3233",
-            "en": "3233"
-          }
-        },
-        {
-          "id": "eidikotita_monimos",
-          "label": {
-            "el": "Ειδικότητα",
-            "en": "Specialty"
-          },
-          "value": "1",
-          "valueLabel": {
-            "el": "Δάσκαλος",
-            "en": "Elementary teacher",
-            "tr": ""
-          }
-        }
-      ]
-    },
-    {
-      "pageUrl": "takeover",
-      "pageTitle": {
-        "el": "Ημερομηνία ανάληψης",
-        "en": "Takeover date",
-        "tr": ""
-      },
-      "fields": [
-        {
-          "id": "date_start",
-          "label": {
-            "el": "Ημερομηνία ανάληψης",
-            "en": "Start Date"
-          },
-          "value": "2020-12-11",
-          "valueLabel": {
-            "el": "11/12/2020",
-            "en": "11/12/2020"
-          }
-        },
-        {
-          "id": "date_on_contract",
-          "label": {
-            "el": "Η ημερομηνία αυτή είναι η ίδια με αυτή του συμβολαίου;",
-            "en": "Is this date the same as the contract date?"
-          },
-          "value": "date_other",
-          "valueLabel": {
-            "el": "Όχι, αυτή είναι διαφορετική",
-            "en": "No, this is different",
-            "tr": ""
-          }
-        },
-        {
-          "id": "date_contract",
-          "label": {
-            "el": "Ημερομηνία συμβολαίου",
-            "en": "Contract Date"
-          },
-          "value": "16/04/2025",
-          "valueLabel": {
-            "el": "16/04/2025",
-            "en": "16/04/2025"
-          }
-        },
-        {
-          "id": "reason",
-          "label": {
-            "el": "Αιτιολόγηση καθυστέρησης στην ανάληψη καθηκόντων",
-            "en": "Reason for delay in assuming duties"
-          },
-          "value": "24324dssf",
-          "valueLabel": {
-            "el": "24324dssf",
-            "en": "24324dssf"
-          }
-        }
-      ]
-    }
+    ...
   ],
   "rendererVersion": "1.14.1",              // Renderer version
   "designSystemsVersion": "3.1.0",          // Design systems version
@@ -1740,6 +1771,7 @@ The validation rules for each element are defined in the `"validations` array fo
     - `date`: Date input (DD/MM/YYYY)
     - `dateISO`: ISO date input `YYYY-M-D`
     - `dateDMY`: European/Common Format date input `D/M/YYYY`
+    - `maxCurrentYear`: Maximum current year input
 - `required`: Checks if the value is not null, undefined, or an empty string (after trimming).
 - `length`: Checks if the value has a maximum length passed in the `checkValue` parameter.
 - `regCheck`: Checks if the value matches the specified regular expression passed in the `checkValue` parameter.
@@ -2599,7 +2631,7 @@ The environment variables are defined in:
    - `.env.production` for production
 
 #### Secret environment variables
-The following secret environment variables are used to configure the server:
+The following secret environment variables are used to configure the server (note the values below are examples, you need to replace them with your own values):
 
 ```dotenv
 # 🔐 Session
@@ -2673,9 +2705,13 @@ TEST_FILE_DELETE_API_URL=http://localhost:3002/fileDelete
 # Eligibility checks (optional test APIs)
 TEST_ELIGIBILITY_1_API_URL=http://localhost:3002/eligibility1
 TEST_ELIGIBILITY_2_API_URL=http://localhost:3002/eligibility2
+
+# Update my details
+CIVIL_REGISTRY_CONTACT_API_URL=http://localhost:3002/get-update-my-details
+UPDATE_MY_DETAILS_URL=https://update-my-details.staging.service.gov.cy
 ```
 #### Non secret environment variables
-The following non-secret environment variables are used to configure the server defined in `.env.development` for local development, `.env.staging` for staging, and `.env.production` for production.:
+The following non-secret environment variables are used to configure the server defined in `.env.development` for local development, `.env.staging` for staging, and `.env.production` for production:
 
 ```dotenv
 #### Matomo web analytics environment variables

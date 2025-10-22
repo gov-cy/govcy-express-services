@@ -10,7 +10,7 @@ var _govcyPrevFocus = null;
 var _govcyDisabledEls = [];
 
 // 🔁 Loop over each file input and attach a change event listener
-fileInputs.forEach(function(input) {
+fileInputs.forEach(function (input) {
   input.addEventListener('change', _uploadFileEventHandler);
 });
 
@@ -19,19 +19,19 @@ fileInputs.forEach(function(input) {
  * @param {*} root  The root element whose focusable children will be disabled
  */
 function disableFocusables(root) {
-    var sel = 'a[href],area[href],button,input,select,textarea,iframe,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
-    var nodes = root.querySelectorAll(sel);
-    _govcyDisabledEls = [];
-    for (var i = 0; i < nodes.length; i++) {
-        var el = nodes[i];
-        if (_govcyOverlay.contains(el)) continue;                 // don’t disable overlay itself
-        var prev = el.getAttribute('tabindex');
-        el.setAttribute('data-prev-tabindex', prev === null ? '' : prev);
-        el.setAttribute('tabindex', '-1');
-        _govcyDisabledEls.push(el);
-    }
-    root.setAttribute('aria-hidden', 'true');              // hide from AT on fallback
-    root.setAttribute('aria-busy', 'true');
+  var sel = 'a[href],area[href],button,input,select,textarea,iframe,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
+  var nodes = root.querySelectorAll(sel);
+  _govcyDisabledEls = [];
+  for (var i = 0; i < nodes.length; i++) {
+    var el = nodes[i];
+    if (_govcyOverlay.contains(el)) continue;                 // don’t disable overlay itself
+    var prev = el.getAttribute('tabindex');
+    el.setAttribute('data-prev-tabindex', prev === null ? '' : prev);
+    el.setAttribute('tabindex', '-1');
+    _govcyDisabledEls.push(el);
+  }
+  root.setAttribute('aria-hidden', 'true');              // hide from AT on fallback
+  root.setAttribute('aria-busy', 'true');
 }
 
 /**
@@ -39,15 +39,15 @@ function disableFocusables(root) {
  * @param {*} root  The root element whose focusable children will be restored
  */
 function restoreFocusables(root) {
-    for (var i = 0; i < _govcyDisabledEls.length; i++) {
-        var el = _govcyDisabledEls[i];
-        var prev = el.getAttribute('data-prev-tabindex');
-        if (prev === '') el.removeAttribute('tabindex'); else el.setAttribute('tabindex', prev);
-        el.removeAttribute('data-prev-tabindex');
-    }
-    _govcyDisabledEls = [];
-    root.removeAttribute('aria-hidden');
-    root.removeAttribute('aria-busy');
+  for (var i = 0; i < _govcyDisabledEls.length; i++) {
+    var el = _govcyDisabledEls[i];
+    var prev = el.getAttribute('data-prev-tabindex');
+    if (prev === '') el.removeAttribute('tabindex'); else el.setAttribute('tabindex', prev);
+    el.removeAttribute('data-prev-tabindex');
+  }
+  _govcyDisabledEls = [];
+  root.removeAttribute('aria-hidden');
+  root.removeAttribute('aria-busy');
 }
 
 /**
@@ -56,48 +56,48 @@ function restoreFocusables(root) {
  * @returns 
  */
 function trapTab(e) {
-    if (e.key !== 'Tab') return;
-    var focusables = _govcyOverlay.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])');
-    if (focusables.length === 0) { e.preventDefault(); _govcyOverlay.focus(); return; }
-    var first = focusables[0], last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  if (e.key !== 'Tab') return;
+  var focusables = _govcyOverlay.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])');
+  if (focusables.length === 0) { e.preventDefault(); _govcyOverlay.focus(); return; }
+  var first = focusables[0], last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 }
 
 /**
  * Shows the loading spinner overlay and traps focus within it
  */
 function showLoadingSpinner() {
-    _govcyPrevFocus = document.activeElement;
-    _govcyOverlay.setAttribute('aria-hidden', 'false');
-    _govcyOverlay.setAttribute('tabindex', '-1');
-    _govcyOverlay.style.display = 'flex';
-    document.documentElement.style.overflow = 'hidden';
+  _govcyPrevFocus = document.activeElement;
+  _govcyOverlay.setAttribute('aria-hidden', 'false');
+  _govcyOverlay.setAttribute('tabindex', '-1');
+  _govcyOverlay.style.display = 'flex';
+  document.documentElement.style.overflow = 'hidden';
 
-    if ('inert' in HTMLElement.prototype) {               // progressive enhancement
-        _govcyAppRoot.inert = true;
-    } else {
-        disableFocusables(_govcyAppRoot);
-        document.addEventListener('keydown', trapTab, true);
-    }
-    _govcyOverlay.focus();
+  if ('inert' in HTMLElement.prototype) {               // progressive enhancement
+    _govcyAppRoot.inert = true;
+  } else {
+    disableFocusables(_govcyAppRoot);
+    document.addEventListener('keydown', trapTab, true);
+  }
+  _govcyOverlay.focus();
 }
 
 /**
  * Hides the loading spinner overlay and restores focus to the previously focused element
  */
 function hideLoadingSpinner() {
-    _govcyOverlay.style.display = 'none';
-    _govcyOverlay.setAttribute('aria-hidden', 'true');
-    document.documentElement.style.overflow = '';
+  _govcyOverlay.style.display = 'none';
+  _govcyOverlay.setAttribute('aria-hidden', 'true');
+  document.documentElement.style.overflow = '';
 
-    if ('inert' in HTMLElement.prototype) {
-        _govcyAppRoot.inert = false;
-    } else {
-        restoreFocusables(_govcyAppRoot);
-        document.removeEventListener('keydown', trapTab, true);
-    }
-    if (_govcyPrevFocus && _govcyPrevFocus.focus) _govcyPrevFocus.focus();
+  if ('inert' in HTMLElement.prototype) {
+    _govcyAppRoot.inert = false;
+  } else {
+    restoreFocusables(_govcyAppRoot);
+    document.removeEventListener('keydown', trapTab, true);
+  }
+  if (_govcyPrevFocus && _govcyPrevFocus.focus) _govcyPrevFocus.focus();
 }
 
 
@@ -165,24 +165,40 @@ function _uploadFileEventHandler(event) {
   formData.append('file', file);               // Attach the actual file
   formData.append('elementName', elementName); // Attach the field name for backend lookup
 
-  // 🚀 CHANGED: using fetch instead of axios.post
-  fetch(`/apis/${siteId}/${pageUrl}/upload`, {
+  // 🚀 Build upload URL depending on mode (single / multiple/add / multiple/edit/:index)
+  var pathname = window.location.pathname;
+  var uploadUrl;
+
+  if (/\/multiple\/add\/?$/.test(pathname)) {
+    uploadUrl = `/apis/${siteId}/${pageUrl}/multiple/add/upload`;
+  } else {
+    var editMatch = pathname.match(/\/multiple\/edit\/(\d+)(?:\/|$)/);
+    if (editMatch) {
+      var idx = editMatch[1];
+      uploadUrl = `/apis/${siteId}/${pageUrl}/multiple/edit/${idx}/upload`;
+    } else {
+      uploadUrl = `/apis/${siteId}/${pageUrl}/upload`;
+    }
+  }
+
+  fetch(uploadUrl, {
     method: "POST",
     headers: {
       "X-CSRF-Token": csrfToken // 🔐 Pass CSRF token in custom header
     },
     body: formData
   })
-    .then(function(response) {
+
+    .then(function (response) {
       // 🚀 CHANGED: fetch does not auto-throw on error codes → check manually
       if (!response.ok) {
-        return response.json().then(function(errData) {
+        return response.json().then(function (errData) {
           throw { response: { data: errData } };
         });
       }
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       // ✅ Success response
       var sha256 = data.Data.sha256;
       var fileId = data.Data.fileId;
@@ -190,7 +206,7 @@ function _uploadFileEventHandler(event) {
       // 📝 Store returned metadata in hidden fields if needed
       // document.querySelector('[name="' + elementName + 'Attachment[fileId]"]').value = fileId;
       // document.querySelector('[name="' + elementName + 'Attachment[sha256]"]').value = sha256;
-      
+
       // Hide loading spinner
       hideLoadingSpinner();
 
@@ -200,15 +216,15 @@ function _uploadFileEventHandler(event) {
       // Accessibility: Update ARIA live region with success message
       var statusRegion = document.getElementById('_govcy-upload-status');
       if (statusRegion) {
-        setTimeout(function() {
+        setTimeout(function () {
           statusRegion.textContent = messages.uploadSuccesful[lang];
         }, 200);
-        setTimeout(function() {
+        setTimeout(function () {
           statusRegion.textContent = '';
         }, 5000);
       }
     })
-    .catch(function(err) {
+    .catch(function (err) {
       // ⚠️ Show an error message if upload fails
       var errorMessage = messages.uploadFailed;
       var errorCode = err && err.response && err.response.data && err.response.data.ErrorCode;
@@ -245,7 +261,7 @@ function _uploadFileEventHandler(event) {
  * @param {object} errorMessage The error message in all supported languages 
  */
 function _renderFileElement(elementState, elementId, elementName, fileId, sha256, errorMessage) {
-  
+
   // Grab the query string part (?foo=bar&route=something)
   var queryString = window.location.search;
   // Parse it
@@ -263,7 +279,7 @@ function _renderFileElement(elementState, elementId, elementName, fileId, sha256
       "lang": lang
     }
   };
-  var fileInputMap =  JSON.parse(JSON.stringify(window._govcyFileInputs));
+  var fileInputMap = JSON.parse(JSON.stringify(window._govcyFileInputs));
   var fileElement = fileInputMap[elementName];
   fileElement.element = elementState;
   if (errorMessage != null) fileElement.params.error = errorMessage;
@@ -271,22 +287,27 @@ function _renderFileElement(elementState, elementId, elementName, fileId, sha256
   if (sha256 != null) fileElement.params.sha256 = sha256;
   if (elementState == "fileView") {
     fileElement.params.visuallyHiddenText = fileElement.params.label;
-    // TODO: Also need to set the `view` and `download` URLs 
-    fileElement.params.viewHref = "/" + window._govcySiteId + "/" + window._govcyPageUrl + "/view-file/" + elementName;
+    // Use the actual current path (works for single, draft, edit)
+    var basePath = window.location.pathname.replace(/\/$/, "");
+
+    // View link
+    fileElement.params.viewHref = basePath + "/view-file/" + elementName;
     fileElement.params.viewTarget = "_blank";
-    fileElement.params.deleteHref  = "/" + window._govcySiteId + "/" + window._govcyPageUrl + "/delete-file/" + elementName 
+
+    // Delete link (preserve ?route=review if present)
+    fileElement.params.deleteHref = basePath + "/delete-file/" + elementName
       + (route !== null ? "?route=" + encodeURIComponent(route) : "");
   }
   // Construct the JSONTemplate
   var JSONTemplate = {
     "elements": [fileElement]
   };
-  
+
   //render HTML into string
-  var renderedHtml = renderer.renderFromJSON(JSONTemplate,inputData);
-  var outerElement = document.getElementById(`${elementId}-outer-control`) 
-        || document.getElementById(`${elementId}-input-control`) 
-        || document.getElementById(`${elementId}-view-control`);
+  var renderedHtml = renderer.renderFromJSON(JSONTemplate, inputData);
+  var outerElement = document.getElementById(`${elementId}-outer-control`)
+    || document.getElementById(`${elementId}-input-control`)
+    || document.getElementById(`${elementId}-view-control`);
 
   if (outerElement) {
     //remove all classes from outerElement

@@ -13,6 +13,17 @@ export function govcyFileViewHandler() {
         try {
             const { siteId, pageUrl, elementName } = req.params;
 
+            // Detect MultipleThings modes based on URL
+            let mode = "single";
+            let index = null;
+
+            if (req.originalUrl.includes("/multiple/add")) {
+                mode = "multipleThingsDraft";
+            } else if (req.originalUrl.includes("/multiple/edit/")) {
+                mode = "multipleThingsEdit";
+                index = parseInt(req.params.index, 10);
+            }
+
             // Create a deep copy of the service to avoid modifying the original
             let serviceCopy = req.serviceData;
 
@@ -51,6 +62,11 @@ export function govcyFileViewHandler() {
             //     return handleMiddlewareError(`Page condition evaluated to true on POST — skipping form save and redirecting`, 404, next);
             // }
 
+
+            // If mode is `single` make sure it has no multipleThings
+            if (mode === "single" && page?.multipleThings) {
+                return handleMiddlewareError(`Single mode file view not allowed on multipleThings pages`, 404, next)
+            }
             // Validate the field: Only allow delete if the page contains a fileInput with the given name
             const fileInputElement = pageContainsFileInput(pageTemplateCopy, elementName);
             if (!fileInputElement) {
@@ -64,7 +80,15 @@ export function govcyFileViewHandler() {
             }
 
             //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
+            let elementData;
+            if (mode === "single") {
+                elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName);
+            } else if (mode === "multipleThingsDraft") {
+                elementData = dataLayer.getMultipleDraft(req.session, siteId, pageUrl)?.[elementName];
+            } else if (mode === "multipleThingsEdit") {
+                const items = dataLayer.getPageData(req.session, siteId, pageUrl) || [];
+                elementData = items[index]?.[elementName];
+            }
 
             // If the element data is not found, return an error response
             if (!elementData || !elementData?.sha256 || !elementData?.fileId) {

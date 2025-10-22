@@ -4,6 +4,8 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
+import { govcyMultipleThingsHubHandler } from "./govcyMultipleThingsHubHandler.mjs";
+import { govcyUpdateMyDetailsHandler } from "./govcyUpdateMyDetails.mjs";
 // import {flattenContext, evaluateExpressionWithFlattening, evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
@@ -11,7 +13,7 @@ import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
  * This middleware processes the page template, populates form data, and shows validation errors.
  */
 export function govcyPageHandler() {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
       // Extract siteId and pageUrl from request
       let { siteId, pageUrl } = req.params; 
@@ -29,20 +31,28 @@ export function govcyPageHandler() {
       // 🔍 Find the page by pageUrl
       const page = getPageConfigData(serviceCopy, pageUrl);
 
-      // Deep copy pageTemplate to avoid modifying the original
-      const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
-
       // ----- Conditional logic comes here
       // Check if the page has conditions and apply logic
       const result = evaluatePageConditions(page, req.session, req.params.siteId, req);
       if (result.result === false) {
         return res.redirect(`/${req.params.siteId}/${result.redirect}`);
       }
-      
-      //if user is logged in add the user nane section in the page template
-      if (dataLayer.getUser(req.session)) {
-        pageTemplateCopy.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
+
+      // ----- `updateMyDetails` handling
+      if (page.updateMyDetails) {
+        return await govcyUpdateMyDetailsHandler(req, res, next, page, serviceCopy);
       }
+      // ----- `updateMyDetails` handling
+
+      // ----- MultipleThings hub handling
+      if (page.multipleThings) {
+        logger.debug(`Rendering multipleThings hub for pageUrl: ${pageUrl}`, req);
+        return govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy);
+      }
+
+      // Deep copy pageTemplate to avoid modifying the original
+      const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
+      
       //⚙️ Process forms before rendering
       pageTemplateCopy.sections.forEach(section => {
         section.elements.forEach(element => {
@@ -87,7 +97,16 @@ export function govcyPageHandler() {
             }
             //--------- End of Handle Validation Errors ---------
             
-            populateFormData(element.params.elements, theData,validationErrors, req.session, siteId, pageUrl, req.globalLang, null, req.query.route);
+            populateFormData(
+              element.params.elements, 
+              theData,
+              validationErrors, 
+              req.session, 
+              siteId, 
+              pageUrl, 
+              req.globalLang, 
+              null, 
+              req.query.route);
             // if there are validation errors, add an error summary
             if (validationErrors?.errorSummary?.length > 0) {
               element.params.elements.unshift(govcyResources.errorSummary(validationErrors.errorSummary));

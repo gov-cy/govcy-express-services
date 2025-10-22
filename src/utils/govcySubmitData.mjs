@@ -4,7 +4,10 @@ import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import { evaluatePageConditions } from "./govcyExpressions.mjs";
+import { getPageConfigData } from "./govcyLoadConfigData.mjs";
 import { logger } from "./govcyLogger.mjs";
+import { createUmdManualPageTemplate } from "../middleware/govcyUpdateMyDetails.mjs"
+import nunjucks from "nunjucks";
 
 /**
  * Prepares the submission data for the service, including raw data, print-friendly data, and renderer data.
@@ -41,68 +44,138 @@ export function prepareSubmissionData(req, siteId, service) {
 
         // Find the <form> element in the page
         let formElement = null;
-        for (const section of page.pageTemplate.sections || []) {
-            formElement = section.elements.find(el => el.element === "form");
-            if (formElement) break;
+
+        // ----- `updateMyDetails` handling
+        // 🔹 Case C: updateMyDetails
+        if (page.updateMyDetails) {
+            logger.debug("Preparing submission data for UpdateMyDetails page", { siteId, pageUrl });
+            // Build the manual UMD page template
+            const umdTemplate  = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+            
+            // Extract the form element
+            formElement = umdTemplate .sections
+                .flatMap(section => section.elements)
+                .find(el => el.element === "form");
+            
+            if (!formElement) {
+                logger.error("🚨 UMD form element not found during prepareSubmissionData", { siteId, pageUrl });
+                return handleMiddlewareError("🚨 UMD form element not found during prepareSubmissionData", 500, next);
+            }
+            // ----- `updateMyDetails` handling
+        } else {
+            // Normal flow 
+            for (const section of page.pageTemplate.sections || []) {
+                formElement = section.elements.find(el => el.element === "form");
+                if (formElement) break;
+            }
         }
 
         if (!formElement) continue; // ⛔ Skip pages without a <form> element
 
-        // submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
-        submissionData[pageUrl] = {}; // ✅ Now initialize only if a form is present
+        // 🔹 Case A: multipleThings page → array of items
+        if (page.multipleThings) {
+            // get the items array from session (or empty array if not found / not an array)
+            let items = dataLayer.getPageData(req.session, siteId, pageUrl);
+            if (!Array.isArray(items)) items = [];
 
-        // Traverse the form elements inside the form
-        for (const element of formElement.params.elements || []) {
-            const elType = element.element;
+            submissionData[pageUrl] = [];
 
-            // ✅ Skip non-input elements like buttons
-            if (!ALLOWED_FORM_ELEMENTS.includes(elType)) continue;
+            items.forEach((item, idx) => {
+                const itemData = {};
+                for (const el of formElement.params.elements || []) {
+                    if (!ALLOWED_FORM_ELEMENTS.includes(el.element)) continue;
+                    const elId = el.params?.id || el.params?.name;
+                    if (!elId) continue;
 
-            const elId = element.params?.id || element.params?.name;
-            if (!elId) continue; // ⛔ Skip elements with no id/name
+                    // ✅ normalized with index
+                    let value = getValue(el, pageUrl, req, siteId, idx);
+                    itemData[elId] = value;
 
-            // 🟢 Use helper to get session value (or "" fallback if missing)
-            const value = getValue(element, pageUrl, req, siteId) ?? "";
+                    // handle fileInput special naming
+                    if (el.element === "fileInput") {
+                        itemData[elId + "Attachment"] = value;
+                        delete itemData[elId];
+                    }
 
-            // Store in submissionData
-            // submissionData[pageUrl].formData[elId] = value;
-            submissionData[pageUrl][elId] = value;
+                    // radios conditional elements
+                    if (el.element === "radios") {
+                        for (const radioItem of el.params.items || []) {
+                            for (const condEl of radioItem.conditionalElements || []) {
+                                if (!ALLOWED_FORM_ELEMENTS.includes(condEl.element)) continue;
+                                const condId = condEl.params?.id || condEl.params?.name;
+                                if (!condId) continue;
+                                let condValue = getValue(condEl, pageUrl, req, siteId, idx);
+                                itemData[condId] = condValue;
 
-            // handle fileInput
-            if (elType === "fileInput") {
-                // change the name of the key to include "Attachment" at the end but not have the original key
-                // submissionData[pageUrl].formData[elId + "Attachment"] = value;
-                submissionData[pageUrl][elId + "Attachment"] = value;
-                // delete submissionData[pageUrl].formData[elId];
-                delete submissionData[pageUrl][elId];
-            }
+                                if (condEl.element === "fileInput") {
+                                    itemData[condId + "Attachment"] = condValue;
+                                    delete itemData[condId];
+                                }
+                            }
+                        }
+                    }
+                }
+                submissionData[pageUrl].push(itemData);
+            });
+        } else {
+            // 🔹 Case B: normal page → single object
 
-            // 🔄 If radios with conditionalElements, walk ALL options
-            if (elType === "radios" && Array.isArray(element.params?.items)) {
-                for (const radioItem of element.params.items) {
-                    const condEls = radioItem.conditionalElements;
-                    if (!Array.isArray(condEls)) continue;
+            // submissionData[pageUrl] = { formData: {} }; // ✅ Now initialize only if a form is present
+            submissionData[pageUrl] = {}; // ✅ Now initialize only if a form is present
 
-                    for (const condElement of condEls) {
-                        const condType = condElement.element;
-                        if (!ALLOWED_FORM_ELEMENTS.includes(condType)) continue;
+            // Traverse the form elements inside the form
+            for (const element of formElement.params.elements || []) {
+                const elType = element.element;
 
-                        const condId = condElement.params?.id || condElement.params?.name;
-                        if (!condId) continue;
+                // ✅ Skip non-input elements like buttons
+                if (!ALLOWED_FORM_ELEMENTS.includes(elType)) continue;
 
-                        // Again: read from session or fallback to ""
-                        const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
+                const elId = element.params?.id || element.params?.name;
+                if (!elId) continue; // ⛔ Skip elements with no id/name
 
-                        // Store even if the field was not visible to user
-                        // submissionData[pageUrl].formData[condId] = condValue;
-                        submissionData[pageUrl][condId] = condValue;
-                        // handle fileInput
-                        if (condType === "fileInput") {
-                            // change the name of the key to include "Attachment" at the end but not have the original key
-                            // submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
-                            submissionData[pageUrl][condId + "Attachment"] = condValue;
-                            // delete submissionData[pageUrl].formData[condId];
-                            delete submissionData[pageUrl][condId];
+                // 🟢 Use helper to get session value (or "" fallback if missing)
+                const value = getValue(element, pageUrl, req, siteId) ?? "";
+
+                // Store in submissionData
+                // submissionData[pageUrl].formData[elId] = value;
+                submissionData[pageUrl][elId] = value;
+
+                // handle fileInput
+                if (elType === "fileInput") {
+                    // change the name of the key to include "Attachment" at the end but not have the original key
+                    // submissionData[pageUrl].formData[elId + "Attachment"] = value;
+                    submissionData[pageUrl][elId + "Attachment"] = value;
+                    // delete submissionData[pageUrl].formData[elId];
+                    delete submissionData[pageUrl][elId];
+                }
+
+                // 🔄 If radios with conditionalElements, walk ALL options
+                if (elType === "radios" && Array.isArray(element.params?.items)) {
+                    for (const radioItem of element.params.items) {
+                        const condEls = radioItem.conditionalElements;
+                        if (!Array.isArray(condEls)) continue;
+
+                        for (const condElement of condEls) {
+                            const condType = condElement.element;
+                            if (!ALLOWED_FORM_ELEMENTS.includes(condType)) continue;
+
+                            const condId = condElement.params?.id || condElement.params?.name;
+                            if (!condId) continue;
+
+                            // Again: read from session or fallback to ""
+                            const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
+
+                            // Store even if the field was not visible to user
+                            // submissionData[pageUrl].formData[condId] = condValue;
+                            submissionData[pageUrl][condId] = condValue;
+                            // handle fileInput
+                            if (condType === "fileInput") {
+                                // change the name of the key to include "Attachment" at the end but not have the original key
+                                // submissionData[pageUrl].formData[condId + "Attachment"] = condValue;
+                                submissionData[pageUrl][condId + "Attachment"] = condValue;
+                                // delete submissionData[pageUrl].formData[condId];
+                                delete submissionData[pageUrl][condId];
+                            }
                         }
                     }
                 }
@@ -122,7 +195,7 @@ export function prepareSubmissionData(req, siteId, service) {
         submissionUsername: dataLayer.getUser(req.session).name,
         submissionEmail: dataLayer.getUser(req.session).email,
         submissionData: submissionData, // Raw data as submitted by the user in each page
-        submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version ||"", // The submission data version
+        submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version || "", // The submission data version
         printFriendlyData: printFriendlyData, // Print-friendly data
         rendererData: reviewSummaryList, // Renderer data of the summary list
         rendererVersion: service.site?.rendererVersion || service.site?.renderer_version || "", // The renderer version
@@ -174,7 +247,9 @@ export function preparePrintFriendlyData(req, siteId, service) {
     // and extract the form data from the session
     for (const page of service.pages) {
         const fields = [];
+        const items = []; // ✅ new
         // const currentPageUrl = page.pageData.url;
+
         // ----- Conditional logic comes here
         // Skip page if conditions indicate it should redirect (i.e. not be shown)
         const conditionResult = evaluatePageConditions(page, req.session, siteId, req);
@@ -182,8 +257,20 @@ export function preparePrintFriendlyData(req, siteId, service) {
             continue; // ⛔ Skip this page from print-friendly data
         }
 
+        let pageTemplate = page.pageTemplate;
+        let pageTitle = page.pageData.title || {};
+        
+
+        // ----- MultipleThings hub handling
+        if (page.updateMyDetails) {
+            // create the page template
+            pageTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req );
+            // set the page title
+            pageTitle = govcyResources.staticResources.text.updateMyDetailsTitle;
+        }
+
         // find the form element in the page template
-        for (const section of page.pageTemplate.sections || []) {
+        for (const section of pageTemplate.sections || []) {
             for (const element of section.elements || []) {
                 if (element.element !== "form") continue;
 
@@ -196,7 +283,11 @@ export function preparePrintFriendlyData(req, siteId, service) {
 
                     //create the field object and push it to the fields array
                     // value of the field is handled by getValueLabel function
-                    const field = createFieldObject(formElement, rawValue, getValueLabel(formElement, rawValue, page.pageData.url, req, siteId, service), service);
+                    const field = createFieldObject(
+                        formElement,
+                        rawValue,
+                        getValueLabel(formElement, rawValue, page.pageData.url, req, siteId, service),
+                        service);
                     fields.push(field);
 
                     // Handle conditional elements (only for radios for now)
@@ -223,11 +314,25 @@ export function preparePrintFriendlyData(req, siteId, service) {
             }
         }
 
+        // Special case: multipleThings page → extract item titles // ✅ new
+        if (page.multipleThings) {
+            pageTitle = page.multipleThings?.listPage?.title || pageTitle;
+            let mtItems = dataLayer.getPageData(req.session, siteId, page.pageData.url);
+            if (Array.isArray(mtItems)) {
+                const env = new nunjucks.Environment(null, { autoescape: false });
+                for (const item of mtItems) {
+                    const itemTitle = env.renderString(page.multipleThings.itemTitleTemplate, item);
+                    items.push({ itemTitle, ...item });
+                }
+            }
+        }
+
         if (fields.length > 0) {
             submissionData.push({
                 pageUrl: page.pageData.url,
-                pageTitle: page.pageData.title,
-                fields
+                pageTitle: pageTitle,
+                fields,
+                items: (page.multipleThings ? items : null) // ✅ new
             });
         }
     }
@@ -243,12 +348,13 @@ export function preparePrintFriendlyData(req, siteId, service) {
  * @param {string} name The name of the form element
  * @param {object} req The request object
  * @param {string} siteId The site ID
+ * @param {number} index The index of the date input
  * @returns {string} The raw date input in ISO format (YYYY-MM-DD) or an empty string if not found
  */
-function getDateInputISO(pageUrl, name, req, siteId) {
-    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
-    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
-    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
+function getDateInputISO(pageUrl, name, req, siteId, index = null) {
+    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`, index);
+    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`, index);
+    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`, index);
     if (!day || !month || !year) return "";
 
     // Pad day and month with leading zero if needed
@@ -265,12 +371,13 @@ function getDateInputISO(pageUrl, name, req, siteId) {
  * @param {string} name The name of the form element
  * @param {object} req The request object
  * @param {string} siteId The site ID
+ * @param {number} index The index of the date input
  * @returns {string} The raw date input in DMY format (DD/MM/YYYY) or an empty string if not found
  */
-function getDateInputDMY(pageUrl, name, req, siteId) {
-    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`);
-    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`);
-    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`);
+function getDateInputDMY(pageUrl, name, req, siteId, index = null) {
+    const day = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_day`, index);
+    const month = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_month`, index);
+    const year = dataLayer.getFormDataValue(req.session, siteId, pageUrl, `${name}_year`, index);
     if (!day || !month || !year) return "";
     return `${day}/${month}/${year}`;   // EU format: DD/MM/YYYY
 }
@@ -303,19 +410,20 @@ function createFieldObject(formElement, value, valueLabel, service) {
  * @param {string} pageUrl The page URL
  * @param {object} req The request object
  * @param {string} siteId The site ID
+ * @param {number} index The index of the form element (for multipleThings)
  * @returns {string} The value of the form element from the session or an empty string if not found
  */
-function getValue(formElement, pageUrl, req, siteId) {
+function getValue(formElement, pageUrl, req, siteId, index = null) {
     // handle raw value 
     let value = ""
     if (formElement.element === "dateInput") {
-        value = getDateInputISO(pageUrl, formElement.params.name, req, siteId);
+        value = getDateInputISO(pageUrl, formElement.params.name, req, siteId, index);
     } else if (formElement.element === "fileInput") {
         // unneeded handle of `Attachment` at the end
         // value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name + "Attachment");
-        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
+        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name, index);
     } else {
-        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name);
+        value = dataLayer.getFormDataValue(req.session, siteId, pageUrl, formElement.params.name, index);
     }
 
     // 🔁 Normalize checkboxes: always return an array
@@ -486,26 +594,49 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
 
 
 
+    const env = new nunjucks.Environment(null, { autoescape: true });
+    // One template renders multiple things
+    const multipleThingsTemplate = `
+        <div><strong>${govcyResources.staticResources.text.multipleThingsEntries[req.globalLang] || govcyResources.staticResources.text.multipleThingsEntries["el"]}</strong></div>
+        <ol class="govcy-mt-2">
+        {% for it in items -%}
+            <li>{{ it.itemTitle | trim }}</li>
+        {%- endfor %}
+        </ol>
+        `;
 
     // Loop through each page in the submission data
     for (const page of submissionData) {
         // Get the page URL, title, and fields
-        const { pageUrl, pageTitle, fields } = page;
+        const { pageUrl, pageTitle, fields, items } = page;
 
 
         let summaryListInner = { element: "summaryList", params: { items: [] } };
 
-        // loop through each field and add it to the summary entry
-        for (const field of fields) {
-            const label = field.label;
-            const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            // --- HACK --- to see if this is a file element
-            // check if field.value is an object with `sha256` and `fileId` properties
-            if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
-                summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+        // Special handling: multipleThings page → show <ol> of itemTitle only
+        if (Array.isArray(items)) {
+            summaryListInner = { element: "htmlElement", params: { text: {} } };
+            if (items.length == 0) {
+                summaryListInner.params.text = govcyResources.staticResources.text.multipleThingsEmptyStateReview
             } else {
-                // add the field to the summary entry
-                summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+                // Build ordered list HTML
+                let htmlByLang = env.renderString(multipleThingsTemplate, { items });
+                // Set the HTML for each language
+                summaryListInner.params.text = govcyResources.getMultilingualObject(htmlByLang, htmlByLang, htmlByLang);
+            }
+        } else { // Normal page → keep old behavior
+            // loop through each field and add it to the summary entry
+            for (const field of fields) {
+                const label = field.label;
+                const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
+                // --- HACK --- to see if this is a file element
+                // check if field.value is an object with `sha256` and `fileId` properties
+                if (typeof field.value === "object" && field.value.hasOwnProperty("sha256") && field.value.hasOwnProperty("fileId") && showChangeLinks) {
+                    summaryListInner.params.items.push(createSummaryListItemFileLink(label, valueLabel, siteId, pageUrl, field.name));
+                } else {
+                    // add the field to the summary entry
+                    summaryListInner.params.items.push(createSummaryListItem(label, valueLabel));
+                }
             }
         }
 
@@ -558,7 +689,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
                 component: "bodySuccess",
                 params: {
                     title: service?.site?.successEmailHeader?.[req.globalLang]
-                    || govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
+                        || govcyResources.getLocalizeContent(govcyResources.staticResources.text.submissionSuccessTitle, req.globalLang),
                     body: `${govcyResources.getLocalizeContent(govcyResources.staticResources.text.yourSubmissionId, req.globalLang)} ${submissionId}`
                 }
             }
@@ -573,11 +704,17 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         }
     );
 
+    const env = new nunjucks.Environment(null, { autoescape: true })
+
     // For each page in the submission data
     for (const page of submissionData) {
         // Get the page URL, title, and fields
-        const { pageUrl, pageTitle, fields } = page;
+        let { pageUrl, pageTitle, fields, items } = page;
 
+        // 🔹 MultipleThings page
+        if (page.multipleThings) {
+            pageTitle = page.multipleThings?.listPage?.title || pageTitle;
+        }
         // Add data title to the body
         body.push(
             {
@@ -587,19 +724,54 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
             }
         );
 
-        let dataUl = [];
-        // loop through each field and add it to the summary entry
-        for (const field of fields) {
-            const label = govcyResources.getLocalizeContent(field.label, req.globalLang);
-            const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
-            dataUl.push({ key: label, value: valueLabel });
+        if (Array.isArray(items)) {
+            // 🔹 MultipleThings page → loop through items
+            // multipleThings → use itemTitleTemplate
+            const pageConfig = getPageConfigData(service, pageUrl);
+            const template = pageConfig.multipleThings?.itemTitleTemplate || "{{itemTitle}}";
+
+            if (items.length === 0) {
+                // Empty state message
+                body.push({
+                    component: "bodyParagraph",
+                    body: govcyResources.getLocalizeContent(
+                        govcyResources.staticResources.text.multipleThingsEmptyStateReview,
+                        req.globalLang
+                    )
+                });
+            } else {
+                // Build ordered list of item titles
+                const listItems = items.map(item => {
+                    const safeTitle = env.renderString(template, item);
+                    return safeTitle; // already escaped
+                });
+
+                // Add ordered list to the body
+                body.push({
+                    component: "bodyList",
+                    params: {
+                        type: "ol",
+                        items: listItems
+                    }
+                });
+            }
+        } else {
+            // 🔹 Normal page → continue below
+            let dataUl = [];
+            // loop through each field and add it to the summary entry
+            for (const field of fields) {
+                const label = govcyResources.getLocalizeContent(field.label, req.globalLang);
+                const valueLabel = getSubmissionValueLabelString(field.valueLabel, req.globalLang);
+                dataUl.push({ key: label, value: valueLabel });
+            }
+            // add data to the body
+            body.push(
+                {
+                    component: "bodyKeyValue",
+                    params: { type: "ul", items: dataUl },
+                });
         }
-        // add data to the body
-        body.push(
-            {
-                component: "bodyKeyValue",
-                params: { type: "ul", items: dataUl },
-            });
+
 
     }
 

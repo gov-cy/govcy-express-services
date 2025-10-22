@@ -1,0 +1,37 @@
+
+dl.govcy-summary-list-row-internal:not(:first-of-type) {
+    margin-top: 0.5rem !important;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 0 !important;
+}
+.list-inline-item:not(:first-child) {
+    margin-left: .5rem;
+}
+
+.govcy-add-new-item {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: underline;
+}
+
+.govcy-add-new-item::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url("/img/Plus_24x24.svg") no-repeat center center;
+  background-size: contain;
+  margin-right: 0.25rem; /* Fallback for browsers without flex gap */
+}
+
+.govcy-whitespace-pre-line {
+    white-space: pre-line;
+}
+
+@media (max-width: 767.98px) {
+    #multipleThingsList>tbody>tr>td {
+        padding: .5rem .5rem;
+    }
+}

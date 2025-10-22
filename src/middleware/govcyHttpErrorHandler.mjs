@@ -52,6 +52,11 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     res.status(statusCode);
 
     if (isApiRequest(req)) {
+        if (err.code === `LIMIT_FILE_SIZE` && err.name === `MulterError`) {
+            statusCode = 409;
+            message = "File exceeds allowed size";
+            return res.status(400).json(errorResponse(statusCode, message));
+        }
         return res.status(statusCode).json(errorResponse(statusCode, message));
     }
 
@@ -63,6 +68,8 @@ export function govcyHttpErrorHandler(err, req, res, next) {
     if (dataLayer.getUser(req.session)) {
         pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
     }
+    // Add custom CSS path
+    pageData.site.customCSSFile = `/css/govcyExpress.css`;
     const html = renderer.renderFromJSON(pageTemplate, pageData);
     res.send(html);
 }

@@ -44,12 +44,21 @@ export function govcySuccessPageHandler(isPDF = false) {
                     // }
                 ]
             };
+
+            let weHaveSendYouAnEmailText = JSON.parse(JSON.stringify(govcyResources.staticResources.text.weHaveSendYouAnEmail));
+            // Replace label placeholders for email
+            for (const lang of Object.keys(weHaveSendYouAnEmailText)) {
+                weHaveSendYouAnEmailText[lang] = weHaveSendYouAnEmailText[lang].replace("{{email}}", 
+                    submissionData.contactEmailAddress || ""
+                );
+            }
+
             // Construct page title
             const weHaveSendYouAnEmail = {
                 element: "textElement",
                 params: {
                     type: "p",
-                    text: govcyResources.staticResources.text.weHaveSendYouAnEmail
+                    text: weHaveSendYouAnEmailText
                 }
             };
             
@@ -97,11 +106,6 @@ export function govcySuccessPageHandler(isPDF = false) {
             );
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });
-            
-            //if user is logged in add he user bane section in the page template
-            if (dataLayer.getUser(req.session)) {
-                pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
-            }
             
             //prepare pageData
             pageData.site = serviceCopy.site;

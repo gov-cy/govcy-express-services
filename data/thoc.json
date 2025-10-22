@@ -1,0 +1,2735 @@
+
+{
+  "site": {
+    "id": "thoc",
+    "lang": "el",
+    "languages": [
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      }
+    ],
+    "footerLinks": [
+      {
+        "label": {
+          "el": "Δήλωση απορρήτου",
+          "en": "Privacy statement",
+          "tr": "Privacy statement"
+        },
+        "href": "thoc/privacy-statement"
+      },
+      {
+        "label": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": "Cookies"
+        },
+        "href": "thoc/cookie-policy"
+      },
+      {
+        "label": {
+          "el": "Προσβασιμότητα",
+          "en": "Accessibility",
+          "tr": "Accessibility"
+        },
+        "href": "thoc/accessibility-statement"
+      }
+    ],
+    "footerIcons": [
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png"
+        },
+        "alt": {
+          "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU",
+          "en": "Funded by the EU Next Generation EU",
+          "tr": "Funded by the EU Next Generation EU"
+        },
+        "href": {
+          "el": "https://europa.eu/",
+          "en": "https://europa.eu/",
+          "tr": "https://europa.eu/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα της ΕΕ",
+          "en": "Go to EU website",
+          "tr": "Go to EU website"
+        }
+      },
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png"
+        },
+        "alt": {
+          "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας",
+          "en": "Cyprus tomorrow, recovery and resilience plan",
+          "tr": "Cyprus tomorrow, recovery and resilience plan"
+        },
+        "href": {
+          "el": "http://www.cyprus-tomorrow.gov.cy/",
+          "en": "http://www.cyprus-tomorrow.gov.cy/",
+          "tr": "http://www.cyprus-tomorrow.gov.cy/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο",
+          "en": "Go to Cyprus Tomorrow website",
+          "tr": "Go to Cyprus Tomorrow website"
+        }
+      }
+    ],
+    "menu": {
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {
+      "el": "Εκδήλωση ενδιαφέροντος για διορισμό στο Διοικητικό Συμβούλιο του ΘΟΚ",
+      "en": "Application for appointment to the THOK Board of Directors",
+      "tr": ""
+    },
+    "headerTitle": {
+      "title": {
+        "el": "Αίτηση για διοικητικό συμβούλιο ΘΟΚ",
+        "en": "Apply for THOK Board",
+        "tr": "Apply for THOK Board"
+      },
+      "href": {
+        "el": "/thoc",
+        "en": "/thoc",
+        "tr": "/thoc"
+      }
+    },
+    "description": {
+      "el": "Υποβάλετε εκδήλωση ενδιαφέροντος για συμμετοχή στο Διοικητικό Συμβούλιο του Θεατρικού Οργανισμού Κύπρου (ΘΟΚ).",
+      "en": "Submit your expression of interest to serve on the Cyprus Theatre Organisation (THOK) Board of Directors.",
+      "tr": ""
+    },
+    "url": "https://gov.cy",
+    "isTesting": true,
+    "cdn": {
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+      "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+      "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
+    },
+    "submissionDataVersion": "1",
+    "rendererVersion": "1.25.1",
+    "designSystemsVersion": "3.2.0",
+    "matomo": {
+      "url": "//wp.matomo.dits.dmrid.gov.cy/",
+      "siteId": "50"
+    },
+    "copyrightText": {
+      "el": "Κυπριακή Δημοκρατία, 2025",
+      "en": "Republic of Cyprus, 2025",
+      "tr": "Republic of Cyprus, 2025"
+    },
+    "submissionAPIEndpoint": {
+      "url": "SERVICE_ID_SUBMISSION_API_URL",
+      "method": "POST",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY",
+      "response": {
+        "errorResponse": {}
+      }
+    },
+    "submissionGetAPIEndpoint": {
+      "url": "SERVICE_ID_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY"
+    },
+    "submissionPutAPIEndpoint": {
+      "url": "SERVICE_ID_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileUploadAPIEndpoint": {
+      "url": "SERVICE_ID_UPLOAD_FILE_API_URL",
+      "method": "POST",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDownloadAPIEndpoint": {
+      "url": "SERVICE_ID_DOWNLOAD_FILE_API_URL",
+      "method": "GET",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDeleteAPIEndpoint": {
+      "url": "SERVICE_ID_DELETE_FILE_API_URL",
+      "method": "DELETE",
+      "clientKey": "SERVICE_ID_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "SERVICE_ID_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "SERVICE_ID_SUBMISSION_DSF_GTW_KEY"
+    }
+  },
+  "pages": [
+    {
+      "pageData": {
+        "url": "privacy-statement",
+        "title": {
+          "el": "Πολιτική απορρήτου",
+          "en": "Privacy policy",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Πολιτική απορρήτου – οι προσωπικές σας πληροφορίες",
+                    "en": "Privacy policy – your personal information"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς SERVICE_OWNER χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>διεύθυνση επικοινωνίας</li><li>διεύθυνση email</li><li>αριθμός τηλεφώνου</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>ημερομηνία γέννησης, φύλο, εθνικότητα και κοινότητα στην οποία ανήκετε\r</li><li>διεύθυνση επικοινωνίας και email\r(αν ισχύει)</li><li>αριθμός τηλεφώνου\r(αν ισχύει)</li><li>ημερομηνία θανάτου\r(αν ισχύει)</li><li>ονοματεπώνυμο, πατρικό επώνυμο, υπηκοότητα, τόπος και ημερομηνία γέννησης, φύλο, σχέση με αιτητή και ημερομηνία θανάτου για: παιδιά, γονείς, παππούδες, γιαγιάδες και εάν ο αιτητής είναι άρρενας, εγγόνια (αν ισχύει).</li></ul><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, συλλέγουμε επίσης αυτές τις πληροφορίες:</p><ul><li>ο βαθμός ικανοποίησής σας με τη χρήση της υπηρεσίας</li><li>η γνώμη και οι εισηγήσεις σας για το πώς μπορούμε να βελτιώσουμε την υπηρεσία.</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την έκδοση του εγγράφου που επιλέξατε. Στην περίπτωση αίτησης, οι εξεταστές μας τις χρησιμοποιούν για να επεξεργαστούν την αίτησή σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να εκδώόσουμε το έγγραφο που επιλέξατε ή να επεξεργαστούμε την αίτησή σας.</p><p>Αν αφήσετε σχόλια στο Βοηθήστε μας να βελτιώσουμε την υπηρεσία, θα τα χρησιμοποιήσουμε για να αξιολογήσουμε πώς αισθάνονται οι χρήστες για την εμπειρία τους από τη χρήση της υπηρεσίας. Αυτό γίνεται για να βρούμε και να προτεραιοποιήσουμε τομείς βελτίωσης και να πάρουμε ιδέες για νέες εξελίξεις.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
+                    "en": "<p>This privacy policy explains how SERVICE_OWNER uses information about you, in order to process your application.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>postal address</li><li>email address</li><li>phone number</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>date of birth, gender, nationality and community where you belong\r</li><li>postal and email address\r(if it applies)\r</li><li>phone number (if it applies)\r</li><li>date of death (if it applies)</li><li>full name, paternal surname, citizenship, place and date of birth, gender, relation to applicant and date of death for: children, parents, grandparents, and if the applicant is male, grandchildren (if it applies).</li></ul><p>If you leave feedback in Help us improve this service, we also collect this information:</p><ul><li>the degree of your satisfaction while using the service\r</li><li>your opinion and suggestions on how we could improve the service.</li></ul><h2>Why we use your information</h2><p>We collect and use this information to issue the document you selected. In case of an application, our examiners use it to process your application.</p><p>Without access to this information, we cannot issue the document you selected or process your application.</p><p>If you leave feedback in Help us improve this service, we will use it to evaluate how users feel about their experience using the service. This is so that we can identify and prioritize areas for improvement, and get ideas for new developments.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:XXXXX@papd.mof.gov.cy\" target=\"_blank\">XXXXX@papd.mof.gov.cy</a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "cookie-policy",
+        "title": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Cookies",
+                    "en": "Cookies"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions_top",
+                  "text": {
+                    "el": "<p>Η υπηρεσία SERVICE_NAME (SERVICE_URL) χρησιμοποιεί μόνο cookies που είναι απολύτως απαραίτητα για τη σωστή λειτουργία της.</p><h2>Απαραίτητα cookies</h2><p>Όλα τα πιο κάτω cookies διαγράφονται 30 λεπτά μετά το κλείσιμο του φυλλομετρητή (browser) σας.</p>",
+                    "en": "<p>The service SERVICE_NAME (SERVICE_URL) uses cookies that are strictly essential for it to function correctly.</p><h2>Essential cookies</h2><p>All of the following cookies are deleted 30 minutes after you close your browser.</p>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "essentials",
+                  "text": {
+                    "el": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Όνομα</th><th scope='col'>Σκοπός</th></tr></thead><tbody><tr><th scope='col'>connect.sid</th><td scope='col'>Αυτό το cookie αποθηκεύει ένα μοναδικό αναγνωριστικό (session id) για τη διαδικασία περιήγησής σας (browser session).</td></tr><tr><th scope='col'>cs</th><td scope='col'>Αυτο το cookie αποθηκεύει την τελευταία υπηρεσία που έχει επισκεφτεί</td></tr><tr><th scope='col'>lang</th><td scope='col'>Αυτό το cookie αποθηκεύει τη γλώσσα της επιλογής σας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinity</th><td scope='col'>Τοποθετείται από το Azure Application Gateway για να διατηρεί σταθερή σύνδεση με τον ίδιο server κατά τη διάρκεια της συνεδρίας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinityCORS</th><td scope='col'>Παραλλαγή του παραπάνω cookie, χρησιμοποιείται όταν είναι ενεργοποιημένο το CORS για να διατηρεί τη σταθερότητα της συνεδρίας.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Δημιουργείται από υπηρεσίες όπως το AWS Load Balancer για διατήρηση συνεδρίας. Δεν το τοποθετεί η εφαρμογή σας άμεσα.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Συνήθως τοποθετείται από ingress controllers (π.χ. NGINX Ingress ή Azure Front Door) για διατήρηση συνεδρίας σε περιβάλλοντα cloud.</td></tr></tbody></table>",
+                    "en": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Name</th><th scope='col'>Purpose</th></tr></thead><tbody><tr><th scope='col'>connect.sid</th><td scope='col'>This cookie stores a ‘session ID’ which is used to identify your browser session.</td></tr><tr><th scope='col'>cs</th><td scope='col'>This cookie stores the last service visited.</td></tr><tr><th scope='col'>lang</th><td scope='col'>This cookie stores your language preference.</td></tr><tr><th scope='col'>ApplicationGatewayAffinity</th><td scope='col'>Τοποθετείται από το Azure Application Gateway για να διατηρεί σταθερή σύνδεση με τον ίδιο server κατά τη διάρκεια της συνεδρίας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinityCORS</th><td scope='col'>Παραλλαγή του παραπάνω cookie, χρησιμοποιείται όταν είναι ενεργοποιημένο το CORS για να διατηρεί τη σταθερότητα της συνεδρίας.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Δημιουργείται από υπηρεσίες όπως το AWS Load Balancer για διατήρηση συνεδρίας. Δεν το τοποθετεί η εφαρμογή σας άμεσα.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Συνήθως τοποθετείται από ingress controllers (π.χ. NGINX Ingress ή Azure Front Door) για διατήρηση συνεδρίας σε περιβάλλοντα cloud.</td></tr></tbody></table>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Τηλέφωνο: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Δευτέρα έως Παρασκευή, 9 π.μ. έως 5 μ.μ. (εκτός επίσημων αργιών)</li></ul>",
+                    "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Telephone: <a href=\"tel:+35722123456\">22123456</a></li><li>Email: <a href=\"mailto:name@example.com\" target=\"_blank\">name@example.com</a></li><li>Monday to Friday, 9am to 5pm (except public holidays)</li></ul>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "accessibility-statement",
+        "title": {
+          "el": "Δήλωση προσβασιμότητας ",
+          "en": "Accessibility statement",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δήλωση προσβασιμότητας ",
+                    "en": "Accessibility statement"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Κατάσταση συμμόρφωσης</h2><p>Οι <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Οδηγίες Προσβασιμότητας Περιεχομένου</a> (WCAG) καθορίζουν απαιτήσεις για σχεδιαστές και προγραμματιστές για τη βελτίωση της προσβασιμότητας για τα άτομα με αναπηρίες. Καθορίζουν τρία επίπεδα συμμόρφωσης: Επίπεδο A, Επίπεδο AA, και Επίπεδο AAA.</p><p>Η SERVICE_NAME συμμορφώνεται πλήρως με τις Οδηγίες του WCAG 2.1 επίπεδο AA.</p><h2>Προσέγγιση αξιολόγησης</h2><p>Η ομάδα του DSF αξιολόγησε την προσβασιμότητα της υπηρεσίας χρησιμοποιώντας τα εξής εργαλεία:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Συμβατότητα με τους φυλλομετρητές</h2><p>Η υπηρεσία είναι συμβατή με τους πιο κάτω φυλλομετρητές:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Περιορισμοί και εναλλακτικές λύσεις</h2><p>Παρά τις προσπάθειές μας να διασφαλίσουμε την προσβασιμότητα της υπηρεσίας, πιθανόν να υπάρχουν ορισμένοι περιορισμοί. Ακολουθεί περιγραφή γνωστών περιορισμών και πιθανών λύσεων. Επικοινωνήστε μαζί μας εάν παρατηρήσετε κάποιο πρόβλημα που δεν αναφέρεται πιο κάτω.</p><p>Για να λειτουργεί κανονικά η υπηρεσία απαιτείται JavaScript.</p><h2>Ανατροφοδότηση και παράπονα</h2><p>Τα σχόλιά σας σχετικά με την προσβασιμότητα της υπηρεσίας είναι ευπρόσδεκτα. Παρακαλούμε να μας ενημερώσετε εάν συναντήσετε εμπόδια προσβασιμότητας:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>Προσπαθούμε να ανταποκριθούμε στα σχόλια εντός 30 εργάσιμων ημερών.</p><p>Εάν δεν απαντήσουμε ή δεν επιλύσουμε το πρόβλημα, μπορείτε να στείλετε ένα παράπονο στο:</p><ul class=\"govcy-list-unstyled\"><li>Υφυπουργείο Έρευνας, Καινοτομίας και Ψηφιακής Πολιτικής<br/>Λεωφόρος Λεμεσού 134<br/>2015 Στρόβολος, Λευκωσία<br/>Κύπρος</li></ul><p>Ή μπορείτε να στείλετε email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>Εάν δεν σας ικανοποιήσει η απάντηση, μπορείτε να <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_gr/complaintformombudsman_gr?OpenForm\" target=\"_blank\">υποβάλετε παράπονο στο Γραφείο Επιτρόπου Διοικήσεως και Προστασίας των Ανθρωπίνων Δικαιωμάτων</a>.</p><h2>Ημερομηνία</h2><p>Η δήλωση αυτή δημιουργήθηκε στις TEST_DATE.</p>",
+                    "en": "<h2>Conformance status</h2><p>The <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Web Content Accessibility Guidelines</a> (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p><p>The SERVICE_NAME is fully conformant with WCAG 2.1 level AA.</p><h2>Assessment approach</h2><p>The TEAM_NAME assessed the accessibility of the service using:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Compatibility with browsers</h2><p>The service is designed to be compatible with the following browsers:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Limitations and alternatives</h2><p>Despite our best efforts to ensure the accessibility of the service, there may be some limitations. Below is a description of known limitations, and potential solutions. Please contact us if you observe an issue not listed below.</p><p>Javascript is required for the service to function properly.</p><h2>Feedback and complaints</h2><p>We welcome your feedback on the accessibility of the service. Please let us know if you encounter accessibility barriers when using it:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>We try to respond to feedback within 30 working days.</p><p>If we do not reply, or do not fix the issue, you can send a complaint to:</p><ul class=\"govcy-list-unstyled\"><li>Deputy Ministry of Research, Innovation, and Digital Policy<br/>134 Lemesos Avenue\r</li><li>2015 Strovolos, Lefkosia\r</li><li>Cyprus</li></ul><p>Or you can email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>If you are not satisfied with the response, you can <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_en/complaintformombudsman_en?OpenForm\" target=\"_blank\">send a complaint to the Commissioner for Administration and the Protection of Human Rights (Ombudsman)</a>.</p><h2>Date</h2><p>This statement was created on TEST_DATE.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "index",
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "qualifications"
+      },
+      "updateMyDetails": {
+        "APIEndpoint": {
+          "url": "CIVIL_REGISTRY_CONTACT_API_URL",
+          "method": "GET",
+          "clientKey": "DSF_API_GTW_CLIENT_ID",
+          "serviceId": "DSF_API_GTW_SERVICE_ID",
+          "dsfgtwApiKey": "DSF_API_GTW_SECRET"
+        },
+        "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",
+        "topElements": [
+          {
+            "element": "progressList",
+            "params": {
+              "id": "steps",
+              "current": "4",
+              "total": "4",
+              "showSteps": true
+            }
+          }
+        ],
+        "scope": [
+          "fullName",
+          "dob",
+          "email",
+          "mobile",
+          "address"
+        ],
+        "hasBackLink": false
+      }
+    },
+    {
+      "pageData": {
+        "url": "qualifications",
+        "title": {
+          "el": "Ακαδημαϊκά και επαγγελματικά προσόντα",
+          "en": "Academic and professional qualifications",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "memberships"
+      },
+      "multipleThings": {
+        "min": 1,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{institution | trim}} - {{title | trim}}  - {{year | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Ακαδημαϊκά προσόντα",
+            "en": "Academic details"
+          },
+          "topElements" : [            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "2",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ποια είναι τα προσόντα σας;",
+                  "en": "What are your qualifications?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Προσθέστε τουλάχιστον ένα τα ακαδημαϊκό ή επαγγελματικό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "Add at least one academic or professional qualifications to proceed. You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "No qualifications added yet.",
+            "el": "Δεν έχετε προσθέσει ακόμη προσόντα."
+          },
+          "addButtonText": {
+            "en": "Add qualifications",
+            "el": "Προσθήκη προσόντος"
+          },
+          "addButtonPlacement": "top", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "2",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Ακαδημαϊκό προσόν",
+                          "en": "Academic qualification"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution",
+                        "name": "institution",
+                        "label": {
+                          "el": "Όνομα ιδρύματος",
+                          "en": "Name of academic institution"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Μπορεί να είναι ακαδημαϊκό ιδρύμα, ινστιτούτο ή άλλο εκαπαιδευτικό ίδρυμα",
+                          "en": "Μπορεί να είναι ακαδημαϊκό ιδρύμα, ινστιτούτο ή άλλο εκαπαιδευτικό ίδρυμα"
+                        },
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα ιδρύματος πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "The institute name must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα ιδρύματος πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "The institute name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title",
+                        "name": "title",
+                        "label": {
+                          "el": "Όνομα τίτλου",
+                          "en": "Title name"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για πράδειγμα `BSc Computer Science`",
+                          "en": "For example `BSc Computer Science`"
+                        },
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα τίτλου πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "The title name must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα τίτλου πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "The title name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year",
+                        "name": "year",
+                        "label": {
+                          "el": "Έτος απόκτησης",
+                          "en": "Year obtained"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "numeric",
+                            "message": {
+                              "el": "Το έτος απόκτησης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValue",
+                          "params": {
+                            "checkValue": "1900",
+                            "message": {
+                              "el": "Το έτος απόκτησης πρέπει να είναι 1900 ή περισσοτερο",
+                              "en": "The year obtained must be 1900 or more",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "4",
+                            "message": {
+                              "el": "Το έτος απόκτησης πρέπει να είναι 4 χαρακτήρες ή λιγότεροι",
+                              "en": "The year obtained must be 4 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "proof",
+                        "name": "proof",
+                        "label": {
+                          "el": "Αποδεικτικό αρχείο τίτλου",
+                          "en": "Proof of title file",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Save and continue"
+                        },
+                        "prototypeNavigate": "../memberships"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "memberships",
+        "title": {
+          "el": "Μέλη επαγγελματικών ή επιστημονικών συνδέσμων",
+          "en": "Professional or scientific memberships",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "experience"
+      },
+      "multipleThings": {
+        "min": 1,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{institution | trim}} - {{year | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Επαγγελματικοί ή επιστημονικοί συνδέσμοι",
+            "en": "..."
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "3",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Σε ποιους επαγγελματικούς η επιστημονικούς συνδέσμους είστε μέλος;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποιο σύνδεσμο, ινστιτούτο ή επιμελητήριο."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη συνδέσμου"
+          },
+          "addButtonPlacement": "top", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "3",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επαγγελματικός ή επιστημονικός συνδέσμος",
+                          "en": "Επαγγελματικός ή επιστημονικός συνδέσμος"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution",
+                        "name": "institution",
+                        "label": {
+                          "el": "Όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου ",
+                          "en": "Όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου "
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "refNumber",
+                        "name": "refNumber",
+                        "label": {
+                          "el": "Αριθμός εγγραφής",
+                          "en": "Αριθμός εγγραφής"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "20",
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Ο αριθμός εγγραφής πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Ο αριθμός εγγραφής πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "year",
+                        "name": "year",
+                        "label": {
+                          "el": "Έτος εγγραφής",
+                          "en": "Έτος εγγραφής"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "4",
+                        "type": "numeric"
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "numeric",
+                            "message": {
+                              "el": "Το έτος εγγραφής δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValue",
+                          "params": {
+                            "checkValue": "1900",
+                            "message": {
+                              "el": "Το έτος εγγραφής πρέπει να είναι 1900 ή περισσοτερο",
+                              "en": "The year ... must be 1900 or more",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "4",
+                            "message": {
+                              "el": "Το έτος εγγραφής πρέπει να είναι 4 χαρακτήρες ή λιγότεροι",
+                              "en": "The year ... must be 4 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../additional-info"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "experience",
+        "title": {
+          "el": "Επαγγελματική εμπειρία",
+          "en": "Work experience",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "council-of-ministers-organisations"
+      },
+      "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Επαγγελματική εμπειρία",
+            "en": "..."
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "4",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ποια είναι η επαγγελματική σας εμπειρία;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποια επαγγελματική εμπειρία."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη επαγγελματικής εμπειρίας"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "4",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επαγγελματική εμπειρία",
+                          "en": "Επαγγελματική εμπειρία"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Εργοδότης",
+                          "en": "Εργοδότης"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του εργοδότη",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα του εργοδότη πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα του εργοδότη πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στον οργανισμό",
+                          "en": "H θέση σας στον οργανισμό"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση",
+                          "en": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση"
+                        },
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στον οργανισμό",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "council-of-ministers-organisations",
+        "title": {
+          "el": "Συμμετοχή σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο",
+          "en": "Participation in councils assigned by the Council of Ministers",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "other-organisations"
+      },
+      "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Συμμετοχή σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο",
+            "en": "..."
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "5",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Συμμετείχατε σε συμβούλια που διορίζονται από το Υπουργικό Συμβούλιο;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποιο συμβούλιο."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη συμβουλίου"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "5",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Συμβούλια που διορίζονται από το Υπουργικό συμβούλιο",
+                          "en": "..."
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Ονομασία συμβουλίου",
+                          "en": "..."
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του οργανισμού",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα του οργανισμού πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα του οργανισμού πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στον συμβούλιο",
+                          "en": "..."
+                        },
+                        "isPageHeading": false,
+                        "type": "text",
+                        "hint": {
+                          "en": "Αν είχατε διάφορες θέσεις στον οργανισμό εισαγάγετε την ανωτερη θέση"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στον οργανισμό",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στον οργανισμό πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "other-organisations",
+        "title": {
+          "el": "Συμμετοχή σε άλλες οργανώσεις, συνδέσμους ή συμβούλια",
+          "en": "Other councils",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "additional-info"
+      }, 
+	    "multipleThings": {
+        "min": 0,    
+        "max": 5,   
+        "dedupe": true, 
+        "itemTitleTemplate": "{{from_year | trim}} - {{to_year | trim}} - {{organisation | trim}}",
+        "listPage": {
+          "title" : {
+            "el": "Άλλες οργανώσεις, σύνδεσμοι ή συμβούλια",
+            "en": "Other councils"
+          },
+          "topElements" : [            
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "6",
+                "total": "10",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Συμμετείχατε σε άλλες οργανώσεις, συνδέσμους ή συμβούλια;",
+                  "en": "...?",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "type": "p",
+                "text": {
+                  "el": "Αφορά οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο",
+                  "en": "..."
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "el": "Μπορείτε να προσθέσετε μέχρι 5.",
+                  "en": "You can up to 5."
+                }
+              }
+            }
+          ],
+          "emptyState": { 
+            "en": "...",
+            "el": "Δεν έχετε προσθέσει ακόμη κάποιο συμβούλιο."
+          },
+          "addButtonText": {
+            "en": "...",
+            "el": "Προσθήκη συμβουλίου"
+          },
+          "addButtonPlacement": "both", 
+          "continueButtonText": {    
+            "en": "Save and continue",
+            "el": "Αποθήκευση και συνέχεια"
+          }, 
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "6",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Άλλες οργανώσεις, συνδέσμοι ή συμβούλια",
+                          "en": "Άλλες οργανώσεις, συνδέσμοι ή συμβούλια"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "intro",
+                        "text": {
+                          "el": "<p>Δηλώστε οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο.</p><p>Για παράδειγμα `Σύνδεσμος γονέων Α Δημοτικού Στροβόλου`</p>",
+                          "en": "<p>Δηλώστε οργανώσεις, συνδέσμους ή συμβούλια που δεν διορίζονται από το Υπουργικό Συμβούλιο.</p><p>Για παράδειγμα `Σύνδεσμος γονέων Α Δημοτικού Στροβόλου`</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "organisation",
+                        "name": "organisation",
+                        "label": {
+                          "el": "Ονομασία οργάνωσης, συνδέσμου ή συμβουλίου",
+                          "en": "Ονομασία οργάνωσης, συνδέσμου ή συμβουλίου"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα της οργάνωσης, συνδέσμου ή συμβουλίου",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Το όνομα της οργάνωσης, συνδέσμου ή συμβουλίου πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Το όνομα οργάνωσης, συνδέσμου ή συμβουλίου πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "position",
+                        "name": "position",
+                        "label": {
+                          "el": "H θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο",
+                          "en": "H θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο",
+                              "en": "The title name for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": ".... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "300",
+                            "message": {
+                              "el": "Η θέση σας στην οργάνωση, συνδέσμο ή συμβούλιο πρέπει να είναι 300 χαρακτήρες ή λιγότεροι",
+                              "en": "... name must be 300 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "from",
+                        "name": "from",
+                        "legend": {
+                          "el": "Ημερομηνία έναρξης",
+                          "en": "Ημερομηνία έναρξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έναρξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "to",
+                        "name": "to",
+                        "legend": {
+                          "el": "Ημερομηνία λήξης",
+                          "en": "Ημερομηνία λήξης"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017",
+                          "en": "Αν δεν θυμάστε ακριβώς την ημερομηνία, δηλώστε την 1η του μήνα. Για παράδειγμα, 1 9 2017"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία λήξης",
+                              "en": "The year ... for qualification is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι σωστή ημερομηνία",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "1900-01-01",
+                            "message": {
+                              "el": "Η ημερομηνία λήξης πρέπει να είναι μετά από τις 1/1/1990",
+                              "en": "....",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "maxCurrentDate",
+                            "message": {
+                              "el": "Η ημερομηνία έναρξης δεν πρέπει να είναι στο μέλλον",
+                              "en": "The year .... must not be in the future",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "additional-info",
+        "title": {
+          "el": "Επιπλέον στοιχεία βιογραφικού",
+          "en": "Additional CV details",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "interest"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "7",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επιπλέον στοιχεία βιογραφικού",
+                          "en": "Επιπλέον στοιχεία βιογραφικού"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "additionalInfo",
+                        "name": "additionalInfo",
+                        "rows": 5,
+                        "label": {
+                          "el": "Προσθέστε τυχόν επιπλέον στοιχεία ή πληροφορίες για το βιογραφικό σας, που δεν έχετε ήδη αναφέρει στην αίτηση",
+                          "en": "Προσθέστε τυχόν επιπλέον στοιχεία ή πληροφορίες για το βιογραφικό σας, που δεν έχετε ήδη αναφέρει στην αίτηση"
+                        },
+                        "isPageHeading": false,
+                        "characterCount": {
+                          "type": "char",
+                          "max": 600
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία βιογραφικού πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία βιογραφικού πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../interest"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "interest",
+        "title": {
+          "el": "Εκδήλωση ενδιαφέροντος για θέσεις",
+          "en": "Expression of interest for positions ",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "personal-positions"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "8",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "positions",
+                        "name": "positions",
+                        "legend": {
+                          "el": "Για ποιες θέσεις ενδιαφέρεστε;",
+                          "en": "Για ποιες θέσεις ενδιαφέρεστε;"
+                        },
+                        "items": [
+                          {
+                            "value": "president",
+                            "text": {
+                              "el": "Πρόεδρος",
+                              "en": "Πρόεδρος",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "vicePresident",
+                            "text": {
+                              "el": "Αντιπρόεδρος",
+                              "en": "Αντιπρόεδρος",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "member",
+                            "text": {
+                              "el": "Μέλος",
+                              "en": "Μέλος",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": true,
+                        "hint": {
+                          "el": "Δηλώστε τις θέσεις για τις οποίες κάνετε άιτηση",
+                          "en": "Δηλώστε τις θέσεις για τις οποίες κάνετε άιτηση",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξτε τις θέσεις για τις οποίες κάνετε άιτηση",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../personal-positions"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "personal-positions",
+        "title": {
+          "el": "Προσωπικές θέσεις και απόψεις",
+          "en": "Personal positions and opinions",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "declarations"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "9",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Προσωπικές θέσεις και απόψεις",
+                          "en": "Προσωπικές θέσεις και απόψεις"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "thocRoleAndContribution",
+                        "name": "thocRoleAndContribution",
+                        "rows": 5,
+                        "label": {
+                          "el": "Αξολόγηση ρόλου και αποστολής του οργανισμού",
+                          "en": "Αξολόγηση ρόλου και αποστολής του οργανισμού"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Πώς αξιολογείτε τον ρόλο και την αποστολή του ΘΟΚ, ως οργανισμού δημοσίου δικαίου, που συμβάλλει στην οικονομική ανάπτυξη και στη βελτίωση της ποιότητας ζωής των πολιτών;",
+                          "en": "Πώς αξιολογείτε τον ρόλο και την αποστολή του ΘΟΚ, ως οργανισμού δημοσίου δικαίου, που συμβάλλει στην οικονομική ανάπτυξη και στη βελτίωση της ποιότητας ζωής των πολιτών;"
+                        },
+                        "characterCount": {
+                          "type": "char",
+                          "max": 600
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την αξολόγηση ρόλου και αποστολής του οργανισμού",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η αξολόγηση ρόλου και αποστολής του οργανισμού πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Η αξολόγηση ρόλου και αποστολής του οργανισμού πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "thocPersonalContribution",
+                        "name": "thocPersonalContribution",
+                        "rows": 5,
+                        "label": {
+                          "el": "Η δική σας συμβολή στο ΘΟΚ",
+                          "en": "Η δική σας συμβολή στο ΘΟΚ"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Ανεξάρτητα από όσα απαντήσατε πιο πάνω, ποια πιστεύετε ότι θα είναι η δική σας συμβολή, αν επιλεγείτε, για να προχωρήσει η ανάπτυξη των στόχων και η προστασία των συμφερόντων του ΘΟΚ;",
+                          "en": "Ανεξάρτητα από όσα απαντήσατε πιο πάνω, ποια πιστεύετε ότι θα είναι η δική σας συμβολή, αν επιλεγείτε, για να προχωρήσει η ανάπτυξη των στόχων και η προστασία των συμφερόντων του ΘΟΚ;"
+                        },
+                        "characterCount": {
+                          "type": "char",
+                          "max": 600
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τη δική σας συμβολή στο ΘΟΚ",
+                              "en": "... is required",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Η δική σας συμβολή στο ΘΟΚ πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Η δική σας συμβολή στο ΘΟΚ πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "other",
+                        "name": "other",
+                        "rows": 5,
+                        "label": {
+                          "el": "Επιπλέον στοιχεία ή πληρφορίες (Προαιρετικό)",
+                          "en": "Επιπλέον στοιχεία ή πληρφορίες (Προαιρετικό)"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Αναφέρετε οποιοδήποτε επιπλέον στοιχείο ή πληροφορία θεωρείτε χρήσιμη για το γνωμοδοτικό συμβούλιο και που θα μπορούσε να στηρίξει την επιλογή σας για τον ΘΟΚ.",
+                          "en": "Αναφέρετε οποιοδήποτε επιπλέον στοιχείο ή πληροφορία θεωρείτε χρήσιμη για το γνωμοδοτικό συμβούλιο και που θα μπορούσε να στηρίξει την επιλογή σας για τον ΘΟΚ."
+                        },
+                        "characterCount": {
+                          "type": "char",
+                          "max": 600
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "noSpecialChars",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία ή πληρφορίες πρέπει να αποτελούνται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                              "en": "... must consist only of letters, numbers and some other characters",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "600",
+                            "message": {
+                              "el": "Τα επιπλέον στοιχεία ή πληρφορίες πρέπει να είναι 600 χαρακτήρες ή λιγότεροι",
+                              "en": "... must be 600 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../declarations"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "declarations",
+        "title": {
+          "el": "Υπεύθυνη δήλωση και προσωπικά δεδομένα",
+          "en": "Declaration and personal data",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "10",
+                        "total": "10",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Υπεύθυνη δήλωση και προσωπικά δεδομένα",
+                          "en": "Υπεύθυνη δήλωση και προσωπικά δεδομένα"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "contactTitle",
+                        "text": {
+                          "el": "<p>Για να ολοκληρώσετε την αίτηση σας θα πρέπει να αποδεχτείτε τα πιο κάτω:</p>",
+                          "en": "<p>Για να ολοκληρώσετε την αίτηση σας θα πρέπει να αποδεχτείτε τα πιο κάτω:</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "terms",
+                        "name": "terms",
+                        "legend": {
+                          "el": "Αποδέχεστε τους όρους;",
+                          "en": "Αποδέχεστε τους όρους;"
+                        },
+                        "items": [
+                          {
+                            "value": "termsYes",
+                            "text": {
+                              "el": "Ναι, αποδέχομαι",
+                              "en": "Ναι, αποδέχομαι",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "This is a hint text.",
+                          "en": "This is a hint text.",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξτε “Ναι” για την αποδοχή στους όρους, για να μπορέσουμε να επεξεργαστούμε την αίτηση σας",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "personalData",
+                        "name": "personalData",
+                        "legend": {
+                          "el": "Αποδέχεστε να επεξεργαστούμε τα προσωπικά σας δεδομένα;",
+                          "en": "Αποδέχεστε να επεξεργαστούμε τα προσωπικά σας δεδομένα;"
+                        },
+                        "items": [
+                          {
+                            "value": "termsYes",
+                            "text": {
+                              "el": "Ναι, αποδέχομαι",
+                              "en": "Ναι, αποδέχομαι",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Τα προσωπικά σας δεδομένα θα επεξεργαστούν μόνο στα πλαίσια αυτής της αίτησης",
+                          "en": "Τα προσωπικά σας δεδομένα θα επεξεργαστούν μόνο στα πλαίσια αυτής της αίτησης",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξτε “Ναι” για την αποδοχή εξεργασίας των προσωπικών σας δεδομένω, για να μπορέσουμε να επεξεργαστούμε την αίτηση σας",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Αποθήκευση και συνέχεια"
+                        },
+                        "prototypeNavigate": "../review"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    }
+  ],
+  "routes": [],
+  "localizations": {
+    "personal-positions.thocRoleAndContribution": {
+      "el": "Αξολόγηση ρόλου και αποστολής του οργανισμού",
+      "en": "Αξολόγηση ρόλου και αποστολής του οργανισμού",
+      "tr": ""
+    },
+    "personal-positions.thocPersonalContribution": {
+      "el": "Η δική σας συμβολή στο ΘΟΚ",
+      "en": "Η δική σας συμβολή στο ΘΟΚ",
+      "tr": ""
+    },
+    "personal-positions.other": {
+      "el": "Επιπλέον στοιχεία ή πληρφορίες (Προαιρετικό)",
+      "en": "Επιπλέον στοιχεία ή πληρφορίες (Προαιρετικό)",
+      "tr": ""
+    },
+    "declarations.terms": {
+      "el": "Αποδέχεστε τους όρους;",
+      "en": "Αποδέχεστε τους όρους;",
+      "tr": ""
+    },
+    "declarations.personalData": {
+      "el": "Αποδέχεστε να επεξεργαστούμε τα προσωπικά σας δεδομένα;",
+      "en": "Αποδέχεστε να επεξεργαστούμε τα προσωπικά σας δεδομένα;",
+      "tr": ""
+    },
+    "interest.positions": {
+      "el": "Για ποιες θέσεις ενδιαφέρεστε;",
+      "en": "Για ποιες θέσεις ενδιαφέρεστε;",
+      "tr": ""
+    },
+    "memberships.institution": {
+      "el": "Όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου ",
+      "en": "Όνομα ιδρύματος, συνδέσμου, ινστιτούτου ή επιμελητηρίου ",
+      "tr": ""
+    },
+    "memberships.refNumber": {
+      "el": "Αριθμός εγγραφής",
+      "en": "Αριθμός εγγραφής",
+      "tr": ""
+    },
+    "memberships.year": {
+      "el": "Έτος εγγραφής",
+      "en": "Έτος εγγραφής",
+      "tr": ""
+    },
+    "qualifications.institution": {
+      "el": "Όνομα ιδρύματος",
+      "en": "Name of academic institution",
+      "tr": ""
+    },
+    "qualifications.title": {
+      "el": "Όνομα τίτλου",
+      "en": "Title name",
+      "tr": ""
+    },
+    "qualifications.year": {
+      "el": "Έτος απόκτησης",
+      "en": "Year obtained",
+      "tr": ""
+    },
+    "index.name": {
+      "el": "Ονοματεπώνυμο",
+      "en": "Full name",
+      "tr": ""
+    },
+    "index.mobile": {
+      "el": "Αριθμός κινητού τηλεφώνου",
+      "en": "Mobile phone number",
+      "tr": ""
+    },
+    "index.email": {
+      "el": "Email",
+      "en": "Email",
+      "tr": ""
+    },
+    "index.address-line1": {
+      "el": "Γραμμή διεύθυνσης 1",
+      "en": "Address line 1",
+      "tr": ""
+    },
+    "index.address-line2": {
+      "el": "Γραμμή διεύθυνσης 2 (προαιρετικό)",
+      "en": "Address line 2 (optional)",
+      "tr": ""
+    },
+    "index.address-level2": {
+      "el": "Πόλη ή κοινότητα ",
+      "en": "Town or comunity",
+      "tr": ""
+    },
+    "index.postal-code": {
+      "el": "Ταχυδρομικός κώδικας",
+      "en": "Postal code",
+      "tr": ""
+    }
+  }
+}

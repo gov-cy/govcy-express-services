@@ -42,7 +42,7 @@ function validateValue(value, rules) {
     mobileCY: (val) => {
       const normalized = val.replace(/[\s\-()]/g, ''); // Remove spaces, hyphens, and parentheses
       return /^(?:\+357|00357)?9\d{7}$/.test(normalized); // Match Cypriot mobile numbers
-  },
+    },
     iban: (val) => {
       const cleanedIBAN = val.replace(/[\s-]/g, '').toUpperCase(); // Remove spaces/hyphens and convert to uppercase
       const regex = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/;
@@ -96,6 +96,39 @@ function validateValue(value, rules) {
       }
       return normalizedVal <= max;
     },
+    // ✅ Year based current rules
+    maxCurrentYear: (val) => {
+      const normalizedVal = normalizeNumber(val);
+      if (isNaN(normalizedVal)) return false;
+      const currentYear = new Date().getFullYear();
+      return normalizedVal <= currentYear;
+    },
+    minCurrentYear: (val) => {
+      const normalizedVal = normalizeNumber(val);
+      if (isNaN(normalizedVal)) return false;
+      const currentYear = new Date().getFullYear();
+      return normalizedVal >= currentYear;
+    },
+    // ✅ Date-based current rules
+    minCurrentDate: (val) => {
+      const valueDate = parseDate(val);
+      const today = new Date();
+      if (isNaN(valueDate)) return false;
+      // strip time components from both
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return valueOnly >= todayOnly;
+    },
+
+    maxCurrentDate: (val) => {
+      const valueDate = parseDate(val);
+      const today = new Date();
+      if (isNaN(valueDate)) return false;
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return valueOnly <= todayOnly;
+    },
+
     minValueDate: (val, minDate) => {
       const valueDate = parseDate(val); // Parse the input date
       const min = parseDate(minDate); // Parse the minimum date
@@ -129,6 +162,10 @@ function validateValue(value, rules) {
       }
     }
 
+    // Skip validation if the value is empty
+    if (value === null || value === undefined || (typeof value === 'string' && value.trim() === "")) {
+      continue; // let "required" handle emptiness
+    }
     // Check for "valid" rules (e.g., numeric, telCY, etc.)
     if (check === "valid" && validationRules[checkValue]) {
       const isValid = validationRules[checkValue](value);
@@ -177,6 +214,7 @@ function validateValue(value, rules) {
     if (check === 'minLength' && !validationRules.minLength(value, checkValue)) {
       return message;
     }
+
 
   }
 
@@ -314,10 +352,10 @@ export function validateFormElements(elements, formData, pageUrl) {
                     .filter(Boolean) // Remove empty values
                     .join("-") // Join remaining parts
                   : (conditionalElement.element === "fileInput") // Handle fileInput
-                      // unneeded handle of `Attachment` at the end
-                      // ? formData[`${conditionalElement.params.name}Attachment`] || ""
-                      ? formData[`${conditionalElement.params.name}`] || ""
-                  : formData[conditionalElement.params.name] || ""; // Get submitted value
+                    // unneeded handle of `Attachment` at the end
+                    // ? formData[`${conditionalElement.params.name}Attachment`] || ""
+                    ? formData[`${conditionalElement.params.name}`] || ""
+                    : formData[conditionalElement.params.name] || ""; // Get submitted value
 
                 //Autocheck: check for "checkboxes", "radios", "select" if `fieldValue` is one of the `field.params.items`
                 if (["checkboxes", "radios", "select"].includes(conditionalElement.element) && conditionalFieldValue !== "") {
@@ -357,3 +395,76 @@ export function validateFormElements(elements, formData, pageUrl) {
   });
   return validationErrors;
 }
+
+
+/**
+ * Checks if a user is an Individual with a valid Cypriot citizen identifier.
+ * Rules:
+ *  - profile_type must be "Individual"
+ *  - unique_identifier must be a string
+ *  - must start with "00"
+ *  - must be 10 characters long
+ *
+ * @param {object} user - The user object (e.g. req.session.user)
+ * @returns {boolean} true if valid, false otherwise
+ */
+export function isValidCypriotCitizen(user = {}) {
+  const { profile_type, unique_identifier } = user;
+
+  if (
+    typeof profile_type === "string" &&
+    profile_type === "Individual" &&
+    typeof unique_identifier === "string" &&
+    unique_identifier.startsWith("00") &&
+    unique_identifier.length === 10
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Checks if the given user represents a valid foreign resident (ARC holder).
+ * Conditions:
+ *  - profile_type must equal "Individual"
+ *  - unique_identifier must be a string
+ *  - unique_identifier must start with "05"
+ *  - unique_identifier must be exactly 10 characters long
+ *
+ * @param {object} user - e.g. req.session.user
+ * @returns {boolean} True if valid foreign resident, otherwise false
+ */
+export function isValidForeignResident(user = {}) {
+  const { profile_type, unique_identifier } = user;
+
+  return (
+    typeof profile_type === "string" &&
+    profile_type === "Individual" &&
+    typeof unique_identifier === "string" &&
+    unique_identifier.startsWith("05") &&
+    unique_identifier.length === 10
+  );
+}
+
+/**
+ * Checks if the user is under 18 years old based on their date of birth.
+ * @param {string} dobString - The date of birth in the format "YYYY-MM-DD".
+ * @returns {boolean} True if the user is under 18 years old, otherwise false.
+ * @throws {Error} If the date of birth is missing or invalid.
+ * */
+export function isUnder18(dobString) {
+  if (!dobString) throw new Error("DOB is missing");
+  const dob = new Date(dobString);
+  if (isNaN(dob)) throw new Error("Invalid DOB format");
+
+  const today = new Date();
+  const ageDiff = today.getFullYear() - dob.getFullYear();
+  const hasHadBirthday =
+    today.getMonth() > dob.getMonth() ||
+    (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
+
+  return (hasHadBirthday ? ageDiff : ageDiff - 1) < 18;
+}
+
+

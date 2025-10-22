@@ -99,12 +99,38 @@ describe('isApiRequest utility', () => {
     });
 
     it("10. should return true for /apis/ route even with complex path", () => {
-    const req = {
-        originalUrl: "/apis/my-site/special-page/download",
-        headers: {}
-    };
-    expect(isApiRequest(req)).to.be.true;
-});
+        const req = {
+            originalUrl: "/apis/my-site/special-page/download",
+            headers: {}
+        };
+        expect(isApiRequest(req)).to.be.true;
+    });
+
+    it("11. should detect API request for multipleThings add upload route", () => {
+        const req = {
+            originalUrl: "/apis/site99/academic-details/multiple/add/upload",
+            headers: {}
+        };
+        const result = isApiRequest(req);
+        expect(result).to.be.true;
+    });
+
+    it("12. should detect API request for multipleThings edit upload route with index", () => {
+        const req = {
+            originalUrl: "/apis/site99/academic-details/multiple/edit/2/upload",
+            headers: {}
+        };
+        const result = isApiRequest(req);
+        expect(result).to.be.true;
+    });
+
+    it("13. should return false for invalid multipleThings upload path", () => {
+        const req = {
+            originalUrl: "/apis/site99/academic-details/multiple/edit/upload-wrong",
+            headers: {}
+        };
+        expect(isApiRequest(req)).to.be.false;
+    });
 
 
 });

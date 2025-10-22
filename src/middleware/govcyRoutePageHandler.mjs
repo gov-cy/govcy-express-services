@@ -45,8 +45,10 @@ export function govcyRoutePageHandler(req, res, next) {
     pageData.site.lang = req.globalLang; 
     //if user is logged in add he user bane section in the page template
     if (dataLayer.getUser(req.session)) {
-    pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
+        pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
     }
+    // Add custom CSS path
+    pageData.site.customCSSFile = `/css/govcyExpress.css`;
     const renderer = new govcyFrontendRenderer();
     const html = renderer.renderFromJSON(pageTemplate, pageData);
     res.send(html);

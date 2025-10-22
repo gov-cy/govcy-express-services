@@ -111,9 +111,17 @@ describe("govcyReviewPageHandler", () => {
         // Add submissionErrors to session
         req.session.siteData["site123"].submissionErrors = {
             errors: {
-                "test-pagefullName": {
-                    pageUrl: "test-page",
-                    message: "Το όνομα είναι υποχρεωτικό"
+                "test-page": {
+                    type: "normal",
+                    "test-pagefullName": {
+                        id: "fullName",
+                        pageUrl: "test-page",
+                        message: {
+                            el: "Το όνομα είναι υποχρεωτικό",
+                            en: "Name is required",
+                            tr: ""
+                        }
+                    }
                 }
             },
             errorSummary: []
@@ -134,8 +142,65 @@ describe("govcyReviewPageHandler", () => {
         const errorSummary = mainSection.elements.find(el => el.element === "errorSummary");
         expect(errorSummary.params).to.be.an("object");
         expect(errorSummary.params.errors).to.be.an("array");
-        expect(errorSummary.params.errors[0].text).to.include("Το όνομα είναι υποχρεωτικό");
+        expect(errorSummary.params.errors[0].text.el).to.include("Το όνομα είναι υποχρεωτικό");
         expect(errorSummary.params.errors[0].link).to.include("/site123/test-page?route=review");
     });
+
+    it("3. should handle multipleThings validation errors correctly", () => {
+        // Simulate a service with the relevant page
+        req.serviceData.pages = [
+            {
+                pageData: { url: "academic-details", title: { en: "Academic details" } },
+                multipleThings: {
+                    itemTitleTemplate: "{{ qualification }}",
+                    min: 0,
+                    max: 3,
+                    listPage: { title: { en: "Your qualifications" } }
+                },
+                pageTemplate: { sections: [{ name: "main", elements: [] }] }
+            }
+        ];
+
+        // Setup: multipleThings-type error in session
+        req.session.siteData["site123"].submissionErrors = {
+            errors: {
+                "academic-details": {
+                    type: "multipleThings",
+                    hub: {
+                        errors: {
+                            "academic-details": {
+                                field1: {
+                                    pageUrl: "academic-details",
+                                    message: {
+                                        en: "You must add at least one qualification",
+                                        el: "Πρέπει να προσθέσετε τουλάχιστον ένα προσόν"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            errorSummary: []
+        };
+
+        const handler = govcyReviewPageHandler();
+        handler(req, res, next);
+
+        const processed = req.processedPage;
+        expect(processed).to.be.an("object");
+
+        const mainSection = processed.pageTemplate.sections.find(sec => sec.name === "main");
+        expect(mainSection).to.exist;
+
+        const errorSummary = mainSection.elements.find(el => el.element === "errorSummary");
+        expect(errorSummary).to.exist;
+
+        const errorsArray = errorSummary.params.errors || errorSummary.params;
+        const firstErr = errorsArray[0];
+        expect(firstErr.text.en).to.include("qualification");
+
+    });
+
 
 });

@@ -102,5 +102,18 @@ describe("govcyHttpErrorHandler", () => {
         expect(res._sentHtml).to.include("there is a problem with the service"); // Error 500 message
     });
 
+    it("7. should include user name section when user is logged in", () => {
+        const err = { status: 404, message: "Page not found" };
+
+        // Simulate a session with a logged-in user
+        req.session.user = { name: "John Tester" };
+
+        govcyHttpErrorHandler(err, req, res, next);
+
+        expect(res.statusCode).to.equal(404);
+        expect(res._sentHtml).to.be.a("string");
+        // The rendered HTML should contain the user's name (from userNameSection)
+        expect(res._sentHtml).to.include("John Tester");
+    });
 
 });

@@ -18,9 +18,21 @@ import { logger } from './govcyLogger.mjs';
  * @param {string} opts.pageUrl - Page URL
  * @param {string} opts.elementName - Name of file input
  * @param {object} opts.file - File object from multer (req.file)
+ * @param {string} opts.mode - Upload mode ("single" | "multipleThingsDraft" | "multipleThingsEdit")
+ * @param {number|null} opts.index - Numeric index for edit mode (0-based), or null
  * @returns {Promise<{ status: number, data?: object, errorMessage?: string }>}
  */
-export async function handleFileUpload({ service, store, siteId, pageUrl, elementName, file }) {
+export async function handleFileUpload({ 
+  service, 
+  store, 
+  siteId, 
+  pageUrl, 
+  elementName, 
+  file,
+  mode = "single",       // "single" | "multipleThingsDraft" | "multipleThingsEdit"
+  index = null           // numeric index for edit mode
+}) {
+  
   try {
     // Validate essentials
     // Early exit if key things are missing
@@ -88,6 +100,16 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
 
     // deep copy the page template to avoid modifying the original
     const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));
+    
+    // If mode is `single` make sure it has no multipleThings
+    if (mode === "single" && page?.multipleThings) {
+      return {
+        status: 400,
+        dataStatus: 413,
+        errorMessage: 'Single mode upload not allowed on multipleThings pages'
+      };
+    }
+    
     // Validate the field: Only allow upload if the page contains a fileInput with the given name
     const isAllowed = pageContainsFileInput(pageTemplateCopy, elementName);
     if (!isAllowed) {
@@ -187,23 +209,56 @@ export async function handleFileUpload({ service, store, siteId, pageUrl, elemen
 
     // ✅ Success
     // Store the file metadata in the session store
-    // unneeded handle of `Attachment` at the end
-    // dataLayer.storePageDataElement(store, siteId, pageUrl, elementName+"Attachment", {
-    dataLayer.storePageDataElement(store, siteId, pageUrl, elementName, {
+    const metadata = {
       sha256: response.Data.sha256,
       fileId: response.Data.fileId,
-    });
-    logger.debug("File upload successful", response.Data);
-    logger.info(`File uploaded successfully for element ${elementName} on page ${pageUrl} for site ${siteId}`);
+      fileName: response.Data.fileName || file.originalname || "",
+      mimeType: response.Data.contentType || file.mimetype || "",
+      fileSize: response.Data.fileSize || file.size || 0,
+    };
+
+    if (mode === "multipleThingsDraft") {
+      // Store in draft object
+      let draft = dataLayer.getMultipleDraft(store, siteId, pageUrl);
+      if (!draft) draft = {};
+      draft[elementName] = {
+        sha256: response.Data.sha256,
+        fileId: response.Data.fileId,
+      };
+      dataLayer.setMultipleDraft(store, siteId, pageUrl, draft);
+      logger.debug(`Stored file metadata in draft for ${siteId}/${pageUrl}`, metadata);
+    }
+    else if (mode === "multipleThingsEdit") {
+      // Store in item array
+      let items = dataLayer.getPageData(store, siteId, pageUrl);
+      if (!Array.isArray(items)) items = [];
+      if (index !== null && index >= 0 && index < items.length) {
+        items[index][elementName] = {
+          sha256: response.Data.sha256,
+          fileId: response.Data.fileId,
+        };
+        dataLayer.storePageData(store, siteId, pageUrl, items);
+        logger.debug(`Stored file metadata in item index=${index} for ${siteId}/${pageUrl}`, metadata);
+      } else {
+        return {
+          status: 400,
+          dataStatus: 412,
+          errorMessage: `Invalid index for multipleThingsEdit (index=${index})`
+        };
+      }
+    }
+    else {
+      // Default: single-page behaviour
+      dataLayer.storePageDataElement(store, siteId, pageUrl, elementName, {
+        sha256: response.Data.sha256,
+        fileId: response.Data.fileId,
+      });
+      logger.debug(`Stored file metadata in single mode for ${siteId}/${pageUrl}`, metadata);
+    }
+
     return {
       status: 200,
-      data: {
-        sha256: response.Data.sha256,
-        filename: response.Data.fileName || '',
-        fileId: response.Data.fileId,
-        mimeType: response.Data.contentType || '',
-        fileSize: response.Data?.fileSize || ''
-      }
+      data: metadata
     };
 
   } catch (err) {

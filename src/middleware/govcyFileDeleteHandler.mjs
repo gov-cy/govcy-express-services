@@ -47,13 +47,17 @@ export function govcyFileDeletePageHandler() {
                 return handleMiddlewareError(`File input [${elementName}] does not have a label`, 404, next);
             }
 
-            //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
-
-            // If the element data is not found, return an error response
-            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
-                return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
+            // --- Resolve file element data (normal + multipleThings add/edit) ---
+            const { index } = req.params;
+            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName, index);
+        
+            // Guard if still nothing found
+            if (!elementData || !elementData.fileId || !elementData.sha256) {
+                logger.info(`govcyFileDeletePageHandler: File data not found for element [${elementName}] on page [${pageUrl}] in site [${siteId}]. Redirecting to "${siteId}/${pageUrl}".`);
+                return res.redirect(govcyResources.constructPageUrl(siteId, pageUrl, (req.query.route === "review" ? "review" : "")))
+                // return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
+
 
             // Deep copy page title (so we don’t mutate template)
             const pageTitle = JSON.parse(JSON.stringify(govcyResources.staticResources.text.deleteFileTitle));
@@ -92,7 +96,7 @@ export function govcyFileDeletePageHandler() {
             const showSameFileWarning = dataLayer.isFileUsedInSiteInputDataAgain(
                 req.session,
                 siteId,
-                elementData 
+                elementData
             );
 
             // Construct page title
@@ -119,12 +123,27 @@ export function govcyFileDeletePageHandler() {
                 }
             };
             //-------------
-
+            // Build proper action based on context (normal / multiple add / multiple edit)
+            let actionPath;
+            if (typeof req.params.index !== "undefined") {
+                // multiple edit
+                actionPath = `${pageUrl}/multiple/edit/${req.params.index}/delete-file/${elementName}`;
+            } else if (req.originalUrl.includes("/multiple/add")) {
+                // multiple add
+                actionPath = `${pageUrl}/multiple/add/delete-file/${elementName}`;
+            } else {
+                // normal page
+                actionPath = `${pageUrl}/delete-file/${elementName}`;
+                // if normal page but has multipleThings, block it
+                if (page?.multipleThings) {
+                    return handleMiddlewareError(`Single mode delete file not allowed on multipleThings pages`, 404, next)
+                }
+            }
             // Construct submit button
             const formElement = {
                 element: "form",
                 params: {
-                    action: govcyResources.constructPageUrl(siteId, `${pageUrl}/delete-file/${elementName}`, (req.query.route === "review" ? "review" : "")),
+                    action: govcyResources.constructPageUrl(siteId, actionPath, (req.query.route === "review" ? "review" : "")),
                     method: "POST",
                     elements: [
                         pageRadios,
@@ -158,11 +177,6 @@ export function govcyFileDeletePageHandler() {
             mainElements.push(formElement);
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });
-
-            //if user is logged in add he user bane section in the page template
-            if (dataLayer.getUser(req.session)) {
-                pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
-            }
 
             //prepare pageData
             pageData.site = serviceCopy.site;
@@ -215,16 +229,34 @@ export function govcyFileDeletePostHandler() {
                 return handleMiddlewareError(`File input [${elementName}] not allowed on this page`, 404, next);
             }
 
-            //get element data 
-            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName)
-
-            // If the element data is not found, return an error response
-            if (!elementData || !elementData?.sha256 || !elementData?.fileId) {
+            // --- Resolve file element data (normal + multipleThings add/edit) ---
+            const { index } = req.params;
+            const elementData = dataLayer.getFormDataValue(req.session, siteId, pageUrl, elementName, index);
+        
+            // Guard if still nothing found
+            if (!elementData || !elementData.fileId || !elementData.sha256) {
                 return handleMiddlewareError(`File input [${elementName}] data not found on this page`, 404, next);
             }
 
+            // Build proper action based on context (normal / multiple add / multiple edit)
+            let actionPath;
+            if (typeof req.params.index !== "undefined") {
+                // multiple edit
+                actionPath = `${pageUrl}/multiple/edit/${req.params.index}`;
+            } else if (req.originalUrl.includes("/multiple/add")) {
+                // multiple add
+                actionPath = `${pageUrl}/multiple/add`;
+            } else {
+                // normal page
+                actionPath = `${pageUrl}`;
+                // if normal page but has multipleThings, block it
+                if (page?.multipleThings) {
+                    return handleMiddlewareError(`Single mode delete file not allowed on multipleThings pages`, 404, next)
+                }
+            }
+
             // the page base return url
-            const pageBaseReturnUrl = `http://localhost:3000/${siteId}/${pageUrl}`;
+            const pageBaseReturnUrl = `http://localhost:3000/${siteId}/${actionPath}`;
 
             //check if input `deleteFile` has a value
             if (!req?.body?.deleteFile ||

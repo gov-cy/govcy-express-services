@@ -121,7 +121,8 @@ This is an overview of the data stored in the session:
       "loadData": {},              // Data used to load the site when presaved
       "inputData": {                // Input data of the site
         "[pageUrl]": {              // Pages level - e.g., "page1"
-          "formData": {},           // Form data per page
+          "formData": {},           // Form data per page. For multiple things pages, array of item objects
+          "multipleDraft": {},      // Temporary item data during multiple things "add" flow
           "validationErrors": {     // Page-level validation
             "errors": {},
             "formData": {},
@@ -281,7 +282,44 @@ For example:
           }
         },
         // SITE: `nsf-2`, PAGE: `answer-bank-boc`
-        "answer-bank-boc": {}
+        "answer-bank-boc": {},
+        // Multiple things page
+        "qualifications": {
+          "formData": [       // form data in an array
+            {
+              "institution": "Manchester university",
+              "title": "MSc Computer Science",
+              "year": "2005",
+              "proof": {
+                "sha256": "mock-sha256-hash",
+                "fileId": "mock-file-id"
+              }
+            }
+          ],
+          "multipleDraft": {}, // Multiple things page draft when adding and uploading 
+          "validationErrors": { // this page has validation errors while adding
+            "add": {
+              "errors": {
+                "institution": {
+                  "id": "institution",
+                  "message": {
+                    "el": "Το όνομα ιδρύματος πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
+                    "en": "The institute name must consist only of letters, numbers and some other characters",
+                    "tr": ""
+                  },
+                  "pageUrl": ""
+                }
+              },
+              "formData": {
+                "institution": "*/*-/",
+                "title": "",
+                "year": "",
+                "proof": ""
+              },
+              "errorSummary": []
+            }
+          }
+        }
       },
       // ELIGIBILITY
       "eligibility": {            // Site eligibility cached results
@@ -458,6 +496,27 @@ More examples in the [govcyDataLayer.mjs](./src/utils/govcyDataLayer.mjs) file.
    - Stores submission in session under ` siteData[siteId].submissionData`
    - Clears the pages data from session. 
    - Redirects to success page
+
+### 🧩 MultipleThings Flow (Add / Edit / Delete / Hub)
+
+This pattern is used when a service needs to collect multiple entries of the same structure (e.g. academic qualifications, dependents, addresses).
+Each entry is stored as an object inside an array in the session under:
+
+```js
+req.session.siteData[siteId].inputData[pageUrl].formData = [ {...}, {...}, ... ]
+```
+
+More at [REAMDE.md - Multiple things](README.md#multiple-things-pages-repeating-group-of-inputs)
+
+
+### 🧱 File operations with multipleThings
+
+- The `/upload`, `/view-file`, and `/delete-file` routes in single mode are disabled for multipleThings pages.
+- File actions for multipleThings pages must use the indexed paths:
+  - `POST /apis/:siteId/:pageUrl/multiple/add/upload`
+  - `POST /apis/:siteId/:pageUrl/multiple/edit/:index/upload`
+  - `GET /:siteId/:pageUrl/multiple/edit/:index/view-file/:elementName`
+  - `POST /:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName`
 
 ---
 

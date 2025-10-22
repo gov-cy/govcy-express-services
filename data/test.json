@@ -1,4 +1,3 @@
-
 {
   "site": {
     "id": "test",
@@ -214,6 +213,53 @@
             "105": {
               "error": "user not registration",
               "page": "/test/user-not-registered"
+            }
+          }
+        }
+      },
+      {
+        "url": "CRMD_ELIGIBILITY_API_URL",
+        "method": "GET",
+        "clientKey": "DSF_API_GTW_CLIENT_ID",
+        "serviceId": "DSF_API_GTW_SERVICE_ID",
+        "cashingTimeoutMinutes": "0",
+        "dsfgtwApiKey": "DSF_API_GTW_SECRET",
+        "params": {
+          "checkFor": "isIdentifierFound,isAlive,isCypriot"
+        },
+        "response": {
+          "errorResponse": {
+            "100": {
+              "error": "DRMD check isIdenfierFound",
+              "page": "/test/identifier-not-found"
+            },
+            "101": {
+              "error": "DRMD check isAlive",
+              "page": "/test/not-alive-citizen"
+            },
+            "102": {
+              "error": "DRMD check isCypriot",
+              "page": "/test/not-cy-nationality"
+            },
+            "103": {
+              "error": "DRMD check isGreekCypriot",
+              "page": "/test/not-greek-cypriot"
+            },
+            "104": {
+              "error": "DRMD check isTurkishCypriot",
+              "page": "/test/not-turkish-cypriot"
+            },
+            "105": {
+              "error": "DRMD check is18AndOver",
+              "page": "/test/under-18"
+            },
+            "106": {
+              "error": "DRMD check is17AndOver",
+              "page": "/test/under-17"
+            },
+            "107": {
+              "error": "DRMD check is16AndOver",
+              "page": "/test/under-16"
             }
           }
         }
@@ -522,6 +568,390 @@
                   "text": {
                     "el": "<p>Για να υποβάλετε σε υπηρεσία αυτή, χρειάζεται να είστε διαχειριστής στο ΧΥΖ.</p>",
                     "en": "<p>To submit in this service you need to be an administrator of XYZ.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "identifier-not-found",
+        "title": {
+          "el": "Δεν σας βρήκαμε στα αρχεία μας",
+          "en": "We didn’t find you in our records",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν σας βρήκαμε στα αρχεία μας",
+                    "en": "You are not registered"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-alive-citizen",
+        "title": {
+          "el": "Έχει βρεθεί ημερομηνία θανάτου για αυτό το άτομο",
+          "en": "Date of death found for this person",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Έχει βρεθεί ημερομηνία θανάτου για αυτό το άτομο",
+                    "en": "Date of death found for this person"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-cy-nationality",
+        "title": {
+          "el": "Η υπηκοότητά σας δεν είναι κυπριακή",
+          "en": "Your citizenship is not Cypriot",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηκοότητά σας δεν είναι κυπριακή",
+                    "en": "Your citizenship is not Cypriot"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Κύπριος ή Κύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be a Cypriot citizen.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-greek-cypriot",
+        "title": {
+          "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+          "en": "You cannot continue online",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+                    "en": "You cannot continue online"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Έλληνοκύπριος ή Ελληνοκύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be Greek Cypriot.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-turkish-cypriot",
+        "title": {
+          "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+          "en": "You cannot continue online",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+                    "en": "You cannot continue online"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Τουρκοκύπριος ή Τουρκοκύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be Turkish Cypriot.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-16",
+        "title": {
+          "el": "Είστε κάτω των 16 χρόνων",
+          "en": "You are under 16 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 16 χρόνων",
+                    "en": "You are under 16 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 16 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 16 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-17",
+        "title": {
+          "el": "Είστε κάτω των 17 χρόνων",
+          "en": "You are under 17 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 17 χρόνων",
+                    "en": "You are under 17 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 17 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 17 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-18",
+        "title": {
+          "el": "Είστε κάτω των 18 χρόνων",
+          "en": "You are under 18 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 18 χρόνων",
+                    "en": "You are under 18 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 18 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 18 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
                   }
                 }
               }
@@ -1462,10 +1892,10 @@
         "conditions": [
           {
             "expression": "[].concat(dataLayer['test.inputData.index.formData.certificate_select'] || []).includes('birth')",
-            "redirect": "review"
+            "redirect": "multiple-academic-details"
           }
         ],
-        "nextPage": "review"
+        "nextPage": "multiple-academic-details"
       },
       "pageTemplate": {
         "sections": [
@@ -5767,6 +6197,1295 @@
               }
             ],
             "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "multiple-academic-details",
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "update-my-details"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "progress",
+                        "current": "4",
+                        "total": "4",
+                        "showSteps": true
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Ακαδημαϊκό προσόντον",
+                          "en": "Academic detail"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "title",
+                        "name": "title",
+                        "label": {
+                          "el": "Ακαδημαϊκός τίτλος",
+                          "en": "What is your id?"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του ακδημαϊκου τίτλου",
+                              "en": "Enter τhe academic title name",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institution",
+                        "name": "institution",
+                        "label": {
+                          "el": "Όνομα ινστιτούτου",
+                          "en": "Institution name"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το όνομα του ινστιτούτου",
+                              "en": "Enter τhe institution name",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "institutionPhoneNumber",
+                        "name": "institutionPhoneNumber",
+                        "label": {
+                          "el": "Τηλέφωνο ινστιτούτου",
+                          "en": "Institution phone number"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "20",
+                        "type": "tel"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό τηλεφώνου του ινστιτούτου",
+                              "en": "Enter τhe institution phone number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "telCY",
+                            "message": {
+                              "el": "O αριθμό τηλεφώνου του ινστιτούτου πρέπει να είναι Κυπριακος αριθμός τηλεφώνου",
+                              "en": "The institution phone number must be a Cypriot telephone number",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "dateGot",
+                        "name": "dateGot",
+                        "legend": {
+                          "el": "Ημερομηνία απόκτησης τίτλου",
+                          "en": "Date of obtaining the degree"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateISO",
+                            "message": {
+                              "el": "Η ημερομηνία απόκτησης τίτλου πρέπει να είναι ημερομηνία [π.χ. 13 8 2007]",
+                              "en": "The date of obtaining the degree must be an date [e.g. 13 8 2007]",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "academicFile",
+                        "name": "academicFile",
+                        "label": {
+                          "el": "Ανεβάστε τον τίτλο",
+                          "en": "Upload the degree",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε τον τίτλο",
+                              "en": "Upload the title",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "multipleThings": {
+        "min": "1",
+        "max": "2",
+        "dedupe": true,
+        "itemTitleTemplate": "{{dateGot_year}} - {{title | trim}}",
+        "listPage": {
+          "title": {
+            "el": "Ακαδημαϊκά προσόντα",
+            "en": "Academic details",
+            "tr": ""
+          },
+          "emptyState": {
+            "el": "Δεν έχετε προσθέσει ακόμη ακαδημαϊκά προσόντα.",
+            "en": "No academic details added yet.",
+            "tr": ""
+          },
+          "addButtonText": {
+            "el": "Προσθήκη ακαδημαϊκό προσόν",
+            "en": "Add academic details",
+            "tr": ""
+          },
+          "addButtonPlacement": "both",
+          "continueButtonText": {
+            "el": "Αποθήκευση και συνέχεια",
+            "en": "Save and continue",
+            "tr": ""
+          },
+          "hasBackLink": true,
+          "topElements": [
+            {
+              "element": "progressList",
+              "params": {
+                "id": "progress",
+                "current": "4",
+                "total": "4",
+                "showSteps": true
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Ακαδημαϊκά προσόντα",
+                  "en": "Academic details"
+                }
+              }
+            },
+            {
+              "element": "htmlElement",
+              "params": {
+                "id": "instructions",
+                "text": {
+                  "el": "<p>Προσθέστε τουλάχιστον ένα ακαδημαϊκό προσόν για να συνεχίσετε. Μπορείτε να προσθέσετε μέχρι 5.</p>",
+                  "en": "<p>Add at least one academic detail to proceed. You can up to 5.</p>"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "pageData": {
+        "url": "update-my-details",
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "multiple-data-entry-all"
+      },
+      "updateMyDetails": {
+        "APIEndpoint": {
+          "url": "CIVIL_REGISTRY_CONTACT_API_URL",
+          "method": "GET",
+          "clientKey": "DSF_API_GTW_CLIENT_ID",
+          "serviceId": "DSF_API_GTW_SERVICE_ID",
+          "dsfgtwApiKey": "DSF_API_GTW_SECRET"
+        },
+        "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",
+        "topElements": [
+          {
+            "element": "progressList",
+            "params": {
+              "id": "steps",
+              "current": "4",
+              "total": "4",
+              "showSteps": true
+            }
+          }
+        ],
+        "scope": [
+          "fullName",
+          "email",
+          "mobile",
+          "address"
+        ],
+        "hasBackLink": true
+      }
+    },
+    {
+      "pageData": {
+        "url": "multiple-data-entry-all",
+        "title": {
+          "el": "Multiple Όλα τα input",
+          "en": "Multiple All input",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "multiple-radios-conditions"
+      },
+      "multipleThings": {
+        "min": 1,
+        "max": 5,
+        "dedupe": true,
+        "itemTitleTemplate": "{{txtMobile | trim}} - {{txtName | trim}}",
+        "listPage": {
+          "title": {
+            "el": "Multiple Όλα τα inputs",
+            "en": "Multiple all inputs"
+          },
+          "topElements": [
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Multiple Όλα τα inputs",
+                  "en": "Multiple all inputs",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "en": "Add at least one. You can up to 5.",
+                  "el": "Προσθέστε τουλάχιστον ένα. Μπορείτε να προσθέσετε μέχρι 5."
+                }
+              }
+            }
+          ],
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Όλα τα inputs",
+                          "en": "All inputs"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "html",
+                        "text": {
+                          "el": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraphddd</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>",
+                          "en": "<h2>This is 1st Title - H2 mobile</h2><p>This is 1st Paragraph</p><ul><li>List Item 1.1</li><li>List Item 1.2</li></ul><p>This is 2nd Paragraph</p><ol><li>List Item 2.1</li><li>List Item 2.2</li></ol><h2>This is 2nd Title - H2 mobile</h2><p>Please contact us:</p><ul class=\"govcy-list-unstyled\"><li>This is our webpage on <a href=\"https://gov-cy.github.io/govcy-design-system-docs/\" target=\"_blank\">Design System</a></li><li>This is our Email: <a href=\"mailto:dsf@dits.dmrid.gov.cy\" target=\"_blank\">dsf@dits.dmrid.gov.cy</a></li></ul><h3>This is 2.1 Title - H3 mobile</h3><p>This is a sample sub paragraph</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtMobile",
+                        "name": "txtMobile",
+                        "label": {
+                          "el": "Τηλέφωνο",
+                          "en": "Phone"
+                        },
+                        "isPageHeading": false,
+                        "fixedWidth": "20",
+                        "type": "tel"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtName",
+                        "name": "txtName",
+                        "label": {
+                          "el": "Όνομα",
+                          "en": "Name"
+                        },
+                        "isPageHeading": false,
+                        "type": "name"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtEmail",
+                        "name": "txtEmail",
+                        "label": {
+                          "el": "Email",
+                          "en": "Email"
+                        },
+                        "isPageHeading": false,
+                        "type": "email"
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "txtNumeric",
+                        "name": "txtNumeric",
+                        "label": {
+                          "el": "Αριθμός",
+                          "en": "Number"
+                        },
+                        "isPageHeading": false,
+                        "type": "numeric"
+                      }
+                    },
+                    {
+                      "element": "dateInput",
+                      "params": {
+                        "id": "dateInput",
+                        "name": "dateInput",
+                        "legend": {
+                          "el": "Ημερομηνία απόκτησης",
+                          "en": "Date got"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      }
+                    },
+                    {
+                      "element": "datePicker",
+                      "params": {
+                        "id": "datePicker",
+                        "name": "datePicker",
+                        "label": {
+                          "el": "Επιλογή Ημερομηνίας",
+                          "en": "Date Picker"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Για παράδειγμα, 13 8 2007",
+                          "en": "For example, 13 8 2007"
+                        }
+                      }
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "checkboxes",
+                        "name": "checkboxes",
+                        "legend": {
+                          "el": "Checkboxes List (Ελληνικά)",
+                          "en": "Checkboxes List"
+                        },
+                        "items": [
+                          {
+                            "value": "checkbox1",
+                            "text": {
+                              "el": "Option 1 Ελληνικά",
+                              "en": "Option 1",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "checkbox2",
+                            "text": {
+                              "el": "Option 2 Ελληνικά",
+                              "en": "Option 2",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "checkbox3",
+                            "text": {
+                              "el": "Option 3 Ελληνικά",
+                              "en": "Option 3",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "checkbox4",
+                            "text": {
+                              "el": "Option 4 Ελληνικά",
+                              "en": "Option 4",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "This is a hint text.",
+                          "en": "This is a hint text.",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "radios",
+                        "name": "radios",
+                        "legend": {
+                          "el": "Radios List (Ελληνικά)",
+                          "en": "Radios List"
+                        },
+                        "items": [
+                          {
+                            "value": "option1",
+                            "text": {
+                              "el": "Option 1 Ελληνικά",
+                              "en": "Option 1",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "option2",
+                            "text": {
+                              "el": "Option 2 Ελληνικά",
+                              "en": "Option 2",
+                              "tr": ""
+                            },
+                            "hint": {
+                              "el": "This is a hint text.",
+                              "en": "This is a hint text."
+                            }
+                          },
+                          {
+                            "value": "option3",
+                            "text": {
+                              "el": "Option 3 Ελληνικά",
+                              "en": "Option 3",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "option4",
+                            "text": {
+                              "el": "Option 4 Ελληνικά",
+                              "en": "Option 4",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "This is a hint text.",
+                          "en": "This is a hint text.",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "textArea",
+                        "name": "textArea",
+                        "rows": 5,
+                        "label": {
+                          "el": "Char count label ΕΛΛΗΝΙΚΑ",
+                          "en": "Char count label ΑΓΓΛΙΚΑ"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        },
+                        "characterCount": {
+                          "type": "char",
+                          "max": 300
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "textArea1",
+                        "name": "textArea1",
+                        "rows": 5,
+                        "label": {
+                          "el": "Text area label ΕΛΛΗΝΙΚΑ",
+                          "en": "Text area label ΑΓΓΛΙΚΑ"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textArea",
+                      "params": {
+                        "id": "textArea2",
+                        "name": "textArea2",
+                        "rows": 5,
+                        "label": {
+                          "el": "Word count label ΕΛΛΗΝΙΚΑ",
+                          "en": "Word count label ΑΓΓΛΙΚΑ"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        },
+                        "characterCount": {
+                          "type": "word",
+                          "max": 300
+                        }
+                      }
+                    },
+                    {
+                      "element": "select",
+                      "params": {
+                        "id": "select1",
+                        "name": "select1",
+                        "label": {
+                          "el": "Choose an item Ελληνικά",
+                          "en": "Choose an item"
+                        },
+                        "items": [
+                          {
+                            "value": "",
+                            "text": {
+                              "el": "",
+                              "en": "",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "1",
+                            "text": {
+                              "el": "Κύπρος",
+                              "en": "Cyprus",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "2",
+                            "text": {
+                              "el": "Ελλάδα",
+                              "en": "Greece",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "3",
+                            "text": {
+                              "el": "Τιμπουκτού",
+                              "en": "Timpouktou",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "4",
+                            "text": {
+                              "el": "Γουαδελούπη",
+                              "en": "Guadeloupe",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Hint",
+                          "en": "Hint"
+                        }
+                      }
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "file1",
+                        "name": "file1",
+                        "label": {
+                          "el": "Upload a file Ελληνικά",
+                          "en": "Upload a file",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG are the acceptable formats [PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές]",
+                          "en": "PDF, JPG, JPEG, PNG are the acceptable formats [PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές]",
+                          "tr": ""
+                        }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../radios-conditions"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "params": {}
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "multiple-radios-conditions",
+        "title": {
+          "el": "Multiple Κοντίσιοναλ ράδια (δεν εμφανίζεται αν δεν έχει επιλεγεί το πιστοποιητικό γέννησης)",
+          "en": "Multiple Conditional radios (not shown if birth certificate is not selected)",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "conditions": [
+          {
+            "expression": "[].concat(dataLayer['test.inputData.index.formData.certificate_select'] || []).includes('birth')",
+            "redirect": "review"
+          }
+        ],
+        "nextPage": "review"
+      },
+      "multipleThings": {
+        "min": 0,
+        "max": 5,
+        "dedupe": true,
+        "itemTitleTemplate": "{% if id_select == \"id\" %}ID - {{id_number | trim}} - {{id_country | trim}}{% elseif id_select == \"arc\" %}ARC - {{arc_number | trim}}{% elseif id_select == \"passport\" %}Passport - {{passport_number | trim}} - {{passport_country | trim}}{% endif %}",
+        "listPage": {
+          "title": {
+            "el": "Multiple τρόποι ταυτοποίησης",
+            "en": "Multiple ways of verification"
+          },
+          "topElements": [
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Multiple τρόποι ταυτοποίησης",
+                  "en": "Multiple ways of verification",
+                  "tr": ""
+                }
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "instructions",
+                "type": "p",
+                "text": {
+                  "en": "Add at least one. You can up to 5.",
+                  "el": "Προσθέστε τουλάχιστον ένα. Μπορείτε να προσθέσετε μέχρι 5."
+                }
+              }
+            }
+          ],
+          "hasBackLink": true
+        }
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ],
+            "params": {}
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Τρόποι ταυτοποίησης",
+                          "en": "Identification methods"
+                        }
+                      }
+                    },
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "id_select",
+                        "name": "id_select",
+                        "legend": {
+                          "el": "Πως θέλετε να σας ταυτοποιήσουμε;",
+                          "en": "What type of identification  can we use?"
+                        },
+                        "items": [
+                          {
+                            "value": "id",
+                            "text": {
+                              "el": "Ταυτότητα",
+                              "en": "ID card",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "id_number",
+                                  "name": "id_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό ταυτότητας",
+                                    "en": "Enter ID card number"
+                                  },
+                                  "isPageHeading": false,
+                                  "hint": {
+                                    "el": "Κυπριακή ή άλλη",
+                                    "en": "Cypriot or other"
+                                  },
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξετε τρόπο ταυτοποίησης",
+                                        "en": "Choose identification type",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "numeric",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ταυτότητας",
+                                        "en": "Enter a valid ID number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "10",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ταυτότητας",
+                                        "en": "Enter a valid ID number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "element": "select",
+                                "params": {
+                                  "id": "id_country",
+                                  "name": "id_country",
+                                  "label": {
+                                    "el": "Επιλέξτε χώρα έκδοσης",
+                                    "en": "Choose issuing country"
+                                  },
+                                  "items": [
+                                    {
+                                      "value": "",
+                                      "text": {
+                                        "el": "",
+                                        "en": "",
+                                        "tr": ""
+                                      }
+                                    },
+                                    {
+                                      "value": "AW",
+                                      "text": {
+                                        "el": "Αρούμπα",
+                                        "en": "Aruba",
+                                        "tr": "Aruba"
+                                      }
+                                    },
+                                    {
+                                      "value": "AF",
+                                      "text": {
+                                        "el": "Αφγανιστάν",
+                                        "en": "Afghanistan",
+                                        "tr": "Afganistan"
+                                      }
+                                    },
+                                    {
+                                      "value": "AO",
+                                      "text": {
+                                        "el": "Ανγκόλα",
+                                        "en": "Angola",
+                                        "tr": "Angola"
+                                      }
+                                    },
+                                    {
+                                      "value": "AI",
+                                      "text": {
+                                        "el": "Ανγκουίλα",
+                                        "en": "Anguilla",
+                                        "tr": "Anguilla"
+                                      }
+                                    },
+                                    {
+                                      "value": "AX",
+                                      "text": {
+                                        "el": "Νήσοι Άλαντ",
+                                        "en": "Åland Islands",
+                                        "tr": "Åland Adaları"
+                                      }
+                                    },
+                                    {
+                                      "value": "AL",
+                                      "text": {
+                                        "el": "Αλβανία",
+                                        "en": "Albania",
+                                        "tr": "Arnavutluk"
+                                      }
+                                    },
+                                    {
+                                      "value": "AD",
+                                      "text": {
+                                        "el": "Ανδόρα",
+                                        "en": "Andorra",
+                                        "tr": "Andorra"
+                                      }
+                                    },
+                                    {
+                                      "value": "AE",
+                                      "text": {
+                                        "el": "Ηνωμένα Αραβικά Εμιράτα",
+                                        "en": "United Arab Emirates",
+                                        "tr": "Birleşik Arap Emirlikleri"
+                                      }
+                                    },
+                                    {
+                                      "value": "AR",
+                                      "text": {
+                                        "el": "Αργεντινή",
+                                        "en": "Argentina",
+                                        "tr": "Arjantin"
+                                      }
+                                    }
+                                  ],
+                                  "isPageHeading": false
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξτε τη χώρα που εξέδωσε την ταυτότητα",
+                                        "en": "Choose the country that issued the ID",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "value": "arc",
+                            "text": {
+                              "el": "Δελτίο Εγγραφής Αλλοδαπού (ARC)",
+                              "en": "Alien Registration Certificate (ARC)",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "arc_number",
+                                  "name": "arc_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό ARC",
+                                    "en": "Enter ARC number"
+                                  },
+                                  "isPageHeading": false,
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε αριθμό ARC",
+                                        "en": "Enter ARC number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "numeric",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ARC όπως 51234567. Ξεκινά με 5",
+                                        "en": "Enter a valid ARC number like 51234567. It starts with 5",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "10",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό ARC όπως 51234567. Ξεκινά με 5",
+                                        "en": "Enter a valid ARC number like 51234567. It starts with 5",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "value": "passport",
+                            "text": {
+                              "el": "Διαβατήριο",
+                              "en": "Passport",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "textInput",
+                                "params": {
+                                  "id": "passport_number",
+                                  "name": "passport_number",
+                                  "label": {
+                                    "el": "Εισαγάγετε αριθμό διαβατηρίου",
+                                    "en": "Enter passport number"
+                                  },
+                                  "isPageHeading": false,
+                                  "type": "text"
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Εισαγάγετε αριθμό διαβατηρίου",
+                                        "en": "Enter passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "valid",
+                                    "params": {
+                                      "checkValue": "numeric",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό διαβατηρίου",
+                                        "en": "Enter a valid passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "check": "length",
+                                    "params": {
+                                      "checkValue": "10",
+                                      "message": {
+                                        "el": "Εισαγάγετε έγκυρο αριθμό διαβατηρίου",
+                                        "en": "Enter a valid passport number",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "element": "select",
+                                "params": {
+                                  "id": "passport_country",
+                                  "name": "passport_country",
+                                  "label": {
+                                    "el": "Επιλέξτε χώρα έκδοσης",
+                                    "en": "Choose issuing country"
+                                  },
+                                  "items": [
+                                    {
+                                      "value": "",
+                                      "text": {
+                                        "el": "",
+                                        "en": "",
+                                        "tr": ""
+                                      }
+                                    },
+                                    {
+                                      "value": "AW",
+                                      "text": {
+                                        "el": "Αρούμπα",
+                                        "en": "Aruba",
+                                        "tr": "Aruba"
+                                      }
+                                    },
+                                    {
+                                      "value": "AF",
+                                      "text": {
+                                        "el": "Αφγανιστάν",
+                                        "en": "Afghanistan",
+                                        "tr": "Afganistan"
+                                      }
+                                    },
+                                    {
+                                      "value": "AO",
+                                      "text": {
+                                        "el": "Ανγκόλα",
+                                        "en": "Angola",
+                                        "tr": "Angola"
+                                      }
+                                    },
+                                    {
+                                      "value": "AI",
+                                      "text": {
+                                        "el": "Ανγκουίλα",
+                                        "en": "Anguilla",
+                                        "tr": "Anguilla"
+                                      }
+                                    },
+                                    {
+                                      "value": "AX",
+                                      "text": {
+                                        "el": "Νήσοι Άλαντ",
+                                        "en": "Åland Islands",
+                                        "tr": "Åland Adaları"
+                                      }
+                                    },
+                                    {
+                                      "value": "AL",
+                                      "text": {
+                                        "el": "Αλβανία",
+                                        "en": "Albania",
+                                        "tr": "Arnavutluk"
+                                      }
+                                    },
+                                    {
+                                      "value": "AD",
+                                      "text": {
+                                        "el": "Ανδόρα",
+                                        "en": "Andorra",
+                                        "tr": "Andorra"
+                                      }
+                                    },
+                                    {
+                                      "value": "AE",
+                                      "text": {
+                                        "el": "Ηνωμένα Αραβικά Εμιράτα",
+                                        "en": "United Arab Emirates",
+                                        "tr": "Birleşik Arap Emirlikleri"
+                                      }
+                                    },
+                                    {
+                                      "value": "AR",
+                                      "text": {
+                                        "el": "Αργεντινή",
+                                        "en": "Argentina",
+                                        "tr": "Arjantin"
+                                      }
+                                    }
+                                  ],
+                                  "isPageHeading": false
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Επιλέξτε τη χώρα που εξέδωσε το διαβατήριο",
+                                        "en": "Choose the country that issued the passport",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "hint": {
+                          "el": "Επιλέξτε τρόπο ταυτοποίησης",
+                          "en": "Select identification type",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε τρόπο ταυτοποίησης",
+                              "en": "Choose identification type",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../review"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         ]
       }

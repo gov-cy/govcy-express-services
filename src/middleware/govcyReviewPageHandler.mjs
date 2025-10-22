@@ -1,8 +1,9 @@
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
-import {preparePrintFriendlyData , generateReviewSummary  } from "../utils/govcySubmitData.mjs";
+import { preparePrintFriendlyData, generateReviewSummary } from "../utils/govcySubmitData.mjs";
 import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
+import { buildMultipleThingsValidationSummary } from "../utils/govcyMultipleThingsValidation.mjs";
 
 
 /**
@@ -13,23 +14,23 @@ export function govcyReviewPageHandler() {
     return (req, res, next) => {
         try {
             const { siteId } = req.params;
-            
+
             // Create a deep copy of the service to avoid modifying the original
             let serviceCopy = req.serviceData;
-            
+
             // Deep copy renderer pageData from
             let pageData = JSON.parse(JSON.stringify(govcyResources.staticResources.rendererPageData));
-            
+
             // Handle isTesting 
             pageData.site.isTesting = (whatsIsMyEnvironment() === "staging");
-    
+
             // Base page template structure
             let pageTemplate = {
                 sections: [
-                    {
-                        name: "beforeMain",
-                        elements: [govcyResources.staticResources.elements.backLink]
-                    }
+                    // {
+                    //     name: "beforeMain",
+                    //     elements: [govcyResources.staticResources.elements.backLink]
+                    // }
                 ]
             };
             // Construct page title
@@ -40,12 +41,12 @@ export function govcyReviewPageHandler() {
                     // if serviceCopy has site.reviewPageHeader use it otherwise use the static resource. it should test if serviceCopy.site.reviewPageHeader[req.globalLang] exists
                     text: (
                         serviceCopy?.site?.reviewPageHeader?.[req.globalLang]
-                        ? serviceCopy.site.reviewPageHeader
-                        : govcyResources.staticResources.text.checkYourAnswersTitle
+                            ? serviceCopy.site.reviewPageHeader
+                            : govcyResources.staticResources.text.checkYourAnswersTitle
                     )
                 }
             };
-            
+
             // Construct submit button
             const submitButton = {
                 element: "form",
@@ -66,40 +67,65 @@ export function govcyReviewPageHandler() {
             }
             // Generate the summary list using the utility function
             let printFriendlyData = preparePrintFriendlyData(req, siteId, serviceCopy);
-            let summaryList = generateReviewSummary(printFriendlyData,req, siteId);
-            
+            let summaryList = generateReviewSummary(printFriendlyData, req, siteId);
+
+            let mainElements = [];
             //--------- Handle Validation Errors ---------
             // Check if validation errors exist in the session
             const validationErrors = dataLayer.getSiteSubmissionErrors(req.session, siteId);
-            let mainElements = [];
-            if (validationErrors ) {
-                for (const error in validationErrors.errors) {
-                    validationErrors.errorSummary.push({
-                        link: govcyResources.constructPageUrl(siteId, validationErrors.errors[error].pageUrl, "review"), //`/${siteId}/${error.pageUrl}`,
-                        text: validationErrors.errors[error].message
-                    });
+            let summaryItems = [];
+
+            if (validationErrors && validationErrors.errors) {
+                for (const [pageUrl, err] of Object.entries(validationErrors.errors)) {
+                    // Handle multipleThings hub errors
+                    if (err.type === "multipleThings") {
+                        const mtErrors = err.hub?.errors || {};
+                        // Build summary items for multipleThings errors
+                        summaryItems.push(...buildMultipleThingsValidationSummary( serviceCopy, mtErrors, siteId, pageUrl, req, "review", false));
+                    } else {
+                        // Normal pages: loop through field errors
+                        for (const [fieldKey, fieldErr] of Object.entries(err)) {
+                            // Skip type field
+                            if (fieldKey === "type") continue;
+                            // Push each field error to summary items
+                            summaryItems.push({
+                                link: govcyResources.constructPageUrl(siteId, fieldErr.pageUrl, "review"),
+                                text: fieldErr.message
+                            });
+                        }
+                    }
                 }
-                mainElements.push(govcyResources.errorSummary(validationErrors.errorSummary));
-            } 
+            }
+
+            if (summaryItems.length > 0) {
+                mainElements.unshift(govcyResources.errorSummary(summaryItems));
+            }
+
+            // const validationErrors = dataLayer.getSiteSubmissionErrors(req.session, siteId);
+            // let mainElements = [];
+            // if (validationErrors ) {
+            //     for (const error in validationErrors.errors) {
+            //         validationErrors.errorSummary.push({
+            //             link: govcyResources.constructPageUrl(siteId, validationErrors.errors[error].pageUrl, "review"), //`/${siteId}/${error.pageUrl}`,
+            //             text: validationErrors.errors[error].message
+            //         });
+            //     }
+            //     mainElements.push(govcyResources.errorSummary(validationErrors.errorSummary));
+            // } 
             //--------- End Handle Validation Errors ---------
 
             // Add elements to the main section, the H1, summary list, the submit button and the JS
-            mainElements.push(pageH1, 
-                summaryList, 
+            mainElements.push(pageH1,
+                summaryList,
                 submitButton
             );
             // Append generated summary list to the page template
             pageTemplate.sections.push({ name: "main", elements: mainElements });
-            
-            //if user is logged in add he user bane section in the page template
-            if (dataLayer.getUser(req.session)) {
-                pageTemplate.sections.push(govcyResources.userNameSection(dataLayer.getUser(req.session).name)); // Add user name section
-            }
-            
+
             //prepare pageData
             pageData.site = serviceCopy.site;
             pageData.pageData.title = govcyResources.staticResources.text.checkYourAnswersTitle;
-            
+
             // Attach processed page data to the request
             req.processedPage = {
                 pageData: pageData,

@@ -30,6 +30,10 @@ export async function serviceConfigDataMiddleware(req, res, next) {
             });
         }
 
+        //replace the globalLang with the site.lang
+        req.globalLang = req.serviceData.site.lang;
+    
+
         next();
     } catch (error) {
         return next(error)

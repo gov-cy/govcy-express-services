@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { handleFileUpload } from '../../src/utils/govcyHandleFiles.mjs';
+import * as dataLayer from "../../src/utils/govcyDataLayer.mjs";
 
 
 describe('handleFileUpload - file upload util', () => {
@@ -321,6 +322,340 @@ describe('handleFileUpload - file upload util', () => {
     expect(result.status).to.equal(200);
     expect(result.data).to.have.property("sha256", "mock-sha256-hash");
     expect(result.data).to.have.property("fileId", "mock-file-id");
+  });
+
+
+});
+
+describe("handleFileUpload - multipleThings modes", () => {
+  const configWithFileInput = {
+    site: {
+      fileUploadAPIEndpoint: {
+        url: "UPLOAD_URL",
+        method: "POST",
+        clientKey: "CLIENT_KEY",
+        serviceId: "SERVICE_ID"
+      }
+    },
+    pages: [
+      {
+        pageData: { url: "test-page" },
+        pageTemplate: {
+          sections: [
+            {
+              name: "main",
+              elements: [
+                {
+                  element: "form",
+                  params: {
+                    elements: [
+                      { element: "fileInput", params: { name: "elementName", id: "elementName" } }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  };
+
+  const validFile = {
+    originalname: "good.pdf",
+    mimetype: "application/pdf",
+    buffer: Buffer.from([0x25, 0x50, 0x44, 0x46]), // %PDF
+    size: 100
+  };
+
+  it("13. should store in draft when mode=multipleThingsDraft", async () => {
+    const store = { siteData: {} };
+
+    const result = await handleFileUpload({
+      service: configWithFileInput,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsDraft"
+    });
+
+    expect(result.status).to.equal(200);
+    const draft = dataLayer.getMultipleDraft(store, "test-site", "test-page");
+
+    expect(draft).to.have.property("elementName");
+    expect(draft.elementName).to.have.property("fileId");
+  });
+
+  it("14. should store in item array when mode=multipleThingsEdit", async () => {
+    const store = { siteData: {} };
+    // Pre-populate items
+    dataLayer.storePageData(store, "test-site", "test-page", [{}]);
+
+    const result = await handleFileUpload({
+      service: configWithFileInput,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: 0
+    });
+
+    expect(result.status).to.equal(200);
+    const items = dataLayer.getPageData(store, "test-site", "test-page");
+    expect(items[0]).to.have.property("elementName");
+    expect(items[0].elementName).to.have.property("fileId");
+  });
+
+  it("15. should return 400 if mode=multipleThingsEdit with invalid index", async () => {
+    const store = { siteData: {} };
+    dataLayer.storePageData(store, "test-site", "test-page", []); // empty items
+
+    const result = await handleFileUpload({
+      service: configWithFileInput,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: 99
+    });
+
+    expect(result.status).to.equal(400);
+    expect(result.errorMessage).to.include("Invalid index");
+  });
+});
+
+// -----------------------------------------------------------------------------
+// Additional tests for new branches and metadata handling in handleFileUpload
+// -----------------------------------------------------------------------------
+describe("handleFileUpload - metadata and new branch coverage", () => {
+
+  const validServiceConfig = {
+    site: {
+      fileUploadAPIEndpoint: {
+        url: "UPLOAD_URL",
+        method: "POST",
+        clientKey: "CLIENT_KEY",
+        serviceId: "SERVICE_ID"
+      }
+    },
+    pages: [
+      {
+        pageData: { url: "test-page" },
+        pageTemplate: {
+          sections: [
+            {
+              name: "main",
+              elements: [
+                {
+                  element: "form",
+                  params: {
+                    elements: [
+                      { element: "fileInput", params: { name: "elementName", id: "elementName" } }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  };
+
+  const validFile = {
+    originalname: "doc.pdf",
+    mimetype: "application/pdf",
+    buffer: Buffer.from("%PDF-1.7\n"),
+    size: 2000
+  };
+
+  // ---------------------------------------------------------------------------
+  it("16. should include full metadata in success response", async () => {
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store: {},
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile
+    });
+
+    expect(result.status).to.equal(200);
+    expect(result.data).to.have.keys(["sha256", "fileId", "fileName", "mimeType", "fileSize"]);
+    expect(result.data.fileName).to.equal("doc.pdf");
+    expect(result.data.mimeType).to.equal("application/pdf");
+    expect(result.data.fileSize).to.equal(2000);
+  });
+
+  // ---------------------------------------------------------------------------
+  it("17. should store full metadata in draft when mode=multipleThingsDraft", async () => {
+    const store = { siteData: {} };
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "draftsite",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsDraft"
+    });
+
+    expect(result.status).to.equal(200);
+    const draft = dataLayer.getMultipleDraft(store, "draftsite", "test-page");
+    expect(draft).to.have.property("elementName");
+    expect(draft.elementName).to.have.keys(["sha256", "fileId"]);
+  });
+
+  // ---------------------------------------------------------------------------
+  it("18. should update only one item in items array in multipleThingsEdit mode", async () => {
+    const store = { siteData: {} };
+    // pre-populate 3 items
+    dataLayer.storePageData(store, "test-site", "test-page", [
+      { elementName: { fileId: "oldA", sha256: "shaA" } },
+      { elementName: { fileId: "oldB", sha256: "shaB" } },
+      { elementName: { fileId: "oldC", sha256: "shaC" } }
+    ]);
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: 1
+    });
+
+    expect(result.status).to.equal(200);
+    const items = dataLayer.getPageData(store, "test-site", "test-page");
+    expect(items[1].elementName.fileId).to.not.equal("oldB");
+    expect(items[0].elementName.fileId).to.equal("oldA");
+    expect(items[2].elementName.fileId).to.equal("oldC");
+  });
+
+  // ---------------------------------------------------------------------------
+  it("19. should return 400 if single mode upload attempted on a multipleThings page", async () => {
+    const multiplePageConfig = JSON.parse(JSON.stringify(validServiceConfig));
+    multiplePageConfig.pages[0].multipleThings = true;
+
+    const result = await handleFileUpload({
+      service: multiplePageConfig,
+      store: {},
+      siteId: "site1",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "single"
+    });
+
+    expect(result.status).to.equal(400);
+    expect(result.errorMessage).to.include("Single mode upload not allowed");
+  });
+
+  it("20. should auto-create draft object when none exists", async () => {
+    const store = { siteData: {} };
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "siteEdge",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsDraft"
+    });
+
+    expect(result.status).to.equal(200);
+    const draft = dataLayer.getMultipleDraft(store, "siteEdge", "test-page");
+    expect(draft).to.have.property("elementName");
+  });
+
+  it("21. should initialize empty items array if getPageData returns non-array", async () => {
+    const store = { siteData: {} };
+
+    // Force storePageData to hold an object instead of an array
+    dataLayer.storePageData(store, "test-site", "test-page", { notArray: true });
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: 0
+    });
+
+    expect(result.status).to.equal(400); // should reject due to invalid index 0 on empty array
+    expect(result.errorMessage).to.include("Invalid index");
+  });
+
+
+  it("22. should return 400 if index is negative in multipleThingsEdit", async () => {
+    const store = { siteData: {} };
+    dataLayer.storePageData(store, "test-site", "test-page", [{}]);
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: -1
+    });
+
+    expect(result.status).to.equal(400);
+    expect(result.errorMessage).to.include("Invalid index");
+  });
+
+  it("23. should overwrite existing field in draft on re-upload", async () => {
+    const store = { siteData: {} };
+    dataLayer.setMultipleDraft(store, "test-site", "test-page", {
+      elementName: { fileId: "oldFile", sha256: "oldSha" }
+    });
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsDraft"
+    });
+
+    expect(result.status).to.equal(200);
+    const draft = dataLayer.getMultipleDraft(store, "test-site", "test-page");
+    expect(draft.elementName.fileId).to.not.equal("oldFile");
+  });
+
+  it("24. should return 400 if index is null in multipleThingsEdit", async () => {
+    const store = { siteData: {} };
+    dataLayer.storePageData(store, "test-site", "test-page", [{}]);
+
+    const result = await handleFileUpload({
+      service: validServiceConfig,
+      store,
+      siteId: "test-site",
+      pageUrl: "test-page",
+      elementName: "elementName",
+      file: validFile,
+      mode: "multipleThingsEdit",
+      index: null
+    });
+
+    expect(result.status).to.equal(400);
+    expect(result.errorMessage).to.include("Invalid index");
   });
 
 

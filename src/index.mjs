@@ -18,7 +18,7 @@ import { govcyCsrfMiddleware } from './middleware/govcyCsrf.mjs';
 import { govcySessionData } from './middleware/govcySessionData.mjs';
 import { govcyHttpErrorHandler } from './middleware/govcyHttpErrorHandler.mjs';
 import { govcyLanguageMiddleware } from './middleware/govcyLanguageMiddleware.mjs';
-import { requireAuth, naturalPersonPolicy,handleLoginRoute, handleSigninOidc, handleLogout } from './middleware/cyLoginAuth.mjs';
+import { requireAuth, naturalPersonPolicy, handleLoginRoute, handleSigninOidc, handleLogout } from './middleware/cyLoginAuth.mjs';
 import { serviceConfigDataMiddleware } from './middleware/govcyConfigSiteData.mjs';
 import { govcyManifestHandler } from './middleware/govcyManifestHandler.mjs';
 import { govcyRoutePageHandler } from './middleware/govcyRoutePageHandler.mjs';
@@ -27,32 +27,35 @@ import { govcyLoadSubmissionData } from './middleware/govcyLoadSubmissionData.mj
 import { govcyFileUpload } from './middleware/govcyFileUpload.mjs';
 import { govcyFileDeletePageHandler, govcyFileDeletePostHandler } from './middleware/govcyFileDeleteHandler.mjs';
 import { govcyFileViewHandler } from './middleware/govcyFileViewHandler.mjs';
-import { isProdOrStaging , getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
+import { govcyMultipleThingsAddHandler, govcyMultipleThingsEditHandler, govcyMultipleThingsAddPostHandler, govcyMultipleThingsEditPostHandler } from './middleware/govcyMultipleThingsItemPage.mjs';
+import { govcyMultipleThingsDeletePageHandler, govcyMultipleThingsDeletePostHandler } from './middleware/govcyMultipleThingsDeleteHandler.mjs';
+import { govcyUpdateMyDetailsPostHandler } from './middleware/govcyUpdateMyDetails.mjs';
+import { isProdOrStaging, getEnvVariable, whatsIsMyEnvironment } from './utils/govcyEnvVariables.mjs';
 import { logger } from "./utils/govcyLogger.mjs";
 
 import fs from 'fs';
 
-export default function initializeGovCyExpressService(){
+export default function initializeGovCyExpressService() {
   const app = express();
 
   // Add this line before session middleware
   app.set('trust proxy', 1);
-  
+
   // Get the directory name of the current module
   const __dirname = dirname(fileURLToPath(import.meta.url));
   // Construct the absolute path to local certificate files
   logger.debug('Current directory:', __dirname);
   logger.debug('Current working directory:', process.cwd());
-  const  certPath = join(process.cwd(),'server');
-  
+  const certPath = join(process.cwd(), 'server');
+
   // Determine environment settings
   const ENV = whatsIsMyEnvironment();
   // Set port
   const PORT = getEnvVariable('PORT') || 44319;
   // Use HTTPS if isProdOrStaging or certificate files exist
   const USE_HTTPS = isProdOrStaging() || (fs.existsSync(certPath + '.cert') && fs.existsSync(certPath + '.key'));
-  
-  
+
+
   // Middleware
   // Enable parsing of URL-encoded data (data from HTML form submissions with application/x-www-form-urlencoded encoding)
   app.use(express.urlencoded({ extended: true }));
@@ -64,39 +67,39 @@ export default function initializeGovCyExpressService(){
       secret: getEnvVariable('SESSION_SECRET'), // Use environment variable or fallback for dev. To generate a secret, run: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"`
       resave: false,  // Prevents unnecessary session updates
       saveUninitialized: false, // Don't save empty sessions
-      cookie: { 
+      cookie: {
         secure: false, // Secure cookies only if HTTPS is used
         httpOnly: true,   // Prevents XSS attacks
         maxAge: 1800000,  // Session expires after 30 mins
-        sameSite:  'lax' // Prevents CSRF by default
-      } 
+        sameSite: 'lax' // Prevents CSRF by default
+      }
     })
   );
   // Enable cookie parsing
-  app.use(cookieParser()); 
+  app.use(cookieParser());
   // Apply language middleware
-  app.use(govcyLanguageMiddleware); 
+  app.use(govcyLanguageMiddleware);
   // Add request timing middleware
   app.use(requestTimer);
   // add csrf middleware
   app.use(govcyCsrfMiddleware);
   // Enable security headers
   app.use(noCacheAndSecurityHeaders);
-  
+
   // 🔒 cyLogin ----------------------------------------
-  
+
   // 🔒 -- ROUTE: Redirect to Login
-  app.get('/login', handleLoginRoute() );
-  
+  app.get('/login', handleLoginRoute());
+
   // 🔒 -- ROUTE: Handle login Callback
-  app.get('/signin-oidc', handleSigninOidc() );
-  
+  app.get('/signin-oidc', handleSigninOidc());
+
   // 🔒 -- ROUTE: Handle Logout
-  app.get('/logout', handleLogout() );
-  
+  app.get('/logout', handleLogout());
+
   //----------------------------------------------------------------------
-  
-  
+
+
   // 🛠️ Debugging routes -----------------------------------------------------
   // 🙍🏻‍♂️ -- ROUTE: Debugging route Protected Route
   // if (!isProdOrStaging()) {
@@ -114,72 +117,220 @@ export default function initializeGovCyExpressService(){
   //   });
   // }
   //----------------------------------------------------------------------
-  
-  
+
+
   // ✅ Ensures session structure exists
-  app.use(govcySessionData);  
+  app.use(govcySessionData);
   // add logger middleware
   app.use(requestLogger);
-  
+
   // Construct the absolute path to the public directory
   const publicPath = join(__dirname, 'public');
   // 🌐 -- ROUTE: Serve static files in the public directory. Route for `/js/`
   app.use(express.static(publicPath));
-  
+
   // 🏡 -- ROUTE: handle the route `/`
-   app.get('/', govcyRoutePageHandler);
+  app.get('/', govcyRoutePageHandler);
 
   // 📝 -- ROUTE: Serve manifest.json dynamically for each site
   app.get('/:siteId/manifest.json', serviceConfigDataMiddleware, govcyManifestHandler());
 
   // 🗃️ -- ROUTE: Handle POST requests for file uploads for a page. 
-  app.post('/apis/:siteId/:pageUrl/upload', 
-    serviceConfigDataMiddleware, 
+  app.post('/apis/:siteId/:pageUrl/upload',
+    serviceConfigDataMiddleware,
     requireAuth, // UNCOMMENT 
     naturalPersonPolicy, // UNCOMMENT 
     govcyServiceEligibilityHandler(true), // UNCOMMENT 
     govcyFileUpload);
-  
+
+  // 🗃️ -- ROUTE: Handle POST requests for file uploads inside multipleThings (add)
+  app.post('/apis/:siteId/:pageUrl/multiple/add/upload',
+    serviceConfigDataMiddleware,
+    requireAuth, // UNCOMMENT
+    naturalPersonPolicy, // UNCOMMENT
+    govcyServiceEligibilityHandler(true), // UNCOMMENT
+    govcyFileUpload
+  );
+
+  // 🗃️ -- ROUTE: Handle POST requests for file uploads inside multipleThings (edit)
+  app.post('/apis/:siteId/:pageUrl/multiple/edit/:index/upload',
+    serviceConfigDataMiddleware,
+    requireAuth, // UNCOMMENT
+    naturalPersonPolicy, // UNCOMMENT
+    govcyServiceEligibilityHandler(true), // UNCOMMENT
+    govcyFileUpload
+  );
+
+  // View (multipleThings draft)
+  app.get('/:siteId/:pageUrl/multiple/add/view-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyFileViewHandler());
+
+  // ❌🗃️ -- ROUTE: Delete file during multipleThings ADD (before dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/add/delete-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(),
+    govcyLoadSubmissionData(),
+    govcyFileDeletePageHandler(),
+    renderGovcyPage()
+  );
+
+  // ❌🗃️ -- ROUTE: Delete file during multipleThings EDIT (before dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(),
+    govcyLoadSubmissionData(),
+    govcyFileDeletePageHandler(),
+    renderGovcyPage()
+  );
+
+
+  // ❌🗃️📥 -- ROUTE: Handle POST requests for delete file in multipleThings ADD
+  app.post('/:siteId/:pageUrl/multiple/add/delete-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyFileDeletePostHandler()
+  );
+
+  // ❌🗃️📥 -- ROUTE: Handle POST requests for delete file in multipleThings EDIT
+  app.post('/:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyFileDeletePostHandler()
+  );
+
+
+  // View (multipleThings edit)
+  app.get('/:siteId/:pageUrl/multiple/edit/:index/view-file/:elementName',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyFileViewHandler());
+
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
-  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true),govcyLoadSubmissionData(),govcyPageHandler(), renderGovcyPage());
-  
+  app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());
+
   // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
-  app.get('/:siteId/review',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(),govcyLoadSubmissionData(), govcyReviewPageHandler(), renderGovcyPage());
-  
+  app.get('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyReviewPageHandler(), renderGovcyPage());
+
   // ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
-  app.get('/:siteId/success/pdf',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(true), govcyPDFRender());
-  
+  app.get('/:siteId/success/pdf', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(true), govcyPDFRender());
+
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
-  app.get('/:siteId/success',serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
-  
+  app.get('/:siteId/success', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
+
   // 👀🗃️ -- ROUTE: View file (BEFORE the dynamic route)
   app.get('/:siteId/:pageUrl/view-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileViewHandler());
 
   // ❌🗃️ -- ROUTE: Delete file (BEFORE the dynamic route)
   app.get('/:siteId/:pageUrl/delete-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyFileDeletePageHandler(), renderGovcyPage());
+
+  // ➕ -- ROUTE: Add item page (BEFORE the generic dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/add',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyLoadSubmissionData(),
+    govcyMultipleThingsAddHandler(),
+    renderGovcyPage()
+  );
+
+
+  // ➕ -- ROUTE: Add item POST (BEFORE the generic POST)
+  app.post('/:siteId/:pageUrl/multiple/add',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyMultipleThingsAddPostHandler()
+  );
+
+  // ✏️ -- ROUTE: Edit item page (BEFORE the generic dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/edit/:index',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyLoadSubmissionData(),
+    govcyMultipleThingsEditHandler(),
+    renderGovcyPage()
+  );
+
+  // 🗃️ -- ROUTE: Handle POST requests for multipleThings EDIT item
+  app.post('/:siteId/:pageUrl/multiple/edit/:index',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyMultipleThingsEditPostHandler()
+  );
+
+  // ❌🗃️ -- ROUTE: Delete multipleThings item (BEFORE the dynamic route)
+  app.get('/:siteId/:pageUrl/multiple/delete/:index',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(),
+    govcyLoadSubmissionData(),
+    govcyMultipleThingsDeletePageHandler(),
+    renderGovcyPage()
+  );
+
+  // ❌🗃️📥 -- ROUTE: Handle POST requests for delete multipleThings item
+  app.post('/:siteId/:pageUrl/multiple/delete/:index',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
+    govcyMultipleThingsDeletePostHandler()
+  );
+
+  // ----- `updateMyDetails` handling
   
+  // 🔀➡️ -- ROUTE coming from incoming update my details /:siteId/:pageUrl/update-my-details-response
+  app.post('/:siteId/:pageUrl/update-my-details-response', 
+    serviceConfigDataMiddleware, 
+    requireAuth, 
+    naturalPersonPolicy, 
+    govcyServiceEligibilityHandler(true), 
+    govcyUpdateMyDetailsPostHandler());
+  // ----- `updateMyDetails` handling
+
   // 📝 -- ROUTE: Dynamic route to render pages based on siteId and pageUrl, using govcyPageHandler middleware
   app.get('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());
-  
+
   // ❌🗃️📥 -- ROUTE: Handle POST requests for delete file
   app.post('/:siteId/:pageUrl/delete-file/:elementName', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFileDeletePostHandler());
-  
+
   // 📥 -- ROUTE: Handle POST requests for review page. The `submit` action
   app.post('/:siteId/review', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(), govcyReviewPostHandler());
-  
+
   // 👀📥 -- ROUTE: Handle POST requests (Form Submissions) based on siteId and pageUrl, using govcyFormsPostHandler middleware
   app.post('/:siteId/:pageUrl', serviceConfigDataMiddleware, requireAuth, naturalPersonPolicy, govcyServiceEligibilityHandler(true), govcyFormsPostHandler());
-  
+
   // post for /:siteId/review
-  
+
   // 🔹 Catch 404 errors (must be after all routes)
   app.use((req, res, next) => {
     next({ status: 404, message: "Page not found" });
   });
-  
+
   // 🔹 Centralized error handling (must be the LAST middleware)
   app.use(govcyHttpErrorHandler);
-  
+
   let server = null;
 
   return {
@@ -199,7 +350,7 @@ export default function initializeGovCyExpressService(){
           logger.info(`⚡ Server running at http://localhost:${PORT} (${ENV})`);
         });
       }
-    }, 
+    },
     stopServer: () => {
       if (server) {
         server.close(() => {

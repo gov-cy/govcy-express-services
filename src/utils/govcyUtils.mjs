@@ -11,3 +11,15 @@ export function handleMiddlewareError(message, status, next) {
     error.status = status;
     return next(error);
 }
+
+/**
+ * Helper function to format a date in the format D/M/YYYY.
+ * 
+ * @param {string} dateString - The date string in the format YYYY-MM-DD.
+ * @returns {string} The formatted date in the format D/M/YYYY.
+ */
+export function dateStringISOtoDMY(dateString) {
+  if (typeof dateString !== "string" || !dateString.trim()) return "";
+  const [year, month, day] = dateString.trim().split("-");
+  return `${parseInt(day)}/${parseInt(month)}/${year}`;
+}
