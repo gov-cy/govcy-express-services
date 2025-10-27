@@ -2700,7 +2700,13 @@ const service = initializeGovCyExpressService({
                 }
             ],
             false,
-            { nextPage: "/cso/memberships" }, // custom property nextPage
+            { // other custom properties if needed like nextPage or initial data
+                nextPage: "/cso/memberships", // custom property nextPage. Not needed by Express but useful for the custom logic
+                data : // custom initial data. Useful when you need the data model to be standard or pre-populated
+                { 
+                    something: "",
+                }  
+             }
         );
 
         // ==========================================================
