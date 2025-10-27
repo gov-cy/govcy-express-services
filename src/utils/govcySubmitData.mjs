@@ -50,13 +50,13 @@ export function prepareSubmissionData(req, siteId, service) {
         if (page.updateMyDetails) {
             logger.debug("Preparing submission data for UpdateMyDetails page", { siteId, pageUrl });
             // Build the manual UMD page template
-            const umdTemplate  = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
-            
+            const umdTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+
             // Extract the form element
-            formElement = umdTemplate .sections
+            formElement = umdTemplate.sections
                 .flatMap(section => section.elements)
                 .find(el => el.element === "form");
-            
+
             if (!formElement) {
                 logger.error("🚨 UMD form element not found during prepareSubmissionData", { siteId, pageUrl });
                 return handleMiddlewareError("🚨 UMD form element not found during prepareSubmissionData", 500, next);
@@ -190,11 +190,51 @@ export function prepareSubmissionData(req, siteId, service) {
 
     // Get the renderer data from the session store
     const reviewSummaryList = generateReviewSummary(printFriendlyData, req, siteId, false);
+
+    // ==========================================================
+    //  Custom pages
+    // ==========================================================
+    const customPages = dataLayer.getSiteCustomPages(req.session, siteId) || {};
+
+    // Convert submissionData keys into ordered array for splicing
+    const orderedEntries = Object.entries(submissionData);
+
+    // Loop through each custom page
+    for (const [customKey, customPage] of Object.entries(customPages)) {
+        const pageData = customPage?.data || "";
+        const insertAfter = customPage?.insertAfterPageUrl; // normalize
+
+        // Build a new entry for this custom page
+        const customEntry = [customKey, pageData];
+
+        if (insertAfter) {
+            // Find the index of the page to insert after
+            const idx = orderedEntries.findIndex(([pageUrl]) => pageUrl === insertAfter);
+            if (idx >= 0) {
+                // Insert right after the matched page
+                orderedEntries.splice(idx + 1, 0, customEntry);
+                continue;
+            }
+        }
+
+        // Fallback: append to the top
+        orderedEntries.unshift(customEntry);
+    }
+
+    // Convert back to an object in the new order
+    const orderedSubmissionData = Object.fromEntries(orderedEntries);
+
+    logger.info("Submission Data with custom pages merged");
+
+    // ==========================================================
+    //  END custom page merge
+    // ==========================================================
+
     // Prepare the submission data object
     return {
         submissionUsername: dataLayer.getUser(req.session).name,
         submissionEmail: dataLayer.getUser(req.session).email,
-        submissionData: submissionData, // Raw data as submitted by the user in each page
+        submissionData: orderedSubmissionData, // Raw data as submitted by the user in each page
         submissionDataVersion: service.site?.submissionDataVersion || service.site?.submission_data_version || "", // The submission data version
         printFriendlyData: printFriendlyData, // Print-friendly data
         rendererData: reviewSummaryList, // Renderer data of the summary list
@@ -259,12 +299,12 @@ export function preparePrintFriendlyData(req, siteId, service) {
 
         let pageTemplate = page.pageTemplate;
         let pageTitle = page.pageData.title || {};
-        
+
 
         // ----- MultipleThings hub handling
         if (page.updateMyDetails) {
             // create the page template
-            pageTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req );
+            pageTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
             // set the page title
             pageTitle = govcyResources.staticResources.text.updateMyDetailsTitle;
         }
@@ -642,6 +682,7 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
 
         // Add inner summary list to the main summary list
         let outerSummaryList = {
+            "pageUrl": pageUrl, // add pageUrl for change link
             "key": pageTitle,
             "value": [summaryListInner],
             "actions": [ //add change link
@@ -664,6 +705,76 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
 
     }
 
+    // ==========================================================
+    //  CustomPages
+    // ==========================================================
+    // Custom summaries are stored under:
+    //   session.siteData[siteId].customPages
+    // Each entry may include:
+    //   insertAfter: "pageUrl"
+    //   summary: array of summaryList items (same shape as generateReviewSummary output)
+    // OR
+    //   html: pre-rendered multilingual HTML block
+    // ==========================================================
+
+    const customPages = dataLayer.getSiteCustomPages(req.session, siteId);
+
+    for (const [key, block] of Object.entries(customPages)) { // 
+        // Build the structure the same way as a normal section
+        let customEntry;
+
+        let customValue = [];
+
+        if (block.summaryHtml) {
+            //  Direct HTML block
+            customValue = [
+                {
+                    element: "htmlElement",
+                    params: { text: block.summaryHtml }
+                }
+            ];
+        } else if (block.summaryElements) {
+            //  Already a ready-made summaryList object
+            customValue = [
+                {
+                    element: "summaryList",
+                    params: { items: block.summaryElements }
+                }
+            ];
+        } else {
+            //  Fallback empty block
+            continue; // skip this block if no valid content
+        }
+
+        customEntry = {
+            key: block.pageTitle || { en: key, el: key },
+            value: customValue,
+            actions: block.summaryActions || [] // Optional actions, e.g. change links
+        };
+
+        //  If showChangeLinks, remove the actions key
+        if (!showChangeLinks) {
+            delete customEntry.actions;
+        }
+
+        //  Insert custom summary section after given page
+        if (block.insertAfterPageUrl) {
+            const idx = summaryList.params.items.findIndex(
+                (p) => p.pageUrl === block.insertAfterPageUrl);
+            if (idx >= 0) {
+                summaryList.params.items.splice(idx + 1, 0, customEntry);
+            } else {
+                summaryList.params.items.push(customEntry); // fallback append
+            }
+        } else {
+            summaryList.params.items.unshift(customEntry); // fallback append
+        }
+    }
+
+    // ==========================================================
+    //  END customPages merge
+    // ==========================================================
+
     return summaryList;
 }
 
@@ -680,6 +791,14 @@ export function generateReviewSummary(submissionData, req, siteId, showChangeLin
  */
 export function generateSubmitEmail(service, submissionData, submissionId, req) {
     let body = [];
+    // ==========================================================
+    //  Custom page
+    // ==========================================================
+    const customPages = dataLayer.getSiteCustomPages(req.session, service.site.id) || {};
+    // Build a lookup for custom pages by insertAfterPageUrl
+    const customPageEntries = Object.entries(customPages);
+    let pagesInBody = [];
+    // ===========================================================
 
     //check if there is submission Id
     if (submissionId) {
@@ -772,8 +891,57 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
                 });
         }
 
-
+        // ==========================================================
+        //  Custom page
+        // ==========================================================
+        // 🆕 Check for custom pages that should appear after this one
+        for (const [customKey, customPage] of   customPageEntries) {
+            const insertAfter = customPage.insertAfterPageUrl;
+            if (insertAfter && insertAfter === pageUrl && Array.isArray(customPage.email)) {
+                pagesInBody.push(customPage.pageUrl); // Track custom page key for later
+                // Add data title to the body
+                body.push(
+                    {
+                        component: "bodyHeading",
+                        params: { "headingLevel": 2 },
+                        body: govcyResources.getLocalizeContent(customPage.pageTitle, req.globalLang)
+                    }
+                )
+                logger.debug(`📧 Inserting custom page email '${customKey}' after '${pageUrl}'`);
+                body.push(...customPage.email);
+            }
+        }
+        
+        // ==========================================================
     }
+
+    // ==========================================================
+    //  Custom pages - Handle leftover custom pages not yet inserted
+    // ==========================================================
+    for (const [customKey, customPage] of customPageEntries) {
+        // check if this custom page was already inserted
+        const wasInserted = pagesInBody.includes(customKey);
+        // check if it has email content
+        const hasEmail = Array.isArray(customPage.email);
+        // get its title
+        const pageTitle = customPage.pageTitle;
+
+        // If not inserted and has email content, prepend it to the body
+        if (!wasInserted && hasEmail) {
+            // Prepend its email content
+            body.unshift(...customPage.email);
+            // Add a heading for visibility
+            body.unshift({
+                component: "bodyHeading",
+                params: { headingLevel: 2 },
+                body: govcyResources.getLocalizeContent(pageTitle, req.globalLang)
+            });
+
+            logger.debug(`📧 Adding leftover custom page '${customKey}' (no insertAfter match)`);
+        }
+    }
+    // ==========================================================
+
 
     let emailObject = govcyResources.getEmailObject(
         service.site.title,
@@ -790,86 +958,3 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
     return emailRenderer.renderFromJson(emailObject);
 }
 
-
-
-/*
-{
- "bank-details": {
-   "formData": {
-     "AccountName": "asd",
-     "Iban": "CY12 0020 0123 0000 0001 2345 6789",
-     "Swift": "BANKCY2NXXX",
-     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-   }
- },
- "answer-bank-boc": {
-   "formData": {
-     "Objection": "Object",
-     "country": "Azerbaijan",
-     "ObjectionReason": "ObjectionReasonCode1",
-     "ObjectionExplanation": "asdsa",
-     "DepositsBOCAttachment": "",
-     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-   }
- },
- "bank-settlement": {
-   "formData": {
-     "ReceiveSettlementExplanation": "",
-     "ReceiveSettlementDate_day": "",
-     "ReceiveSettlementDate_month": "",
-     "ReceiveSettlementDate_year": "",
-     "ReceiveSettlement": "no",
-     "_csrf": "sjknv79rxjgv0uggo0d5312vzgz37jsh"
-   }
- }
-}
-
-
-
-[
- {
-   pageUrl: "personal-details",
-   pageTitle: { en: "Personal data", el: "Προσωπικά στοιχεία" }, // from pageData.title in correct language
-   fields: [
-     [
-       {
-           id: "firstName",
-           label: { en: "First Name", el: "Όνομα" },
-           value: "John",  // The actual user input value
-           valueLabel: { en: "John", el: "John" }  // Same label as the value for text inputs
-       },
-       {
-           id: "lastName",
-           label: { en: "Last Name", el: "Επίθετο" },
-           value: "Doe",  // The actual user input value
-           valueLabel: { en: "Doe", el: "Doe" }  // Same label as the value for text inputs
-       },
-       {
-           id: "gender",
-           label: { en: "Gender", el: "Φύλο" },
-           value: "m",  // The actual value ("male")
-           valueLabel: { en: "Male", el: "Άντρας" }  // The corresponding label for "male"
-       },
-       {
-           id: "languages",
-           label: { en: "Languages", el: "Γλώσσες" },
-           value: ["en", "el"],  // The selected values ["en", "el"]
-           valueLabel: [
-               { en: "English", el: "Αγγλικά" },  // Labels corresponding to "en" and "el"
-               { en: "Greek", el: "Ελληνικά" }
-           ]
-       },
-       {
-           id: "birthDate",
-           label: { en: "Birth Date", el: "Ημερομηνία Γέννησης" },
-           value: "1990-01-13",  // The actual value based on user input
-           valueLabel: "13/1/1990"  // Date inputs label will be conveted to D/M/YYYY
-       }
-   ]
- },
- ...
-]
-
-
-
-   */

@@ -35,7 +35,7 @@ import { logger } from "./utils/govcyLogger.mjs";
 
 import fs from 'fs';
 
-export default function initializeGovCyExpressService() {
+export default function initializeGovCyExpressService(opts = {}) {
   const app = express();
 
   // Add this line before session middleware
@@ -151,6 +151,46 @@ export default function initializeGovCyExpressService() {
     govcyServiceEligibilityHandler(true), // UNCOMMENT
     govcyFileUpload
   );
+
+  // ==========================================================
+  //  Custom pages
+  // ==========================================================
+  /**
+   * siteRoute helper:
+   * Registers a route NOT under /:siteId, but injects req.params.siteId manually.
+   */
+  const siteRoute = (siteId, method, path, ...handlers) => {
+    if (typeof app[method] !== "function") {
+      throw new Error(`Unsupported HTTP method: ${method}`);
+    }
+
+    // Middleware to manually inject the siteId param
+    const injectSiteId = (req, res, next) => {
+      req.params = req.params || {};
+      req.params.siteId = siteId;
+      next();
+    };
+
+    // Chain your standard middlewares AFTER injection
+    const wrappedHandlers = [
+      injectSiteId,
+      serviceConfigDataMiddleware,
+      requireAuth,
+      naturalPersonPolicy,
+      govcyServiceEligibilityHandler(),
+      ...handlers,
+    ];
+
+    // ✅ Register under a plain path (no /:siteId/)
+    // e.g. path = "/custom" → registers "/custom" only
+    app[method](path, ...wrappedHandlers);
+  };
+
+  // Allow custom routes
+  if (typeof opts.beforeMount === "function") {
+    opts.beforeMount({ siteRoute, app });
+  }
+  // ==========================================================
 
   // 🗃️ -- ROUTE: Handle POST requests for file uploads inside multipleThings (edit)
   app.post('/apis/:siteId/:pageUrl/multiple/edit/:index/upload',
@@ -299,13 +339,13 @@ export default function initializeGovCyExpressService() {
   );
 
   // ----- `updateMyDetails` handling
-  
+
   // 🔀➡️ -- ROUTE coming from incoming update my details /:siteId/:pageUrl/update-my-details-response
-  app.post('/:siteId/:pageUrl/update-my-details-response', 
-    serviceConfigDataMiddleware, 
-    requireAuth, 
-    naturalPersonPolicy, 
-    govcyServiceEligibilityHandler(true), 
+  app.post('/:siteId/:pageUrl/update-my-details-response',
+    serviceConfigDataMiddleware,
+    requireAuth,
+    naturalPersonPolicy,
+    govcyServiceEligibilityHandler(true),
     govcyUpdateMyDetailsPostHandler());
   // ----- `updateMyDetails` handling
 

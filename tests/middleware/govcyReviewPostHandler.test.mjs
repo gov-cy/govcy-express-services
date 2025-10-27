@@ -331,7 +331,7 @@ describe("govcyReviewPostHandler", () => {
         process.env.CLIENT_KEY = "CLIENT_KEY";
         process.env.SERVICE_ID = "SERVICE_ID";
 
-        
+
         // ✅ Add this
         req.query = {}; // <-- prevents the route undefined error
         req.csrfToken = () => "mock"; // avoid CSRF undefined function
@@ -407,6 +407,263 @@ describe("govcyReviewPostHandler", () => {
         const submission = req.session.siteData["site123"].submissionData;
         expect(submission.submissionData["update-my-details"]).to.have.property("email", "user@example.com");
     });
+
+    it("9. should reset custom pages after successful submission", async () => {
+        // ✅ Valid form input
+        req.session.siteData["site123"].inputData["test-page"].formData = {
+            fullName: "Test User"
+        };
+
+        // ✅ Add mock customPages data in session to simulate dirty state
+        req.session.siteData["site123"].customPages = {
+            custom1: { data: { something: "old" } }
+        };
+
+        // ✅ Mock global app with a static definition
+        req.app = {
+            siteData: {
+                site123: {
+                    customPagesDefinition: {
+                        custom1: { data: { something: "default" } }
+                    }
+                }
+            }
+        };
+
+        // ✅ Set env vars to hit the success flow
+        process.env.MOCK_URL = "http://localhost:3002/success";
+        process.env.CLIENT_KEY = "CLIENT_KEY";
+        process.env.SERVICE_ID = "SERVICE_ID";
+
+        // ✅ Add user info
+        req.session.user = {
+            email: "reset@test.com"
+        };
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Should redirect to success page
+        expect(res.redirectedTo).to.equal("/site123/success");
+
+        // ✅ After submission, customPages should be reset from app definition
+        const resetPageData = req.session.siteData["site123"].customPages["custom1"];
+        expect(resetPageData).to.deep.equal({ data: { something: "default" } });
+    });
+
+    it("10. should skip resetCustomPages if req.app is missing", async () => {
+        // ✅ Valid form input
+        req.session.siteData["site123"].inputData["test-page"].formData = {
+            fullName: "NoApp User"
+        };
+
+        // ✅ Add mock customPages data in session
+        req.session.siteData["site123"].customPages = {
+            custom1: { data: { something: "old" } }
+        };
+
+        // ⚠️ Intentionally remove req.app
+        delete req.app;
+
+        // ✅ Set env vars for success path
+        process.env.MOCK_URL = "http://localhost:3002/success";
+        process.env.CLIENT_KEY = "CLIENT_KEY";
+        process.env.SERVICE_ID = "SERVICE_ID";
+
+        // ✅ Add user info
+        req.session.user = { email: "noapp@test.com" };
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Should still redirect successfully
+        expect(res.redirectedTo).to.equal("/site123/success");
+
+        // ✅ Custom pages should remain unchanged (no reset)
+        expect(req.session.siteData["site123"].customPages).to.deep.equal({
+            custom1: { data: { something: "old" } }
+        });
+    });
+
+
+    it("11. should include custom page errors and redirect to review", async () => {
+        // ✅ Prepare a site with valid minimal data
+        req.session.siteData["site123"].inputData["test-page"].formData = {
+            fullName: "Test User"
+        };
+
+        // ✅ Add customPages with a validation error
+        req.session.siteData["site123"].customPages = {
+            custom1: {
+                insertAfterPageUrl: "test-page",
+                errors: [
+                    {
+                        id: "custom-error-1",
+                        text: { en: "This is a custom error" },
+                        pageUrl: "custom1"
+                    }
+                ]
+            }
+        };
+
+        // ✅ Provide minimal service definition
+        const service = {
+            site: {
+                id: "site123",
+                submissionAPIEndpoint: {
+                    url: "MOCK_URL",
+                    clientKey: "CLIENT_KEY",
+                    serviceId: "SERVICE_ID"
+                }
+            },
+            pages: [
+                {
+                    pageData: { url: "test-page" },
+                    pageTemplate: { sections: [{ elements: [{ element: "form", params: { elements: [] } }] }] }
+                }
+            ]
+        };
+        req.serviceData = service;
+
+        // ✅ Run handler
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Should redirect to the review page (not success)
+        expect(res.redirectedTo).to.contain("/site123/review");
+
+        // ✅ Should have stored the custom validation error
+        const storedErrors = req.session.siteData["site123"].submissionErrors?.errors || {};
+        const hasCustomError =
+            Object.values(storedErrors).some(e =>
+                Object.values(e).some(field => field.message?.en === "This is a custom error")
+            );
+
+        expect(hasCustomError).to.be.true;
+    });
+
+    it("12. should skip custom page validation when there are no errors and submit successfully", async () => {
+        // ✅ Prepare session with normal form data
+        req.session.siteData["site123"].inputData["test-page"].formData = {
+            fullName: "Custom OK"
+        };
+
+        // ✅ Define customPages but with no errors
+        req.session.siteData["site123"].customPages = {
+            custom1: {
+                insertAfterPageUrl: "test-page",
+                errors: [] // no validation errors
+            }
+        };
+
+        // ✅ Mock app definition (so resetCustomPages will run)
+        req.app = {
+            siteData: {
+                site123: {
+                    customPagesDefinition: {
+                        custom1: { data: { default: "defaultValue" } }
+                    }
+                }
+            }
+        };
+
+        // ✅ Define service
+        const service = {
+            site: {
+                id: "site123",
+                title: { en: "Test Service" },
+                lang: "en",
+                submissionAPIEndpoint: {
+                    url: "MOCK_URL",
+                    clientKey: "CLIENT_KEY",
+                    serviceId: "SERVICE_ID"
+                }
+            },
+            pages: [
+                {
+                    pageData: { url: "test-page" },
+                    pageTemplate: { sections: [{ elements: [{ element: "form", params: { elements: [] } }] }] }
+                }
+            ]
+        };
+        req.serviceData = service;
+
+        // ✅ Add mock user for submission
+        req.session.user = { email: "customok@test.com" };
+
+        // ✅ Run handler
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Expect success redirect (normal submission)
+        expect(res.redirectedTo).to.equal("/site123/success");
+
+        // ✅ Custom pages should be reset from definition
+        const resetPage = req.session.siteData["site123"].customPages.custom1;
+        expect(resetPage).to.deep.equal({ data: { default: "defaultValue" } });
+    });
+
+    it("13. should skip custom page validation when errors property is missing", async () => {
+        // ✅ Prepare session with normal form data
+        req.session.siteData["site123"].inputData["test-page"].formData = {
+            fullName: "Custom OK Missing Errors"
+        };
+
+        // ✅ Define customPages but no `errors` key at all
+        req.session.siteData["site123"].customPages = {
+            custom1: {
+                insertAfterPageUrl: "test-page"
+                // no errors property
+            }
+        };
+
+        // ✅ Mock app definition (so resetCustomPages will run)
+        req.app = {
+            siteData: {
+                site123: {
+                    customPagesDefinition: {
+                        custom1: { data: { default: "defaultValue" } }
+                    }
+                }
+            }
+        };
+
+        // ✅ Define service
+        const service = {
+            site: {
+                id: "site123",
+                title: { en: "Test Service" },
+                lang: "en",
+                submissionAPIEndpoint: {
+                    url: "MOCK_URL",
+                    clientKey: "CLIENT_KEY",
+                    serviceId: "SERVICE_ID"
+                }
+            },
+            pages: [
+                {
+                    pageData: { url: "test-page" },
+                    pageTemplate: { sections: [{ elements: [{ element: "form", params: { elements: [] } }] }] }
+                }
+            ]
+        };
+        req.serviceData = service;
+
+        // ✅ Add mock user for submission
+        req.session.user = { email: "missingerror@test.com" };
+
+        // ✅ Run handler
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        // ✅ Expect success redirect (normal submission)
+        expect(res.redirectedTo).to.equal("/site123/success");
+
+        // ✅ Custom pages should still reset properly
+        const resetPage = req.session.siteData["site123"].customPages.custom1;
+        expect(resetPage).to.deep.equal({ data: { default: "defaultValue" } });
+    });
+
 
 
 });

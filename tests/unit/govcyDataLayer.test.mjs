@@ -1335,7 +1335,7 @@ describe("clearMultipleDraft()", () => {
             siteData: { site1: { inputData: { "page1": { multipleDraft: {} } } } }
         };
         expect(() => dataLayer.clearMultipleDraft(store, "site1", "page1")).not.to.throw();
-        
+
         expect(store.siteData.site1.inputData.page1.multipleDraft).to.be.null;
     });
 
@@ -1348,77 +1348,77 @@ describe("clearMultipleDraft()", () => {
 });
 
 describe("getFormDataValue()", () => {
-  let store;
+    let store;
 
-  beforeEach(() => {
-    store = {
-      siteData: {
-        testSite: {
-          inputData: {
-            "simple-page": {
-              formData: {
-                name: "Constantinos",
-                email: "test@example.com"
-              }
-            },
-            "multiple-page": {
-              formData: [
-                { title: "MSc", year: "2020" },
-                { title: "BSc", year: "2018" }
-              ]
-            },
-            "draft-page": {
-              formData: [
-                { title: "Old MSc", year: "2020" }
-              ],
-              multipleDraft: { title: "Draft MSc", year: "2024" }
+    beforeEach(() => {
+        store = {
+            siteData: {
+                testSite: {
+                    inputData: {
+                        "simple-page": {
+                            formData: {
+                                name: "Constantinos",
+                                email: "test@example.com"
+                            }
+                        },
+                        "multiple-page": {
+                            formData: [
+                                { title: "MSc", year: "2020" },
+                                { title: "BSc", year: "2018" }
+                            ]
+                        },
+                        "draft-page": {
+                            formData: [
+                                { title: "Old MSc", year: "2020" }
+                            ],
+                            multipleDraft: { title: "Draft MSc", year: "2024" }
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    };
-  });
+        };
+    });
 
-  it("1. should return value from a normal single page", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "simple-page", "name");
-    expect(result).to.equal("Constantinos");
-  });
+    it("1. should return value from a normal single page", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "simple-page", "name");
+        expect(result).to.equal("Constantinos");
+    });
 
-  it("2. should return correct indexed value for multipleThings", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "title", 1);
-    expect(result).to.equal("BSc");
-  });
+    it("2. should return correct indexed value for multipleThings", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "title", 1);
+        expect(result).to.equal("BSc");
+    });
 
-  it("3. should return undefined for out-of-range index", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "title", 99);
-    expect(result).to.equal("");
-  });
+    it("3. should return undefined for out-of-range index", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "title", 99);
+        expect(result).to.equal("");
+    });
 
-  it("4. should prioritize array data over multipleDraft value", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "draft-page", "title", 0);
-    expect(result).to.equal("Old MSc");
-  });
+    it("4. should prioritize array data over multipleDraft value", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "draft-page", "title", 0);
+        expect(result).to.equal("Old MSc");
+    });
 
-  it("5. should return first item when index is not specified for multipleThings", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "year");
-    expect(result).to.equal("");
-  });
+    it("5. should return first item when index is not specified for multipleThings", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "multiple-page", "year");
+        expect(result).to.equal("");
+    });
 
-  it("6. should return undefined if page or field does not exist", () => {
-    const result = dataLayer.getFormDataValue(store, "testSite", "unknown-page", "fieldX");
-    expect(result).to.equal("");
-  });
+    it("6. should return undefined if page or field does not exist", () => {
+        const result = dataLayer.getFormDataValue(store, "testSite", "unknown-page", "fieldX");
+        expect(result).to.equal("");
+    });
 
-  it("7. should return empty string if field exists but empty", () => {
-    store.siteData.testSite.inputData["simple-page"].formData["emptyField"] = "";
-    const result = dataLayer.getFormDataValue(store, "testSite", "simple-page", "emptyField");
-    expect(result).to.equal("");
-  });
+    it("7. should return empty string if field exists but empty", () => {
+        store.siteData.testSite.inputData["simple-page"].formData["emptyField"] = "";
+        const result = dataLayer.getFormDataValue(store, "testSite", "simple-page", "emptyField");
+        expect(result).to.equal("");
+    });
 
-  it("8. should not throw even if store structure is malformed", () => {
-    const malformed = {};
-    expect(() => dataLayer.getFormDataValue(malformed, "x", "y", "z")).not.to.throw();
-  });
+    it("8. should not throw even if store structure is malformed", () => {
+        const malformed = {};
+        expect(() => dataLayer.getFormDataValue(malformed, "x", "y", "z")).not.to.throw();
+    });
 });
 
 // ---------------------------------------------------------
@@ -1488,3 +1488,43 @@ describe("storePageUpdateMyDetails() and getPageUpdateMyDetails()", () => {
 
 });
 
+// ---------------------------------------------------------
+// getSiteCustomPages
+// ---------------------------------------------------------
+describe("getSiteCustomPages()", () => {
+
+    it("1. should return customPages if they exist, otherwise empty object", () => {
+        const siteId = "site1";
+
+        // Case 1: customPages exist
+        const session = {
+            siteData: {
+                [siteId]: {
+                    customPages: {
+                        custom1: { data: { field1: "value1" } },
+                        custom2: { data: { field2: "value2" } }
+                    }
+                }
+            }
+        };
+
+        const result1 = dataLayer.getSiteCustomPages(session, siteId);
+        expect(result1).to.deep.equal(session.siteData[siteId].customPages);
+
+        // Case 2: customPages not defined
+        const session2 = {
+            siteData: {
+                [siteId]: {}
+            }
+        };
+        const result2 = dataLayer.getSiteCustomPages(session2, siteId);
+        expect(result2).to.deep.equal({}); // ✅ now expects empty object
+
+        // Case 3: siteData missing entirely
+        const session3 = {};
+        const result3 = dataLayer.getSiteCustomPages(session3, siteId);
+        expect(result3).to.deep.equal({}); // ✅ also empty object
+    });
+
+
+});

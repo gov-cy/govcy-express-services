@@ -134,6 +134,7 @@ describe('govcySubmitData', () => {
                     items: [
                         {
                             key: { en: 'Page 1', el: 'Σελίδα 1' },
+                            pageUrl: "page1",
                             value: [
                                 {
                                     element: 'summaryList',
@@ -156,9 +157,100 @@ describe('govcySubmitData', () => {
                 },
             });
         });
+
+        it('4. should insert custom page summary after insertAfterPageUrl', () => {
+            // Create mock submissionData (2 normal pages)
+            const submissionData = [
+                {
+                    pageUrl: 'page1',
+                    pageTitle: { en: 'Page 1' },
+                    fields: [{ label: { en: 'A' }, valueLabel: { en: '1' } }]
+                },
+                {
+                    pageUrl: 'page2',
+                    pageTitle: { en: 'Page 2' },
+                    fields: [{ label: { en: 'B' }, valueLabel: { en: '2' } }]
+                }
+            ];
+
+            // Define custom page in session
+            req.session.siteData[siteId].customPages = {
+                customPage: {
+                    pageTitle: { en: 'Custom Page' },
+                    insertAfterPageUrl: 'page1',
+                    summaryElements: [
+                        {
+                            key: { en: 'Extra field' },
+                            value: [{ element: 'textElement', params: { text: { en: 'XYZ' } } }]
+                        }
+                    ]
+                }
+            };
+
+            // Run function
+            const result = generateReviewSummary(submissionData, req, siteId, true);
+
+            // Extract keys in summary order
+            const keys = result.params.items.map(i => i.pageUrl || i.key?.en);
+
+            // Expect custom page appears after page1
+            const idxPage1 = keys.indexOf('page1');
+            const idxCustom = keys.indexOf('Custom Page'); // key is title in this case
+
+            expect(idxCustom).to.be.greaterThan(idxPage1);
+        });
+
+        it('5. should append custom page summary when insertAfterPageUrl not found', () => {
+            // Mock submissionData with one page only
+            const submissionData = [
+                {
+                    pageUrl: 'mainPage',
+                    pageTitle: { en: 'Main Page' },
+                    fields: [{ label: { en: 'Field A' }, valueLabel: { en: '123' } }]
+                }
+            ];
+
+            // Define custom page with invalid insertAfterPageUrl
+            req.session.siteData[siteId].customPages = {
+                orphanCustom: {
+                    pageTitle: { en: 'Orphan Custom Page' },
+                    insertAfterPageUrl: 'nonExistingPage',
+                    summaryElements: [
+                        {
+                            key: { en: 'Extra Info' },
+                            value: [
+                                {
+                                    element: 'textElement',
+                                    params: {
+                                        text: { en: 'Fallback Works' }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+
+            // Run generateReviewSummary
+            const result = generateReviewSummary(submissionData, req, siteId, true);
+
+            // Get the order of section titles
+            const titles = result.params.items.map(i => i.key.en);
+
+            // Expect both pages to exist
+            expect(titles).to.include('Main Page');
+            expect(titles).to.include('Orphan Custom Page');
+
+            // Orphan custom should be last (fallback append)
+            const mainIdx = titles.indexOf('Main Page');
+            const orphanIdx = titles.indexOf('Orphan Custom Page');
+            expect(orphanIdx).to.be.greaterThan(mainIdx);
+        });
+
+
     });
 
-    it('4. should NOT skip pages with redirecting conditions', () => {
+    it('6. should NOT skip pages with redirecting conditions', () => {
         // Extend the service to include a conditional page with a redirect
         service.pages.push({
             pageData: {
@@ -214,7 +306,7 @@ describe('govcySubmitData', () => {
 
 
     describe('preparePrintFriendlyData with conditionally excluded page', () => {
-        it('5. should not include print-friendly data for excluded page', () => {
+        it('7. should not include print-friendly data for excluded page', () => {
             service.pages[0].pageData.conditions = [
                 {
                     expression: "true",
@@ -228,7 +320,7 @@ describe('govcySubmitData', () => {
     });
 
     describe('generateReviewSummary with conditionally excluded page', () => {
-        it('6. should not generate summary for excluded page', () => {
+        it('8. should not generate summary for excluded page', () => {
             service.pages[0].pageData.conditions = [
                 {
                     expression: "true",
@@ -241,7 +333,7 @@ describe('govcySubmitData', () => {
         });
     });
 
-    it('7. should rename fileInput field to include "Attachment" in submissionData', () => {
+    it('9. should rename fileInput field to include "Attachment" in submissionData', () => {
         // Add fileInput to the form
         service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
             element: 'fileInput',
@@ -267,7 +359,7 @@ describe('govcySubmitData', () => {
         });
     });
 
-    it('8. should handle fileInput inside conditional radio and rename correctly', () => {
+    it('10. should handle fileInput inside conditional radio and rename correctly', () => {
         // Add a radios element with conditional file input
         service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
             element: 'radios',
@@ -311,7 +403,7 @@ describe('govcySubmitData', () => {
         });
     });
 
-    it('9. should assign empty string when fileInput value is missing', () => {
+    it('11. should assign empty string when fileInput value is missing', () => {
         service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
             element: 'fileInput',
             params: { id: 'licenseFile', name: 'licenseFile', label: { en: 'License', el: 'Άδεια' } }
@@ -341,7 +433,7 @@ describe('govcySubmitData', () => {
             });
         });
 
-        it('10. unchecked checkboxes → [] in submissionData; empty label string in summary', () => {
+        it('12. unchecked checkboxes → [] in submissionData; empty label string in summary', () => {
             // Nothing set in session for page1.formData.docs
             const prep = prepareSubmissionData(req, siteId, service);
 
@@ -363,7 +455,7 @@ describe('govcySubmitData', () => {
             expect(summary.element).to.equal('summaryList');
         });
 
-        it('11. single checkbox (string in session) → normalized to ["value"] and correct labels', () => {
+        it('13. single checkbox (string in session) → normalized to ["value"] and correct labels', () => {
             req.session.sessionFixFlag = true; // harmless; ensure session mutability
             req.session.siteData.testSite.inputData.page1.formData.docs = 'birth';
 
@@ -385,7 +477,7 @@ describe('govcySubmitData', () => {
             expect(summary.element).to.equal('summaryList'); // smoke check
         });
 
-        it('12. multiple checkboxes (array in session) → preserved array + labels joined in summary', () => {
+        it('14. multiple checkboxes (array in session) → preserved array + labels joined in summary', () => {
             req.session.siteData.testSite.inputData.page1.formData.docs = ['birth', 'perm'];
 
             const prep = prepareSubmissionData(req, siteId, service);
@@ -404,14 +496,73 @@ describe('govcySubmitData', () => {
             expect(summary.element).to.equal('summaryList'); // smoke check
         });
 
+        it('15. should merge custom pages into submissionData in correct order', () => {
+            // Mock a normal submission page
+            const resultBefore = prepareSubmissionData(req, siteId, service);
+            expect(resultBefore.submissionData).to.have.property('page1');
+
+            // Add customPages data into session
+            req.session.siteData[siteId].customPages = {
+                customA: {
+                    data: { fieldX: '123' },
+                    insertAfterPageUrl: 'page1'
+                },
+                customB: {
+                    data: { fieldY: '456' },
+                    insertAfterPageUrl: 'customA' // chained insert
+                }
+            };
+
+            // Run function again
+            const result = prepareSubmissionData(req, siteId, service);
+
+            const keys = Object.keys(result.submissionData);
+            // Expected order: page1 -> customA -> customB
+            const page1Idx = keys.indexOf('page1');
+            const aIdx = keys.indexOf('customA');
+            const bIdx = keys.indexOf('customB');
+
+            expect(page1Idx).to.be.lessThan(aIdx);
+            expect(aIdx).to.be.lessThan(bIdx);
+            expect(result.submissionData.customA).to.deep.equal({ fieldX: '123' });
+            expect(result.submissionData.customB).to.deep.equal({ fieldY: '456' });
+        });
+
+        it('16. should append custom pages when insertAfterPageUrl not found', () => {
+            // Clean session
+            req.session.siteData[siteId].customPages = {};
+
+            // Custom page refers to a non-existent anchor
+            req.session.siteData[siteId].customPages = {
+                orphanCustom: {
+                    data: { orphanValue: '999' },
+                    insertAfterPageUrl: 'nonExistentPage'
+                }
+            };
+
+            // Run prepareSubmissionData again
+            const result = prepareSubmissionData(req, siteId, service);
+
+            // Ensure custom page is still added
+            expect(result.submissionData).to.have.property('orphanCustom');
+            expect(result.submissionData.orphanCustom).to.deep.equal({ orphanValue: '999' });
+
+            // Since anchor doesn't exist, it should be appended (first in order)
+            const keys = Object.keys(result.submissionData);
+            const lastKey = keys[0];
+            expect(lastKey).to.equal('orphanCustom');
+        });
+
     });
+
+
 
     // -----------------------------------------------------------------------------
     // Additional tests for multipleThings, helper functions, and email generation
     // -----------------------------------------------------------------------------
     describe('govcySubmitData - extended behavior', () => {
 
-        it('13. should prepare submission data correctly for multipleThings pages', () => {
+        it('17. should prepare submission data correctly for multipleThings pages', () => {
             service.pages.push({
                 pageData: { url: 'multi-page', title: { en: 'Multi', el: 'Πολλαπλά' } },
                 "multipleThings": {
@@ -506,7 +657,7 @@ describe('govcySubmitData', () => {
             expect(result.submissionData['multi-page'][1].fieldA).to.equal('val2');
         });
 
-        it('14. should prepare print-friendly data for multipleThings pages with itemTitleTemplate', () => {
+        it('18. should prepare print-friendly data for multipleThings pages with itemTitleTemplate', () => {
             service.pages.push({
                 pageData: { url: 'multi-items', title: { en: 'Multiple Items', el: 'Πολλαπλά Στοιχεία' } },
                 multipleThings: {
@@ -543,7 +694,7 @@ describe('govcySubmitData', () => {
             expect(multiPage.items[0].itemTitle).to.include('Alpha');
         });
 
-        it('15. should render multipleThings summary as <ol> list in generateReviewSummary', () => {
+        it('19. should render multipleThings summary as <ol> list in generateReviewSummary', () => {
             const submissionData = [
                 {
                     pageUrl: 'multi-items',
@@ -563,7 +714,7 @@ describe('govcySubmitData', () => {
             expect(html).to.include('Item Two');
         });
 
-        it('16. should include file link element for file inputs in generateReviewSummary', () => {
+        it('20. should include file link element for file inputs in generateReviewSummary', () => {
             const submissionData = [
                 {
                     pageUrl: 'files-page',
@@ -585,7 +736,7 @@ describe('govcySubmitData', () => {
             expect(html).to.include('<a href');
         });
 
-        it('17. should generate submit email with multipleThings list rendered as <ol>', () => {
+        it('21. should generate submit email with multipleThings list rendered as <ol>', () => {
             service.pages.push({
                 pageData: { url: 'multi-email', title: { en: 'Multi Email', el: 'Πολλαπλά Email' } },
                 multipleThings: { itemTitleTemplate: "Entry {{ name }}" },
@@ -621,7 +772,7 @@ describe('govcySubmitData', () => {
             expect(htmlEmail).to.include('Entry Maria');
         });
 
-        it('18. should format date and label strings correctly (helpers)', () => {
+        it('22. should format date and label strings correctly (helpers)', () => {
             // --- Part 1: indirectly test label joining (getSubmissionValueLabelString)
             const submissionData = [
                 {
@@ -688,7 +839,7 @@ describe('govcySubmitData', () => {
 
     });
 
-    it('19. should prepare submission data correctly for updateMyDetails page', () => {
+    it('23. should prepare submission data correctly for updateMyDetails page', () => {
         // Add an UpdateMyDetails page
         service.pages.push({
             pageData: { url: 'update-my-details', title: { en: 'Update My Details', el: 'Ενημέρωση στοιχείων' } },
@@ -739,7 +890,7 @@ describe('govcySubmitData', () => {
     });
 
 
-    it('20. should prepare print-friendly data correctly for updateMyDetails page', () => {
+    it('24. should prepare print-friendly data correctly for updateMyDetails page', () => {
         service.pages.push({
             pageData: { url: 'update-my-details', title: { en: 'Update My Details', el: 'Ενημέρωση στοιχείων' } },
             updateMyDetails: {
@@ -758,7 +909,7 @@ describe('govcySubmitData', () => {
         req.session.siteData.testSite.inputData['update-my-details'] = {
             formData: { email: 'user@example.com', mobile: '99999999' }
         };
-        
+
         // ✅ Add this
         req.query = {}; // <-- prevents the route undefined error
         req.csrfToken = () => "mock"; // avoid CSRF undefined function
@@ -783,6 +934,137 @@ describe('govcySubmitData', () => {
                 valueLabel: { en: '99999999', el: '99999999' }
             }
         ]);
+    });
+
+    it('25. should insert custom page email content after insertAfterPageUrl', () => {
+        // Mock minimal service
+        const service = {
+            site: {
+                id: 'test',
+                title: { en: 'Test Service' },
+                successEmailHeader: { en: 'Submission Successful' },
+            }
+        };
+
+        // Mock submissionData (two standard pages)
+        const submissionData = [
+            {
+                pageUrl: 'page1',
+                pageTitle: { en: 'Page 1' },
+                fields: [{ label: { en: 'Field A' }, valueLabel: { en: 'Value A' } }]
+            },
+            {
+                pageUrl: 'page2',
+                pageTitle: { en: 'Page 2' },
+                fields: [{ label: { en: 'Field B' }, valueLabel: { en: 'Value B' } }]
+            }
+        ];
+
+        let siteId = 'test';
+
+        // Clean session
+        req.session.siteData[siteId] = {};
+        req.session.siteData[siteId].customPages = {};
+
+        // Add customPages to session
+        req.session.siteData[siteId].customPages = {
+            customEmailPage: {
+                pageUrl: 'customEmailPage',
+                pageTitle: { en: 'Custom Email Page' },
+                insertAfterPageUrl: 'page1',
+                data: { fieldX: 'XYZ' },
+                email: [
+                    {
+                        component: 'bodyKeyValue',
+                        params: {
+                            type: 'ul',
+                            items: [{ key: 'Extra Field', value: 'XYZ' }]
+                        }
+                    }
+                ]
+            }
+        };
+
+        // Run function
+        const htmlOutput = generateSubmitEmail(service, submissionData, 'REF123', req);
+
+        // Verify structure
+        expect(htmlOutput).to.be.a('string');
+        expect(htmlOutput).to.include('Submission Successful');
+        expect(htmlOutput).to.include('Page 1');
+        expect(htmlOutput).to.include('Page 2');
+        expect(htmlOutput).to.include('Custom Email Page');
+
+        // ✅ Custom section should appear between Page 1 and Page 2
+        const idxPage1 = htmlOutput.indexOf('Page 1');
+        const idxCustom = htmlOutput.indexOf('Custom Email Page');
+        const idxPage2 = htmlOutput.indexOf('Page 2');
+
+        expect(idxCustom).to.be.greaterThan(idxPage1);
+        expect(idxCustom).to.be.lessThan(idxPage2);
+        expect(htmlOutput).to.include('Extra Field');
+    });
+
+    it('26. should append custom page email content when insertAfterPageUrl not found', () => {
+        // Mock minimal service
+        const service = {
+            site: {
+                id: 'test',
+                title: { en: 'Test Service' },
+                successEmailHeader: { en: 'Submission Successful' },
+            }
+        };
+
+        // Mock submissionData (single standard page)
+        const submissionData = [
+            {
+                pageUrl: 'mainPage',
+                pageTitle: { en: 'Main Page' },
+                fields: [{ label: { en: 'Field A' }, valueLabel: { en: 'Value A' } }]
+            }
+        ];
+
+        const siteId = 'test';
+
+        // Reset session
+        req.session.siteData[siteId] = {};
+        req.session.siteData[siteId].customPages = {};
+
+        // Add custom page that points to a non-existent insertAfterPageUrl
+        req.session.siteData[siteId].customPages = {
+            orphanEmailPage: {
+                pageUrl: 'orphanEmailPage',
+                pageTitle: { en: 'Orphan Custom Page' },
+                insertAfterPageUrl: 'doesNotExist',
+                email: [
+                    {
+                        component: 'bodyKeyValue',
+                        params: {
+                            type: 'ul',
+                            items: [{ key: 'Lost Field', value: '999' }]
+                        }
+                    }
+                ]
+            }
+        };
+
+        // Run the function
+        const htmlOutput = generateSubmitEmail(service, submissionData, 'REF999', req);
+
+        // Verify structure
+        expect(htmlOutput).to.be.a('string');
+        expect(htmlOutput).to.include('Submission Successful');
+        expect(htmlOutput).to.include('Main Page');
+        expect(htmlOutput).to.include('Orphan Custom Page');
+
+        // ✅ The orphan custom section should appear *after* all normal pages (fallback)
+        const idxMain = htmlOutput.indexOf('Main Page');
+        const idxOrphan = htmlOutput.indexOf('Orphan Custom Page');
+
+        expect(idxMain).to.be.greaterThan(idxOrphan);
+
+        // ✅ Check content rendered correctly
+        expect(htmlOutput).to.include('Lost Field');
     });
 
 
