@@ -89,7 +89,10 @@ export function govcyReviewPageHandler() {
                             if (fieldKey === "type") continue;
                             // Push each field error to summary items
                             summaryItems.push({
-                                link: govcyResources.constructPageUrl(siteId, fieldErr.pageUrl, "review"),
+                                link: (err.type === "custom" ? // Custom pages 
+                                    `/${fieldErr.pageUrl}?route=review` :
+                                    govcyResources.constructPageUrl(siteId, fieldErr.pageUrl, "review")
+                                ),
                                 text: fieldErr.message
                             });
                         }

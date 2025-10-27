@@ -379,6 +379,23 @@ export function getSiteLoadData(store, siteId) {
 }
 
 /**
+ * Get the site's custom pages from the store for custom pages
+ * 
+ * @param {object} store The session store
+ * @param {string} siteId |The site id
+ * @returns The site custom pages or null if none exist.
+ */
+export function getSiteCustomPages(store, siteId) {
+    const customPages  = store?.siteData?.[siteId]?.customPages  || {};
+
+    if (customPages ) {
+        return customPages ;
+    }
+
+    return null;
+}
+
+/**
  * Get the site's reference number from load data from the store 
  * 
  * @param {object} store The session store

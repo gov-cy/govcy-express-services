@@ -10,6 +10,7 @@ import { sendEmail } from "../utils/govcyNotification.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { createUmdManualPageTemplate } from "./govcyUpdateMyDetails.mjs"
 import { validateMultipleThings } from "../utils/govcyMultipleThingsValidation.mjs";
+import { resetCustomPages } from "../utils/govcyCustomPages.mjs";
 
 /**
  * Middleware to handle review page form submission
@@ -25,12 +26,12 @@ export function govcyReviewPostHandler() {
             let validationErrors = {};
             // to be used for sending email
             let updateMyDetailsData = null;
-            
+
             // Loop through all pages in the service
             for (const page of service.pages) {
                 //get page url
                 const pageUrl = page.pageData.url;
-                
+
                 // to be used for sending email 
                 // get updateMyDetails data if not found before
                 if (!updateMyDetailsData) {
@@ -52,13 +53,13 @@ export function govcyReviewPostHandler() {
                 if (page.updateMyDetails) {
                     logger.debug("Validating UpdateMyDetails page during review POST", { siteId, pageUrl });
                     // Build the manual UMD page template
-                    const umdTemplate  = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
-                    
+                    const umdTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+
                     // Extract the form element
-                    formElement = umdTemplate .sections
+                    formElement = umdTemplate.sections
                         .flatMap(section => section.elements)
                         .find(el => el.element === "form");
-                    
+
                     if (!formElement) {
                         logger.error("🚨 UMD form element not found during review validation", { siteId, pageUrl });
                         return handleMiddlewareError("🚨 UMD form element not found during review validation", 500, next);
@@ -106,6 +107,53 @@ export function govcyReviewPostHandler() {
                 // Add errors to the validationErrors object
                 validationErrors = { ...validationErrors, ...errors };
             }
+
+            // ==========================================================
+            //  Custom pages
+            // ==========================================================
+            //  Handle custom summary validation blocks from session
+            const customPages = dataLayer.getSiteCustomPages(req.session, siteId);
+
+            //  Convert existing validationErrors object to ordered array of [pageUrl, errorObj]
+            //    so we can splice into it in the correct order.
+            let orderedErrors = Object.entries(validationErrors);
+
+            for (const [key, block] of Object.entries(customPages)) {
+                if (Array.isArray(block.errors) && block.errors.length > 0) {
+                    const customErrObj = {};
+                    for (const err of block.errors) {
+                        customErrObj[err.id] = {
+                            id: err.id,
+                            message: err.text,       // ⚙️ uses your structure
+                            pageUrl: err.pageUrl || key
+                        };
+                    }
+
+                    const newErrorEntry = [
+                        key,
+                        {
+                            type: "custom",           // mark it as custom for debug clarity
+                            ...customErrObj
+                        }
+                    ];
+
+                    //  If block.insertAfter exists, insert after that page’s index
+                    if (block.insertAfterPageUrl) {
+                        const idx = orderedErrors.findIndex(([pageUrl]) => pageUrl === block.insertAfterPageUrl);
+                        if (idx >= 0) {
+                            orderedErrors.splice(idx + 1, 0, newErrorEntry); // insert after
+                            continue; // move to next custom block
+                        }
+                    }
+
+                    //  Fallback: append to top if insertAfter not found or not defined
+                    orderedErrors.unshift(newErrorEntry);
+                }
+            }
+
+            //  Convert back into a normal object
+            validationErrors = Object.fromEntries(orderedErrors);
+            // ==========================================================
 
             // ❌ Return validation errors if any exist
             if (Object.keys(validationErrors).length > 0) {
@@ -163,7 +211,7 @@ export function govcyReviewPostHandler() {
                     // Add the reference number to the submission data
                     submissionData.referenceNumber = referenceNo;
                     logger.info("✅ Data submitted", siteId, referenceNo);
-                    
+
                     // Get the user email address
                     let emailAddress = "";
                     // if Update my details not provided the use user email
@@ -174,25 +222,33 @@ export function govcyReviewPostHandler() {
                     }
                     // add contact email to submission data
                     submissionData.contactEmailAddress = emailAddress;
-                    
+
                     // handle data layer submission
                     dataLayer.storeSiteSubmissionData(
                         req.session,
                         siteId,
                         submissionData);
-
+                        
                     //-- Send email to user
                     // Generate the email body
                     let emailBody = generateSubmitEmail(service, submissionData.printFriendlyData, referenceNo, req);
-                   
+                    
+                    // ==========================================================
+                    //  Custom pages
+                    // =========================================================
+                    // 🆕 Reset per-session custom pages from the global app definition
+                    const app = req.app;  // ✅ Express automatically provides this
+                    resetCustomPages(app, req.session, siteId);
+                    // ==========================================================
+
                     // Send the email
                     sendEmail(
-                        service.site.title[service.site.lang], 
-                        emailBody, 
-                        [emailAddress], 
+                        service.site.title[service.site.lang],
+                        emailBody,
+                        [emailAddress],
                         "eMail").catch(err => {
                             logger.error("Email sending failed (async):", err);
-                    });
+                        });
                     // --- End of email sending
 
                     logger.debug("🔄 Redirecting to success page:", req);
