@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -75,7 +75,7 @@
     "chai-http": "^5.1.1",
     "coverage-badges-cli": "^2.2.0",
     "mocha": "^11.1.0",
-    "mochawesome": "^7.1.3",
+    "mochawesome": "^7.1.4",
     "nodemon": "^3.0.2",
     "pa11y": "^8.0.0",
     "sinon": "^20.0.0"
