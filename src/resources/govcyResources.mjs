@@ -218,7 +218,7 @@ export const staticResources = {
         },
         multipleThingsEntries: {
             en: "Entries",
-            el: "Καταχωρήσεις",
+            el: "Καταχωρίσεις",
             tr: "Entries"
         },
         multipleThingsDeleteYesOption: {
