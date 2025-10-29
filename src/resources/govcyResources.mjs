@@ -163,17 +163,17 @@ export const staticResources = {
         },
         multipleThingsEnptyState: {
             en: "You did not add any entries.",
-            el: "Δεν έχετε προσθέσει ακόμη κάποια καταχώρηση.",
+            el: "Δεν έχετε προσθέσει ακόμη κάποια καταχώριση.",
             tr: "You did not add any entries."
         },
         multipleThingsEmptyStateReview: {
             en: "You did not add any entries.",
-            el: "Δεν έχετε προσθέσει κάποια καταχώρηση.",
+            el: "Δεν έχετε προσθέσει κάποια καταχώριση.",
             tr: "You did not add any entries yet."
         },
         multipleThingsAddEntry: {
             en: "Add new entry",
-            el: "Προσθήκη νέας καταχώρησης",
+            el: "Προσθήκη νέας καταχώρισης",
             tr: "Add new entry"
         },
         multipleThingsDedupeMessage: {
@@ -193,7 +193,7 @@ export const staticResources = {
         },
         multipleThingsItemsValidationPrefix: {
             en: "Entry {{index}} - ",
-            el: "Καταχώρηση {{index}} - ",
+            el: "Καταχώριση {{index}} - ",
             tr: "Entry {{index}} - "
         },
         multipleThingsAddSuffix: {
@@ -208,12 +208,12 @@ export const staticResources = {
         },
         multipleThingsDeleteTitle: {
             en: "Are you sure you want to delete the item \"{{item}}\"",
-            el: "Σίγουρα θέλετε να διαγράψετε την καταχώρηση \"{{item}}\"",
+            el: "Σίγουρα θέλετε να διαγράψετε την καταχώριση \"{{item}}\"",
             tr: "Are you sure you want to delete the item \"{{item}}\""
         },
         multipleThingsDeleteValidationError: {
             en: "Select if you want to delete this item",
-            el: "Επιλέξτε αν θέλετε να διαγράψετε αυτή την καταχώρηση",
+            el: "Επιλέξτε αν θέλετε να διαγράψετε αυτή την καταχώριση",
             tr: "Select if you want to delete the item"
         },
         multipleThingsEntries: {
@@ -222,12 +222,12 @@ export const staticResources = {
             tr: "Entries"
         },
         multipleThingsDeleteYesOption: {
-            el: "Ναι, θέλω να διαγράψω την καταχώρηση",
+            el: "Ναι, θέλω να διαγράψω την καταχώριση",
             en: "Yes, I want to delete this entry",
             tr: "Yes, I want to delete this entry"
         },
         multipleThingsDeleteNoOption: {
-            el: "Όχι, δεν θέλω να διαγράψω την καταχώρηση",
+            el: "Όχι, δεν θέλω να διαγράψω την καταχώριση",
             en: "No, I don't want to delete this entry",
             tr: "No, I don't want to delete this entry"
         },
