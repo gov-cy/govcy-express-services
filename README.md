@@ -30,6 +30,8 @@ The APIs used for submission, temporary save and file uploads are not part of th
 - [✅ Best Practices](#-best-practices)
 - [📦 Full installation guide](#-full-installation-guide)
 - [🛠️ Usage](#%EF%B8%8F-usage)
+  - [🔑 Authentication Middleware](#-authentication-middleware)
+    -[CY Login Access Policies](#cy-login-access-policies)
   - [🧩 Dynamic services](#-dynamic-services)
     - [Pages](#pages)
     - [Form vs static pages](#form-vs-static-pages)
@@ -142,12 +144,66 @@ npm start
 ```
 The server will start on `https://localhost:44319` (see [NOTES.md](NOTES.md#local-development) for more details on this).
 
-### Authentication Middleware
+### 🔑 Authentication Middleware
 Authentication is handled via OpenID Connect using CY Login and is configured using environment variables. The middleware ensures users have valid sessions before accessing protected routes. 
 
 The CY Login tokens are used to also connect with the various APIs through [cyConnect](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/74/CY-Connect), so make sure to include the correct `scope` when requesting for a [cyLogin client registration](https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/34/Developer-Guide).
 
 The CY Login settings are configured in the `secrets/.env` file.
+
+#### cyLogin Access Policies
+
+Each service can specify which types of authenticated CY Login profiles are allowed to access it using the `site.cyLoginPolicies` property in its site configuration.
+
+```json
+"cyLoginPolicies": ["naturalPerson", "legalPerson"]
+```
+
+##### Supported Policies
+
+| Policy name     | Description                                                  | Typical use                                          |
+| --------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| `naturalPerson` | Allows individual users (Cypriot citizens or foreign residents) who have a verified profile in the Civil Registry. Identified by `profile_type: "Individual"` and a 10-digit identifier starting with `00` (citizen) or `05` (foreigner). | Citizen-facing services, personal applications, etc. |
+| `legalPerson`   | Allows legal entities (companies, partnerships, organisations) with verified profiles in the Registrar of Companies. Identified by `profile_type: "Organisation"` and a `legal_unique_identifier`. | Business-facing services, company submissions, etc.  |
+
+##### How it works
+
+- Access is granted if **any** of the listed policies pass.
+- If the user’s CY Login profile does not match any of the allowed policies, the request is blocked. 
+
+##### Defaults
+
+If `cyLoginPolicies` is omitted, the framework defaults to:
+
+```json
+"cyLoginPolicies": ["naturalPerson"]
+```
+
+This maintains backward compatibility with existing services that only supported individual (civil registry) users.
+
+##### Example
+
+Allow both natural and legal persons:
+
+```json
+"site": {
+  "cyLoginPolicies": ["naturalPerson", "legalPerson"]
+}
+```
+
+Restrict access to natural persons only:
+
+```json
+"site": {
+  "cyLoginPolicies": ["naturalPerson"]
+}
+```
+
+##### Notes
+
+- This configuration applies globally to the service.
+- Both `requireAuth` and `cyLoginPolicy` middlewares must be present on protected routes (automatically included by the default route setup).
+
 
 ### 🧩 Dynamic Services
 Services are rendered dynamically using JSON templates stored in the `/data` folder. All the service configuration, pages, routes, and logic is stored in the JSON files. The service will load `data/:siteId.json` to get the form data when a user visits `/:siteId/:pageUrl`. Checkout the [express-service-shema.json](express-service-shema.json) and the example JSON structure of the **[test.json](data/test.json)** file for more details.
@@ -158,6 +214,7 @@ Here is an example JSON config:
 {
   "site": {
     "id": "test",
+    "cyLoginPolicies": ["naturalPerson"], //<-- Allowed CY Login policies
     "lang": "el",     //<-- Default language
     "languages": [    //<-- Supported languages
       {
