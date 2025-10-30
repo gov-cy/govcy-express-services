@@ -26,6 +26,7 @@ export function govcyPageHandler() {
         logger.debug(`No pageUrl provided for siteId: ${siteId}`, req);
         // Example: Redirect to a default page or load a homepage
         pageUrl = "index"; // Change "index" to whatever makes sense for your service
+        req.params.pageUrl = pageUrl; // Update req.params to reflect the new pageUrl
       }
 
       // 🔍 Find the page by pageUrl
