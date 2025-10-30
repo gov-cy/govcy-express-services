@@ -497,7 +497,7 @@ export function govcyUpdateMyDetailsPostHandler() {
                     // 🔄 User chose to update their details externally
                     const redirectUrl = constructUpdateMyDetailsRedirect(req, userId, umdBaseURL, returnUrl);
                     logger.info("User opted to update details externally", {
-                        userId: user.unique_identifier,
+                        userId: user.sub,
                         redirectUrl
                     });
                     return res.redirect(redirectUrl);

@@ -1,6 +1,7 @@
 
 {
   "site": {
+    "cyLoginPolicies" : ["naturalPerson","legalPerson"],
     "id": "thoc",
     "lang": "el",
     "languages": [
