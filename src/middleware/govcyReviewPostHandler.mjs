@@ -184,7 +184,7 @@ export function govcyReviewPostHandler() {
                 const submissionData = prepareSubmissionData(req, siteId, service);
 
                 // Prepare submission data for API
-                const submissionDataAPI = prepareSubmissionDataAPI(submissionData);
+                const submissionDataAPI = prepareSubmissionDataAPI(submissionData, service);
 
                 logger.debug("Prepared submission data for API:", submissionDataAPI);
 

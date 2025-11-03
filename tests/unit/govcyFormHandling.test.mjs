@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { populateFormData, getFormData } from '../../src/utils/govcyFormHandling.mjs';
+import { populateFormData, getFormData, getMultipleThingsEmptyFormData } from '../../src/utils/govcyFormHandling.mjs';
 
 describe('govcyFormHandling', () => {
     it('1. should populate basic input elements with session data', () => {
@@ -617,9 +617,9 @@ describe('getFormData', () => {
                         'page-1': {
                             formData: [
                                 // Simulate multiple entries as an array
-                                   {proof: { fileId: 'fileA', sha256: 'shaA' }},
-                                   {proof: { fileId: 'fileB', sha256: 'shaB' }},
-                                   {proof: { fileId: 'fileC', sha256: 'shaC' }}
+                                { proof: { fileId: 'fileA', sha256: 'shaA' } },
+                                { proof: { fileId: 'fileB', sha256: 'shaB' } },
+                                { proof: { fileId: 'fileC', sha256: 'shaC' } }
                             ]
                         }
                     }
@@ -860,4 +860,185 @@ describe('populateFormData - _global validation errors', () => {
     });
 
 
+});
+
+
+describe('getMultipleThingsEmptyFormData', () => {
+    it('1. should generate empty object for basic input elements', () => {
+        const page = {
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        { element: 'textInput', params: { name: 'field1' } },
+                                        { element: 'textArea', params: { name: 'field2' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+        const result = getMultipleThingsEmptyFormData(page);
+
+        expect(result).to.deep.equal({
+            field1: '',
+            field2: '',
+        });
+    });
+
+    it('2. should handle radios with conditional elements recursively', () => {
+        const page = {
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        {
+                                            element: 'radios',
+                                            params: {
+                                                name: 'choice',
+                                                items: [
+                                                    {
+                                                        value: 'yes',
+                                                        conditionalElements: [
+                                                            { element: 'textInput', params: { name: 'reasonYes' } },
+                                                        ],
+                                                    },
+                                                    {
+                                                        value: 'no',
+                                                        conditionalElements: [
+                                                            { element: 'textInput', params: { name: 'reasonNo' } },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+        const result = getMultipleThingsEmptyFormData(page);
+
+        expect(result).to.deep.equal({
+            choice: '',
+            reasonYes: '',
+            reasonNo: '',
+        });
+    });
+
+    it('3. should handle fileInput elements by appending Attachment suffix', () => {
+        const page = {
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        { element: 'fileInput', params: { name: 'passport' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+        const result = getMultipleThingsEmptyFormData(page);
+
+        expect(result).to.deep.equal({
+            passportAttachment: '',
+        });
+    });
+
+    it('4. should return empty object if no form element exists', () => {
+        const page = {
+            pageTemplate: {
+                sections: [
+                    { elements: [{ element: 'textInput', params: { name: 'noform' } }] },
+                ],
+            },
+        };
+
+        const result = getMultipleThingsEmptyFormData(page);
+        expect(result).to.deep.equal({});
+    });
+
+    it('5. should handle malformed or missing sections gracefully', () => {
+        const page = {}; // No sections
+        const result = getMultipleThingsEmptyFormData(page);
+        expect(result).to.deep.equal({});
+    });
+
+    it('6. should preserve element order (same as getFormData traversal)', () => {
+        const page = {
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        { element: 'textInput', params: { name: 'first' } },
+                                        { element: 'textInput', params: { name: 'second' } },
+                                        {
+                                            element: 'radios',
+                                            params: {
+                                                name: 'gender',
+                                                items: [
+                                                    {
+                                                        value: 'male',
+                                                        conditionalElements: [
+                                                            { element: 'textInput', params: { name: 'maleDetails' } },
+                                                        ],
+                                                    },
+                                                    {
+                                                        value: 'female',
+                                                        conditionalElements: [
+                                                            { element: 'textInput', params: { name: 'femaleDetails' } },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                        { element: 'textInput', params: { name: 'third' } },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+        const result = getMultipleThingsEmptyFormData(page);
+
+        // Verify all fields exist and order of keys reflects traversal
+        expect(Object.keys(result)).to.deep.equal([
+            'first',
+            'second',
+            'gender',
+            'maleDetails',
+            'femaleDetails',
+            'third',
+        ]);
+    });
 });

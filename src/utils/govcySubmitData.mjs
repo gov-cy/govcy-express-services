@@ -4,7 +4,8 @@ import * as dataLayer from "./govcyDataLayer.mjs";
 import { DSFEmailRenderer } from '@gov-cy/dsf-email-templates';
 import { ALLOWED_FORM_ELEMENTS } from "./govcyConstants.mjs";
 import { evaluatePageConditions } from "./govcyExpressions.mjs";
-import { getPageConfigData } from "./govcyLoadConfigData.mjs";
+import { getServiceConfigData, getPageConfigData } from "./govcyLoadConfigData.mjs";
+import { getMultipleThingsEmptyFormData } from "./govcyFormHandling.mjs";
 import { logger } from "./govcyLogger.mjs";
 import { createUmdManualPageTemplate } from "../middleware/govcyUpdateMyDetails.mjs"
 import nunjucks from "nunjucks";
@@ -252,21 +253,48 @@ export function prepareSubmissionData(req, siteId, service) {
 /**
  * Prepares the submission data for the API, stringifying all relevant fields.
  * 
- * @param {object} data data prepared by `prepareSubmissionData`
+ * @param {object} data data prepared by `prepareSubmissionData`\
+ * @param {object} service service config data
  * @returns {object} The API-ready submission data object with all fields as strings
  */
-export function prepareSubmissionDataAPI(data) {
+export function prepareSubmissionDataAPI(data, service) {
+
+    //deep copy data to avoid mutating the original
+    let dataObj = JSON.parse(JSON.stringify(data));
+    // get site?.submissionAPIEndpoint.isDSFSubmissionPlatform
+    const isDSFSubmissionPlatform = service?.site?.usesDSFSubmissionPlatform || false;
+
+    // If DSF Submission Platform, ensure submissionData is an array
+    // this is intended for multipleThings pages only
+    if (isDSFSubmissionPlatform) {
+        // loop through submissionData 
+        for (const [key, value] of Object.entries(dataObj.submissionData || {})) {
+            // check if the value is an empty array
+            if (Array.isArray(value) && value.length === 0) {
+                // get the pageConfigData for the page
+                try {
+                    const page = getPageConfigData(service, key);
+                    let pageEmptyData = getMultipleThingsEmptyFormData(page);
+                    //replace the dataObj.submissionData[key] with the empty data
+                    dataObj.submissionData[key] = [pageEmptyData];
+    
+                } catch (error) {
+                    logger.error('Error getting pageConfigData:', key);
+                }
+            }
+        }
+    }
 
     return {
-        submissionUsername: String(data.submissionUsername ?? ""),
-        submissionEmail: String(data.submissionEmail ?? ""),
-        submissionData: JSON.stringify(data.submissionData ?? {}),
-        submissionDataVersion: String(data.submissionDataVersion ?? ""),
-        printFriendlyData: JSON.stringify(data.printFriendlyData ?? []),
-        rendererData: JSON.stringify(data.rendererData ?? {}),
-        rendererVersion: String(data.rendererVersion ?? ""),
-        designSystemsVersion: String(data.designSystemsVersion ?? ""),
-        service: JSON.stringify(data.service ?? {})
+        submissionUsername: String(dataObj.submissionUsername ?? ""),
+        submissionEmail: String(dataObj.submissionEmail ?? ""),
+        submissionData: JSON.stringify(dataObj.submissionData ?? {}),
+        submissionDataVersion: String(dataObj.submissionDataVersion ?? ""),
+        printFriendlyData: JSON.stringify(dataObj.printFriendlyData ?? []),
+        rendererData: JSON.stringify(dataObj.rendererData ?? {}),
+        rendererVersion: String(dataObj.rendererVersion ?? ""),
+        designSystemsVersion: String(dataObj.designSystemsVersion ?? ""),
+        service: JSON.stringify(dataObj.service ?? {})
     };
 }
 

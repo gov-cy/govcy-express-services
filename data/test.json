@@ -2,6 +2,7 @@
   "site": {
     "id": "test",
     "lang": "el",
+    "usesDSFSubmissionPlatform": true,
     "languages": [
       {
         "code": "el",
@@ -6526,7 +6527,7 @@
         "nextPage": "multiple-radios-conditions"
       },
       "multipleThings": {
-        "min": 1,
+        "min": 0,
         "max": 5,
         "dedupe": true,
         "itemTitleTemplate": "{{txtMobile | trim}} - {{txtName | trim}}",
