@@ -133,7 +133,7 @@ export function populateFormData(
                     // Delete link (preserve ?route=review if present)
                     element.params.deleteHref = `${basePath}/delete-file/${fieldName}${(routeParam) ? `?route=${routeParam}` : ''}`
 
-                   
+
                 } else {
                     // TODO: Ask Andreas how to handle empty file inputs
                     element.params.value = "";
@@ -294,4 +294,75 @@ export function getFormData(elements, formData, store = {}, siteId = "", pageUrl
 
 
     return filteredData;
+}
+
+/**
+ * Get empty form data for multipleThings elements.
+ * Used to fill in empty multipleThings pages with the correct structure
+ * 
+ * @param {object|Array} pageOrElements The page or elements of a conditional radio
+ * @param {object} emptyObject The object to populate with empty values
+ * @returns {object} An object with empty values for each form element 
+ */
+export function getMultipleThingsEmptyFormData(pageOrElements, emptyObject = {}) {
+    // Determine if we're given a full page or just an array of elements
+    let elements = [];
+    if (Array.isArray(pageOrElements)) {
+        elements = pageOrElements; // recursion case
+    } else if (pageOrElements?.pageTemplate?.sections) {
+        // Deep copy to avoid modifying the original
+        const pageTemplateCopy = JSON.parse(JSON.stringify(pageOrElements.pageTemplate));
+        // Find the first form element in sections
+        for (const section of pageTemplateCopy.sections) {
+            const form = section.elements?.find(el => el.element === "form");
+            if (form) {
+                elements = form?.params?.elements || [];
+                break;
+            }
+        }
+    } else {
+        // No valid elements
+        return emptyObject;
+    }
+
+    // Iterate through elements in order (like getFormData)
+    elements.forEach(element => {
+        const { name } = element.params || {};
+
+        if (ALLOWED_FORM_ELEMENTS.includes(element.element) && name) {
+            // Handle different element types
+            if (["checkboxes", "radios", "select"].includes(element.element)) {
+                emptyObject[name] = "";
+
+                // Handle conditional radios (same recursion pattern as getFormData)
+                if (element.element === "radios" && Array.isArray(element.params?.items)) {
+                    element.params.items.forEach(item => {
+                        if (item.conditionalElements) {
+                            Object.assign(
+                                emptyObject,
+                                getMultipleThingsEmptyFormData(item.conditionalElements, {})
+                            );
+                        }
+                    });
+                }
+            }
+
+            // Handle dateInput (single name, per your clarification)
+            else if (element.element === "dateInput") {
+                emptyObject[name] = "";
+            }
+
+            // Handle fileInput (suffix Attachment, per submission schema)
+            else if (element.element === "fileInput") {
+                emptyObject[`${name}Attachment`] = "";
+            }
+
+            // Handle all other elements (textInput, textArea, datePicker, etc.)
+            else {
+                emptyObject[name] = "";
+            }
+        }
+    });
+
+    return emptyObject;
 }

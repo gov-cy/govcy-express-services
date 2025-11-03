@@ -28,6 +28,7 @@ function validateValue(value, rules) {
     alpha: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff\s]+$/.test(val),
     alphaNum: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff0-9\s]+$/.test(val),
     noSpecialChars: (val) => /^([0-9]|[A-Z]|[a-z]|[α-ω]|[Α-Ω]|[,]|[.]|[-]|[(]|[)]|[?]|[!]|[;]|[:]|[\n]|[\r]|[ _]|[\u0370-\u03ff\u1f00-\u1fff])+$/.test(val),
+    noSpecialCharsEl: (val) => /^([0-9]|[α-ω]|[Α-Ω]|[,]|[.]|[-]|[(]|[)]|[?]|[!]|[;]|[:]|[\n]|[\r]|[ _]|[\u0370-\u03ff\u1f00-\u1fff])+$/.test(val),
     name: (val) => /^[A-Za-zΑ-Ωα-ω\u0370-\u03ff\u1f00-\u1fff\s'-]+$/.test(val),
     tel: (val) => /^(?:\+|00)?[\d\s\-()]{8,20}$/.test(val.replace(/[\s\-()]/g, '')),
     mobile: (val) => /^(?:\+|00)?[\d\s\-()]{8,20}$/.test(val.replace(/[\s\-()]/g, '')),

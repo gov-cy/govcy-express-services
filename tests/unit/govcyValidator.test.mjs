@@ -1911,35 +1911,100 @@ describe('govcyValidator', () => {
         expect(validationErrors).to.deep.equal({});
     });
 
+    //------------- valid noSpecialCharsEl validation ---------------------
+    it('47. should validate `noSpecialCharsEl` fields correctly (Greek and Latin text)', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'noSpecialCharsEl', message: 'Contains invalid characters (EL)' } },
+                ],
+            },
+        ];
+
+        // ✅ Valid examples (Greek + Latin + numbers + punctuation)
+        const validInputs = [
+            'Καλημέρα κόσμε',
+            'Αθήνα 2025',
+            'Δρ. Νικόλαος Παπαδόπουλος',
+            'Τμήμα(Α)',
+            'Χαίρετε!',
+            'Ερώτηση;',
+            'Απάντηση: ναι',
+            'Λεμεσός-Κύπρος',
+            'Πάφος (Δήμος)',
+            '12345',
+            'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ',
+            'αβγδεζηθικλμνξοπρστυφχψω',
+            'Αναφορά\nΝέα γραμμή', // newline
+        ];
+
+        validInputs.forEach((val) => {
+            const formData = { field1: val };
+            const result = validateFormElements(elements, formData, 'page1');
+            expect(result).to.deep.equal({});
+        });
+
+        // ❌ Invalid examples (Latin special chars or symbols not allowed)
+        const invalidInputs = [
+            'Hello@world',  // @ not allowed
+            'Καλημέρα$',    // $ not allowed
+            'Πάφος#Λεμεσός', // # not allowed
+            '<script>',     // < > not allowed
+            '"quote"',      // quotes not allowed
+            '`backtick`',   // not allowed
+            '{brackets}',   // not allowed
+        ];
+
+        invalidInputs.forEach((val) => {
+            const formData = { field1: val };
+            const result = validateFormElements(elements, formData, 'page1');
+            expect(result).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (EL)',
+                    pageUrl: 'page1',
+                },
+            });
+        });
+
+        // ✅ Conditional element case
+        contElements[0].params.items[0].conditionalElements = elements;
+        const formData = { contField1: 'yes', field1: 'Αθήνα' };
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
 
     //TODO: test more validation rules
 });
 
 describe("cyLogin validations", () => {
- 
-  it("1. recognize if the user is a cypriot citizen with `isValidCypriotCitizen`", () => {
 
-    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '0012345678' })).to.be.true;
-    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '9912345678' })).to.be.false;
-    expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '5512345678' })).to.be.false;
-    expect(isValidCypriotCitizen({ profile_type: 'Company', unique_identifier: '0012345678' })).to.be.false;
-    expect(isValidCypriotCitizen({})).to.be.false;
+    it("1. recognize if the user is a cypriot citizen with `isValidCypriotCitizen`", () => {
 
-  });
-  
-  it("2. recognize if the user is a foreign resident with `isValidForeignResident`", () => {
+        expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '0012345678' })).to.be.true;
+        expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '9912345678' })).to.be.false;
+        expect(isValidCypriotCitizen({ profile_type: 'Individual', unique_identifier: '5512345678' })).to.be.false;
+        expect(isValidCypriotCitizen({ profile_type: 'Company', unique_identifier: '0012345678' })).to.be.false;
+        expect(isValidCypriotCitizen({})).to.be.false;
 
-    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0512345678" }))
-      .to.equal(true);
-    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0012345678" }))
-      .to.equal(false);
-    expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "9912345678" }))
-      .to.equal(false);
-    expect(isValidForeignResident({ profile_type: "Company", unique_identifier: "0512345678" }))
-      .to.equal(false);
-    expect(isValidForeignResident({}))
-      .to.equal(false);
+    });
 
-  });
+    it("2. recognize if the user is a foreign resident with `isValidForeignResident`", () => {
+
+        expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0512345678" }))
+            .to.equal(true);
+        expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "0012345678" }))
+            .to.equal(false);
+        expect(isValidForeignResident({ profile_type: "Individual", unique_identifier: "9912345678" }))
+            .to.equal(false);
+        expect(isValidForeignResident({ profile_type: "Company", unique_identifier: "0512345678" }))
+            .to.equal(false);
+        expect(isValidForeignResident({}))
+            .to.equal(false);
+
+    });
 
 });

@@ -2,7 +2,9 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as dataLayer from '../../src/utils/govcyDataLayer.mjs';
 import * as govcyResources from '../../src/resources/govcyResources.mjs';
-import { prepareSubmissionData, preparePrintFriendlyData, generateReviewSummary, generateSubmitEmail } from '../../src/utils/govcySubmitData.mjs';
+import { prepareSubmissionData, preparePrintFriendlyData, generateReviewSummary, generateSubmitEmail, prepareSubmissionDataAPI} from '../../src/utils/govcySubmitData.mjs';
+import { getMultipleThingsEmptyFormData } from '../../src/utils/govcyFormHandling.mjs';
+
 
 describe('govcySubmitData', () => {
     let req, siteId, service;
@@ -1072,3 +1074,88 @@ describe('govcySubmitData', () => {
 });
 
 
+describe('prepareSubmissionDataAPI (integration)', () => {
+    let service, data;
+
+    beforeEach(() => {
+        service = {
+            site: {
+                usesDSFSubmissionPlatform: true // ✅ required to trigger logic
+            },
+            pages: [
+                {
+                    pageData: { url: 'multi-page' },
+                    pageTemplate: {
+                        sections: [
+                            {
+                                elements: [
+                                    {
+                                        element: 'form',
+                                        params: {
+                                            elements: [
+                                                { element: 'textInput', params: { name: 'fieldA', id: 'fieldA' } },
+                                                { element: 'fileInput', params: { name: 'docA', id: 'docA' } },
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        };
+
+        data = {
+            submissionUsername: 'user',
+            submissionEmail: 'test@example.com',
+            submissionDataVersion: '1.0',
+            rendererVersion: '1.1.1',
+            designSystemsVersion: '3.0.0',
+            printFriendlyData: [],
+            rendererData: {},
+            service: {},
+            submissionData: {
+                'multi-page': [] // triggers empty array logic
+            }
+        };
+    });
+
+    it('1. should replace empty array with one empty object when DSF platform enabled', () => {
+        const result = prepareSubmissionDataAPI(data, service);
+        const parsed = JSON.parse(result.submissionData);
+
+        // Rebuild what the helper would generate
+        const expectedEmpty = getMultipleThingsEmptyFormData(service.pages[0]);
+
+        expect(parsed['multi-page']).to.be.an('array').with.lengthOf(1);
+        expect(parsed['multi-page'][0]).to.deep.equal(expectedEmpty);
+        expect(result.submissionEmail).to.equal('test@example.com');
+        expect(result.submissionUsername).to.equal('user');
+    });
+
+    it('2. should skip transformation when DSF platform disabled', () => {
+        service.site.usesDSFSubmissionPlatform = false;
+
+        const result = prepareSubmissionDataAPI(data, service);
+        const parsed = JSON.parse(result.submissionData);
+
+        expect(parsed['multi-page']).to.deep.equal([]); // untouched
+    });
+
+    it('3. should handle additional pages without affecting unrelated data', () => {
+        // Add another normal page (non-empty array)
+        service.pages.push({
+            pageData: { url: 'page2' },
+            pageTemplate: { sections: [] }
+        });
+
+        data.submissionData['page2'] = [{ fieldX: 'value' }];
+
+        const result = prepareSubmissionDataAPI(data, service);
+        const parsed = JSON.parse(result.submissionData);
+
+        expect(parsed['multi-page']).to.be.an('array').with.lengthOf(1);
+        expect(parsed['page2']).to.deep.equal([{ fieldX: 'value' }]); // unchanged
+    });
+});

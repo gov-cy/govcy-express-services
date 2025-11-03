@@ -5,11 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.0] - 2025-11-03
+### Added
+- `site.usesDSFSubmissionPlatform` that indicates whether the service uses the DSF submission platform (transforms submission data as needed)
+  - when `site.usesDSFSubmissionPlatform == true` the structure of an empty object is added on empty arrays in submission data.
+- New validation rule `noSpecialCharsEl`
+
+### Changed
+- Updated email template for better readability
+
 ## [v1.5.0] - 2025-10-30
 ### Added
-- Legal persons (`legalPerson`) cyLogin user policy
-- Natural persons (`naturalPerson`) cyLogin user policy
-- Support for multiple cyLogin user policies with `"cyLoginPolicies": ["naturalPerson","legalPerson"]`
+- [cyLogin Access Policies feature](README.md#cylogin-access-policies) with `"cyLoginPolicies": ["naturalPerson","legalPerson"]`
+  - Natural persons (`naturalPerson`) cyLogin user policy
+  - Legal persons (`legalPerson`) cyLogin user policy
 
 ### Changed
 - Fixed bug on `/:siteId` for `Update my details` or `Multiple things page` 
@@ -28,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.4.0] - 2025-10-27
 ### Added
-- Custom pages and custom logic feature
+- [Custom pages](docs/Custom-pages.md) and custom logic feature
 
 ## [v1.3.1] - 2025-10-23
 ### Changed
