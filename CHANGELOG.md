@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.1] - 2025-11-07
+### Changed
+- Updated readme with `site.usesDSFSubmissionPlatform` in sample service config JSON
+
 ## [v1.6.0] - 2025-11-03
 ### Added
 - `site.usesDSFSubmissionPlatform` that indicates whether the service uses the DSF submission platform (transforms submission data as needed)

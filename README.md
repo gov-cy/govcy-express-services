@@ -214,6 +214,7 @@ Here is an example JSON config:
 {
   "site": {
     "id": "test",
+    "usesDSFSubmissionPlatform": true,  //<-- Indicates whether the service uses the DSF submission platform (transforms submission data as needed)
     "cyLoginPolicies": ["naturalPerson"], //<-- Allowed CY Login policies
     "lang": "el",     //<-- Default language
     "languages": [    //<-- Supported languages
