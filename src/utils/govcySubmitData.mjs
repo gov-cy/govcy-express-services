@@ -101,11 +101,19 @@ export function prepareSubmissionData(req, siteId, service) {
                     // radios conditional elements
                     if (el.element === "radios") {
                         for (const radioItem of el.params.items || []) {
+                            
+                            const isSelected = radioItem.value === value; // 🔸 to decide to populate only selected
+                            
                             for (const condEl of radioItem.conditionalElements || []) {
                                 if (!ALLOWED_FORM_ELEMENTS.includes(condEl.element)) continue;
                                 const condId = condEl.params?.id || condEl.params?.name;
                                 if (!condId) continue;
-                                let condValue = getValue(condEl, pageUrl, req, siteId, idx);
+                                
+                                // 🔸only populate if selected, otherwise empty string
+                                let condValue = isSelected
+                                    ? getValue(condEl, pageUrl, req, siteId, idx)
+                                    : ""; // 🔸 Empty if conditional radio is not selected
+
                                 itemData[condId] = condValue;
 
                                 if (condEl.element === "fileInput") {
@@ -156,6 +164,8 @@ export function prepareSubmissionData(req, siteId, service) {
                         const condEls = radioItem.conditionalElements;
                         if (!Array.isArray(condEls)) continue;
 
+                        const isSelected = radioItem.value === value; // 🔸 to decide to populate only selected
+
                         for (const condElement of condEls) {
                             const condType = condElement.element;
                             if (!ALLOWED_FORM_ELEMENTS.includes(condType)) continue;
@@ -164,7 +174,10 @@ export function prepareSubmissionData(req, siteId, service) {
                             if (!condId) continue;
 
                             // Again: read from session or fallback to ""
-                            const condValue = getValue(condElement, pageUrl, req, siteId) ?? "";
+                            // 🔸 only populate if selected; otherwise keep empty string
+                            const condValue = isSelected
+                                ? getValue(condElement, pageUrl, req, siteId) ?? ""
+                                : ""; // 🔸 Empty if conditional radio is not selected
 
                             // Store even if the field was not visible to user
                             // submissionData[pageUrl].formData[condId] = condValue;

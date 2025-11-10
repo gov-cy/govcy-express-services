@@ -3,6 +3,7 @@
   "site": {
     "cyLoginPolicies" : ["naturalPerson","legalPerson"],
     "id": "thoc",
+    "usesDSFSubmissionPlatform": true,
     "lang": "el",
     "languages": [
       {

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as dataLayer from '../../src/utils/govcyDataLayer.mjs';
 import * as govcyResources from '../../src/resources/govcyResources.mjs';
-import { prepareSubmissionData, preparePrintFriendlyData, generateReviewSummary, generateSubmitEmail, prepareSubmissionDataAPI} from '../../src/utils/govcySubmitData.mjs';
+import { prepareSubmissionData, preparePrintFriendlyData, generateReviewSummary, generateSubmitEmail, prepareSubmissionDataAPI } from '../../src/utils/govcySubmitData.mjs';
 import { getMultipleThingsEmptyFormData } from '../../src/utils/govcyFormHandling.mjs';
 
 
@@ -417,6 +417,174 @@ describe('govcySubmitData', () => {
         // expect(result.submissionData.page1.formData.licenseFileAttachment).to.equal("");
         expect(result.submissionData.page1.licenseFileAttachment).to.equal("");
     });
+
+    it('11b. should include empty strings for unselected conditional radios and real values for selected', () => {
+        // Add a radios field with conditional text inputs
+        service.pages[0].pageTemplate.sections[0].elements[0].params.elements.push({
+            element: 'radios',
+            params: {
+                id: 'preferredContact',
+                name: 'preferredContact',
+                items: [
+                    {
+                        value: 'email',
+                        conditionalElements: [
+                            {
+                                element: 'textInput',
+                                params: {
+                                    id: 'emailAddress',
+                                    name: 'emailAddress',
+                                    label: { en: 'Email Address', el: 'Διεύθυνση Email' }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        value: 'phone',
+                        conditionalElements: [
+                            {
+                                element: 'textInput',
+                                params: {
+                                    id: 'phoneNumber',
+                                    name: 'phoneNumber',
+                                    label: { en: 'Phone Number', el: 'Αριθμός Τηλεφώνου' }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        // Simulate user selecting "email" and filling its conditional field
+        req.session.siteData[siteId].inputData.page1.formData.preferredContact = 'email';
+        req.session.siteData[siteId].inputData.page1.formData.emailAddress = 'user@example.com';
+        req.session.siteData[siteId].inputData.page1.formData.phoneNumber = '9912345678';
+
+        // No phone number entered, since "phone" branch is hidden
+        let result = prepareSubmissionData(req, siteId, service);
+        let formData = result.submissionData.page1;
+
+        // ✅ Selected conditional branch should have real value
+        expect(formData.emailAddress).to.equal('user@example.com');
+
+        // ✅ Non-selected branch should exist but be empty string
+        expect(formData.phoneNumber).to.equal('');
+
+        // ✅ The radio value itself is preserved
+        expect(formData.preferredContact).to.equal('email');
+
+        // Simulate user selecting "email" and filling its conditional field
+        req.session.siteData[siteId].inputData.page1.formData.preferredContact = 'phone';
+
+        // No phone number entered, since "phone" branch is hidden
+        result = prepareSubmissionData(req, siteId, service);
+        formData = result.submissionData.page1;
+
+        // ✅ Selected conditional branch should have real value
+        expect(formData.emailAddress).to.equal('');
+
+        // ✅ Non-selected branch should exist but be empty string
+        expect(formData.phoneNumber).to.equal('9912345678');
+
+        // ✅ The radio value itself is preserved
+        expect(formData.preferredContact).to.equal('phone');
+
+    });
+
+    it('11c. should include empty strings for unselected conditional radios and real values for selected in multipleThings pages', () => {
+        // Add a new multipleThings page with conditional radios
+        service.pages.push({
+            pageData: { url: 'multi-contact', title: { en: 'Multi Contact', el: 'Πολλαπλή Επαφή' } },
+            multipleThings: { itemTitleTemplate: "{{ preferredContact }}" },
+            pageTemplate: {
+                sections: [
+                    {
+                        elements: [
+                            {
+                                element: 'form',
+                                params: {
+                                    elements: [
+                                        {
+                                            element: 'radios',
+                                            params: {
+                                                id: 'preferredContact',
+                                                name: 'preferredContact',
+                                                items: [
+                                                    {
+                                                        value: 'email',
+                                                        conditionalElements: [
+                                                            {
+                                                                element: 'textInput',
+                                                                params: {
+                                                                    id: 'emailAddress',
+                                                                    name: 'emailAddress',
+                                                                    label: { en: 'Email Address', el: 'Διεύθυνση Email' }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        value: 'phone',
+                                                        conditionalElements: [
+                                                            {
+                                                                element: 'textInput',
+                                                                params: {
+                                                                    id: 'phoneNumber',
+                                                                    name: 'phoneNumber',
+                                                                    label: { en: 'Phone Number', el: 'Αριθμός Τηλεφώνου' }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        // Simulate session data for multiple items
+        req.session.siteData[siteId].inputData['multi-contact'] = {
+            formData: [
+                // First item → selected email
+                {
+                    preferredContact: 'email',
+                    emailAddress: 'user1@example.com',
+                    phoneNumber: '9911111111' // should be cleared
+                },
+                // Second item → selected phone
+                {
+                    preferredContact: 'phone',
+                    emailAddress: 'user2@example.com', // should be cleared
+                    phoneNumber: '9922222222'
+                }
+            ]
+        };
+
+        const result = prepareSubmissionData(req, siteId, service);
+        const items = result.submissionData['multi-contact'];
+
+        // ✅ Should have 2 items preserved
+        expect(items).to.be.an('array').with.lengthOf(2);
+
+        // ✅ Item 1: selected "email" → emailAddress real, phoneNumber empty
+        expect(items[0].preferredContact).to.equal('email');
+        expect(items[0].emailAddress).to.equal('user1@example.com');
+        expect(items[0].phoneNumber).to.equal('');
+
+        // ✅ Item 2: selected "phone" → phoneNumber real, emailAddress empty
+        expect(items[1].preferredContact).to.equal('phone');
+        expect(items[1].emailAddress).to.equal('');
+        expect(items[1].phoneNumber).to.equal('9922222222');
+    });
+
+
 
     describe('checkboxes normalization + labels', () => {
         beforeEach(() => {
