@@ -361,26 +361,304 @@ describe('govcyValidator', () => {
             },
         ];
 
-        const formData = { contField1: 'yes', field1: "O'Connor" };
+        //
+        // VALID CASES
+        //
+        const validNames = [
+            // Western Europe
+            
+            "Niccolò d’Este",                  // Italian + curly apostrophe
+            "François Dupré",                  // French accents
+            "García Márquez",                  // Spanish accents
+            "Jean-Luc Picard",                 // hyphen
+            "Marie Thérèse",                   // accents + space
+            "Ana-Maria Popescu",               // Romanian hyphenation
 
-        // Test valid name
-        let validationErrors = validateFormElements(elements, formData, 'page1');
-        expect(validationErrors).to.deep.equal({});
+            // Eastern Europe / Slavic
+            "Łukasz Żółć",                     // Polish
+            "Željko Jovanović",                // Serbian/Croatian/Bosnian
+            "Jiří Šimůnek",                    // Czech
+            "Tõnu Õunapuu",                    // Estonian
+            "Džon Lê",                          // Mixed diacritics
 
-        // Test invalid name
-        formData.field1 = '123';
-        validationErrors = validateFormElements(elements, formData, 'page1');
-        expect(validationErrors).to.deep.equal({
-            page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+            // Greek
+            "Μιχαήλ Παπαδόπουλος",
+            "Ανδρέας Κυριακίδης",
+
+            // Russian & Cyrillic
+            "Иван Иванов",
+            "Алексей Навальный",
+
+            // Nordic / Scandinavian
+            "Åsa Björk",                       // Swedish/Norwegian
+            "Søren Kierkegaard",               // Danish
+            "Árni Guðmundsson",                // Icelandic
+
+            // Armenian / Georgian
+            "Արամ Խաչատրյան",                  // Armenian
+            "Լևոն Արոնյան",                    // Armenian
+            "ლევან გაჩეჩილაძე",                 // Georgian
+            "გიორგი აბაშიძე",                   // Georgian
+
+            // Arabic (RTL)
+            "محمد علي",
+            "عمر بن الخطاب",
+
+            // Turkish
+            "MİHRİBAN ŞEMİ",
+            "Şevval Nur",
+            "Çağrı Ümit",
+
+            // Chinese (Simplified)
+            "李华",
+            "王小明",
+            "张伟",
+
+            // Chinese (Traditional)
+            "陳大文",
+            "黃淑芬",
+
+            // Japanese (Kanji)
+            "山田 太郎",
+            "佐藤 花子",
+
+            // Japanese (Hiragana)
+            "たなか きよし",
+
+            // Japanese (Katakana)
+            "ミカサ アッカーマン",
+
+            // Korean (Hangul)
+            "김민준",
+            "박지성",
+
+            // Mixed-script valid names
+            "王 Xiao Ming",
+            "李-Marie",
+            "陈 O’Brian",
+
+            // Valid punctuation usage
+            "O’Brien",                         // curly apostrophe
+            "D‘Angelo",                        // left curly apostrophe
+            "DʼSouza",                          // modifier apostrophe
+            "Dr. Ivan Petrović",               // dot allowed
+            "A. B. C.",                         // multiple dots
+            // Capitalized English
+            "JOHN SMITH",
+            "ALICE JOHNSON",
+            "MICHAEL BROWN",
+
+            // Capitalized Greek (with accents)
+            "ΜΙΧΑΗΛ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+            "ΓΕΩΡΓΙΟΣ ΑΝΑΣΤΑΣΙΟΥ",
+            "ΧΑΡΑΛΑΜΠΟΣ ΝΙΚΟΛΑΟΥ",
+
+            // Capitalized Greek (NO accents, monotonic style)
+            "ΜΙΧΑΛΗΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+            "ΕΛΕΝΗ ΔΗΜΗΤΡΙΟΥ",
+            "ΑΝΔΡΕΑΣ ΚΥΡΙΑΚΟΥ",
+            "ΧΡΗΣΤΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+
+            // Capitalized Turkish
+            "AHMET YILMAZ",
+            "MEHMET ŞAHİN",
+            "AYŞE DEMİR",
+            "FATMA ÖZTÜRK",
+
+            // Mixed-case Greek (correct but no punctuation)
+            "Μαρία Παπαδοπούλου",
+            "Αντώνης Γεωργίου",
+            "Κυριάκος Χριστοφόρου",
+
+            // Mixed-case Latin (simple, no punctuation)
+            "Maria Papadopoulou",
+            "George Michael",
+            "Aylin Demir",
+
+        ];
+
+        //
+        // INVALID CASES
+        //
+        const invalidNames = [
+            "123",                             // digits not allowed
+            "John99",                          // digits inside
+            "Mary3",                           // trailing digit
+            "Eleni<>Papas",                    // < > not allowed
+            "John_Doe",                        // underscore not allowed
+            "*Maria*",                         // stars not allowed
+            "Robert$",                         // symbol
+            "!!@@##",                          // symbols
+            "Иван123",                         // Cyrillic + digits
+            "Μάριος$",                          // invalid symbol in Greek name
+            "O'Connor",                        // ASCII apostrophe not allowed
+            "O Connor#"                       // invalid character at end
+        ];
+
+        //
+        // VALIDATION: valid names
+        //
+        validNames.forEach(name => {
+            const formData = { field1: name };
+            const errors = validateFormElements(elements, formData, 'page1');
+            expect(errors, `Expected valid for: "${name}"`).to.deep.equal({});
         });
 
+        //
+        // VALIDATION: invalid names
+        //
+        invalidNames.forEach(name => {
+            const formData = { field1: name };
+            const errors = validateFormElements(elements, formData, 'page1');
+            expect(
+                errors,
+                `Expected invalid for: "${name}"`
+            ).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+            });
+        });
+
+        //
+        // CONDITIONAL TEST
+        //
         // Test conditional
+        const formData = { contField1: 'yes', field1: "123" };
         contElements[0].params.items[0].conditionalElements = elements;
-        validationErrors = validateFormElements(contElements, formData, 'page1');
+        let validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({
             page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
         });
     });
+
+    it('9.1. should validate `nameCY` fields correctly', () => {
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'nameCY', message: 'Must be a valid name' } },
+                ],
+            },
+        ];
+
+        //
+        // VALID CASES
+        //
+        const validNames = [
+            "",                    // allowed (required handled separately)
+            " ",                   // allowed
+            "   ",                 // allowed
+
+            // English (Latin)
+            "JOHN SMITH",
+            "Alice Johnson",
+            "Michael-Brown",
+            "A. B. C.",
+
+            // GREEK — monotonic only  
+            "ΜΙΧΑΛΗΣ ΠΑΠΑΔΟΠΟΥΛΟΣ",
+            "ΕΛΕΝΗ ΔΗΜΗΤΡΙΟΥ",
+            "Ανδρέας Κωνσταντίνου",
+            "ΧΡΗΣΤΟΣ ΧΡΙΣΤΟΔΟΥΛΟΥ",
+            "Άννα Μαρία",            // accented Greek allowed  
+
+            // Greek Dialitica
+            "Λοΐζος Λοΐζου Γαϊδαρος",
+            "Μαΐρη Παϊσίου",
+            "ΪΩΑΝΝΑ ΣΩΤΗΡΊΟΥ",
+            "ΫΠΑΤΙΑ ΜΑΪΛΗ",
+            "Αΐδα",
+            "Γαΰρος",
+
+
+            // TURKISH
+            "AHMET YILMAZ",
+            "MİHRİBAN ŞEMİ",
+            "ÇAĞDAŞ ÖZTÜRK",
+            "Ayşe Demir",
+            "FATMA ÜNAL",
+            "Çetin Şahin",
+
+            // Valid punctuation (NO ASCII apostrophe)
+            "O’Brien",               // curly ’
+            "D’Angelo",              // curly ’ 
+            "D‘Angelo",              // left curly ‘
+            "DʼSouza",               // modifier apostrophe
+            "Eleni-Maria",           // hyphen
+            "Dr. Eleni Papadaki",    // dot allowed
+        ];
+
+        //
+        // INVALID CASES
+        //
+        const invalidNames = [
+            // ASCII apostrophe forbidden now
+            "O'Connor",                 // ' is not allowed
+            "D'Angelo",                 // same
+
+            // Digits not allowed
+            "John2",
+            "123",
+
+            // Non-Greek, non-Latin, non-Turkish alphabets
+            "Иван Иванов",              // Cyrillic
+            "محمد علي",                // Arabic
+            "李华",                     // Chinese
+            "佐藤 花子",                // Japanese
+            "김민준",                   // Korean
+            "Արամ",                     // Armenian
+            "გიორგი",                   // Georgian
+
+            // Polytonic Greek (forbidden)
+            "Ἀχιλλεύς",
+            "ᾍλκιβιάδης",
+
+            // Forbidden punctuation
+            "Eleni@Home",
+            "George#Brown",
+            "Maria*Maria",
+            "John_Doe",                 // underscore forbidden
+            "Eleni<>Papas",             // angle brackets
+            "Robert$",                  // symbol
+ 
+        ];
+
+        //
+        // VALIDATION: valid names
+        //
+        validNames.forEach(name => {
+            const formData = { field1: name };
+            const errors = validateFormElements(elements, formData, 'page1');
+            expect(errors, `Expected valid for: "${name}"`).to.deep.equal({});
+        });
+
+        //
+        // VALIDATION: invalid names
+        //
+        invalidNames.forEach(name => {
+            const formData = { field1: name };
+            const errors = validateFormElements(elements, formData, 'page1');
+            expect(
+                errors,
+                `Expected invalid for: "${name}"`
+            ).to.deep.equal({
+                page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+            });
+        });
+
+        //
+        // CONDITIONAL TEST
+        //
+        const formData = { contField1: 'yes', field1: "O'Connor" }; // invalid (ASCII apostrophe)
+        contElements[0].params.items[0].conditionalElements = elements;
+
+        let validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({
+            page1field1: { id: 'field1', message: 'Must be a valid name', pageUrl: 'page1' },
+        });
+    });
+
 
     //------------- valid tel validation ---------------------
     it('10. should validate `tel` fields correctly', () => {

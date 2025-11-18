@@ -437,10 +437,13 @@ export const staticResources = {
                     {
                         check: "valid",
                         params: {
-                            checkValue: "noSpecialChars",
+                            checkValue: "nameCY",
                             message: {
-                                el: "Το όνομα σας πρέπει να αποτελείται μόνο από γράμματα, αριθμούς και ορισμένους άλλους χαρακτήρες",
-                                en: "Your name must consist only of letters, numbers and some other characters",
+                                // el: "Το όνομά σας μπορεί να περιέχει μόνο γράμματα, κενά, παύλες (-), αποστρόφους (’ ‘ ʼ) και τελείες (.)",
+                                // en: "Your name can only include letters, spaces, hyphens (-), apostrophes (’ ‘ ʼ) and dots (.)",
+                                // tr: ""
+                                el: "Το όνομά σας μπορεί να περιέχει μόνο γράμματα, κενά, παύλες (-), αποστρόφους (’ ‘ ʼ) και τελείες (.)",
+                                en: "Your name can only include letters, spaces, hyphens (-), curly apostrophes (’ ‘ ʼ) and dots (.)",
                                 tr: ""
                             }
                         }

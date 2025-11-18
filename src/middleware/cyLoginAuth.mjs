@@ -182,3 +182,15 @@ export function cyLoginPolicy(req, res, next) {
     );
 }
 /************************************************************************/
+
+export function getUniqueIdentifier(req) {
+    // https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/82/Available-Scopes-and-Claims
+    const user = req?.session?.user || {};
+
+    const id =
+        user.unique_identifier ??
+        user.legal_unique_identifier ??
+        "";
+
+    return String(id);
+}
