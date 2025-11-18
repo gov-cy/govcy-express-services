@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.3] - 2025-11-17
+### Added
+- New validation rule `valid` `nameCY` accepting Greek, English and Turkish characters
+
+### Changed
+- Fixed validation issue on `Update My Details` not accepting Turkish characters
+- Updated the `valid` `name` validation to accept UTF-8 characters
+- When `site.usesDSFSubmissionPlatform == true` the `cylogin_unique_identifier` is added to the submission data in the first position.
+
 ## [v1.6.2] - 2025-11-10
 ### Changed
 - Fixed the issue of conditional radio storing values saved before

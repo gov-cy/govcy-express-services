@@ -1243,12 +1243,12 @@ describe('govcySubmitData', () => {
 
 
 describe('prepareSubmissionDataAPI (integration)', () => {
-    let service, data;
+    let service, data, req;
 
     beforeEach(() => {
         service = {
             site: {
-                usesDSFSubmissionPlatform: true // ✅ required to trigger logic
+                usesDSFSubmissionPlatform: true
             },
             pages: [
                 {
@@ -1274,6 +1274,14 @@ describe('prepareSubmissionDataAPI (integration)', () => {
             ]
         };
 
+        req = {
+            session: {
+                user: {
+                    unique_identifier: "0012345678"
+                }
+            }
+        };
+
         data = {
             submissionUsername: 'user',
             submissionEmail: 'test@example.com',
@@ -1289,30 +1297,39 @@ describe('prepareSubmissionDataAPI (integration)', () => {
         };
     });
 
-    it('1. should replace empty array with one empty object when DSF platform enabled', () => {
-        const result = prepareSubmissionDataAPI(data, service);
+    it('1. should replace empty array and insert unique_identifier when DSF is enabled', () => {
+        const result = prepareSubmissionDataAPI(data, service, req);
         const parsed = JSON.parse(result.submissionData);
 
-        // Rebuild what the helper would generate
         const expectedEmpty = getMultipleThingsEmptyFormData(service.pages[0]);
 
+        // ✔ Unique identifier exists
+        expect(parsed.cylogin_unique_identifier).to.equal("0012345678");
+
+        // ✔ Empty array replaced with one empty entry
         expect(parsed['multi-page']).to.be.an('array').with.lengthOf(1);
         expect(parsed['multi-page'][0]).to.deep.equal(expectedEmpty);
+
+        // ✔ Other fields unchanged
         expect(result.submissionEmail).to.equal('test@example.com');
         expect(result.submissionUsername).to.equal('user');
     });
 
-    it('2. should skip transformation when DSF platform disabled', () => {
+    it('2. should skip DSF transformations when platform disabled', () => {
         service.site.usesDSFSubmissionPlatform = false;
 
-        const result = prepareSubmissionDataAPI(data, service);
+        const result = prepareSubmissionDataAPI(data, service, req);
         const parsed = JSON.parse(result.submissionData);
 
-        expect(parsed['multi-page']).to.deep.equal([]); // untouched
+        // ✔ No cylogin_unique_identifier added
+        expect(parsed.cylogin_unique_identifier).to.be.undefined;
+
+        // ✔ Original empty array kept
+        expect(parsed['multi-page']).to.deep.equal([]);
     });
 
-    it('3. should handle additional pages without affecting unrelated data', () => {
-        // Add another normal page (non-empty array)
+    it('3. should not modify non-empty multipleThings pages', () => {
+        // Add another page
         service.pages.push({
             pageData: { url: 'page2' },
             pageTemplate: { sections: [] }
@@ -1320,10 +1337,60 @@ describe('prepareSubmissionDataAPI (integration)', () => {
 
         data.submissionData['page2'] = [{ fieldX: 'value' }];
 
-        const result = prepareSubmissionDataAPI(data, service);
+        const result = prepareSubmissionDataAPI(data, service, req);
         const parsed = JSON.parse(result.submissionData);
 
+        const expectedEmpty = getMultipleThingsEmptyFormData(service.pages[0]);
+
+        // ✔ multi-page transformed normally
         expect(parsed['multi-page']).to.be.an('array').with.lengthOf(1);
-        expect(parsed['page2']).to.deep.equal([{ fieldX: 'value' }]); // unchanged
+        expect(parsed['multi-page'][0]).to.deep.equal(expectedEmpty);
+
+        // ✔ page2 left untouched
+        expect(parsed['page2']).to.deep.equal([{ fieldX: 'value' }]);
+
+        // ✔ cylogin_unique_identifier exists
+        expect(parsed.cylogin_unique_identifier).to.equal("0012345678");
     });
+
+    it('4. should use legal_unique_identifier for legal-person users', () => {
+        req.session.user = {
+            profile_type: "Organisation",
+            legal_unique_identifier: "HE123456"
+        };
+
+        const result = prepareSubmissionDataAPI(data, service, req);
+        const parsed = JSON.parse(result.submissionData);
+
+        expect(parsed.cylogin_unique_identifier).to.equal("HE123456");
+    });
+
+    it('5. should prefer unique_identifier when both identifiers exist, even for legal persons', () => {
+        req.session.user = {
+            profile_type: "Organisation",
+            unique_identifier: "0012345678",
+            legal_unique_identifier: "HE123456"
+        };
+
+        const result = prepareSubmissionDataAPI(data, service, req);
+        const parsed = JSON.parse(result.submissionData);
+
+        // getUniqueIdentifier() always prioritizes cylogin_unique_identifier
+        expect(parsed.cylogin_unique_identifier).to.equal("0012345678");
+    });
+
+    it('6. should insert empty string when legal person has no legal_unique_identifier', () => {
+        req.session.user = {
+            profile_type: "Organisation"
+            // no legal_unique_identifier
+        };
+
+        const result = prepareSubmissionDataAPI(data, service, req);
+        const parsed = JSON.parse(result.submissionData);
+
+        expect(parsed.cylogin_unique_identifier).to.equal("");
+    });
+
+
+
 });

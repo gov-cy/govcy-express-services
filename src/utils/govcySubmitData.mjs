@@ -8,6 +8,7 @@ import { getServiceConfigData, getPageConfigData } from "./govcyLoadConfigData.m
 import { getMultipleThingsEmptyFormData } from "./govcyFormHandling.mjs";
 import { logger } from "./govcyLogger.mjs";
 import { createUmdManualPageTemplate } from "../middleware/govcyUpdateMyDetails.mjs"
+import { getUniqueIdentifier } from "../middleware/cyLoginAuth.mjs"
 import nunjucks from "nunjucks";
 
 /**
@@ -101,14 +102,14 @@ export function prepareSubmissionData(req, siteId, service) {
                     // radios conditional elements
                     if (el.element === "radios") {
                         for (const radioItem of el.params.items || []) {
-                            
+
                             const isSelected = radioItem.value === value; // 🔸 to decide to populate only selected
-                            
+
                             for (const condEl of radioItem.conditionalElements || []) {
                                 if (!ALLOWED_FORM_ELEMENTS.includes(condEl.element)) continue;
                                 const condId = condEl.params?.id || condEl.params?.name;
                                 if (!condId) continue;
-                                
+
                                 // 🔸only populate if selected, otherwise empty string
                                 let condValue = isSelected
                                     ? getValue(condEl, pageUrl, req, siteId, idx)
@@ -268,9 +269,10 @@ export function prepareSubmissionData(req, siteId, service) {
  * 
  * @param {object} data data prepared by `prepareSubmissionData`\
  * @param {object} service service config data
+ * @param {object} req request object
  * @returns {object} The API-ready submission data object with all fields as strings
  */
-export function prepareSubmissionDataAPI(data, service) {
+export function prepareSubmissionDataAPI(data, service, req) {
 
     //deep copy data to avoid mutating the original
     let dataObj = JSON.parse(JSON.stringify(data));
@@ -290,12 +292,20 @@ export function prepareSubmissionDataAPI(data, service) {
                     let pageEmptyData = getMultipleThingsEmptyFormData(page);
                     //replace the dataObj.submissionData[key] with the empty data
                     dataObj.submissionData[key] = [pageEmptyData];
-    
+
                 } catch (error) {
                     logger.error('Error getting pageConfigData:', key);
                 }
             }
         }
+        // get the Unique Identifier of the user
+        const uniqueIdentifier = getUniqueIdentifier(req);
+
+        // Insert unique identifier as the first item in the array
+        dataObj.submissionData = {
+            cylogin_unique_identifier: uniqueIdentifier,
+            ...(dataObj.submissionData || {})
+        };
     }
 
     return {
@@ -936,7 +946,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
         //  Custom page
         // ==========================================================
         // 🆕 Check for custom pages that should appear after this one
-        for (const [customKey, customPage] of   customPageEntries) {
+        for (const [customKey, customPage] of customPageEntries) {
             const insertAfter = customPage.insertAfterPageUrl;
             if (insertAfter && insertAfter === pageUrl && Array.isArray(customPage.email)) {
                 pagesInBody.push(customPage.pageUrl); // Track custom page key for later
@@ -952,7 +962,7 @@ export function generateSubmitEmail(service, submissionData, submissionId, req) 
                 body.push(...customPage.email);
             }
         }
-        
+
         // ==========================================================
     }
 

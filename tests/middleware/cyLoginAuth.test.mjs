@@ -6,7 +6,8 @@ import {
     naturalPersonPolicy,
     legalPersonPolicy,
     cyLoginPolicy, 
-    handleLoginRoute 
+    handleLoginRoute,
+    getUniqueIdentifier 
 } from "../../src/middleware/cyLoginAuth.mjs";
 
 
@@ -275,4 +276,57 @@ describe("handleLoginRoute (behavioral)", () => {
     const err = next.firstCall.args[0];
     expect(err).to.be.instanceOf(Error);
   });
+});
+
+describe("getUniqueIdentifier", () => {
+    let req;
+
+    beforeEach(() => {
+        req = { session: { user: {} } };
+    });
+
+    it("1. returns unique_identifier when present", () => {
+        req.session.user = { unique_identifier: "0012345678" };
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("0012345678");
+    });
+
+    it("2. returns legal_unique_identifier when unique_identifier is missing", () => {
+        req.session.user = { legal_unique_identifier: "HE123456" };
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("HE123456");
+    });
+
+    it("3. prefers unique_identifier when both exist", () => {
+        req.session.user = {
+            unique_identifier: "0012345678",
+            legal_unique_identifier: "HE987654"
+        };
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("0012345678");
+    });
+
+    it("4. returns empty string if both identifiers missing", () => {
+        req.session.user = {};
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("");
+    });
+
+    it("5. returns empty string if req.session.user is null", () => {
+        req.session.user = null;
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("");
+    });
+
+    it("6. returns empty string if req.session is missing (safe fallback)", () => {
+        req = {}; // no session object
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("");
+    });
+
+    it("7. handles invalid types gracefully (numbers, arrays, etc.)", () => {
+        req.session.user = { unique_identifier: 12345 };
+        const result = getUniqueIdentifier(req);
+        expect(result).to.equal("12345"); // JS will coerce to string
+    });
 });
