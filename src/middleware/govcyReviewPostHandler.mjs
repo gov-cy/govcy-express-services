@@ -53,7 +53,7 @@ export function govcyReviewPostHandler() {
                 if (page.updateMyDetails) {
                     logger.debug("Validating UpdateMyDetails page during review POST", { siteId, pageUrl });
                     // Build the manual UMD page template
-                    const umdTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req);
+                    const umdTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req, true);
 
                     // Extract the form element
                     formElement = umdTemplate.sections
