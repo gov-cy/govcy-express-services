@@ -698,9 +698,10 @@ function createUmdHasNoDataPageTemplate(siteId, lang, page, req, umdBaseURL) {
  * @param {string} lang The language 
  * @param {object} page The page object 
  * @param {object} req The request object
+ * @param {boolean} fromReview Whether the page is from the review route
  * @returns {object} The page template 
  */
-export function createUmdManualPageTemplate(siteId, lang, page, req) {
+export function createUmdManualPageTemplate(siteId, lang, page, req, fromReview = false) {
     const umdConfig = page?.updateMyDetails || {};
     // Build hub template
     const pageTemplate = {
@@ -744,7 +745,10 @@ export function createUmdManualPageTemplate(siteId, lang, page, req) {
     //for each element in the scope array
     umdConfig?.scope.forEach(element => {
         // ➕ Add the element 
-        pageTemplate.sections[0].elements[0].params.elements.push(govcyResources.staticResources.elements.umdManual[element]);
+        pageTemplate.sections[0].elements[0].params.elements.push(
+            fromReview ? govcyResources.staticResources.elements.umdManualReview[element] :
+            govcyResources.staticResources.elements.umdManual[element]
+        );
 
     })
     // ➕ Add the continue button
