@@ -1,6 +1,7 @@
 import { govcyFrontendRenderer } from '@gov-cy/govcy-frontend-renderer';
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import {logger} from "../utils/govcyLogger.mjs";
 import {listAvailableSiteConfigs, getServiceConfigData} from "../utils/govcyLoadConfigData.mjs";
 import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
 
@@ -13,7 +14,13 @@ export function govcyRoutePageHandler(req, res, next) {
     // if current service cookie is set redirect to that page
     if (req.cookies.cs) {
         const siteId  = req.cookies.cs;
-        const serviceData = getServiceConfigData(siteId, req.globalLang);
+        let serviceData = {};
+        try {
+            serviceData = getServiceConfigData(siteId, req.globalLang) || {};
+        }
+        catch (e) {
+            logger.debug('Could not read data from cookie:', e.message);
+        }
         if (serviceData.site && serviceData.site.homeRedirectPage) {
             const homeRedirectPage = serviceData.site.homeRedirectPage;
             const lang = req.globalLang || 'el'; // fallback to 'en' if not set
