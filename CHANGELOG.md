@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.6.7] - 2025-11-21
+### Added
+- New validation rule `valid` `textWide_EL`, `textWide_EL_Latn`, `textWide_EL_Latn_TR`, `textWide_UTF` intended for text inputs that accept a wider range of inputs.
+
 ## [v1.6.6] - 2025-11-21
 ### Changed
 - Fixed issue on `govcyRoutePageHandler` when cookie service is not found
