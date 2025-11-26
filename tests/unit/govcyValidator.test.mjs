@@ -366,7 +366,7 @@ describe('govcyValidator', () => {
         //
         const validNames = [
             // Western Europe
-            
+
             "Niccolò d’Este",                  // Italian + curly apostrophe
             "François Dupré",                  // French accents
             "García Márquez",                  // Spanish accents
@@ -621,7 +621,7 @@ describe('govcyValidator', () => {
             "John_Doe",                 // underscore forbidden
             "Eleni<>Papas",             // angle brackets
             "Robert$",                  // symbol
- 
+
         ];
 
         //
@@ -2252,6 +2252,457 @@ describe('govcyValidator', () => {
         const formData = { contField1: 'yes', field1: 'Αθήνα' };
         const validationErrors = validateFormElements(contElements, formData, 'page1');
         expect(validationErrors).to.deep.equal({});
+    });
+
+    //------------- valid textWide_EL validation ---------------------
+    it('48. should validate `textWide_EL` fields correctly (Greek-wide text)', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_EL', message: 'Contains invalid characters (textWide_EL)' } },
+                ],
+            },
+        ];
+
+        //
+        // VALID INPUTS
+        //
+        const validInputs = [
+            // Basic Greek text
+            'Καλημέρα',
+            'Γειά σου Κόσμε',
+
+            // Greek + numbers
+            'Αθήνα 2025',
+            'Δήμος Λεμεσού 123',
+
+            // Greek punctuation
+            'Χαίρετε!',
+            'Ερώτηση;',
+            'Απάντηση: ναι',
+            'Τιμή €20',   // euro symbol allowed
+
+            // Greek quotes
+            '«Καλημέρα»',
+            '“Καλημέρα”',
+
+            // Different apostrophes
+            'Τσ’αιρι',   // Cypriot
+            "Τη‘ν ημέρα", // left single quote
+            "Τη’ν ημέρα", // right single quote
+
+            // Dashes & separators
+            'Αθήνα-Λεμεσός',
+            'Αθήνα–Λεμεσός',  // en-dash
+            'Αθήνα—Λεμεσός',  // em-dash
+            'Τελική·τιμή',    // middle dot
+
+            // Parentheses & brackets
+            'Κέντρο (Αθήνα)',
+            'Τμήμα [Α]',
+            'Κατηγορία {Β}',
+
+            // Angle brackets (allowed)
+            'Τιμή <20€>',
+
+            // Symbols allowed
+            'Αριθμός & Τελική Τιμή',
+            'Κόστος + ΦΠΑ',
+            'Προϊόν #1',
+            'Έκπτωση 20%',
+            'Αντιστοιχία = ναι',
+            'Παράγραφος _1',
+            'Λεμεσός*Πάφος',     // * allowed
+            'Λεμεσός/Πάφος',     // / allowed
+            'Λεμεσός\\Πάφος',    // \ allowed
+            'Λεμεσός|Πάφος',    // | allowed
+
+            // Multiline
+            'Αναφορά\nΝέα γραμμή',
+        ];
+
+        validInputs.forEach((val) => {
+            const formData = { field1: val };
+            const result = validateFormElements(elements, formData, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        //
+        // INVALID INPUTS
+        //
+        const invalidInputs = [
+            // Latin letters not allowed
+            'Hello',
+            'Test123',
+            'Athina',
+
+            // Turkish not allowed
+            'Çağrı',
+            'Özgür',
+
+            // Cyrillic not allowed
+            'Иван',
+            'Москва',
+
+            // Chinese / Japanese / Arabic not allowed
+            '東京',
+            '李华',
+            'محمد',
+
+            // Emoji not allowed
+            'Καλημέρα 🙂',
+            'Γειά σου ❤️',
+
+            // Disallowed symbols (not in the regex)
+            '`backtick`',
+            'Καλημέρα~κόσμε`',
+
+            // Zero-width characters (common copy/paste issue)
+            'Καλη\u200Bμέρα', // zero-width space
+            'Αθήνα\u200DΑθήνα', // zero-width joiner
+
+            // Control characters
+            'Αθήνα\u0007', // bell character
+        ];
+
+        invalidInputs.forEach((val) => {
+            const formData = { field1: val };
+            const result = validateFormElements(elements, formData, 'page1');
+            expect(
+                result,
+                `Expected invalid for: "${val}"`
+            ).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_EL)',
+                    pageUrl: 'page1',
+                },
+            });
+        });
+
+        //
+        // CONDITIONAL CASE
+        //
+        contElements[0].params.items[0].conditionalElements = elements;
+        const formData = { contField1: 'yes', field1: 'Καλημέρα κόσμε' };
+        const validationErrors = validateFormElements(contElements, formData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    it('49. should validate `textWide_EL_Latn` fields correctly (Greek + Latin wide text)', () => {
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_EL_Latn', message: 'Contains invalid characters (textWide_EL_Latn)' } },
+                ],
+            },
+        ];
+
+        //
+        // VALID INPUTS
+        //
+        const validInputs = [
+            'Καλημέρα κόσμε',
+            'Αθήνα 2025',
+            'Λευκωσία (Κύπρος)',
+            'Hello world',
+            'European Union — 2025',
+            'Athens Αθήνα',
+            'Dr. Maria Papadaki',
+            'Value: 100€',
+            'Symbols *&@# ok',
+            'Brackets [ok] {fine} (nice)',
+            'Quotes “Hello” and «Γεια»',
+            'Path / folder \\ path',
+            'Line1\nLine2',
+            '   spaces   ',
+            'Pipe | ok',
+        ];
+
+        validInputs.forEach((val) => {
+            const result = validateFormElements(elements, { field1: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        //
+        // INVALID INPUTS — EXACTLY matching the regex rules
+        //
+        const invalidInputs = [
+            // Non-Greek/Latin scripts
+            'Иван',          // Cyrillic
+            'محمد',          // Arabic
+            '王小明',         // Chinese
+            '佐藤 花子',       // Japanese
+            '김민준',         // Korean
+            'Արամ',          // Armenian
+            'გიორგი',        // Georgian
+
+            // Emojis
+            'Hello 😊',
+            'Test 😀👍',
+            'Αθήνα 🌍',
+
+            // Disallowed ASCII symbols
+            'Backtick ` ok',  // ` NOT allowed
+            'Tilde ~ ok',     // ~ NOT allowed
+            'Caret ^ ok',     // ^ NOT allowed
+
+            // Mixed non-allowed scripts
+            'Test Иван',
+            'Mix عربى English',
+        ];
+
+        invalidInputs.forEach((val) => {
+            const errors = validateFormElements(elements, { field1: val }, 'page1');
+            expect(
+                errors,
+                `Expected invalid for: "${val}"`
+            ).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_EL_Latn)',
+                    pageUrl: 'page1'
+                },
+            });
+        });
+
+        //
+        // CONDITIONAL
+        //
+        contElements[0].params.items[0].conditionalElements = elements;
+        const conditionalFormData = { contField1: 'yes', field1: 'Athens Αθήνα' };
+        const validationErrors = validateFormElements(contElements, conditionalFormData, 'page1');
+        expect(validationErrors).to.deep.equal({});
+    });
+
+    it('50. should validate `textWide_EL_Latn_TR` fields correctly (Greek + Latin + Turkish wide text)', () => {
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_EL_Latn_TR', message: 'Contains invalid characters (textWide_EL_Latn_TR)' } },
+                ],
+            },
+        ];
+
+        //
+        // VALID INPUTS
+        //
+        const validInputs = [
+            // Greek
+            'Καλημέρα κόσμε',
+            'Αθήνα 2025',
+            'Λευκωσία – Κύπρος',
+
+            // Latin
+            'Hello world',
+            'European Union — 2025',
+            'Dr. Maria Papadaki',
+
+            // Turkish
+            'Çağdaş Öztürk',
+            'MİHRİBAN ŞEMİ',
+            'çalışma örneği',
+            'Üniversite öğrencisi',
+            'Güvenlik şifresi',
+
+            // Mixed Greek + Latin + Turkish
+            'Athens Αθήνα İstanbul',
+            'Tekirdağ Λεμεσός Example',
+            'Örnek Τεστ 2025',
+
+            // Allowed punctuation / symbols
+            'Value: 100€',
+            'Symbols *&@# ok',
+            'Brackets [ok] {fine} (nice)',
+            'Quotes “Hello” and «Γεια»',
+            'Test | pipes allowed',
+            'Slash / backslash \\ ok',
+
+            // Whitespace
+            'Line1\nLine2',
+            '  leading and trailing spaces  ',
+        ];
+
+        validInputs.forEach((val) => {
+            const result = validateFormElements(elements, { field1: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        //
+        // INVALID INPUTS
+        //
+        const invalidInputs = [
+            // Non Greek/Latin/Turkish scripts
+            'Иван',          // Cyrillic
+            'محمد',          // Arabic
+            '王小明',         // Chinese
+            '佐藤 花子',       // Japanese
+            '김민준',         // Korean
+            'Արամ',          // Armenian
+            'გიორგი',        // Georgian
+
+            // Emojis
+            'Hello 😊',
+            'Test 😀👍',
+            'Καλημέρα 🌍',
+
+            // Disallowed ASCII punctuation
+            'Backtick ` here',
+            'Caret ^ here',
+            'Tilde ~ here',
+
+            // Mixed forbidden scripts
+            'Test Иван',
+            'Greek Ελληνικά + عربى',
+        ];
+
+        invalidInputs.forEach((val) => {
+            const errors = validateFormElements(elements, { field1: val }, 'page1');
+            expect(
+                errors,
+                `Expected invalid for: "${val}"`
+            ).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_EL_Latn_TR)',
+                    pageUrl: 'page1'
+                },
+            });
+        });
+
+        //
+        // CONDITIONAL CASE
+        //
+        contElements[0].params.items[0].conditionalElements = elements;
+        const conditionalData = { contField1: 'yes', field1: 'Çağdaş Αθήνα Example' };
+        const conditionalResult = validateFormElements(contElements, conditionalData, 'page1');
+        expect(conditionalResult).to.deep.equal({});
+    });
+
+    it('51. should validate `textWide_UTF` fields correctly (all Unicode letters + numbers + wide punctuation)', () => {
+
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_UTF', message: 'Contains invalid characters (textWide_UTF)' } },
+                ],
+            },
+        ];
+
+        //
+        // VALID INPUTS
+        //
+        const validInputs = [
+            // Greek
+            'Καλημέρα κόσμε',
+            'Αθήνα 2025',
+
+            // Latin
+            'Hello world',
+            'Dr. Maria Papadaki',
+
+            // Turkish
+            'Çağdaş Öztürk',
+            'MİHRİBAN ŞEMİ',
+
+            // Cyrillic
+            'Иван Иванов',
+            'Москва 2024',
+
+            // Arabic
+            'محمد علي',
+            'مرحبا بالعالم',
+
+            // Hebrew
+            'שלום עולם',
+
+            // Armenian / Georgian
+            'Արամ Խաչատրյան',
+            'გიორგი აბაშიძე',
+
+            // Chinese / Japanese / Korean
+            '王小明',
+            '佐藤 花子',
+            'こんにちは 世界',
+            '김민준',
+
+            // Indian scripts
+            'नमस्ते दुनिया',
+            'வணக்கம் உலகம்',
+
+            // Numbers (all Unicode sets)
+            '٠١٢٣٤٥٦٧٨٩',   // Arabic-Indic
+            '१२३४५६',       // Devanagari
+
+            // Allowed punctuation
+            'Value: 100€',
+            'Check [brackets] {curly} (round)',
+            'Quotes “Hello” and «Γεια»',
+            'Symbols *&@# ok',
+            'Paths / and \\ both work',
+            'Pipe | here',
+
+            // Whitespace
+            'Line1\nLine2',
+            '   spaced out   ',
+        ];
+
+        validInputs.forEach((val) => {
+            const result = validateFormElements(elements, { field1: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+
+        //
+        // INVALID INPUTS
+        //
+        const invalidInputs = [
+            // Emojis
+            'Hello 😊',
+            'Test 😀👍',
+            'Καλημέρα 🌍',
+
+            // Disallowed ASCII punctuation
+            'Backtick ` here',  // NOT allowed
+            'Caret ^ here',     // NOT allowed
+            'Tilde ~ here',     // NOT allowed
+
+            // Mixed valid + emoji
+            'Example 中文 😊 text',
+        ];
+
+        invalidInputs.forEach((val) => {
+            const errors = validateFormElements(elements, { field1: val }, 'page1');
+            expect(
+                errors,
+                `Expected invalid for: "${val}"`
+            ).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_UTF)',
+                    pageUrl: 'page1'
+                },
+            });
+        });
+
+
+        //
+        // CONDITIONAL CASE
+        //
+        contElements[0].params.items[0].conditionalElements = elements;
+        const conditionalData = { contField1: 'yes', field1: 'Καλημέρα 世界 2025' };
+        const conditionalResult = validateFormElements(contElements, conditionalData, 'page1');
+        expect(conditionalResult).to.deep.equal({});
     });
 
 

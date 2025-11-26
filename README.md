@@ -1817,12 +1817,18 @@ The validation rules for each element are defined in the `"validations` array fo
 
 - `valid`: Checks the value against the specified rule's `checkValue`. Available rules:
     - `noSpecialChars`: Consists only of letters, numbers and some other characters
-    - `numeric`: Numeri input
+    - `noSpecialCharsEl`: Consists only of Greek letters, numbers and some other characters
+    - `textWide_EL`: Consists of Greek Letters and a wider range of characters
+    - `textWide_EL_Latn`: Consists of Greek Letters, Latin letters, numbers and a wider range of characters
+    - `textWide_EL_Latn_TR`: Consists of Greek Letters, Latin letters, Turkish letters, numbers and a wider range of characters
+    - `textWide_UTF`: Consists of any letters, numbers and a wider range of characters
+    - `numeric`: Numeric input
     - `numDecimal`: Numeric decimal input
     - `currency`: Currency input (numeric with 2 decimal places)
     - `alpha`: Alphabetic input
     - `alphaNum`: Alphanumeric input
     - `name`: Name input
+    - `nameCY`: Name input for Cyprus (Greek, Latin and Turkish characters)
     - `tel`: Telephone input
     - `mobile`: Mobile input
     - `telCY`: Cyprus telephone input
