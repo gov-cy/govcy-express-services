@@ -351,8 +351,8 @@ export const staticResources = {
                         params: {
                             checkValue: "",
                             message: {
-                                el: "Επιλέξτε ναι εάν θέλετε να χρησιμοποιήσουμε τα στοιχεία σας",
-                                en: "Select yes if you want us to use your details",
+                                el: "Επιλέξετε αν θέλετε να χρησιμοποιηθούν τα στοιχεία που φαίνονται εδώ",
+                                en: "Choose if you'd like to use the details shown here",
                                 tr: ""
                             }
                         }
