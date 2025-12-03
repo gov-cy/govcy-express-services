@@ -110,12 +110,12 @@ function _uploadFileEventHandler(event) {
   var input = event.target;
   var messages = {
     "uploadSuccesful": {
-      "el": "Το αρχείο ανεβαστηκε",
+      "el": "Το αρχείο ανέβηκε με επιτυχία",
       "en": "File uploaded successfully",
       "tr": "File uploaded successfully"
     },
     "uploadFailed": {
-      "el": "Αποτυχια ανεβασης",
+      "el": "Το αρχείο δεν ανέβηκε",
       "en": "File upload failed",
       "tr": "File upload failed"
     },
