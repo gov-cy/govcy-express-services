@@ -6,8 +6,6 @@
 [![coverage](coverage-badges.svg)](coverage-summary.json)
 
 > ⚠️ **Warning:**  
-> This package is **under active development** and is not a finished product. It is intended for testing, acceptance, integration, and browser testing purposes only. 
-> 
 > **No guarantees are provided regarding stability, security, or compliance. Using this package does not imply your product or service will automatically pass any required assessments, audits, or certifications by the Cyprus government or any other authority.**  
 >
 > You are responsible for ensuring your own compliance, security, and quality assurance processes.
