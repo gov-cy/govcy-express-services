@@ -460,6 +460,18 @@ export function isValidForeignResident(user = {}) {
  * @throws {Error} If the date of birth is missing or invalid.
  * */
 export function isUnder18(dobString) {
+  return isAgeUnder(dobString, 18);
+}
+
+
+/**
+ * Checks if the user is under a specified minimum age based on their date of birth.
+ * @param {string} dobString - The date of birth in the format "YYYY-MM-DD".
+ * @param {number} minimumAge - The minimum age to check against (default is 16).
+ * @returns {boolean} True if the user is under the specified minimum age, otherwise false.
+ * @throws {Error} If the date of birth is missing or invalid.
+ * */
+export function isAgeUnder(dobString, minimumAge = 16) {
   if (!dobString) throw new Error("DOB is missing");
   const dob = new Date(dobString);
   if (isNaN(dob)) throw new Error("Invalid DOB format");
@@ -470,7 +482,7 @@ export function isUnder18(dobString) {
     today.getMonth() > dob.getMonth() ||
     (today.getMonth() === dob.getMonth() && today.getDate() >= dob.getDate());
 
-  return (hasHadBirthday ? ageDiff : ageDiff - 1) < 18;
+  return (hasHadBirthday ? ageDiff : ageDiff - 1) < minimumAge;
 }
 
 

@@ -16,7 +16,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from '../utils/govcyLogger.mjs';
 import { handleMiddlewareError, dateStringISOtoDMY } from "../utils/govcyUtils.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
-import { isUnder18, isValidCypriotCitizen, validateFormElements } from "../utils/govcyValidator.mjs";
+import { isAgeUnder, isValidCypriotCitizen, validateFormElements } from "../utils/govcyValidator.mjs";
 import { populateFormData, getFormData } from "../utils/govcyFormHandling.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { tempSaveIfConfigured } from "../utils/govcyTempSave.mjs";
@@ -107,8 +107,8 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
                 return handleMiddlewareError(`updateMyDetailsAPIEndpoint - Missing response data`, 500, next);
             }
 
-            // calculate if person in under 18 based on date of birth
-            if (isUnder18(response.Data.dob)) {
+            // calculate if person in under 16 based on date of birth
+            if (isAgeUnder(response.Data.dob, 16)) {
                 // --------------- Not eligible for Update my details ---------------
                 // --------------- Page variant 1
                 pageVariant = 1;
@@ -368,8 +368,8 @@ export function govcyUpdateMyDetailsPostHandler() {
                     return handleMiddlewareError(`updateMyDetailsAPIEndpoint - Missing response data`, 500, next);
                 }
 
-                // calculate if person in under 18 based on date of birth
-                if (isUnder18(response.Data.dob)) {
+                // calculate if person in under 16 based on date of birth
+                if (isAgeUnder(response.Data.dob, 16)) {
                     // --------------- Not eligible for Update my details ---------------
                     // --------------- Page variant 1:Manual form for non-eligible users
                     pageVariant = 1;
