@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { validateFormElements, isValidCypriotCitizen, isValidForeignResident } from '../../src/utils/govcyValidator.mjs';
+import { 
+  validateFormElements,
+  isValidCypriotCitizen,
+  isValidForeignResident,
+  isUnder18,
+  isAgeUnder, } from '../../src/utils/govcyValidator.mjs';
 import * as govcyResources from '../../src/resources/govcyResources.mjs';
 
 describe('govcyValidator', () => {
@@ -2703,6 +2708,46 @@ describe('govcyValidator', () => {
         const conditionalData = { contField1: 'yes', field1: 'Καλημέρα 世界 2025' };
         const conditionalResult = validateFormElements(contElements, conditionalData, 'page1');
         expect(conditionalResult).to.deep.equal({});
+    });
+
+    describe('52. age helpers', () => {
+        const formatISO = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const dobYearsAgo = (years, dayOffset = 0) => {
+            const date = new Date();
+            date.setHours(0, 0, 0, 0);
+            date.setFullYear(date.getFullYear() - years);
+            date.setDate(date.getDate() + dayOffset);
+            return formatISO(date);
+        };
+
+        it('isUnder18 returns true when the 18th birthday is still upcoming', () => {
+            expect(isUnder18(dobYearsAgo(18, 1))).to.equal(true);
+        });
+
+        it('isUnder18 returns false once the user has turned 18', () => {
+            expect(isUnder18(dobYearsAgo(18, 0))).to.equal(false);
+        });
+
+        it('isAgeUnder honours the customizable minimumAge threshold', () => {
+            expect(isAgeUnder(dobYearsAgo(21, 1), 21)).to.equal(true);
+            expect(isAgeUnder(dobYearsAgo(21, -1), 21)).to.equal(false);
+        });
+
+        it('isAgeUnder defaults to 16 when minimumAge is omitted', () => {
+            expect(isAgeUnder(dobYearsAgo(16, 1))).to.equal(true);
+            expect(isAgeUnder(dobYearsAgo(16, 0))).to.equal(false);
+        });
+
+        it('throws descriptive errors for missing or invalid DOB values', () => {
+            expect(() => isAgeUnder()).to.throw('DOB is missing');
+            expect(() => isAgeUnder('not-a-date')).to.throw('Invalid DOB format');
+        });
     });
 
 
