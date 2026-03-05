@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -64,7 +64,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "form-data": "^4.0.4",
-    "multer": "^2.1.0",
+    "multer": "^2.1.1",
     "nunjucks": "^3.2.4",
     "openid-client": "^6.3.4",
     "puppeteer": "^24.6.0"
