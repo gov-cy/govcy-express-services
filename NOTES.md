@@ -642,9 +642,6 @@ flowchart TD
                 RS2["govcyReviewPostHandler"]:::internal
                 RS3["govcySuccessPageHandler"]:::internal
             end
-            subgraph "PDF Generation"
-                P1["govcyPDFRender"]:::internal
-            end
             subgraph "Logging & Error"
                 L1["govcyHttpErrorHandler"]:::internal
                 L2["govcyLogger"]:::internal
@@ -706,7 +703,6 @@ flowchart TD
     click RS1 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyReviewPageHandler.mjs"
     click RS2 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyReviewPostHandler.mjs"
     click RS3 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcySuccessPageHandler.mjs"
-    click P1 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyPDFRender.mjs"
     click L1 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyHttpErrorHandler.mjs"
     click L2 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyLogger.mjs"
     click L3 "https://github.com/gov-cy/govcy-express-services/blob/main/src/middleware/govcyRequestTimer.mjs"

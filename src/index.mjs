@@ -8,7 +8,6 @@ import { requestTimer } from './middleware/govcyRequestTimer.mjs';
 import { noCacheAndSecurityHeaders } from "./middleware/govcyHeadersControl.mjs";
 import { renderGovcyPage } from "./middleware/govcyPageRender.mjs";
 import { govcyPageHandler } from './middleware/govcyPageHandler.mjs';
-import { govcyPDFRender } from './middleware/govcyPDFRender.mjs';
 import { govcyFormsPostHandler } from './middleware/govcyFormsPostHandler.mjs';
 import { govcyReviewPostHandler } from './middleware/govcyReviewPostHandler.mjs';
 import { govcyReviewPageHandler } from './middleware/govcyReviewPageHandler.mjs';
@@ -261,13 +260,10 @@ export default function initializeGovCyExpressService(opts = {}) {
 
   // 🏠 -- ROUTE: Handle route with only siteId (/:siteId or /:siteId/)
   app.get('/:siteId', serviceConfigDataMiddleware, requireAuth, cyLoginPolicy, govcyServiceEligibilityHandler(true), govcyLoadSubmissionData(), govcyPageHandler(), renderGovcyPage());
-
+  
   // 👀 -- ROUTE: Add Review Page Route (BEFORE the dynamic route)
   app.get('/:siteId/review', serviceConfigDataMiddleware, requireAuth, cyLoginPolicy, govcyServiceEligibilityHandler(), govcyLoadSubmissionData(), govcyReviewPageHandler(), renderGovcyPage());
-
-  // ✅📄 -- ROUTE: Add Success PDF Route (BEFORE the dynamic route)
-  app.get('/:siteId/success/pdf', serviceConfigDataMiddleware, requireAuth, cyLoginPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(true), govcyPDFRender());
-
+  
   // ✅ -- ROUTE: Add Success Page Route (BEFORE the dynamic route)
   app.get('/:siteId/success', serviceConfigDataMiddleware, requireAuth, cyLoginPolicy, govcyServiceEligibilityHandler(), govcySuccessPageHandler(), renderGovcyPage());
 
