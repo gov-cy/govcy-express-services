@@ -182,7 +182,76 @@ This profile provides the full set of integration features supported by Express 
 
 ------
 
-## 1.4 Endpoint Path Convention
+## 1.4 Service Execution Flow
+
+The diagram below illustrates a typical interaction between **Express Services** and the **backend system** during a service journey.
+
+> [!NOTE]  
+> Not all services use all endpoints shown in this diagram.  
+>
+> The endpoints used depend on the selected [integration profile](#13-integration-profiles).
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant ExpressServices as Express Services
+    participant Backend
+
+    rect rgb(245, 245, 245)
+        Note over User,Backend: Before start
+        User->>ExpressServices: Start service
+        opt Profile B / D
+            ExpressServices->>Backend: POST /eligibility
+            Backend-->>ExpressServices: Eligibility result
+        end
+        opt Profile C / D
+            ExpressServices->>Backend: GET /temporary-save
+            Backend-->>ExpressServices: Draft data or null
+        end
+    end
+
+    rect rgb(235, 245, 255)
+        Note over User,Backend: During service journey
+        loop While user completes service pages
+            User->>ExpressServices: Submit page
+            opt Profile C / D
+                ExpressServices->>Backend: PUT /temporary-save
+                Backend-->>ExpressServices: Draft saved
+            end
+        end
+
+        rect rgb(255, 250, 235)
+            Note over User,Backend: Files
+            opt Upload file
+                User->>ExpressServices: Upload file
+                ExpressServices->>Backend: POST /file-upload/:tag
+                Backend-->>ExpressServices: File metadata
+            end
+
+            opt View file
+                User->>ExpressServices: View uploaded file
+                ExpressServices->>Backend: GET /file-download/:referenceValue/:fileId/:sha256
+                Backend-->>ExpressServices: File metadata + base64
+            end
+
+            opt Delete file
+                User->>ExpressServices: Delete uploaded file
+                ExpressServices->>Backend: DELETE /file-delete/:fileId/:sha256
+                Backend-->>ExpressServices: Delete result
+            end
+        end
+    end
+
+    rect rgb(245, 255, 245)
+        Note over User,Backend: Submit
+        User->>ExpressServices: Review and confirm
+        ExpressServices->>Backend: POST /submit
+        Backend-->>ExpressServices: Submission result
+        ExpressServices-->>User: Confirmation page
+    end
+```
+
+## 1.5 Endpoint Path Convention
 
 This specification defines the **behaviour and contract** of each backend endpoint.
 
@@ -410,7 +479,7 @@ This section defines the **backend API contract** for each integration endpoint 
 
 The actual endpoint URLs are **configurable per service**, as described in:
 
-- [Endpoint path convention](#14-endpoint-path-convention)
+- [Endpoint path convention](#15-endpoint-path-convention)
 
 Examples in this document use reference paths such as:
 
