@@ -197,58 +197,50 @@ sequenceDiagram
     participant ExpressServices as Express Services
     participant Backend
 
-    rect rgb(245, 245, 245)
-        Note over User,Backend: Before start
-        User->>ExpressServices: Start service
-        opt Profile B / D
-            ExpressServices->>Backend: POST /eligibility
-            Backend-->>ExpressServices: Eligibility result
-        end
+    Note over User,Backend: Before start
+    User->>ExpressServices: Start service
+    opt Profile B / D
+        ExpressServices->>Backend: POST /eligibility
+        Backend-->>ExpressServices: Eligibility result
+    end
+    opt Profile C / D
+        ExpressServices->>Backend: GET /temporary-save
+        Backend-->>ExpressServices: Draft data or null
+    end
+
+    Note over User,Backend: During service journey
+    loop While user completes service pages
+        User->>ExpressServices: Submit page
         opt Profile C / D
-            ExpressServices->>Backend: GET /temporary-save
-            Backend-->>ExpressServices: Draft data or null
+            ExpressServices->>Backend: PUT /temporary-save
+            Backend-->>ExpressServices: Draft saved
+        end
+
+        Note over User,Backend: Files
+        opt Upload file
+            User->>ExpressServices: Upload file
+            ExpressServices->>Backend: POST /file-upload/:tag
+            Backend-->>ExpressServices: File metadata
+        end
+
+        opt View file
+            User->>ExpressServices: View uploaded file
+            ExpressServices->>Backend: GET /file-download/:referenceValue/:fileId/:sha256
+            Backend-->>ExpressServices: File metadata + base64
+        end
+
+        opt Delete file
+            User->>ExpressServices: Delete uploaded file
+            ExpressServices->>Backend: DELETE /file-delete/:fileId/:sha256
+            Backend-->>ExpressServices: Delete result
         end
     end
 
-    rect rgb(235, 245, 255)
-        Note over User,Backend: During service journey
-        loop While user completes service pages
-            User->>ExpressServices: Submit page
-            opt Profile C / D
-                ExpressServices->>Backend: PUT /temporary-save
-                Backend-->>ExpressServices: Draft saved
-            end
-        end
-
-        rect rgb(255, 250, 235)
-            Note over User,Backend: Files
-            opt Upload file
-                User->>ExpressServices: Upload file
-                ExpressServices->>Backend: POST /file-upload/:tag
-                Backend-->>ExpressServices: File metadata
-            end
-
-            opt View file
-                User->>ExpressServices: View uploaded file
-                ExpressServices->>Backend: GET /file-download/:referenceValue/:fileId/:sha256
-                Backend-->>ExpressServices: File metadata + base64
-            end
-
-            opt Delete file
-                User->>ExpressServices: Delete uploaded file
-                ExpressServices->>Backend: DELETE /file-delete/:fileId/:sha256
-                Backend-->>ExpressServices: Delete result
-            end
-        end
-    end
-
-    rect rgb(245, 255, 245)
-        Note over User,Backend: Submit
-        User->>ExpressServices: Review and confirm
-        ExpressServices->>Backend: POST /submit
-        Backend-->>ExpressServices: Submission result
-        ExpressServices-->>User: Confirmation page
-    end
+    Note over User,Backend: Submit
+    User->>ExpressServices: Review and confirm
+    ExpressServices->>Backend: POST /submit
+    Backend-->>ExpressServices: Submission result
+    ExpressServices-->>User: Confirmation page
 ```
 
 ## 1.5 Endpoint Path Convention
@@ -494,8 +486,8 @@ Backend implementations may use different URLs as long as they follow the **same
 | Endpoint | Method | Profiles | Description |
 |---|---|---|---|
 | [Submission](#31-submission-endpoint) | POST | A,B,C,D | Receives final service submission |
-| [Eligibility](#32-eligibility-endpoint) | POST | B,D | Determines if user can start service |
-| [Temporary Save Retrieve](#33-temporary-save-retrieve) | POST / GET | C,D | Retrieves draft data |
+| [Eligibility](#32-eligibility-endpoint) | POST / GET | B,D | Determines if user can start service |
+| [Temporary Save Retrieve](#33-temporary-save-retrieve) | POST | C,D | Retrieves draft data |
 | [Temporary Save Update](#34-temporary-save-update) | PUT | C,D | Saves draft data |
 | [File Upload](#35-file-upload-endpoint) | POST | C,D | Upload supporting files |
 | [File Download](#36-file-download-endpoint) | GET | C,D | Download uploaded file |
