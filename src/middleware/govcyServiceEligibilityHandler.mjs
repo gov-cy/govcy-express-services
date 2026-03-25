@@ -26,8 +26,8 @@ export function govcyServiceEligibilityHandler(checkForForm = false) {
                 if (!pageUrl) pageUrl = "index";
                 // 🔍 Find the page by pageUrl
                 const page = getPageConfigData(service, pageUrl);
-                // ----- `updateMyDetails` handling. always run eligibility for updateMyDetails
-                if (!page.updateMyDetails) {
+                // ----- `updateMyDetails` & `taskList` handling. Always run eligibility for these types
+                if (!page.updateMyDetails && !page.taskList) {
                     if (!page || !page.pageTemplate) return next(); // Defensive: skip if no template
                     // Deep copy pageTemplate to avoid modifying the original
                     const pageTemplateCopy = JSON.parse(JSON.stringify(page.pageTemplate));

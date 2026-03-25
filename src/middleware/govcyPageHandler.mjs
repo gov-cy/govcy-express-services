@@ -6,6 +6,7 @@ import { logger } from "../utils/govcyLogger.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { govcyMultipleThingsHubHandler } from "./govcyMultipleThingsHubHandler.mjs";
 import { govcyUpdateMyDetailsHandler } from "./govcyUpdateMyDetails.mjs";
+import { govcyTaskListHandler } from "./govcyTaskListHandler.mjs";
 // import {flattenContext, evaluateExpressionWithFlattening, evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 
 /**
@@ -37,6 +38,11 @@ export function govcyPageHandler() {
       const result = evaluatePageConditions(page, req.session, req.params.siteId, req);
       if (result.result === false) {
         return res.redirect(`/${req.params.siteId}/${result.redirect}`);
+      }
+
+      // ----- `taskList` handling
+      if (page.taskList) {
+        return govcyTaskListHandler(req, res, next, page, serviceCopy);
       }
 
       // ----- `updateMyDetails` handling

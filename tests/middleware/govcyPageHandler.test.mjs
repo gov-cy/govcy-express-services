@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { govcyPageHandler } from "../../src/middleware/govcyPageHandler.mjs";
-import * as dataLayer from "../../src/utils/govcyDataLayer.mjs";
 import * as govcyUpdateMyDetailsModule from "../../src/middleware/govcyUpdateMyDetails.mjs";
 
 
@@ -374,11 +373,98 @@ describe("govcyPageHandler", () => {
   const handler = govcyPageHandler();
   await handler(req, res, next);
 
-  // --- Assertions ---
-  // The handler should return early (no page rendering or further logic)
-  expect(wasReturned || next.called).to.be.true;
+    // --- Assertions ---
+    // The handler should return early (no page rendering or further logic)
+    expect(wasReturned || next.called).to.be.true;
 });
 
+    it("9. renders task list page when configuration includes taskList", async () => {
+        req.params.pageUrl = "task-list-overview";
+        req.serviceData.pages = buildTaskListPages();
+        req.session.siteData["test-site"].inputData = {
+            "task-list-overview": {},
+            "book-title": { formData: { "book-title-field": "My title" } }
+        };
 
+        const handler = govcyPageHandler();
+        await handler(req, res, next);
+
+        expect(req.processedPage).to.exist;
+        const elements = req.processedPage.pageTemplate.sections[0].elements[0].params.elements;
+        const hasTaskList = elements.some(el => el.element === "taskList");
+        expect(hasTaskList).to.be.true;
+        expect(next.calledOnce).to.be.true;
+    });
 
 });
+
+function buildTaskListPages() {
+    const makePage = (url, title) => ({
+        pageData: {
+            url,
+            title: { en: title },
+            layout: "layouts/govcyBase.njk",
+            mainLayout: "two-third"
+        },
+        pageTemplate: {
+            sections: [
+                {
+                    name: "main",
+                    elements: [
+                        {
+                            element: "form",
+                            params: {
+                                elements: [
+                                    {
+                                        element: "textInput",
+                                        params: {
+                                            id: `${url}-field`,
+                                            name: `${url}-field`,
+                                            label: { en: title },
+                                            validations: [
+                                                {
+                                                    check: "required",
+                                                    params: {
+                                                        checkValue: "",
+                                                        message: { en: `${title} required` }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    { element: "button", params: { text: { en: "Continue" } } }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    });
+
+    return [
+        {
+            pageData: {
+                url: "task-list-overview",
+                title: { en: "Overview" },
+                layout: "layouts/govcyBase.njk",
+                mainLayout: "two-third"
+            },
+            taskList: {
+                taskPages: ["book-title", "authors"],
+                topElements: [
+                    {
+                        element: "textElement",
+                        params: {
+                            type: "h1",
+                            text: { en: "Complete your sections" }
+                        }
+                    }
+                ]
+            },
+            pageTemplate: { sections: [] }
+        },
+        makePage("book-title", "Book title"),
+        makePage("authors", "Authors")
+    ];
+}

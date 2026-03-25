@@ -38,7 +38,12 @@ describe("govcyFormsPostHandler", () => {
                     {
                         pageData: {
                             url: "test-page",
-                            nextPage: "review"
+                            nextPage: "review",
+                            title: {
+                                en: "Applicant details",
+                                el: "Στοιχεία αιτούντα",
+                                tr: "Başvuru sahibi bilgileri"
+                            }
                         },
                         pageTemplate: {
                             sections: [
@@ -483,6 +488,79 @@ it('8. should redirect with error summary when multipleThings validation fails',
     expect(res.redirectCalled).to.include('errorSummary');
   });
 
+});
+
+
+describe("govcyFormsPostHandler - task list handling", () => {
+    let taskListPage;
+
+    beforeEach(() => {
+        req.params.pageUrl = "task-list";
+        req.session.siteData["test-site"].inputData["task-list"] = {
+            formData: {}
+        };
+        taskListPage = {
+            pageData: {
+                url: "task-list",
+                nextPage: "collaborators"
+            },
+            taskList: {
+                taskPages: ["test-page"]
+            },
+            pageTemplate: { sections: [] }
+        };
+        req.serviceData.pages.push(taskListPage);
+    });
+
+    it("12. stores validation errors when tasks are incomplete", () => {
+        res.redirect = sinon.stub();
+        const handler = govcyFormsPostHandler();
+        handler(req, res, next);
+
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.include("errorSummary");
+
+        const validation = req.session.siteData["test-site"].inputData["task-list"].validationErrors;
+        expect(validation.errorSummary).to.be.an("array").that.is.not.empty;
+        expect(validation.errorSummary[1].link).to.equal("/test-site/test-page");
+        expect(validation.errorSummary[1].text.en).to.equal("Complete the section Applicant details");
+        expect(validation.linkToContinue).to.be.undefined;
+    });
+
+    it("13. exposes continue link when linkToContinue is enabled", () => {
+        res.redirect = sinon.stub();
+        taskListPage.taskList.linkToContinue = true;
+
+        const handler = govcyFormsPostHandler();
+        handler(req, res, next);
+
+        const validation = req.session.siteData["test-site"].inputData["task-list"].validationErrors;
+        expect(validation.linkToContinue).to.exist;
+        expect(validation.linkToContinue.link).to.include("collaborators");
+        expect(validation.errorSummary[1].link).to.equal("/test-site/test-page");
+    });
+
+    it("14. includes review route param in task error links", () => {
+        res.redirect = sinon.stub();
+        req.query.route = "review";
+
+        const handler = govcyFormsPostHandler();
+        handler(req, res, next);
+
+        const validation = req.session.siteData["test-site"].inputData["task-list"].validationErrors;
+        expect(validation.errorSummary[1].link).to.equal("/test-site/test-page?route=review");
+    });
+
+    it("15. redirects to next page when all tasks are complete", () => {
+        res.redirect = sinon.stub();
+        req.session.siteData["test-site"].inputData["test-page"].formData = { fullName: "Done" };
+
+        const handler = govcyFormsPostHandler();
+        handler(req, res, next);
+
+        expect(res.redirect.calledOnce).to.be.true;
+        expect(res.redirect.firstCall.args[0]).to.include("/test-site/collaborators");
+    });
 });
 
 

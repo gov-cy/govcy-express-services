@@ -52,6 +52,29 @@ describe("govcyServiceEligibilityHandler", () => {
         expect(req._nextCalled).to.be.true;
     });
 
+    it("1b. should still enforce eligibility checks for task list pages without forms", async () => {
+        req.params.pageUrl = "task-hub";
+        req.serviceData.pages[0] = {
+            pageData: { url: "task-hub" },
+            taskList: { taskPages: [] }
+        };
+        req.serviceData.site.eligibilityAPIEndpoints = [
+            {
+                clientKey: "CLIENT",
+                serviceId: "SERVICE"
+                // missing URL to trigger error
+            }
+        ];
+
+        const handler = govcyServiceEligibilityHandler(true);
+        await handler(req, res, (err) => {
+            req._capturedError = err;
+        });
+
+        expect(req._capturedError).to.be.an("error");
+        expect(req._capturedError.message).to.include("eligibility API endpoint URL is missing");
+    });
+
     it("2. should skip eligibility check if no eligibilityAPIEndpoints are defined", async () => {
         req.params.pageUrl = "form-page";
         req.serviceData.pages[0].pageData.url = "form-page";

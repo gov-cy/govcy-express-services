@@ -26,17 +26,19 @@ The developers can also choose to:
     - `insertAfterPageUrl`: the page **after which** this custom page will appear
     - `summaryElements`, `errors`, and `email` are managed dynamically in session
 	    - **NOTE**: Usually a default `required` error must be defined on start up. This will ensure that the when the users try to submit in the “Check your answers” review page, they get an error message to complete an action.
+    - `taskStatus` *(optional)*: initial task-list status (`NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`). Defaults to `NOT_STARTED`.
     - `extraProps` extra property stored in the session to be used by the developers as they wish
 - During **runtime**, developers are responsible for setting:
     - `data`: data to include in submission, using the `setCustomPageData` function
     - `summaryElements`: what appears in the “Check your answers” review page, using the `setCustomPageSummaryElements` function
     - `email`: array of [`dsf-email-templates`](https://github.com/gov-cy/dsf-email-templates) components for the submission confirmation email, using the `setCustomPageEmail`
     - `errors`: errors that appear in the  “Check your answers” review page. Developers can use the `addCustomPageError` function to add an error, or the `clearCustomPageErrors` to clear the errors
+    - `taskStatus`: call `setCustomPageTaskStatus` whenever custom logic progresses so task-list pages show the right status.
 ## Available methods
 
 | Method                                                                                                                                           | Purpose                                                                                   |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `defineCustomPages(store, siteId, pageUrl, pageTitle, insertAfterSummary, insertAfterPageUrl, errors, summaryElements, summaryHtml, extraProps)` | Registers a custom page definition in `app`. Must be called once at startup.              |
+| `defineCustomPages(store, siteId, pageUrl, pageTitle, insertAfterSummary, insertAfterPageUrl, errors, summaryElements, summaryHtml, taskStatus, extraProps)` | Registers a custom page definition in `app`. Must be called once at startup.              |
 | `getCustomPageDefinition(store, siteId, pageUrl)`                                                                                                | Retrieves the custom page definition for a given siteId and pageUrl                       |
 | `resetCustomPages(configStore, store, siteId)`                                                                                                   | Resets per-session data from the global definitions.                                      |
 | `setCustomPageData(store, siteId, pageUrl, dataObject)`                                                                                          | Sets or replaces the data object used during submission.                                  |
@@ -46,6 +48,20 @@ The developers can also choose to:
 | `setCustomPageEmail(store, siteId, pageUrl, arrayOfEmailObjects)`                                                                                | Defines email sections for the confirmation email using `dsf-email-templates` components. |
 | `setCustomPageProperty(store, siteId, pageUrl, property, value, isDefinition = false)`                                                           | Sets a custom property on a given custom page definition or instance                      |
 | `getCustomPageProperty(store, siteId, pageUrl, property, isDefinition = false)`                                                                  | Gets a custom property from a given custom page definition or instance.                   |
+| `setCustomPageTaskStatus(store, siteId, pageUrl, statusKey)`                                                                                     | Persists the current task status (`NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`) for task lists |
+| `getCustomPageTaskStatus(store, siteId, pageUrl)`                                                                                                | Reads the stored task status (defaults to `NOT_STARTED`)                                   |
+
+### Task list integration
+
+When a custom page URL is included in a task-list configuration, the task-list middleware checks `req.session.siteData[siteId].customPages[pageUrl].taskStatus`. You can:
+
+1. Provide an initial value during `defineCustomPages(..., taskStatus)` (defaults to `NOT_STARTED`).
+2. Update the value at runtime:
+   ```js
+   setCustomPageTaskStatus(req.session, "cso", "/cso/custom", "COMPLETED");
+   ```
+
+Statuses are limited to `NOT_STARTED`, `IN_PROGRESS`, or `COMPLETED`. If an invalid value is provided, it falls back to `NOT_STARTED`.
 
 ---
 
@@ -189,6 +205,9 @@ const service = initializeGovCyExpressService({
             // clear any previous errors
             clearCustomPageErrors(req.session, "cso", "/cso/custom");
 
+            // Update task status
+            setCustomPageTaskStatus(req.session, "cso", "/cso/custom", "COMPLETED");
+            
             // Add a custom error
             // addCustomPageError(req.session, "cso", "/cso/custom", {
             //     id: "custom-error",

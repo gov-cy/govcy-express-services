@@ -161,6 +161,19 @@ describe("govcyReviewPostHandler", () => {
 
     });
 
+    it("2b. should skip task list pages during review validation", async () => {
+        req.serviceData.pages.unshift({
+            pageData: { url: "task-hub", title: { en: "Tasks" } },
+            taskList: { taskPages: ["test-page"] }
+        });
+
+        const handler = govcyReviewPostHandler();
+        await handler(req, res, next);
+
+        expect(res.redirectedTo).to.include("errorSummary-title");
+        expect(req.session.siteData["site123"].submissionErrors.errors).to.have.property("test-page");
+    });
+
 
     it("3. should return error if submission API returns unknown error code", async () => {
         // ✅ Fill required form field so validation passes
