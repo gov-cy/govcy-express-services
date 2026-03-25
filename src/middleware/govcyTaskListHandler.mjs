@@ -2,6 +2,7 @@ import { computeTaskListStatus } from "../utils/govcyTaskList.mjs";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from "../utils/govcyLogger.mjs";
+import { handleMiddlewareError } from "../utils/govcyUtils.mjs";
 
 // The CSS classes for each task status
 const STATUS_TAG_CLASSES = {
@@ -379,4 +380,181 @@ function normalizeStatus(statusKey = "") {
  */
 function deepClone(value) {
     return JSON.parse(JSON.stringify(value));
+}
+
+/**
+ * Handles POST submissions for task-list pages. These pages do not carry form
+ * data; instead we recompute each task's status and decide whether the user can
+ * continue. When outstanding tasks exist we persist a tailored error summary so
+ * the renderer can surface actionable guidance.
+ *
+ * @param {object} req Express request
+ * @param {object} res Express response
+ * @param {Function} next Express next callback
+ * @param {object} ctx Convenience bundle with page, service, siteId, pageUrl
+ * @returns {object|void}
+ */
+export function handleTaskListPost(req, res, next, { page, service, siteId, pageUrl }) {
+    // Task list pages do not have form data, but we still need to validate the current state of the world to see if they can continue.
+    const taskPages = Array.isArray(page?.taskList?.taskPages) ? page.taskList.taskPages : [];
+    const summary = computeTaskListStatus(req, siteId, service, taskPages);
+    const nextPageHref = resolveTaskListNextPage(page, siteId, req);
+
+    if (summary.status === "COMPLETED") {
+        if (!nextPageHref) {
+            return handleMiddlewareError("Task list page missing nextPage destination", 500, next);
+        }
+        return res.redirect(nextPageHref);
+    }
+
+    // Build one error-summary row per incomplete task to highlight next steps.
+    const summaryItems = buildTaskListErrorSummary(
+        summary.tasks,
+        siteId,
+        typeof req.query.route === "string" ? req.query.route : undefined
+    );
+    summaryItems.unshift(govcyResources.staticResources.text.taskListCompleteAll);
+
+    const allowContinue = Boolean(page?.taskList?.linkToContinue) &&
+        nextPageHref &&
+        req.query.route !== "review";
+
+    const options = {};
+    if (allowContinue) {
+        options.body = govcyResources.staticResources.text.taskListAllowContinueBody;
+        options.linkToContinue = {
+            text: govcyResources.staticResources.text.taskListContinueLink,
+            visuallyHiddenText: govcyResources.staticResources.text.taskListContinueHiddenText,
+            link: nextPageHref
+        };
+    }
+
+    storeTaskListValidationSummary(req.session, siteId, pageUrl, summaryItems, options);
+    return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
+}
+
+/**
+ * Resolves the destination URL for a task-list continue action. Mirrors the
+ * logic used for regular pages (respect review route overrides).
+ *
+ * @param {object} page Current page configuration
+ * @param {string} siteId Service identifier
+ * @param {object} req Express request
+ * @returns {string|null}
+ */
+function resolveTaskListNextPage(page, siteId, req) {
+    if (req.query.route === "review") {
+        return govcyResources.constructPageUrl(siteId, "review");
+    }
+    const nextPage = page?.pageData?.nextPage;
+    if (!nextPage) return null;
+    return govcyResources.constructPageUrl(siteId, nextPage);
+}
+
+/**
+ * Creates an error-summary list for every task that still needs attention.
+ *
+ * @param {Array} tasks Task descriptor array from computeTaskListStatus
+ * @param {string} siteId Service identifier for building hrefs
+ * @param {string} [route] Optional route query (e.g. \"review\") to preserve context
+ * @returns {Array<{text:string, link?:string}>}
+ */
+function buildTaskListErrorSummary(tasks = [], siteId, route) {
+    return tasks
+        .filter(task => task && task.status !== "COMPLETED" && task.status !== "SKIPPED")
+        .map(task => {
+            const item = {
+                text: buildTaskListErrorText(task.title)
+            };
+            if (task.pageUrl) {
+                item.link = govcyResources.constructPageUrl(siteId, task.pageUrl, route);
+            }
+            return item;
+        });
+}
+
+/**
+ * Produces a multilingual message like \"Complete the section {Title}\" for each task.
+ *
+ * @param {object} title Multilingual task title object
+ * @returns {object} Multilingual error summary text
+ */
+function buildTaskListErrorText(title) {
+    const normalizedTitle = hasLocalizedContent(title)
+        ? title
+        : govcyResources.staticResources.text.untitled;
+    return combineLocalizedStrings(
+        govcyResources.staticResources.text.task?.title,
+        normalizedTitle
+    );
+}
+
+/**
+ * Concatenates two multilingual objects (prefix + value) while preserving fallbacks.
+ *
+ * @param {object|string} prefix Multilingual/string prefix
+ * @param {object|string} value Multilingual/string value
+ * @returns {object} Combined multilingual object
+ */
+function combineLocalizedStrings(prefix, value) {
+    const languages = new Set(["el", "en", "tr"]);
+    if (hasLocalizedContent(prefix)) {
+        Object.keys(prefix).forEach(lang => languages.add(lang));
+    }
+    if (hasLocalizedContent(value)) {
+        Object.keys(value).forEach(lang => languages.add(lang));
+    }
+
+    const result = {};
+    languages.forEach(lang => {
+        const prefixText = resolveLocalizedText(prefix, lang);
+        const valueText = resolveLocalizedText(value, lang);
+        const combined = `${prefixText} ${valueText}`.trim();
+        result[lang] = combined || valueText || prefixText;
+    });
+    return result;
+}
+
+/**
+ * Returns true when a value looks like a multilingual object with keys.
+ *
+ * @param {any} value Potential multilingual object
+ * @returns {boolean}
+ */
+function hasLocalizedContent(value) {
+    return value && typeof value === "object" && Object.keys(value).length > 0;
+}
+
+/**
+ * Safely resolves text for a single language, falling back to common locales.
+ *
+ * @param {object|string} source Multilingual/string source
+ * @param {string} lang Desired language key
+ * @returns {string}
+ */
+function resolveLocalizedText(source, lang) {
+    if (!source) return "";
+    if (typeof source === "string") return source;
+    return source[lang] ?? source.el ?? source.en ?? source.tr ?? "";
+}
+
+/**
+ * Persists the synthesized error summary back in the session so the renderer
+ * can present GOV.CY error summary content without having to understand task
+ * logic.
+ *
+ * @param {object} store Session object (req.session)
+ * @param {string} siteId Service identifier
+ * @param {string} pageUrl Page identifier
+ * @param {Array} summaryItems Error summary entries
+ * @param {object} options Optional body / linkToContinue overrides
+ */
+function storeTaskListValidationSummary(store, siteId, pageUrl, summaryItems, options = {}) {
+    dataLayer.storePageValidationErrors(store, siteId, pageUrl, {}, null);
+    const container = store?.siteData?.[siteId]?.inputData?.[pageUrl]?.validationErrors;
+    if (!container) return;
+    // Attach extra renderer-friendly metadata when provided.
+    container.errorSummary = summaryItems;
+    if (options.body) container.body = options.body;
+    if (options.linkToContinue) container.linkToContinue = options.linkToContinue;
 }
