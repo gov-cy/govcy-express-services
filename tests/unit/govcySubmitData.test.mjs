@@ -93,6 +93,17 @@ describe('govcySubmitData', () => {
                 },
             });
         });
+
+        it('skips task list shells when building submission data', () => {
+            service.pages.push({
+                pageData: { url: 'task-hub', title: { en: 'Tasks' } },
+                taskList: { taskPages: ['page1'] },
+                pageTemplate: { sections: [] }
+            });
+
+            const submissionData = prepareSubmissionData(req, siteId, service);
+            expect(submissionData.submissionData).to.not.have.property('task-hub');
+        });
     });
 
     describe('preparePrintFriendlyData', () => {
@@ -122,6 +133,17 @@ describe('govcySubmitData', () => {
                     ],
                 },
             ]);
+        });
+
+        it('skips task list shells in print-friendly data', () => {
+            service.pages.push({
+                pageData: { url: 'task-hub', title: { en: 'Tasks' } },
+                taskList: { taskPages: ['page1'] },
+                pageTemplate: { sections: [] }
+            });
+
+            const printFriendlyData = preparePrintFriendlyData(req, siteId, service);
+            expect(printFriendlyData.some(page => page.pageUrl === 'task-hub')).to.be.false;
         });
     });
 

@@ -113,6 +113,31 @@ export function storePageData(store, siteId, pageUrl, formData) {
     store.siteData[siteId].inputData[pageUrl]["formData"] = formData;
 }
 
+/**
+ * Marks whether a page has been posted/submitted at least once.
+ *
+ * @param {object} store Session store (req.session)
+ * @param {string} siteId Site id
+ * @param {string} pageUrl Page url
+ * @param {boolean} posted Flag indicating post action (defaults to true)
+ */
+export function setPagePosted(store, siteId, pageUrl, posted = true) {
+    initializeSiteData(store, siteId, pageUrl);
+    store.siteData[siteId].inputData[pageUrl]["posted"] = Boolean(posted);
+}
+
+/**
+ * Returns true if the user has already posted/submitted the page.
+ *
+ * @param {object} store Session store (req.session)
+ * @param {string} siteId Site id
+ * @param {string} pageUrl Page url
+ * @returns {boolean}
+ */
+export function isPagePosted(store, siteId, pageUrl) {
+    return Boolean(store?.siteData?.[siteId]?.inputData?.[pageUrl]?.posted);
+}
+
 export function storePageDataElement(store, siteId, pageUrl, elementName, value) {
     // Ensure session structure is initialized
     initializeSiteData(store, siteId, pageUrl);

@@ -231,6 +231,80 @@ export const staticResources = {
             en: "No, I don't want to delete this entry",
             tr: "No, I don't want to delete this entry"
         },
+        task: {
+            title: {
+                el: "Ολοκληρώστε την ενότητα",
+                en: "Complete the section",
+                tr: "Bölümü tamamlayın"
+            }
+        },
+        taskListStatus: {
+            NOT_STARTED: {
+                el: "Δεν ξεκίνησε",
+                en: "Not started",
+                tr: "Başlamadı"
+            },
+            IN_PROGRESS: {
+                el: "Σε εξέλιξη",
+                en: "In progress",
+                tr: "Devam ediyor"
+            },
+            COMPLETED: {
+                el: "Ολοκληρώθηκε",
+                en: "Completed",
+                tr: "Tamamlandı"
+            }
+        },
+        taskListCompleteAll: {
+            el: "Ολοκληρώστε όλες τις ενότητες πριν συνεχίσετε.",
+            en: "Complete all sections before continuing.",
+            tr: "Devam etmeden önce tüm bölümleri tamamlayın."
+        },
+        taskListCompleteTheSection: {
+            el: "Ολοκληρώστε την ενότητα ",
+            en: "Complete the section",
+            tr: "Bölümü tamamlayın "
+        },
+        taskListAllowContinueBody: {
+            el: "Μπορείτε να συνεχίσετε τώρα, αλλά θα πρέπει να επιστρέψετε και να ολοκληρώσετε τις υπόλοιπες ενότητες.",
+            en: "You can continue now, but you must return and finish the remaining sections.",
+            tr: "Şimdi devam edebilirsiniz ancak kalan bölümleri tamamlamak için geri dönmelisiniz."
+        },
+        taskListContinueLink: {
+            el: "Συνέχεια χωρίς να ολοκληρωθούν όλες οι ενότητες",
+            en: "Continue without completing all sections",
+            tr: "Tüm bölümleri tamamlamadan devam et"
+        },
+        taskListContinueHiddenText: {
+            el: "Συνέχεια παρότι δεν ολοκληρώθηκαν όλες οι ενότητες",
+            en: "Continue even though not all sections are complete",
+            tr: "Tüm bölümler tamamlanmamış olsa da devam et"
+        },
+        taskListNotApplicable: {
+            el: "Δεν εφαρμόζεται",
+            en: "Not applicable",
+            tr: "Geçerli değil"
+        },
+        taskListOverallLabel: {
+            el: "Συνολική κατάσταση",
+            en: "Overall status",
+            tr: "Genel durum"
+        },
+        taskListCompletionSummary: {
+            el: "Έχετε ολοκληρώσει <strong>{{completed}}</strong> από <strong>{{total}}</strong> ενότητες.",
+            en: "You've completed <strong>{{completed}}</strong> of <strong>{{total}}</strong> sections.",
+            tr: "<strong>{{total}}</strong> bölümün <strong>{{completed}}</strong> tanesini tamamladınız."
+        },
+        taskListErrorCompleteAll: {
+            el: "Πρέπει να ολοκληρώσετε όλες τις ενότητες πριν συνεχίσετε.",
+            en: "You must complete all sections before continuing.",
+            tr: "Devam etmeden önce tüm bölümleri tamamlamalısınız."
+        },
+        taskListEmptyState: {
+            el: "Δεν υπάρχουν ενότητες για εμφάνιση.",
+            en: "There are no sections to display.",
+            tr: "Gösterilecek bölüm yok."
+        },
         updateMyDetailsTitle: {
             el: "Τα στοιχεία σας",
             en: "Your details",
@@ -972,13 +1046,23 @@ export function constructPageUrl(siteId, pageUrl, route) {
  * @param {array} errors The array of errors 
  * @returns The error summary element
  */
-export function errorSummary(errors) {
+export function errorSummary(errors, options = {}) {
+    const params = {
+        id: "errorSummary",
+        errors: errors
+    };
+    if (options.body) {
+        params.body = options.body;
+    }
+    if (options.linkToContinue) {
+        params.linkToContinue = options.linkToContinue;
+    }
+    if (options.header) {
+        params.header = options.header;
+    }
     return {
         element: "errorSummary",
-        params: {
-            id: "errorSummary",
-            errors: errors
-        }
+        params
     };
 }
 

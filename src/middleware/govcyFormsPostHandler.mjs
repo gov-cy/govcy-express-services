@@ -8,6 +8,7 @@ import { getFormData } from "../utils/govcyFormHandling.mjs"
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { tempSaveIfConfigured } from "../utils/govcyTempSave.mjs";
 import { validateMultipleThings } from "../utils/govcyMultipleThingsValidation.mjs";
+import { handleTaskListPost } from "./govcyTaskListHandler.mjs";
 
 
 /**
@@ -30,6 +31,11 @@ export function govcyFormsPostHandler() {
             if (conditionResult.result === false) {
                 logger.debug("⛔️ Page condition evaluated to true on POST — skipping form save and redirecting:", conditionResult);
                 return res.redirect(govcyResources.constructPageUrl(siteId, conditionResult.redirect));
+            }
+
+            // ----- Task list handling (no <form> block)
+            if (page.taskList) {
+                return handleTaskListPost(req, res, next, { page, service, siteId, pageUrl });
             }
 
             // 🔍 Find the form definition inside `pageTemplate.sections`
@@ -60,6 +66,9 @@ export function govcyFormsPostHandler() {
                     dataLayer.storePageValidationErrors(req.session, siteId, pageUrl, errors, null, "hub");
                     return res.redirect(govcyResources.constructErrorSummaryUrl(req.originalUrl));
                 }
+
+                // Mark hub as posted so task lists can treat optional hubs as complete
+                dataLayer.setPagePosted(req.session, siteId, pageUrl, true);
 
                 // No validation errors, proceed to next page
                 logger.debug("✅ multipleThings hub validated successfully:", items, req);
@@ -126,3 +135,4 @@ export function govcyFormsPostHandler() {
         }
     };
 }
+

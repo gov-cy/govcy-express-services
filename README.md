@@ -34,6 +34,7 @@ This readme file describes the definition of these APIs and how to use them. If 
     - [cyLogin Access Policies](#cylogin-access-policies)
   - [🧩 Dynamic services](#-dynamic-services)
     - [Pages](#pages)
+    - [Task list pages](#task-list-pages)
     - [Form vs static pages](#form-vs-static-pages)
     - [Update my details pages](#update-my-details-pages)
     - [Multiple things pages (repeating group of inputs)](#multiple-things-pages-repeating-group-of-inputs)
@@ -941,6 +942,82 @@ Lets break down the JSON config for this page:
     - `elements` is an array of elements for the said section. Seem more details on the [govcy-frontend-renderer's design elements documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/DESIGN_ELEMENTS.md).
 
 ------------------------------------------
+
+#### Task list pages
+
+![Task list pages](docs/img/express-task-list.png)
+
+Task lists act as navigation hubs that show the completion state of one or more pages in the journey. They are defined by adding a `taskList` block alongside `pageData`:
+
+```json
+{
+  "pageData": {
+    "url": "task-list",
+    "title": {
+      "el": "Η αίτησή σας",
+      "en": "Your application"
+    },
+    "layout": "layouts/govcyBase.njk",
+    "mainLayout": "two-third",
+    "nextPage": "options"
+  },
+  "taskList": {
+    "topElements": [
+      { 
+        "element": "progressList", 
+        "params": { "id": "steps", "current": "2", "total": "3" } 
+      },
+      {
+        "element": "textElement",
+        "params": {
+          "type": "h1",
+          "text": {
+            "el": "Αίτηση για ISBN (Task List)",
+            "en": "Apply for an ISBN (Task List)"
+          }
+        }
+      }
+    ],
+    "taskPages": [
+        "index",
+        "book-title",
+        "publishing-details",
+        "authors",
+        "book-theme",
+        "book-series",
+        "reprint",
+        "translation",
+        "book-form",
+        "physical-description",
+        "collaborators"
+    ],
+    "hasBackLink": true,
+    "showSkippedTasks": true,
+    "linkToContinue": false
+  }
+}
+```
+
+- `taskPages` is an ordered list of page URLs. Each entry becomes a GOV.CY task row with the page title, link, and status.
+- `showSkippedTasks` toggles whether conditionally hidden pages appear in the UI with a “Not applicable” tag.
+- `linkToContinue` (default `false`) enables the renderer’s “Continue without completing all sections” link when POST validation fails.
+- `topElements` and `hasBackLink` reuse the usual renderer elements and layout helpers so the page can include progress lists, headings, or lead paragraphs.
+
+##### How statuses are calculated
+
+Task list statuses are produced by the same validation logic as the Review page (`computePageTaskStatus`). Each page can be in one of four states: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`, or `SKIPPED` (when a page is hidden by conditions or a custom page opts out). The helper inspects the stored session data per page type:
+
+| Page type | When it becomes **NOT_STARTED** | When it is **IN_PROGRESS** | When it is **COMPLETED** |
+|-----------|---------------------------------|----------------------------|--------------------------|
+| **Standard form pages** | No `formData` captured yet | `formData` exists but field validation fails | Field validation succeeds (identical to Review) |
+| **Multiple things hubs** | No items and the hub hasn’t been posted yet | Fails per-item or min/max validation | All min/max checks pass or the user explicitly posts an empty-but-allowed hub |
+| **Update my details** | Data has not been fetched/posted | API result present but local validations fail | Data fetched and passes the same validation used on Review |
+| **Custom pages** | Missing status in custom session store | `setCustomPageTaskStatus` sets `IN_PROGRESS` | Custom implementation marks it `COMPLETED` |
+| **Nested task lists** | Any child task is `NOT_STARTED` | Mixed child statuses or explicit `IN_PROGRESS` | Every child task is `COMPLETED` or `SKIPPED` |
+
+Because the logic reuses the Review pipeline, you only have to define task lists in JSON; they immediately reflect file uploads, conditional skips, posted multiple entries, and custom page states without extra code.
+
+POSTing a task-list page re-runs these computations. If every section is complete, the user is redirected to `pageData.nextPage` (or `/review` when the request came from `?route=review`). Otherwise, the middleware stores a per-task error summary in the session so the renderer can show contextual guidance. Optional `linkToContinue` text and the global “Complete all sections before continuing.” message are also inserted automatically.
 
 #### Form vs static pages
 

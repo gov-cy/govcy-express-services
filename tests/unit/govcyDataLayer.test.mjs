@@ -35,6 +35,18 @@ describe('govcyDataLayer', () => {
         });
     });
 
+    it('2b. should set and get the page posted flag', () => {
+        const siteId = 'site1';
+        const pageUrl = 'page1';
+        expect(dataLayer.isPagePosted(session, siteId, pageUrl)).to.be.false;
+
+        dataLayer.setPagePosted(session, siteId, pageUrl, true);
+        expect(dataLayer.isPagePosted(session, siteId, pageUrl)).to.be.true;
+
+        dataLayer.setPagePosted(session, siteId, pageUrl, false);
+        expect(dataLayer.isPagePosted(session, siteId, pageUrl)).to.be.false;
+    });
+
     // Test the `storePageValidationErrors` and `getPageValidationErrors` function
     it('3. should store and retrieve page validation errors correctly', () => {
         dataLayer.initializeSiteData(session, 'site1', 'page1');

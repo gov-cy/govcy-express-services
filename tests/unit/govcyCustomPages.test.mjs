@@ -28,6 +28,7 @@ describe("govcyCustomPages", () => {
             errors,
             summaryElements,
             summaryHtml,
+            "NOT_STARTED",
             extraProps
         );
 
@@ -385,6 +386,7 @@ describe("govcyCustomPages", () => {
             [],
             [],
             false,
+            "NOT_STARTED",
             { nextPage: "review" }
         );
 
@@ -398,6 +400,7 @@ describe("govcyCustomPages", () => {
             [],
             [],
             false,
+            "NOT_STARTED",
             { customFlag: true }
         );
 
@@ -466,6 +469,49 @@ describe("govcyCustomPages", () => {
         expect(page.errors[0].id).to.equal("err1");
     });
 
+    it("13. should persist default task status when defining custom page", () => {
+        const store = {};
+        const siteId = "mysite";
+        govcyCustomPages.defineCustomPages(
+            store,
+            siteId,
+            "/custom-task",
+            { en: "Custom Task" },
+            "review",
+            [],
+            [],
+            false,
+            "IN_PROGRESS"
+        );
+
+        const definition = store.siteData[siteId].customPagesDefinition["/custom-task"];
+        expect(definition.taskStatus).to.equal("IN_PROGRESS");
+    });
+
+    it("14. should set and get custom page task status", () => {
+        const siteId = "mysite";
+        const store = {
+            siteData: {
+                [siteId]: {
+                    customPages: {
+                        "/custom-task": { pageTitle: { en: "Custom Task" } }
+                    }
+                }
+            }
+        };
+
+        // Get should fallback to NOT_STARTED
+        expect(govcyCustomPages.getCustomPageTaskStatus(store, siteId, "/custom-task")).to.equal("NOT_STARTED");
+
+        // Set valid status
+        govcyCustomPages.setCustomPageTaskStatus(store, siteId, "/custom-task", "completed");
+        expect(govcyCustomPages.getCustomPageTaskStatus(store, siteId, "/custom-task")).to.equal("COMPLETED");
+
+        // Invalid status falls back to NOT_STARTED
+        govcyCustomPages.setCustomPageTaskStatus(store, siteId, "/custom-task", "unknown");
+        expect(govcyCustomPages.getCustomPageTaskStatus(store, siteId, "/custom-task")).to.equal("NOT_STARTED");
+    });
+
     it("13. should export all expected helper functions", () => {
         const expectedExports = [
             "defineCustomPages",
@@ -477,7 +523,9 @@ describe("govcyCustomPages", () => {
             "setCustomPageEmail",
             "setCustomPageProperty",
             "getCustomPageProperty",
-            "setCustomPageSummaryElements" // ✅ Added missing export
+            "setCustomPageSummaryElements",
+            "setCustomPageTaskStatus",
+            "getCustomPageTaskStatus"
         ];
 
         expectedExports.forEach(fn => {

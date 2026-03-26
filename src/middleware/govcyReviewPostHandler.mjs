@@ -38,6 +38,12 @@ export function govcyReviewPostHandler() {
                     updateMyDetailsData = dataLayer.getPageUpdateMyDetails(req.session, siteId, pageUrl);
                 }
 
+                // ----- taskList handling
+                // Task list pages are navigation wrappers; skip validation here
+                if (page.taskList) {
+                    continue;
+                }
+
                 // ----- Conditional logic comes here
                 // ✅ Skip validation if page is conditionally excluded
                 const conditionResult = evaluatePageConditions(page, req.session, siteId, req);

@@ -42,6 +42,11 @@ export function prepareSubmissionData(req, siteId, service) {
 
     // Loop through every page in the service definition
     for (const page of service.pages) {
+        
+        // ----- taskList handling
+        if (page.taskList) {
+            continue; // Task list pages do not contribute submission payloads
+        }
         const pageUrl = page.pageData.url || "";
 
         // Find the <form> element in the page
@@ -347,12 +352,16 @@ export function preparePrintFriendlyData(req, siteId, service) {
         if (conditionResult.result === false) {
             continue; // ⛔ Skip this page from print-friendly data
         }
+        // ----- taskList handling
+        if (page.taskList) {
+            continue; // Task list hub is a navigation shell, no print-friendly entry
+        }
 
         let pageTemplate = page.pageTemplate;
         let pageTitle = page.pageData.title || {};
 
 
-        // ----- MultipleThings hub handling
+        // ----- updateMyDetails hub handling
         if (page.updateMyDetails) {
             // create the page template
             pageTemplate = createUmdManualPageTemplate(siteId, service.site.lang, page, req);

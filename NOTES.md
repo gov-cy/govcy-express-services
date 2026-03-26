@@ -518,6 +518,15 @@ More at [REAMDE.md - Multiple things](README.md#multiple-things-pages-repeating-
   - `GET /:siteId/:pageUrl/multiple/edit/:index/view-file/:elementName`
   - `POST /:siteId/:pageUrl/multiple/edit/:index/delete-file/:elementName`
 
+### ✅ Task list internals
+
+- `govcyTaskListHandler` (GET) renders GOV.CY compliant task-list pages. It copies the page definition, injects CSRF/form controls (using `govcyResources.csrfTokenInput`), and feeds renderer sections with the output of `computeTaskListStatus`. Nested task lists are supported because the helper keeps a `visitedPages` set to prevent circular references.
+- `govcyFormsPostHandler` includes a dedicated branch for `page.taskList`. It recomputes all task statuses, and if any item is still pending it stores a synthesized `validationErrors.errorSummary` payload (per-page links + localized text) before redirecting back with `#errorSummary-title`.
+- Optional behaviours come directly from JSON config: `taskList.linkToContinue` enables the GOV.CY error-summary “continue anyway” link, while `showSkippedTasks` toggles visibility of pages skipped by conditions.
+- Multiple-things hubs flag themselves as “posted” (`dataLayer.setPagePosted`) even when `min=0`. The status helper interprets `(min:0, posted:true)` as “started”, so optional hubs can reach `COMPLETED` once validations pass (even with an empty list).
+- Custom pages report their status via `setCustomPageTaskStatus`. `computePageTaskStatus` checks the custom store first and avoids running standard validators when a custom page is encountered.
+- Whenever these middlewares detect an invalid configuration (missing `nextPage`, undefined `taskPages`, etc.) they delegate to `handleMiddlewareError`. This keeps Express error handling consistent across GET and POST flows, and it is the preferred way to bubble up configuration issues from new middleware.
+
 ---
 
 ## Logging configuration
