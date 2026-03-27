@@ -142,6 +142,40 @@ describe('govcyExpressions - evaluateExpressionWithFlattening', () => {
       'while(true){}', obj
     )).to.throw('Blocked unsafe expression');
   });
+
+  it('5. should inject req.user.profile_type into the flattened context', () => {
+    const obj = { meta: { foo: 'bar' } };
+    const req = {
+      user: {
+        profile_type: 'individual'
+      }
+    };
+    const result = evaluateExpressionWithFlattening(
+      'dataLayer["user.profile_type"] === "individual"',
+      obj,
+      '',
+      req
+    );
+    expect(result).to.be.true;
+  });
+
+  it('6. should fall back to req.session.user.profile_type when req.user is missing', () => {
+    const obj = {};
+    const req = {
+      session: {
+        user: {
+          profile_type: 'business'
+        }
+      }
+    };
+    const result = evaluateExpressionWithFlattening(
+      'dataLayer["user.profile_type"] === "business"',
+      obj,
+      '',
+      req
+    );
+    expect(result).to.be.true;
+  });
 });
 
 describe('govcyExpressions - evaluatePageConditions', () => {
@@ -330,6 +364,24 @@ describe('govcyExpressions - evaluatePageConditions', () => {
     const result = evaluatePageConditions(page, store, 'test', req);
 
     expect(result).to.deep.equal({ result: true }); // ✅ should NOT redirect
+  });
+
+  it('11. should evaluate conditions referencing user.profile_type', () => {
+    const page = {
+      pageData: {
+        conditions: [
+          {
+            expression: 'dataLayer["user.profile_type"] === "individual"',
+            redirect: 'profile-gate'
+          }
+        ]
+      }
+    };
+
+    req.user = { profile_type: 'individual' };
+
+    const result = evaluatePageConditions(page, store, 'test', req);
+    expect(result).to.deep.equal({ result: false, redirect: 'profile-gate' });
   });
 
 

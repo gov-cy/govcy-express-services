@@ -101,10 +101,18 @@ export function evaluateExpression(expression, dataLayer = {}) {
  * @param {string} expression - JS expression using dataLayer["..."]
  * @param {object} object - Unflattened data object (e.g., session.siteData[siteKey])
  * @param {string} prefix - Prefix to add to all keys (usually the siteKey)
+ * @param {object} [req=null] - Express request, used to inject user.profile_type into the context
  * @returns {*} - The evaluated result
  */
-export function evaluateExpressionWithFlattening(expression, object, prefix = '') {
-  const dataLayer = flattenContext(object, prefix);
+export function evaluateExpressionWithFlattening(expression, object, prefix = '', req = null) {
+  const baseObject = (object && typeof object === 'object') ? object : {};
+  const dataLayer = flattenContext(baseObject, prefix);
+
+  if (req) {
+    const profileType = req?.user?.profile_type ?? req?.session?.user?.profile_type ?? null;
+    dataLayer['user.profile_type'] = profileType;
+  }
+
   return evaluateExpression(expression, dataLayer);
 }
 
@@ -169,7 +177,8 @@ export function evaluatePageConditions(page, store, siteKey, req = {}) {
       const result = evaluateExpressionWithFlattening(
         condition.expression,
         siteData,
-        siteKey
+        siteKey,
+        req
       );
 
       if (typeof result !== 'boolean') {
