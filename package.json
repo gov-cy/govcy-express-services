@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -56,8 +56,8 @@
     "coverage:badge": "coverage-badges --output ./coverage-badges.svg && npm run coverage:copy"
   },
   "dependencies": {
-    "@gov-cy/dsf-email-templates": "^2.1.11",
-    "@gov-cy/govcy-frontend-renderer": "^1.26.7",
+    "@gov-cy/dsf-email-templates": "^2.1.14",
+    "@gov-cy/govcy-frontend-renderer": "^1.26.9",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",
@@ -78,8 +78,8 @@
     "nodemon": "^3.0.2",
     "pa11y": "^9.1.0",
     "patch-package": "^8.0.1",
-    "sinon": "^21.0.1",
-    "puppeteer": "^24.6.0"
+    "puppeteer": "^24.6.0",
+    "sinon": "^21.0.1"
   },
   "engines": {
     "node": ">=18.0.0"
