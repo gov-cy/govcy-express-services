@@ -242,11 +242,16 @@ function findFormElement(sections = []) {
  * @returns {object}
  */
 function buildStatusResult(page, pageType, pageUrl, hasData, status, conditionResult = null) {
+    let title = page?.pageData?.title || {};
+    if (pageType === "updateMyDetails") {
+        title = govcyResources.staticResources.text.updateMyDetailsTitle;
+    } else if (pageType === "multipleThings") {
+        title = page?.multipleThings?.listPage?.title || title;
+    }
+
     const result = {
         pageUrl,
-        title: pageType === "updateMyDetails"
-            ? govcyResources.staticResources.text.updateMyDetailsTitle
-            : (page?.pageData?.title || {}),
+        title,
         type: pageType,
         status,
         hasData

@@ -63,6 +63,7 @@ describe("computePageTaskStatus", () => {
         // Not started
         let result = computePageTaskStatus(req, siteId, service, MULTI_URL);
         expect(result.status).to.equal("NOT_STARTED");
+        expect(result.title).to.deep.equal({ en: "Things" });
 
         // In progress: one entry with missing data
         dataLayer.storePageData(req.session, siteId, MULTI_URL, [{ itemName: "" }]);
