@@ -5,6 +5,7 @@ import {
     requireAuth,
     naturalPersonPolicy,
     legalPersonPolicy,
+    eidasNaturalPersonPolicy,
     cyLoginPolicy, 
     handleLoginRoute,
     getUniqueIdentifier 
@@ -75,6 +76,7 @@ describe("cyLoginAuth Policies", () => {
         cyLoginPolicy(req, res, next);
         expect(next.calledOnce).to.equal(true);
         expect(next.firstCall.args.length).to.equal(0); // no error
+        expect(req.session.user.policy).to.equal("naturalPerson");
     });
 
     it("9. calls next() if any allowed policy passes (legalPerson)", () => {
@@ -83,6 +85,7 @@ describe("cyLoginAuth Policies", () => {
         cyLoginPolicy(req, res, next);
         expect(next.calledOnce).to.equal(true);
         expect(next.firstCall.args.length).to.equal(0);
+        expect(req.session.user.policy).to.equal("legalPerson");
     });
 
     it("10. calls next(err) with 403 if none of the allowed policies pass", () => {
@@ -95,6 +98,17 @@ describe("cyLoginAuth Policies", () => {
         expect(err).to.be.instanceOf(Error);
         expect(err.status).to.equal(403);
         expect(err.message).to.match(/none of the allowed CY Login policies/i);
+        expect(req.session.user.policy).to.equal(undefined);
+    });
+
+    it("10b. clears stale session policy when no allowed policy passes", () => {
+        req.session.user = { profile_type: "Organisation", policy: "naturalPerson" };
+        req.serviceData.site.cyLoginPolicies = ["naturalPerson"];
+        cyLoginPolicy(req, res, next);
+        const err = next.firstCall.args[0];
+        expect(err).to.be.instanceOf(Error);
+        expect(err.status).to.equal(403);
+        expect(req.session.user.policy).to.equal(undefined);
     });
 
     it("11. ignores unknown policy names but still passes if a known policy matches", () => {
@@ -174,6 +188,30 @@ describe("cyLoginAuth Policies", () => {
         const err = next.firstCall.args[0];
         expect(err).to.be.instanceOf(Error);
         expect(err.status).to.equal(403);
+    });
+
+    it("22. returns true for eIDAS natural person with valid unique_identifier structure", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "DE/CY/ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(true);
+    });
+
+    it("23. returns false for eIDAS natural person with invalid unique_identifier structure", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "DE-CY-ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(false);
+    });
+
+    it("24. returns false for eIDAS natural person when profile_type is not Individual", () => {
+        req.session.user = { profile_type: "Organisation", unique_identifier: "DE/CY/ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(false);
+    });
+
+    it("25. calls next() when eidasNaturalPerson policy passes", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "FR/CY/ID-778899" };
+        req.serviceData.site.cyLoginPolicies = ["eidasNaturalPerson"];
+        cyLoginPolicy(req, res, next);
+        expect(next.calledOnce).to.equal(true);
+        expect(next.firstCall.args.length).to.equal(0);
+        expect(req.session.user.policy).to.equal("eidasNaturalPerson");
     });
 
 

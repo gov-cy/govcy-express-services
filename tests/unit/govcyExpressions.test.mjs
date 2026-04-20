@@ -176,6 +176,40 @@ describe('govcyExpressions - evaluateExpressionWithFlattening', () => {
     );
     expect(result).to.be.true;
   });
+
+  it('7. should inject req.user.policy into the flattened context', () => {
+    const obj = {};
+    const req = {
+      user: {
+        policy: 'eidasNaturalPerson'
+      }
+    };
+    const result = evaluateExpressionWithFlattening(
+      'dataLayer["user.policy"] === "eidasNaturalPerson"',
+      obj,
+      '',
+      req
+    );
+    expect(result).to.be.true;
+  });
+
+  it('8. should fall back to req.session.user.policy when req.user is missing', () => {
+    const obj = {};
+    const req = {
+      session: {
+        user: {
+          policy: 'naturalPerson'
+        }
+      }
+    };
+    const result = evaluateExpressionWithFlattening(
+      'dataLayer["user.policy"] === "naturalPerson"',
+      obj,
+      '',
+      req
+    );
+    expect(result).to.be.true;
+  });
 });
 
 describe('govcyExpressions - evaluatePageConditions', () => {
@@ -382,6 +416,24 @@ describe('govcyExpressions - evaluatePageConditions', () => {
 
     const result = evaluatePageConditions(page, store, 'test', req);
     expect(result).to.deep.equal({ result: false, redirect: 'profile-gate' });
+  });
+
+  it('12. should evaluate conditions referencing user.policy', () => {
+    const page = {
+      pageData: {
+        conditions: [
+          {
+            expression: 'dataLayer["user.policy"] === "eidasNaturalPerson"',
+            redirect: 'policy-gate'
+          }
+        ]
+      }
+    };
+
+    req.user = { policy: 'eidasNaturalPerson' };
+
+    const result = evaluatePageConditions(page, store, 'test', req);
+    expect(result).to.deep.equal({ result: false, redirect: 'policy-gate' });
   });
 
 
