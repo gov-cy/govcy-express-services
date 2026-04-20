@@ -101,7 +101,8 @@ export async function handleCallback(req) {
         logger.debug('ID Token Claims', claims);
 
         let { sub } = claims;
-        let userInfo = await client.fetchUserInfo(config, access_token, sub);
+        const fetchedUserInfo = await client.fetchUserInfo(config, access_token, sub);
+        let userInfo = (fetchedUserInfo && typeof fetchedUserInfo === 'object') ? fetchedUserInfo : {};
         backfillPolicyClaimsFromIdToken(userInfo, claims);
         logger.debug('UserInfo Response', userInfo);
 
