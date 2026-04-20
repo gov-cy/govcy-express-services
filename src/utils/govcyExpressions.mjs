@@ -101,7 +101,7 @@ export function evaluateExpression(expression, dataLayer = {}) {
  * @param {string} expression - JS expression using dataLayer["..."]
  * @param {object} object - Unflattened data object (e.g., session.siteData[siteKey])
  * @param {string} prefix - Prefix to add to all keys (usually the siteKey)
- * @param {object} [req=null] - Express request, used to inject user.profile_type into the context
+ * @param {object} [req=null] - Express request, used to inject user profile context into the dataLayer
  * @returns {*} - The evaluated result
  */
 export function evaluateExpressionWithFlattening(expression, object, prefix = '', req = null) {
@@ -109,8 +109,12 @@ export function evaluateExpressionWithFlattening(expression, object, prefix = ''
   const dataLayer = flattenContext(baseObject, prefix);
 
   if (req) {
+    // Inject user profile context into the dataLayer for expression use,
+    // if available in either req.user or req.session.user
     const profileType = req?.user?.profile_type ?? req?.session?.user?.profile_type ?? null;
+    const policy = req?.user?.policy ?? req?.session?.user?.policy ?? null;
     dataLayer['user.profile_type'] = profileType;
+    dataLayer['user.policy'] = policy;
   }
 
   return evaluateExpression(expression, dataLayer);

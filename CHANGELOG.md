@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support eIDAS authentication
 - CY Login callback now backfills missing `unique_identifier`, `profile_type`, and `legal_unique_identifier` from verified ID token claims when not returned by `/userinfo`, without overriding non-empty `/userinfo` values.
 - Added `eidasNaturalPerson` CY Login policy for eIDAS natural-person identifier structure checks (`CC/CC/<identifier>`).
+- CY Login policy middleware now stores the matched policy in `req.session.user.policy` and clears stale policy values before each policy evaluation.
+- Added `user.policy` access in dataLayer when calculating conditional logic
 
 ## [v1.9.4] - 2026-04-12
 ### Changed
