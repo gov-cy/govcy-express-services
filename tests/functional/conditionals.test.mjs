@@ -266,5 +266,27 @@ describe('Conditional Service - Functional Test', function () {
         expect(bodyText).to.not.include('Επιπλέον πεδιο μόνο με συνθήκες 2'); // for `extra-2`
     });
 
+    it('11. should evaluate conditional-user-profile and either render it or redirect to review', async () => {
+        await page.goto(`${baseUrl}/conditional-user-profile`, { waitUntil: 'networkidle0' });
+
+        await page.waitForSelector('h1', { visible: true });
+        const h1Text = await page.$eval('h1', el => el.textContent.trim());
+
+        const isProfilePage = h1Text.includes('profile_type');
+        const isReviewPage = h1Text.includes('Ελέγξτε τις απαντήσεις σας');
+        expect(isProfilePage).to.be.true;
+    });
+
+    it('12. should evaluate conditional-user-policy and either render it or redirect to review', async () => {
+        await page.goto(`${baseUrl}/conditional-user-policy`, { waitUntil: 'networkidle0' });
+
+        await page.waitForSelector('h1', { visible: true });
+        const h1Text = await page.$eval('h1', el => el.textContent.trim());
+
+        const isPolicyPage = h1Text.includes('policy');
+        const isReviewPage = h1Text.includes('Ελέγξτε τις απαντήσεις σας');
+        expect(isPolicyPage).to.be.true;
+    });
 
 });
+

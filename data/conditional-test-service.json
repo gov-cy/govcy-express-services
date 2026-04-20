@@ -42,6 +42,11 @@
     "cdn": {
       "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist"
     },
+    "cyLoginPolicies": [
+      "naturalPerson",
+      "legalPerson",
+      "eidasNaturalPerson"
+    ],
     "submissionDataVersion": "1",
     "rendererVersion": "1.16.1",
     "designSystemsVersion": "3.2.0",
@@ -289,6 +294,108 @@
                           }
                         }
                       ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "conditional-user-profile",
+        "title": {
+          "el": "Σελίδα Συνθήκης Χρήστη `profile_type`",
+          "en": "User Conditional Page `profile_type`",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review",
+        "conditions": [
+          {
+            "expression": "dataLayer['user.profile_type'] !== 'Individual'",
+            "redirect": "review"
+          }
+        ]
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "profile-check-note",
+                        "name": "profile-check-note",
+                        "isPageHeading": true,
+                        "label": { "el": "Έλεγχος profile_type", "en": "profile_type check" }
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "text": { "el": "Συνέχεια", "en": "Continue" }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "conditional-user-policy",
+        "title": {
+          "el": "Σελίδα Συνθήκης Χρήστη `policy`",
+          "en": "User Conditional Page `policy`",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review",
+        "conditions": [
+          {
+            "expression": "dataLayer['user.policy'] !== 'naturalPerson'",
+            "redirect": "review"
+          }
+        ]
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "policy-check-note",
+                        "name": "policy-check-note",
+                        "isPageHeading": true,
+                        "label": { "el": "Έλεγχος policy", "en": "policy check" }
+                      }
                     },
                     {
                       "element": "button",
