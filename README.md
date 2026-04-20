@@ -157,7 +157,7 @@ The CY Login settings are configured in the `secrets/.env` file.
 Each service can specify which types of authenticated CY Login profiles are allowed to access it using the `site.cyLoginPolicies` property in its site configuration.
 
 ```json
-"cyLoginPolicies": ["naturalPerson", "legalPerson"]
+"cyLoginPolicies": ["naturalPerson", "legalPerson", "eidasNaturalPerson"]
 ```
 
 ##### Supported Policies
@@ -166,6 +166,7 @@ Each service can specify which types of authenticated CY Login profiles are allo
 | --------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
 | `naturalPerson` | Allows individual users (Cypriot citizens or foreign residents) who have a verified profile in the Civil Registry. Identified by `profile_type: "Individual"` and a 10-digit identifier starting with `00` (citizen) or `05` (foreigner). | Citizen-facing services, personal applications, etc. |
 | `legalPerson`   | Allows legal entities (companies, partnerships, organisations) with verified profiles in the Registrar of Companies. Identified by `profile_type: "Organisation"` and a `legal_unique_identifier`. | Business-facing services, company submissions, etc.  |
+| `eidasNaturalPerson` | Allows eIDAS natural persons identified by `profile_type: "Individual"` and `unique_identifier` in the `CC/CC/<identifier>` format. | Cross-border eIDAS individual services. |
 
 ##### How it works
 
@@ -189,6 +190,14 @@ Allow both natural and legal persons:
 ```json
 "site": {
   "cyLoginPolicies": ["naturalPerson", "legalPerson"]
+}
+```
+
+Allow Cypriot and eIDAS natural persons:
+
+```json
+"site": {
+  "cyLoginPolicies": ["naturalPerson", "eidasNaturalPerson"]
 }
 ```
 
@@ -2058,6 +2067,8 @@ To use data layer values, use the special `dataLayer[]` array. For example `data
 The `dataLayer` typically contains keys such as:
 - `inputData`: **All data submitted by the user through forms**
 - `eligibilityResults`: **Cached results from service eligibility API checks**
+- `user.profile_type`: **Authenticated user profile type from CY Login context**
+- `user.policy`: **The matched CY Login policy name for the current session**
 
 Example structure for a service with ID `my-service`:
 
@@ -2073,7 +2084,9 @@ dataLayer = {
   ],
   'my-service.inputData.want-to-apply.formData.option-radio': 'yes',
   'my-service.eligibilityResults.check1.succeeded': true,
-  'my-service.eligibilityResults.check2.ErrorCode': 0
+  'my-service.eligibilityResults.check2.ErrorCode': 0,
+  'user.profile_type': 'Individual',
+  'user.policy': 'naturalPerson'
 }
 
 ```
