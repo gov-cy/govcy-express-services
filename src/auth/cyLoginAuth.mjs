@@ -9,6 +9,7 @@ const clientId = getEnvVariable('CYLOGIN_CLIENT_ID');
 const clientSecret = getEnvVariable('CYLOGIN_CLIENT_SECRET');
 const scope = getEnvVariable('CYLOGIN_SCOPE');
 const redirect_uri = getEnvVariable('CYLOGIN_REDIRECT_URI');
+const policyClaims = ['unique_identifier', 'profile_type', 'legal_unique_identifier'];
 
 // Discover OpenID settings with error handling and retry mechanism
 let config = null; // Changed: Initialize config as null
@@ -101,6 +102,7 @@ export async function handleCallback(req) {
 
         let { sub } = claims;
         let userInfo = await client.fetchUserInfo(config, access_token, sub);
+        backfillPolicyClaimsFromIdToken(userInfo, claims);
         logger.debug('UserInfo Response', userInfo);
 
         return { tokens, claims, userInfo };
@@ -109,6 +111,31 @@ export async function handleCallback(req) {
         logger.error('Error processing login callback:', error.message);
         throw new Error('Unable to process login callback at this time.');
     }
+}
+
+/**
+ * Checks if a value is missing (null, undefined, or empty string)
+ * @param {*} value The value to check 
+ * @returns {boolean} True if the value is missing, false otherwise 
+ */
+function isMissingValue(value) {
+    return value == null || (typeof value === 'string' && value.trim() === '');
+}
+
+/**
+ * Backfill missing policy claims from ID token claims to userInfo
+ * @param {object} userInfo The userInfo object to backfill
+ * @param {object} claims The ID token claims to check for missing values
+ * @returns {object} The updated userInfo object with backfilled claims
+ */
+export function backfillPolicyClaimsFromIdToken(userInfo = {}, claims = {}) {
+    for (const key of policyClaims) {
+        if (isMissingValue(userInfo[key]) && !isMissingValue(claims[key])) {
+            userInfo[key] = claims[key];
+        }
+    }
+
+    return userInfo;
 }
 
 
