@@ -181,6 +181,10 @@ const policyRegistry = {
 export function cyLoginPolicy(req, res, next) {
     // Check what is allowed in the service configuration
     const allowed = req?.serviceData?.site?.cyLoginPolicies || ["naturalPerson"];
+    // Clear stale policy value before policy evaluation
+    if (req?.session?.user) {
+        delete req.session.user.policy;
+    }
 
     // Check each policy in the allowed list
     for (const name of allowed) {
@@ -193,7 +197,10 @@ export function cyLoginPolicy(req, res, next) {
 
         // 🚨 Strict mode: let errors throw naturally if data is malformed
         const passed = policy(req);
-        if (passed) return next();
+        if (passed) {
+            req.session.user.policy = name;
+            return next();
+        }
     }
 
     return handleMiddlewareError(
