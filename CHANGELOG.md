@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `eidasNaturalPerson` CY Login policy for eIDAS natural-person identifier structure checks (`CC/CC/<identifier>`).
 - CY Login policy middleware now stores the matched policy in `req.session.user.policy` and clears stale policy values before each policy evaluation.
 - Added `user.policy` access in dataLayer when calculating conditional logic
+- Added test in `conditionals.test.mjs` for CY Login `user.policy` and `user.profile_type`
+- Vulnerabilities fixed
 
 ## [v1.9.4] - 2026-04-12
 ### Changed
