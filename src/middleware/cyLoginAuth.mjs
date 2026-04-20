@@ -152,9 +152,30 @@ export function legalPersonPolicy(req) {
     return false;
 }
 
+/**
+ * Middleware to enforce eIDAS natural person policy. If the user is not a verified eIDAS natural person, return false.
+ * 
+ * @param {object} req The request object
+ */
+export function eidasNaturalPersonPolicy(req) {
+    // https://dev.azure.com/cyprus-gov-cds/Documentation/_wiki/wikis/Documentation/43/For-eIDAS-Natural-or-Legal-person
+    const { profile_type, unique_identifier } = req.session.user || {};
+    // Allow only natural persons with eIDAS unique identifier format: CC/CC/<identifier>
+    if (profile_type === 'Individual' && typeof unique_identifier === 'string') {
+        const eidasIdentifierPattern = /^[A-Z]{2}\/[A-Z]{2}\/.+$/;
+        if (eidasIdentifierPattern.test(unique_identifier)) {
+            return true;
+        }
+    }
+
+    // Deny access if validation fails
+    return false;
+}
+
 const policyRegistry = {
     naturalPerson: naturalPersonPolicy,
     legalPerson: legalPersonPolicy,
+    eidasNaturalPerson: eidasNaturalPersonPolicy,
 };
 
 export function cyLoginPolicy(req, res, next) {

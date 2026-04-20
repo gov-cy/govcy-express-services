@@ -5,6 +5,7 @@ import {
     requireAuth,
     naturalPersonPolicy,
     legalPersonPolicy,
+    eidasNaturalPersonPolicy,
     cyLoginPolicy, 
     handleLoginRoute,
     getUniqueIdentifier 
@@ -174,6 +175,29 @@ describe("cyLoginAuth Policies", () => {
         const err = next.firstCall.args[0];
         expect(err).to.be.instanceOf(Error);
         expect(err.status).to.equal(403);
+    });
+
+    it("22. returns true for eIDAS natural person with valid unique_identifier structure", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "DE/CY/ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(true);
+    });
+
+    it("23. returns false for eIDAS natural person with invalid unique_identifier structure", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "DE-CY-ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(false);
+    });
+
+    it("24. returns false for eIDAS natural person when profile_type is not Individual", () => {
+        req.session.user = { profile_type: "Organisation", unique_identifier: "DE/CY/ABC123456" };
+        expect(eidasNaturalPersonPolicy(req)).to.equal(false);
+    });
+
+    it("25. calls next() when eidasNaturalPerson policy passes", () => {
+        req.session.user = { profile_type: "Individual", unique_identifier: "FR/CY/ID-778899" };
+        req.serviceData.site.cyLoginPolicies = ["eidasNaturalPerson"];
+        cyLoginPolicy(req, res, next);
+        expect(next.calledOnce).to.equal(true);
+        expect(next.firstCall.args.length).to.equal(0);
     });
 
 
