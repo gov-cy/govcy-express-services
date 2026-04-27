@@ -795,6 +795,49 @@ describe('govcyFormHandling - multiple items mode', () => {
         expect(el.params.deleteHref).to.equal('/mysite/mypage/multiple/edit/1/delete-file/uploadDoc?route=review');
     });
 
+    it('5. should propagate edit mode and index to conditional radio fileInput URLs', () => {
+        const formElements = [
+            {
+                element: 'radios',
+                params: {
+                    id: 'paymentMethod',
+                    name: 'paymentMethod',
+                    items: [
+                        {
+                            value: 'credit',
+                            conditionalElements: [
+                                {
+                                    element: 'fileInput',
+                                    params: {
+                                        id: 'paymentReceipt',
+                                        name: 'paymentReceipt',
+                                        label: { en: 'Upload receipt' }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+
+        const theData = {
+            paymentMethod: 'credit',
+            paymentReceipt: { fileId: 'file-credit-1', sha256: 'sha-credit-1' }
+        };
+
+        const validationErrors = { errors: {}, errorSummary: [] };
+        const store = {};
+
+        populateFormData(formElements, theData, validationErrors, store, 'supplies-subsidy', 'fertilizer-invoices', 'en', null, '', 'edit', 0);
+
+        const conditionalFile = formElements[0].params.items[0].conditionalElements[0];
+        expect(conditionalFile.element).to.equal('fileView');
+        expect(conditionalFile.params.fileId).to.equal('file-credit-1');
+        expect(conditionalFile.params.viewHref).to.equal('/supplies-subsidy/fertilizer-invoices/multiple/edit/0/view-file/paymentReceipt');
+        expect(conditionalFile.params.deleteHref).to.equal('/supplies-subsidy/fertilizer-invoices/multiple/edit/0/delete-file/paymentReceipt');
+    });
+
 });
 
 
