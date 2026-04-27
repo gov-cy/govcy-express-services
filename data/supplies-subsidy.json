@@ -1,0 +1,1928 @@
+{
+  "site": {
+    "id": "supplies-subsidy",
+    "lang": "el",
+    "languages": [
+      {
+        "code": "el",
+        "label": "EL",
+        "alt": "Ελληνική γλώσσα",
+        "href": "?lang=el"
+      },
+      {
+        "code": "en",
+        "label": "EN",
+        "alt": "English language",
+        "href": "?lang=en"
+      }
+    ],
+    "footerLinks": [
+      {
+        "label": {
+          "el": "Δήλωση απορρήτου",
+          "en": "Privacy statement",
+          "tr": "Privacy statement"
+        },
+        "href": "/supplies-subsidy/privacy-statement"
+      },
+      {
+        "label": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": "Cookies"
+        },
+        "href": "/supplies-subsidy/cookie-policy"
+      },
+      {
+        "label": {
+          "el": "Προσβασιμότητα",
+          "en": "Accessibility",
+          "tr": "Accessibility"
+        },
+        "href": "/supplies-subsidy/accessibility-statement"
+      }
+    ],
+    "footerIcons": [
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png"
+        },
+        "alt": {
+          "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU",
+          "en": "Funded by the EU Next Generation EU",
+          "tr": "Funded by the EU Next Generation EU"
+        },
+        "href": {
+          "el": "https://europa.eu/",
+          "en": "https://europa.eu/",
+          "tr": "https://europa.eu/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα της ΕΕ",
+          "en": "Go to EU website",
+          "tr": "Go to EU website"
+        }
+      },
+      {
+        "target": "_blank",
+        "src": {
+          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png",
+          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
+          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png"
+        },
+        "alt": {
+          "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας",
+          "en": "Cyprus tomorrow, recovery and resilience plan",
+          "tr": "Cyprus tomorrow, recovery and resilience plan"
+        },
+        "href": {
+          "el": "http://www.cyprus-tomorrow.gov.cy/",
+          "en": "http://www.cyprus-tomorrow.gov.cy/",
+          "tr": "http://www.cyprus-tomorrow.gov.cy/"
+        },
+        "title": {
+          "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο",
+          "en": "Go to Cyprus Tomorrow website",
+          "tr": "Go to Cyprus Tomorrow website"
+        }
+      }
+    ],
+    "menu": {
+      "el": "Μενού",
+      "en": "Menu",
+      "tr": "Menu"
+    },
+    "title": {
+      "el": "Αίτηση για επιδότηση λιπασμάτων και γεωργικών εφοδίων",
+      "en": "Apply for fertilizers and agricultural supplies subsidy",
+      "tr": ""
+    },
+    "headerTitle": {
+      "title": {
+        "el": "Αίτηση για επιδότηση λιπασμάτων και γεωργικών εφοδίων",
+        "en": "Apply for fertilizers and agricultural supplies subsidy",
+        "tr": "Apply for fertilizers and agricultural supplies subsidy"
+      },
+      "href": {
+        "el": "/supplies-subsidy",
+        "en": "/supplies-subsidy",
+        "tr": "/supplies-subsidy"
+      }
+    },
+    "description": {
+      "el": "Υποβάλετε αίτηση για χορήγηση ISBN",
+      "en": "Apply for fertilizers and agricultural supplies subsidy",
+      "tr": ""
+    },
+    "url": "https://gov.cy",
+    "isTesting": true,
+    "cdn": {
+      "dist": "https://cdn.jsdelivr.net/gh/gov-cy/govcy-design-system@3.2.0/dist",
+      "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
+      "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
+    },
+    "usesDSFSubmissionPlatform": true,
+    "cyLoginPolicies": [
+      "naturalPerson",
+      "legalPerson"
+    ],
+    "submissionDataVersion": "1",
+    "rendererVersion": "1.25.1",
+    "designSystemsVersion": "3.2.0",
+    "matomo": {
+      "url": "//wp.matomo.dits.dmrid.gov.cy/",
+      "siteId": "50"
+    },
+    "copyrightText": {
+      "el": "Κυπριακή Δημοκρατία, 2026",
+      "en": "Republic of Cyprus, 2026",
+      "tr": "Republic of Cyprus, 2026"
+    },
+    "successPageHeader": {
+      "el": "Έχουμε λάβει την αίτησή σας",
+      "en": "We have received your application",
+      "tr": "We have received your application"
+    },
+    "successEmailHeader": {
+      "el": "Έχουμε λάβει την αίτησή σας",
+      "en": "We have received your application",
+      "tr": "We have received your application"
+    },
+    "submissionAPIEndpoint": {
+      "url": "TEST_SUBMISSION_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+      "response": {
+        "errorResponse": {
+          "102": {
+            "error": "user not administrator",
+            "page": "/test/user-not-admin"
+          },
+          "105": {
+            "error": "user not registration",
+            "page": "/test/user-not-registered"
+          }
+        }
+      }
+    },
+    "eligibilityAPIEndpoints": [
+      {
+        "url": "TEST_ELIGIBILITY_2_API_URL",
+        "method": "GET",
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "cashingTimeoutMinutes": "60",
+        "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY",
+        "params": {},
+        "response": {
+          "errorResponse": {
+            "105": {
+              "error": "user not registration",
+              "page": "/test/user-not-registered"
+            }
+          }
+        }
+      },
+      {
+        "url": "CRMD_ELIGIBILITY_API_URL",
+        "method": "GET",
+        "clientKey": "DSF_API_GTW_CLIENT_ID",
+        "serviceId": "DSF_API_GTW_SERVICE_ID",
+        "cashingTimeoutMinutes": "0",
+        "dsfgtwApiKey": "DSF_API_GTW_SECRET",
+        "params": {
+          "checkFor": "isIdentifierFound,isAlive,isCypriot"
+        },
+        "response": {
+          "errorResponse": {
+            "100": {
+              "error": "DRMD check isIdenfierFound",
+              "page": "/test/identifier-not-found"
+            },
+            "101": {
+              "error": "DRMD check isAlive",
+              "page": "/test/not-alive-citizen"
+            },
+            "102": {
+              "error": "DRMD check isCypriot",
+              "page": "/test/not-cy-nationality"
+            },
+            "103": {
+              "error": "DRMD check isGreekCypriot",
+              "page": "/test/not-greek-cypriot"
+            },
+            "104": {
+              "error": "DRMD check isTurkishCypriot",
+              "page": "/test/not-turkish-cypriot"
+            },
+            "105": {
+              "error": "DRMD check is18AndOver",
+              "page": "/test/under-18"
+            },
+            "106": {
+              "error": "DRMD check is17AndOver",
+              "page": "/test/under-17"
+            },
+            "107": {
+              "error": "DRMD check is16AndOver",
+              "page": "/test/under-16"
+            }
+          }
+        }
+      }
+    ],
+    "submissionGetAPIEndpoint": {
+      "url": "TEST_SUBMISSION_GET_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "submissionPutAPIEndpoint": {
+      "url": "TEST_SUBMISSION_PUT_API_URL",
+      "method": "PUT",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileUploadAPIEndpoint": {
+      "url": "TEST_UPLOAD_FILE_API_URL",
+      "method": "POST",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDownloadAPIEndpoint": {
+      "url": "TEST_DOWNLOAD_FILE_API_URL",
+      "method": "GET",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    },
+    "fileDeleteAPIEndpoint": {
+      "url": "TEST_DELETE_FILE_API_URL",
+      "method": "DELETE",
+      "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+      "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+      "dsfgtwApiKey": "TEST_SUBMISSION_DSF_GTW_KEY"
+    }
+  },
+  "pages": [
+    {
+      "pageData": {
+        "url": "identifier-not-found",
+        "title": {
+          "el": "Δεν σας βρήκαμε στα αρχεία μας",
+          "en": "We didn’t find you in our records",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν σας βρήκαμε στα αρχεία μας",
+                    "en": "You are not registered"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-alive-citizen",
+        "title": {
+          "el": "Έχει βρεθεί ημερομηνία θανάτου για αυτό το άτομο",
+          "en": "Date of death found for this person",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Έχει βρεθεί ημερομηνία θανάτου για αυτό το άτομο",
+                    "en": "Date of death found for this person"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-cy-nationality",
+        "title": {
+          "el": "Η υπηκοότητά σας δεν είναι κυπριακή",
+          "en": "Your citizenship is not Cypriot",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηκοότητά σας δεν είναι κυπριακή",
+                    "en": "Your citizenship is not Cypriot"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Κύπριος ή Κύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be a Cypriot citizen.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-greek-cypriot",
+        "title": {
+          "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+          "en": "You cannot continue online",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+                    "en": "You cannot continue online"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Έλληνοκύπριος ή Ελληνοκύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be Greek Cypriot.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "not-turkish-cypriot",
+        "title": {
+          "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+          "en": "You cannot continue online",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δεν μπορείτε να προχωρήσετε διαδικτυακά",
+                    "en": "You cannot continue online"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε Τουρκοκύπριος ή Τουρκοκύπρια.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service, you need to be Turkish Cypriot.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-16",
+        "title": {
+          "el": "Είστε κάτω των 16 χρόνων",
+          "en": "You are under 16 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 16 χρόνων",
+                    "en": "You are under 16 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 16 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 16 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-17",
+        "title": {
+          "el": "Είστε κάτω των 17 χρόνων",
+          "en": "You are under 17 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 17 χρόνων",
+                    "en": "You are under 17 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 17 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 17 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "under-18",
+        "title": {
+          "el": "Είστε κάτω των 18 χρόνων",
+          "en": "You are under 18 years old",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Είστε κάτω των 18 χρόνων",
+                    "en": "You are under 18 years old"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Για να χρησιμοποιήσετε την υπηρεσία αυτή θα πρέπει να είστε πάνω από 18 χρόνων.</p><p>Αν πιστεύετε ότι υπάρχει κάποιο λάθος στα αρχεία μας, επισκεφθείτε το κοντινότερο <a href=\"https://www.gov.cy/moi/documents/simeia-ypovolis-aitiseon/\" target=\"_blank\">Γραφείο Επαρχιακής Διοίκησης</a>.</p>",
+                    "en": "<p>To use this service you need to be over 18 years old.</p><p>If you think that there is a mistake in our records, please visit your nearest <a href=\"https://www.gov.cy/moi/en/documents/application-submission-offices/\" target=\"_blank\">District Administration Office</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "service-not-started",
+        "title": {
+          "el": "Η υπηρεσία δεν είναι ακόμη διαθέσιμη",
+          "en": "The service is not available yet",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηρεσία δεν είναι ακόμη διαθέσιμη",
+                    "en": "The service is not available yet"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<h2>Ζητήστε βοήθεια και καθοδήγηση</h2><ul><li>Email: <a href=\"mailto:info_npdd@cm.gov.cy\" target=\"_blank\">info_npdd@cm.gov.cy</a></li><li>Τηλέφωνο: 22 602933, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>",
+                    "en": "<h2>Get help and advice</h2><ul><li>Email: <a href=\"mailto:info_npdd@cm.gov.cy\" target=\"_blank\">info_npdd@cm.gov.cy</a></li><li>Telephone: 22 602933, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "service-ended",
+        "title": {
+          "el": "Η υπηρεσία δεν είναι πλέον διαθέσιμη",
+          "en": "The service is no longer available",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηρεσία δεν είναι πλέον διαθέσιμη",
+                    "en": "The service is no longer available"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<h2>Ζητήστε βοήθεια και καθοδήγηση</h2><ul><li>Email: <a href=\"mailto:info_npdd@cm.gov.cy\" target=\"_blank\">info_npdd@cm.gov.cy</a></li><li>Τηλέφωνο: 22 602933, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>",
+                    "en": "<h2>Get help and advice</h2><ul><li>Email: <a href=\"mailto:info_npdd@cm.gov.cy\" target=\"_blank\">info_npdd@cm.gov.cy</a></li><li>Telephone: 22 602933, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "index",
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "farmer-registration"
+      },
+      "updateMyDetails": {
+        "topElements": [
+          {
+            "element": "progressList",
+            "params": {
+              "id": "steps",
+              "current": "1",
+              "total": "4",
+              "showSteps": true,
+              "steps": [
+                {
+                  "id": "step1",
+                  "text": {
+                    "el": "Τα στοιχεία σας",
+                    "en": "Your derails",
+                    "tr": ""
+                  }
+                },
+                {
+                  "id": "step2",
+                  "text": {
+                    "el": "Αριθμός μητρώου",
+                    "en": "Registration number",
+                    "tr": ""
+                  }
+                },
+                {
+                  "id": "step4",
+                  "text": {
+                    "el": "Τιμολόγια",
+                    "en": "Invoices",
+                    "tr": ""
+                  }
+                },
+                {
+                  "id": "step5",
+                  "text": {
+                    "el": "Υπεύθυνη δήλωση ",
+                    "en": "Declaration",
+                    "tr": ""
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "scope": [
+          "fullName",
+          "email",
+          "mobile",
+          "address"
+        ],
+        "hasBackLink": false,
+        "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",
+        "APIEndpoint": {
+          "url": "CIVIL_REGISTRY_CONTACT_API_URL",
+          "method": "GET",
+          "clientKey": "DSF_API_GTW_CLIENT_ID",
+          "serviceId": "DSF_API_GTW_SERVICE_ID",
+          "dsfgtwApiKey": "DSF_API_GTW_SECRET"
+        }
+      }
+    },
+    {
+      "pageData": {
+        "url": "farmer-registration",
+        "title": {
+          "el": "Εγγραφή στο Μητρώο Αγροτών",
+          "en": "Registration in the Farmers' Registry",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "fertilizer-invoices"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "2",
+                        "total": "4",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Τα στοιχεία σας",
+                              "en": "Your derails",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Αριθμός μητρώου",
+                              "en": "Registration number",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step4",
+                            "text": {
+                              "el": "Τιμολόγια",
+                              "en": "Invoices",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step5",
+                            "text": {
+                              "el": "Υπεύθυνη δήλωση ",
+                              "en": "Declaration",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Αριθμός εγγραφής μητρώου αγροτών",
+                          "en": "Farmers' registry registration number"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "declaration",
+                        "text": {
+                          "el": "<p>Πρέπει να είστε εγγεγραμμένος σε μία από τις κατηγορίες 2, 4, 6, 7, 8, 11, 13, 16, 17, 24, 25, 26 ή 27, όπως αναγράφεται στο Πιστοποιητικό Εγγραφής στο Μητρώο Αγροτών.</p>",
+                          "en": "<p>You must be registered in one of the categories 2, 4, 6, 7, 8, 11, 13, 16, 17, 24, 25, 26 or 27, as indicated on the Certificate of Registration in the Farmers' Registry.</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "farmersRegistrationNumber",
+                        "name": "farmersRegistrationNumber",
+                        "label": {
+                          "el": "Αριθμός εγγραφής",
+                          "en": "Registration number"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Μπορείτε να το βρείτε στο “Πιστοποιητικό Εγγραφής του Μητρώου Αγροτών και Γεωργικών Εκμεταλλεύσεων” και έχει την μορφή 0000-000000000",
+                          "en": "You can find it in the “Certificate of Registration in the Farmers' Registry” and it has the format 0000-000000000"
+                        },
+                        "fixedWidth": "35",
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό εγγραφής μητρώου αγροτών σας",
+                              "en": "Enter your armers' registry registration number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "textWide_EL_Latn",
+                            "message": {
+                              "el": "Εισαγάγετε έγκυρο αριθμό εγγραφής μητρώου αγροτών με ελληνικούς ή λατινικούς χαρακτήρες, αριθμούς και συνηθισμένα σημεία στίξης",
+                              "en": "Enter a valid farmers' registry registration number with Greek or Latin characters and common punctuation marks",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "regCheck",
+                          "params": {
+                            "checkValue": "^\\d{4}-\\d{9}$",
+                            "message": {
+                              "el": "Ο αριθμός εγγραφής μητρώου πρέπει να είναι έχει τη μορφή 0000-000000000",
+                              "en": "The farmers' registry registration must have a format of 0000-000000000",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "50",
+                            "message": {
+                              "el": "Εισαγάγετε έγκυρο αριθμό εγγραφής μητρώου αγροτών μέχρι 50 χαρακτήρες",
+                              "en": "Enter a valid farmers' registry registration number up to 50 characters long",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Save and continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "fertilizer-invoices",
+        "title": {
+          "el": "Τιμολόγιο",
+          "en": "invoice",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "declarations"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "3",
+                        "total": "4",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Τα στοιχεία σας",
+                              "en": "Your derails",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Αριθμός μητρώου",
+                              "en": "Registration number",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step4",
+                            "text": {
+                              "el": "Τιμολόγια",
+                              "en": "Invoices",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step5",
+                            "text": {
+                              "el": "Υπεύθυνη δήλωση ",
+                              "en": "Declaration",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Τιμολόγιο",
+                          "en": "Invoice"
+                        }
+                      }
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "invoiceNumber",
+                        "name": "invoiceNumber",
+                        "label": {
+                          "el": "Αριθμός τιμολογίου",
+                          "en": "Invoice number"
+                        },
+                        "isPageHeading": false,
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό τιμολογίου",
+                              "en": "Enter the invoice number",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "textWide_EL_Latn",
+                            "message": {
+                              "el": "Εισαγάγετε τον αριθμό τιμολογίου με ελληνικούς ή λατινικούς χαρακτήρες, αριθμούς και συνηθισμένα σημεία στίξης",
+                              "en": "Enter a valid invoice number with Greek or Latin characters, numbers and common punctuation marks",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "100",
+                            "message": {
+                              "el": "Εισαγάγετε έγκυρο Αριθμός τιμολογίου μέχρι 100 χαρακτήρες",
+                              "en": "Enter a valid invoice number up to 100 characters long",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "datePicker",
+                      "params": {
+                        "id": "invoiceDate",
+                        "name": "invoiceDate",
+                        "label": {
+                          "el": "Ημερομηνία έκδοσης ",
+                          "en": "Issue date"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Η ημερομηνία πρέπει να είναι μεταξύ 1/4/2026 έως 31/5/2026 (συμπεριλαμβανομένων)",
+                          "en": "The date must be between 1/4/2026 - 31/5/2026 (inclusive)"
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε την ημερομηνία έκδοσης του τιμολογίου",
+                              "en": "Enter the invoice issue date",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "dateDMY",
+                            "message": {
+                              "el": "Η ημερομηνία έκδοσης του τιμολογίου πρέπει να είναι μια πραγματική ημερομηνία",
+                              "en": "The invoice issue date must be a real date",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "minValueDate",
+                          "params": {
+                            "checkValue": "2026-04-01",
+                            "message": {
+                              "el": "Η ημερομηνία έκδοσης του τιμολογίου πρέπει να είναι μετά από την 1/4/2026",
+                              "en": "The invoice issue date must be after the 1/4/2026",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "maxValueDate",
+                          "params": {
+                            "checkValue": "2026-05-31",
+                            "message": {
+                              "el": "Η ημερομηνία έκδοσης του τιμολογίου πρέπει να είναι το ίδιο ή πριν από τις 31/5/2026",
+                              "en": "The invoice issue date must be the same as or before the 31/5/2026",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "textInput",
+                      "params": {
+                        "id": "invoiceAmount",
+                        "name": "invoiceAmount",
+                        "label": {
+                          "el": "Ποσό τιμολογίου χωρίς το ΦΠΑ (€)",
+                          "en": "Invoice amount excluding VAT (€)"
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "Δηλώστε μόνο το ποσό του τιμολογίου που αφορά τα λιπάσματα και όχι άλλα αγαθά. Δώστε την τιμή σε Ευρώ (€). Για παράδειγμα “123,45”",
+                          "en": "Enter only the amount on the invoice that relates to fertilizers, not other goods. Enter the amount in euros (€). For example, “123.45”."
+                        },
+                        "fixedWidth": "10",
+                        "type": "text"
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Εισαγάγετε το ποσό του τιμολογίου",
+                              "en": "Enter the invoice amount",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "valid",
+                          "params": {
+                            "checkValue": "currency",
+                            "message": {
+                              "el": "Το ποσό του τιμολογίου πρέπει να είναι χρηματικό ποσό. Για παράδειγμα “1234,56”",
+                              "en": "The invoice amount must be a currency amount “1234,56”",
+                              "tr": ""
+                            }
+                          }
+                        },
+                        {
+                          "check": "length",
+                          "params": {
+                            "checkValue": "10",
+                            "message": {
+                              "el": "Το ποσό του τιμολογίου πρέπει να είναι 10 χαρακτήρες ή λιγότεροι",
+                              "en": "The invoice amount must be 10 characters or less",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "fileInput",
+                      "params": {
+                        "id": "invoiceProof",
+                        "name": "invoiceProof",
+                        "label": {
+                          "el": "Ανεβάστε το τιμολόγιο",
+                          "en": "Upload the invoice",
+                          "tr": ""
+                        },
+                        "isPageHeading": false,
+                        "hint": {
+                          "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                          "en": "Accepted formats: PDF, JPG, JPEG, PNG",
+                          "tr": ""
+                        }
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Ανεβάστε το το τιμολόγιο",
+                              "en": "Upload the invoice",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "radios",
+                      "params": {
+                        "id": "paymentMethod",
+                        "name": "paymentMethod",
+                        "legend": {
+                          "el": "Ποια είναι η μέθοδος πληρωμής;",
+                          "en": "What is the payment method?"
+                        },
+                        "items": [
+                          {
+                            "value": "Cash",
+                            "text": {
+                              "el": "Τοις μετρητοίς",
+                              "en": "In cash",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "value": "Credit",
+                            "text": {
+                              "el": "Επί πιστώσει",
+                              "en": "On credit",
+                              "tr": ""
+                            },
+                            "conditionalElements": [
+                              {
+                                "element": "fileInput",
+                                "params": {
+                                  "id": "paymentReceipt",
+                                  "name": "paymentReceipt",
+                                  "label": {
+                                    "el": "Ανεβάστε την απόδειξη πληρωμής",
+                                    "en": "Upload the payment receipt",
+                                    "tr": ""
+                                  },
+                                  "isPageHeading": false,
+                                  "hint": {
+                                    "el": "PDF, JPG, JPEG, PNG, είναι οι αποδεκτές μορφές",
+                                    "en": "Accepted formats: PDF, JPG, JPEG, PNG",
+                                    "tr": ""
+                                  }
+                                },
+                                "validations": [
+                                  {
+                                    "check": "required",
+                                    "params": {
+                                      "checkValue": "",
+                                      "message": {
+                                        "el": "Ανεβάστε την απόδειξη πληρωμής",
+                                        "en": "Upload the payment receipt",
+                                        "tr": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "isPageHeading": false
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξετε τη μέθοδο πληρωμής",
+                              "en": "Select the payment method",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Save and continue"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "multipleThings": {
+        "min": "1",
+        "max": "30",
+        "dedupe": true,
+        "itemTitleTemplate": "{{invoiceNumber | trim}} - {{invoiceDate | trim}} - €{{invoiceAmount | trim}} - {{paymentMethod | trim}}",
+        "listPage": {
+          "title": {
+            "el": "Τιμολόγια για λιπάσματα και γεωργικά εφόδια",
+            "en": "Fertilizer and agricultural supplies invoices",
+            "tr": ""
+          },
+          "addButtonPlacement": "top",
+          "hasBackLink": true,
+          "topElements": [
+            {
+              "element": "progressList",
+              "params": {
+                "id": "steps",
+                "current": "3",
+                "total": "4",
+                "showSteps": true,
+                "steps": [
+                  {
+                    "id": "step1",
+                    "text": {
+                      "el": "Τα στοιχεία σας",
+                      "en": "Your derails",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step2",
+                    "text": {
+                      "el": "Αριθμός μητρώου",
+                      "en": "Registration number",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step4",
+                    "text": {
+                      "el": "Τιμολόγια",
+                      "en": "Invoices",
+                      "tr": ""
+                    }
+                  },
+                  {
+                    "id": "step5",
+                    "text": {
+                      "el": "Υπεύθυνη δήλωση ",
+                      "en": "Declaration",
+                      "tr": ""
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "element": "textElement",
+              "params": {
+                "id": "header",
+                "type": "h1",
+                "text": {
+                  "el": "Τιμολόγια για λιπάσματα και γεωργικά εφόδια",
+                  "en": "Fertilizer and agricultural supplies invoices"
+                }
+              }
+            },
+            {
+              "element": "htmlElement",
+              "params": {
+                "id": "instructions",
+                "text": {
+                  "el": "<p>Προσθέστε τουλάχιστον ένα τιμολογόγιο για να προχωρήσετε. Μπορείτε να προσθέσετε μέχρι 30 τιμολόγια.</p>",
+                  "en": "<p>Add at least one invoice to proceed. You can add up to 15 invoices.</p>"
+                }
+              }
+            }
+          ],
+          "addButtonText": {
+            "el": "Προσθήκη τιμολογίου",
+            "en": "Add invoice",
+            "tr": ""
+          },
+          "emptyState": {
+            "el": "Δεν έχετε προσθέσει τιμολόγιο ακόμα.",
+            "en": "No invoices added yet.",
+            "tr": ""
+          },
+          "continueButtonText": {
+            "el": "Αποθήκευση και συνέχεια",
+            "en": "Save and continue",
+            "tr": ""
+          }
+        }
+      }
+    },
+    {
+      "pageData": {
+        "url": "declarations",
+        "title": {
+          "el": "Υπεύθυνη δήλωση και προσωπικά δεδομένα",
+          "en": "Declaration and personal data",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "next-steps"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "progressList",
+                      "params": {
+                        "id": "steps",
+                        "current": "4",
+                        "total": "4",
+                        "showSteps": true,
+                        "steps": [
+                          {
+                            "id": "step1",
+                            "text": {
+                              "el": "Τα στοιχεία σας",
+                              "en": "Your derails",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step2",
+                            "text": {
+                              "el": "Αριθμός μητρώου",
+                              "en": "Registration number",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step4",
+                            "text": {
+                              "el": "Τιμολόγια",
+                              "en": "Invoices",
+                              "tr": ""
+                            }
+                          },
+                          {
+                            "id": "step5",
+                            "text": {
+                              "el": "Υπεύθυνη δήλωση ",
+                              "en": "Declaration",
+                              "tr": ""
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "header",
+                        "type": "h1",
+                        "text": {
+                          "el": "Υπεύθυνη δήλωση ",
+                          "en": "Declaration"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "declaration",
+                        "text": {
+                          "el": "<ol><li>Δηλώνω υπεύθυνα και εν γνώσει των συνεπειών του Νόμου αναφορικά με ψευδείς δηλώσεις ότι οι πληροφορίες που δίδονται στην αίτηση αυτή είναι αληθείς και ορθές. Επίσης δηλώνω ότι έχω διαβάσει τους όρους του Σχεδίου και συμφωνώ να συμμορφώνομαι πλήρως με αυτούς. </li><li>Αποδέχομαι οποιουσδήποτε ελέγχους η Αρμόδια Αρχή ήθελε να διεξάγει για την ορθότητα των δηλωθέντων στοιχείων. </li><li>Αποδέχομαι κάθε έλεγχο από τις αρμόδιες κρατικές υπηρεσίες και κατά τον έλεγχο θα υποβάλω κάθε δικαιολογητικό που κατά την κρίση των αρμόδιων υπηρεσιών συμβάλλει στην εξαγωγή ασφαλών συμπερασμάτων για την τήρηση των υποχρεώσεων μου.</li><li>Γνωρίζω ότι σε περίπτωση που διαπιστωθεί ότι τα στοιχεία που δηλώθηκαν είναι ψευδή ή παραπλανητικά, ή ότι υπάρχει δόλος, η αίτηση μου απορρίπτεται. Σε αυτή την περίπτωση,  υποχρεούμαι να επιστρέψω το ποσό που τυχόν έχω λάβει ως ενίσχυση.</li></ol>",
+                          "en": "<ol><li>I declare responsibly and in full knowledge of the consequences of the Law regarding false declarations that the information provided in this application is true and correct. I also declare that I have read the terms of the Scheme and agree to fully comply with them. </li><li>I accept any checks that the Competent Authority may wish to conduct regarding the correctness of the declared data. </li><li>I accept any check by the competent state services and during the check I will submit any supporting documents that, in the judgment of the competent services, contribute to drawing reliable conclusions regarding the fulfillment of my obligations.</li><li>I understand that if it is found that the information provided is false or misleading, or that there is fraud, my application will be rejected. In this case, I am obliged to refund any amount I may have received as aid.</li></ol>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "checkboxes",
+                      "params": {
+                        "id": "terms",
+                        "name": "terms",
+                        "legend": {
+                          "el": "Αποδέχεστε την υπεύθυνη δήλωση;",
+                          "en": "Do you accept this declaration?"
+                        },
+                        "items": [
+                          {
+                            "value": "termsYes",
+                            "text": {
+                              "el": "Ναι, αποδέχομαι",
+                              "en": "Yes, I accept",
+                              "tr": ""
+                            }
+                          }
+                        ],
+                        "isPageHeading": false
+                      },
+                      "validations": [
+                        {
+                          "check": "required",
+                          "params": {
+                            "checkValue": "",
+                            "message": {
+                              "el": "Επιλέξτε “Ναι” για την αποδοχή στους όρους, για να μπορέσουμε να επεξεργαστούμε την αίτησή σας",
+                              "en": "...",
+                              "tr": ""
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Αποθήκευση και συνέχεια",
+                          "en": "Save and continue"
+                        },
+                        "prototypeNavigate": "../next-steps"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "next-steps",
+        "title": {
+          "el": "Επόμενα βήματα",
+          "en": "Next steps",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "review"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "form",
+                "params": {
+                  "elements": [
+                    {
+                      "element": "textElement",
+                      "params": {
+                        "id": "title",
+                        "type": "h1",
+                        "text": {
+                          "el": "Επόμενα βήματα μετά την ηλεκτρονική υποβολή",
+                          "en": "Next steps after online submission"
+                        }
+                      }
+                    },
+                    {
+                      "element": "htmlElement",
+                      "params": {
+                        "id": "body",
+                        "text": {
+                          "el": "<p>Μετά την υποβολή της αίτησης, θα χρειαστεί να προσκομίσετε τα πιο κάτω έγγραφα:</p>",
+                          "en": "<p>After submitting the application, you will need to hand in the following documents:</p>"
+                        }
+                      }
+                    },
+                    {
+                      "element": "stepByStepStatic",
+                      "params": {
+                        "id": "steps",
+                        "items": [
+                          {
+                            "heading": {
+                              "el": "Υπεύθυνη Δήλωση Ενιαίας Επιχείρησης (de minimis)",
+                              "en": "Single Enterprise Responsible Declaration (de minimis)",
+                              "tr": ""
+                            },
+                            "elements": [
+                              {
+                                "element": "htmlElement",
+                                "params": {
+                                  "text": {
+                                    "el": "<p>Προσκομίστε <strong>συμπληρωμένη</strong> και <strong>υπογεγραμμένη</strong> την <a href='https://www.gov.cy/media/sites/26/2025/08/%CE%A0%CE%91%CE%A1%CE%91%CE%A1%CE%A4%CE%97%CE%9C%CE%91-%CE%92-%CE%A5%CE%A0%CE%95%CE%A5%CE%98%CE%A5%CE%9D%CE%97-%CE%94%CE%97%CE%9B%CE%A9%CE%A3%CE%97_%CE%95%CE%9D%CE%99%CE%91%CE%99%CE%91%CE%A3-%CE%95%CE%A0%CE%99%CE%A7%CE%95%CE%99%CE%A1%CE%97%CE%A3%CE%97%CE%A3_25112024.pdf' target='_blank'>υπεύθυνη δήλωση ενιαίας επιχείρησης</a> στο <strong>Επαρχιακό Γεωργικό Γραφείο της περιοχής σας</strong>.</p>",
+                                    "en": "<p>Submit a <strong>completed</strong> and <strong>signed</strong> <a href='https://www.gov.cy/media/sites/26/2025/08/%CE%A0%CE%91%CE%A1%CE%91%CE%A1%CE%A4%CE%97%CE%9C%CE%91-%CE%92-%CE%A5%CE%A0%CE%95%CE%A5%CE%98%CE%A5%CE%9D%CE%97-%CE%94%CE%97%CE%9B%CE%A9%CE%A3%CE%97_%CE%95%CE%9D%CE%99%CE%91%CE%99%CE%91%CE%A3-%CE%95%CE%A0%CE%99%CE%A7%CE%95%CE%99%CE%A1%CE%97%CE%A3%CE%97%CE%A3_25112024.pdf' target='_blank'>de minimis declaration</a> to the <strong>District Office of the Department of Agriculture in your area</strong>.</p>",
+                                    "tr": ""
+                                  }
+                                },
+                                "id": "body"
+                              }
+                            ],
+                            "id": "step1"
+                          },
+                          {
+                            "heading": {
+                              "el": "Εγγραφή στο FIMAS",
+                              "en": "Registration with FIMAS",
+                              "tr": ""
+                            },
+                            "elements": [
+                              {
+                                "element": "htmlElement",
+                                "params": {
+                                  "text": {
+                                    "el": "<p>Σε περίπτωση που <strong>δεν είστε εγγεγραμμένος</strong> στο FΙMAS προσκομίστε στο <strong>Επαρχιακό Γεωργικό Γραφείο της περιοχής σας</strong>:</p><ul><li><strong>Συμπληρωμένη</strong> και <strong>υπογεγραμμένη</strong> <a href='https://www.gov.cy/media/sites/26/2025/02/%CE%95%CE%9D%CE%A4%CE%A5%CE%A0%CE%9F5_Eksousiodotisi_Fimas_2025.pdf' target='_blank'>εξουσιοδότηση FIMAS</a></li><li>Αντίγραφο Τραπεζικού Λογαριασμού ΙΒΑΝ</li></ul><p>Εναλλακτικά, μπορείτε να κάνετε εγγραφή ταχυδρομικώς με χειρόγραφη υπογραφή ή μέσω email με πιστοποιημένη ηλεκτρονική υπογραφή, μέσω της υπηρεσίας <a href='https://www.gov.cy/service/engrafi-gia-pliromes-apo-to-fimas/' target='_blank'>FIMAS – Εγγραφή για πληρωμές</a>.</p>",
+                                    "en": "<p>If you are not registered with FIMAS, you must submit to the <strong>District Office of the Department of Agriculture in your area</strong>.:</p><ul><li><strong>Completed</strong> and <strong>signed</strong> <a href='https://www.gov.cy/media/sites/25/2024/06/AUTHORISATION-FOR-PAYMENTS-BY-FIMAS-1.pdf' target='_blank'>FIMAS authorisation</a></li><li>Copy of Bank Account IBAN</li></ul><p>Alternatively, you can register either by post with a handwritten signature or via email with a certified electronic signature through the <a href='https://www.gov.cy/en/service/fimas-authorisation-for-payments-by-fimas/' target='_blank'>FIMAS – Registration for payments</a></p>",
+                                    "tr": ""
+                                  }
+                                },
+                                "id": "body"
+                              }
+                            ],
+                            "id": "step2"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "element": "button",
+                      "params": {
+                        "id": "continue",
+                        "variant": "primary",
+                        "text": {
+                          "el": "Συνέχεια",
+                          "en": "Continue"
+                        },
+                        "prototypeNavigate": "../review"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "privacy-statement",
+        "title": {
+          "el": "Πολιτική απορρήτου",
+          "en": "Privacy policy",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Πολιτική απορρήτου – οι προσωπικές σας πληροφορίες",
+                    "en": "Privacy policy – your personal information"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς το Τμήμα Γεωργίας του Υπουργείου Γεωργίας, Αγροτικής Ανάπτυξης και Περιβάλλοντος χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>αριθμός εγγραφής μητρώου αγροτών</li><li>επιλογή σχεδίων επιδότησης</li><li>λεπτομέρειες τιμολογίων (αριθμός τιμολογίου, ημερομηνία έκδοσης, ποσό, μέθοδος πληρωμής και αποδεικτικά αρχεία)</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>διεύθυνση επικοινωνίας και email</li><li>αριθμός τηλεφώνου</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την επεξεργασία της αίτησης σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να να επεξεργαστούμε την αίτησή σας.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:aalexandrou@da.moa.gov.cy\" target=\"_blank\">aalexandrou@da.moa.gov.cy </a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
+                    "en": "<p>This privacy policy explains how the Department of Agriculture of the Ministry of Agriculture, Rural Development and Environment uses information about you, in order to process your application.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>farmers' registry registration number</li><li>selection of subsidy plans</li><li>invoice details (invoice number, date of issue, amount, payment method and supporting documents)</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>postal and email address</li><li>phone number</li></ul><h2>Why we use your information</h2><p>We collect and use this information to process your application.</p><p>Without access to this information, we cannot process your application.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:aalexandrou@da.moa.gov.cy\" target=\"_blank\">aalexandrou@da.moa.gov.cy </a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "cookie-policy",
+        "title": {
+          "el": "Cookies",
+          "en": "Cookies",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Cookies",
+                    "en": "Cookies"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions_top",
+                  "text": {
+                    "el": "<p>Η υπηρεσία Αίτηση για επιδότηση λιπασμάτων και γεωργικών εφοδίων (https://agriculture.service.gov.cy/supplies-subsidy) χρησιμοποιεί μόνο cookies που είναι απολύτως απαραίτητα για τη σωστή λειτουργία της.</p><h2>Απαραίτητα cookies</h2><p>Όλα τα πιο κάτω cookies διαγράφονται 30 λεπτά μετά το κλείσιμο του φυλλομετρητή (browser) σας.</p>",
+                    "en": "<p>The service Apply for fertilizers and agricultural supplies subsidy (https://agriculture.service.gov.cy/supplies-subsidy) uses cookies that are strictly essential for it to function correctly.</p><h2>Essential cookies</h2><p>All of the following cookies are deleted 30 minutes after you close your browser.</p>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "essentials",
+                  "text": {
+                    "el": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Όνομα</th><th scope='col'>Σκοπός</th></tr></thead><tbody><tr><th scope='col'>connect.sid</th><td scope='col'>Αυτό το cookie αποθηκεύει ένα μοναδικό αναγνωριστικό (session id) για τη διαδικασία περιήγησής σας (browser session).</td></tr><tr><th scope='col'>cs</th><td scope='col'>Αυτο το cookie αποθηκεύει την τελευταία υπηρεσία που έχει επισκεφτεί</td></tr><tr><th scope='col'>lang</th><td scope='col'>Αυτό το cookie αποθηκεύει τη γλώσσα της επιλογής σας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinity</th><td scope='col'>Τοποθετείται από το Azure Application Gateway για να διατηρεί σταθερή σύνδεση με τον ίδιο server κατά τη διάρκεια της συνεδρίας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinityCORS</th><td scope='col'>Παραλλαγή του παραπάνω cookie, χρησιμοποιείται όταν είναι ενεργοποιημένο το CORS για να διατηρεί τη σταθερότητα της συνεδρίας.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Δημιουργείται από υπηρεσίες όπως το AWS Load Balancer για διατήρηση συνεδρίας. Δεν το τοποθετεί η εφαρμογή σας άμεσα.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Συνήθως τοποθετείται από ingress controllers (π.χ. NGINX Ingress ή Azure Front Door) για διατήρηση συνεδρίας σε περιβάλλοντα cloud.</td></tr></tbody></table>",
+                    "en": "<table class='govcy-table'><thead><tr class='govcy-br-input'><th scope='col'>Name</th><th scope='col'>Purpose</th></tr></thead><tbody><tr><th scope='col'>connect.sid</th><td scope='col'>This cookie stores a ‘session ID’ which is used to identify your browser session.</td></tr><tr><th scope='col'>cs</th><td scope='col'>This cookie stores the last service visited.</td></tr><tr><th scope='col'>lang</th><td scope='col'>This cookie stores your language preference.</td></tr><tr><th scope='col'>ApplicationGatewayAffinity</th><td scope='col'>Τοποθετείται από το Azure Application Gateway για να διατηρεί σταθερή σύνδεση με τον ίδιο server κατά τη διάρκεια της συνεδρίας.</td></tr><tr><th scope='col'>ApplicationGatewayAffinityCORS</th><td scope='col'>Παραλλαγή του παραπάνω cookie, χρησιμοποιείται όταν είναι ενεργοποιημένο το CORS για να διατηρεί τη σταθερότητα της συνεδρίας.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Δημιουργείται από υπηρεσίες όπως το AWS Load Balancer για διατήρηση συνεδρίας. Δεν το τοποθετεί η εφαρμογή σας άμεσα.</td></tr><tr><th scope='col'>INGRESSCOOKIE</th><td scope='col'>Συνήθως τοποθετείται από ingress controllers (π.χ. NGINX Ingress ή Azure Front Door) για διατήρηση συνεδρίας σε περιβάλλοντα cloud.</td></tr></tbody></table>"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:aalexandrou@da.moa.gov.cy\" target=\"_blank\">aalexandrou@da.moa.gov.cy </a></li></ul>",
+                    "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:aalexandrou@da.moa.gov.cy\" target=\"_blank\">aalexandrou@da.moa.gov.cy </a></li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "accessibility-statement",
+        "title": {
+          "el": "Δήλωση προσβασιμότητας ",
+          "en": "Accessibility statement",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": [
+              {
+                "element": "backLink",
+                "params": {}
+              }
+            ]
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Δήλωση προσβασιμότητας ",
+                    "en": "Accessibility statement"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "instructions",
+                  "text": {
+                    "el": "<h2>Κατάσταση συμμόρφωσης</h2><p>Οι <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Οδηγίες Προσβασιμότητας Περιεχομένου</a> (WCAG) καθορίζουν απαιτήσεις για σχεδιαστές και προγραμματιστές για τη βελτίωση της προσβασιμότητας για τα άτομα με αναπηρίες. Καθορίζουν τρία επίπεδα συμμόρφωσης: Επίπεδο A, Επίπεδο AA, και Επίπεδο AAA.</p><p>Η Αίτηση για επιδότηση λιπασμάτων και γεωργικών εφοδίων συμμορφώνεται πλήρως με τις Οδηγίες του WCAG 2.1 επίπεδο AA.</p><h2>Προσέγγιση αξιολόγησης</h2><p>Η ομάδα του DSF αξιολόγησε την προσβασιμότητα της υπηρεσίας χρησιμοποιώντας τα εξής εργαλεία:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Συμβατότητα με τους φυλλομετρητές</h2><p>Η υπηρεσία είναι συμβατή με τους πιο κάτω φυλλομετρητές:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Περιορισμοί και εναλλακτικές λύσεις</h2><p>Παρά τις προσπάθειές μας να διασφαλίσουμε την προσβασιμότητα της υπηρεσίας, πιθανόν να υπάρχουν ορισμένοι περιορισμοί. Ακολουθεί περιγραφή γνωστών περιορισμών και πιθανών λύσεων. Επικοινωνήστε μαζί μας εάν παρατηρήσετε κάποιο πρόβλημα που δεν αναφέρεται πιο κάτω.</p><p>Για να λειτουργεί κανονικά η υπηρεσία απαιτείται JavaScript.</p><h2>Ανατροφοδότηση και παράπονα</h2><p>Τα σχόλιά σας σχετικά με την προσβασιμότητα της υπηρεσίας είναι ευπρόσδεκτα. Παρακαλούμε να μας ενημερώσετε εάν συναντήσετε εμπόδια προσβασιμότητας:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>Προσπαθούμε να ανταποκριθούμε στα σχόλια εντός 30 εργάσιμων ημερών.</p><p>Εάν δεν απαντήσουμε ή δεν επιλύσουμε το πρόβλημα, μπορείτε να στείλετε ένα παράπονο στο:</p><ul class=\"govcy-list-unstyled\"><li>Υφυπουργείο Έρευνας, Καινοτομίας και Ψηφιακής Πολιτικής<br/>Λεωφόρος Λεμεσού 134<br/>2015 Στρόβολος, Λευκωσία<br/>Κύπρος</li></ul><p>Ή μπορείτε να στείλετε email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>Εάν δεν σας ικανοποιήσει η απάντηση, μπορείτε να <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_gr/complaintformombudsman_gr?OpenForm\" target=\"_blank\">υποβάλετε παράπονο στο Γραφείο Επιτρόπου Διοικήσεως και Προστασίας των Ανθρωπίνων Δικαιωμάτων</a>.</p><h2>Ημερομηνία</h2><p>Η δήλωση αυτή δημιουργήθηκε στις 21/04/2026.</p>",
+                    "en": "<h2>Conformance status</h2><p>The <a href=\"https://www.w3.org/TR/WCAG21/\" target=\"_blank\">Web Content Accessibility Guidelines</a> (WCAG) defines requirements for designers and developers to improve accessibility for people with disabilities. It defines three levels of conformance: Level A, Level AA, and Level AAA.</p><p>The Apply for fertilizers and agricultural supplies subsidy is fully conformant with WCAG 2.1 level AA.</p><h2>Assessment approach</h2><p>The DSF team assessed the accessibility of the service using:</p><ul><li><a href=\"https://wave.webaim.org/\" target=\"_blank\">WebAIM’s WAVE Evaluation tool</a></li><li><a href=\"https://pa11y.org/\" target=\"_blank\">Pa11y</a></li></ul><h2>Compatibility with browsers</h2><p>The service is designed to be compatible with the following browsers:</p><ul><li>Chrome on Microsoft Windows</li><li>Chrome on Android</li><li>Edge on Microsoft Windows</li><li>Firefox on Microsoft Windows</li><li>Safari on MacOs</li><li>Safari on iOS</li></ul><h2>Limitations and alternatives</h2><p>Despite our best efforts to ensure the accessibility of the service, there may be some limitations. Below is a description of known limitations, and potential solutions. Please contact us if you observe an issue not listed below.</p><p>Javascript is required for the service to function properly.</p><h2>Feedback and complaints</h2><p>We welcome your feedback on the accessibility of the service. Please let us know if you encounter accessibility barriers when using it:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:dsf-admin@dits.dmrid.gov.cy\" target=\"_blank\">dsf-admin@dits.dmrid.gov.cy</a></li></ul><p>We try to respond to feedback within 30 working days.</p><p>If we do not reply, or do not fix the issue, you can send a complaint to:</p><ul class=\"govcy-list-unstyled\"><li>Deputy Ministry of Research, Innovation, and Digital Policy<br/>134 Lemesos Avenue\r</li><li>2015 Strovolos, Lefkosia\r</li><li>Cyprus</li></ul><p>Or you can email: <a href=\"mailto:info@dmrid.gov.cy\" target=\"_blank\">info@dmrid.gov.cy</a>.</p><p>If you are not satisfied with the response, you can <a href=\"https://eforms.mof.gov.cy/eforms/eforms.nsf/complaintformombudsman_en/complaintformombudsman_en?OpenForm\" target=\"_blank\">send a complaint to the Commissioner for Administration and the Protection of Human Rights (Ombudsman)</a>.</p><h2>Date</h2><p>This statement was created on 21/04/2026.</p>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "localizations": {
+    "declarations.terms": {
+      "el": "Αποδέχεστε την υπεύθυνη δήλωση;",
+      "en": "Do you accept this declaration?",
+      "tr": ""
+    },
+    "fertilizer-invoices.invoiceNumber": {
+      "el": "Αριθμός τιμολογίου",
+      "en": "Invoice number",
+      "tr": ""
+    },
+    "fertilizer-invoices.invoiceDate": {
+      "el": "Ημερομηνία έκδοσης ",
+      "en": "Issue date",
+      "tr": ""
+    },
+    "fertilizer-invoices.invoiceAmount": {
+      "el": "Ποσό τιμολογίου χωρίς το ΦΠΑ (€)",
+      "en": "Invoice amount excluding VAT (€)",
+      "tr": ""
+    },
+    "fertilizer-invoices.paymentMethod": {
+      "el": "Ποια είναι η μέθοδος πληρωμής;",
+      "en": "What is the payment method?",
+      "tr": ""
+    },
+    "farmer-registration.farmersRegistrationNumber": {
+      "el": "Αριθμός εγγραφής",
+      "en": "Registration number",
+      "tr": ""
+    }
+  }
+}

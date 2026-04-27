@@ -164,7 +164,7 @@ export function populateFormData(
         if (element.element === "radios" && element.params.items) {
             element.params.items.forEach(item => {
                 if (item.conditionalElements) {
-                    populateFormData(item.conditionalElements, theData, validationErrors, store, siteId, pageUrl, lang, fileInputElements, routeParam);
+                    populateFormData(item.conditionalElements, theData, validationErrors, store, siteId, pageUrl, lang, fileInputElements, routeParam, mode, index);
 
                     // Check if any conditional element has an error and add to the parent "conditionalHasErrors": true
                     if (item.conditionalElements.some(condEl => condEl.params?.error)) {
