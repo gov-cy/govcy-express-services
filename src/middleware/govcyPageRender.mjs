@@ -1,6 +1,7 @@
 import { govcyFrontendRenderer } from "@gov-cy/govcy-frontend-renderer";
 import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
+import { markCurrentNavigation } from "../utils/govcyUtils.mjs";
 
 /**
  * Middleware function to render pages using the GovCy Frontend Renderer.
@@ -26,6 +27,7 @@ export function renderGovcyPage() {
         }
         // Add custom CSS path
         processedPage.pageData.site.customCSSFile = `/css/govcyExpress.css`;
+        markCurrentNavigation(req, processedPage.pageData);
         const html = renderer.renderFromJSON(processedPage.pageTemplate, processedPage.pageData);
         res.send(html);
     };

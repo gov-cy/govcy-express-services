@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { dateStringISOtoDMY } from "../../src/utils/govcyUtils.mjs";
+import { dateStringISOtoDMY, markCurrentNavigation } from "../../src/utils/govcyUtils.mjs";
 
 describe("govcyUtils.dateStringISOtoDMY()", () => {
 
@@ -67,4 +67,151 @@ describe("govcyUtils.dateStringISOtoDMY()", () => {
     expect(result).to.equal("30/11/2025");
   });
 
+});
+
+describe("govcyUtils.markCurrentNavigation()", () => {
+  it("1. should mark matching navigation item as current on exact path match", () => {
+    const req = { path: "/service/task-list" };
+    const pageData = {
+      site: {
+        navigation: {
+          items: [
+            { text: "Home", link: "/service/home" },
+            { text: "Task list", link: "/service/task-list" }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(false);
+    expect(pageData.site.navigation.items[1].current).to.equal(true);
+  });
+
+  it("2. should treat trailing slash as the same path", () => {
+    const req = { path: "/service/task-list/" };
+    const pageData = {
+      site: {
+        navigation: {
+          items: [{ text: "Task list", link: "/service/task-list" }]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(true);
+  });
+
+  it("3. should mark parent page item for nested multiple route", () => {
+    const req = { path: "/service/employment/multiple/add" };
+    const pageData = {
+      site: {
+        navigation: {
+          items: [
+            { text: "Employment", link: "/service/employment" },
+            { text: "Other", link: "/service/other" }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(true);
+    expect(pageData.site.navigation.items[1].current).to.equal(false);
+  });
+
+  it("4. should reset old current flags when no match is found", () => {
+    const req = { path: "/service/not-in-nav" };
+    const pageData = {
+      site: {
+        navigation: {
+          items: [
+            { text: "Home", link: "/service/home", current: true },
+            { text: "Task list", link: "/service/task-list", current: true }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(false);
+    expect(pageData.site.navigation.items[1].current).to.equal(false);
+  });
+
+  it("5. should do nothing when navigation items are missing", () => {
+    const req = { path: "/service/home" };
+    const pageData = { site: {} };
+
+    expect(() => markCurrentNavigation(req, pageData)).to.not.throw();
+  });
+
+  it("6. should match multilingual href object using active language", () => {
+    const req = { path: "/task-list/task-list", globalLang: "en" };
+    const pageData = {
+      site: {
+        lang: "en",
+        navigation: {
+          items: [
+            {
+              text: "Home",
+              href: { en: "/task-list/", el: "/task-list/" }
+            },
+            {
+              text: "Application",
+              href: { en: "/task-list/task-list", el: "/task-list/task-list" }
+            }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(false);
+    expect(pageData.site.navigation.items[1].current).to.equal(true);
+  });
+
+  it("7. should treat /:siteId as alias of /:siteId/index", () => {
+    const req = { path: "/task-list", globalLang: "en" };
+    const pageData = {
+      site: {
+        lang: "en",
+        navigation: {
+          items: [
+            { text: "Home", href: { en: "/task-list/index", el: "/task-list/index" } },
+            { text: "Task list", href: { en: "/task-list/task-list", el: "/task-list/task-list" } }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(true);
+    expect(pageData.site.navigation.items[1].current).to.equal(false);
+  });
+
+  it("8. should treat /:siteId/index as alias of /:siteId", () => {
+    const req = { path: "/task-list/index", globalLang: "en" };
+    const pageData = {
+      site: {
+        lang: "en",
+        navigation: {
+          items: [
+            { text: "Home", href: { en: "/task-list", el: "/task-list" } },
+            { text: "Task list", href: { en: "/task-list/task-list", el: "/task-list/task-list" } }
+          ]
+        }
+      }
+    };
+
+    markCurrentNavigation(req, pageData);
+
+    expect(pageData.site.navigation.items[0].current).to.equal(true);
+    expect(pageData.site.navigation.items[1].current).to.equal(false);
+  });
 });

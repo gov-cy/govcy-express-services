@@ -190,5 +190,71 @@ describe("renderGovcyPage", () => {
         expect(renderedHtml).to.include("govcy--loadingOverlay"); // Still confirm other elements
     });
 
+    it("5. should mark matching navigation item as current during render", () => {
+        const req = {
+            path: "/service/task-list",
+            session: {
+                user: { name: "Test User" }
+            },
+            processedPage: {
+                pageTemplate: {
+                    sections: [{ name: "main", elements: [] }]
+                },
+                pageData: {
+                    site: {
+                        lang: "en",
+                        navigation: {
+                            items: [
+                                { text: "Home", link: "/service/home", current: true },
+                                { text: "Task list", link: "/service/task-list", current: false }
+                            ]
+                        }
+                    },
+                    pageData: { title: { en: "Title" } }
+                }
+            }
+        };
+
+        const res = { send: () => {} };
+        const handler = renderGovcyPage();
+        handler(req, res);
+
+        expect(req.processedPage.pageData.site.navigation.items[0].current).to.equal(false);
+        expect(req.processedPage.pageData.site.navigation.items[1].current).to.equal(true);
+    });
+
+    it("6. should mark parent navigation item for nested routes during render", () => {
+        const req = {
+            path: "/service/employment/multiple/edit/2/",
+            session: {
+                user: { name: "Test User" }
+            },
+            processedPage: {
+                pageTemplate: {
+                    sections: [{ name: "main", elements: [] }]
+                },
+                pageData: {
+                    site: {
+                        lang: "en",
+                        navigation: {
+                            items: [
+                                { text: "Employment", link: "/service/employment" },
+                                { text: "Task list", link: "/service/task-list" }
+                            ]
+                        }
+                    },
+                    pageData: { title: { en: "Title" } }
+                }
+            }
+        };
+
+        const res = { send: () => {} };
+        const handler = renderGovcyPage();
+        handler(req, res);
+
+        expect(req.processedPage.pageData.site.navigation.items[0].current).to.equal(true);
+        expect(req.processedPage.pageData.site.navigation.items[1].current).to.equal(false);
+    });
+
 
 });
