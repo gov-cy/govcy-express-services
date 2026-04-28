@@ -1,4 +1,3 @@
-
 {
   "site": {
     "id": "task-list",
@@ -95,6 +94,51 @@
       "el": "Μενού",
       "en": "Menu",
       "tr": "Menu"
+    },
+    "menuHideLabelVisibility": true,
+    "navigation": {
+      "items": [
+        {
+          "label": {
+            "en": "Home",
+            "el": "Αρχική"
+          },
+          "href": {
+            "en": "/task-list/",
+            "el": "/task-list/"
+          }
+        },
+        {
+          "label": {
+            "en": "The application",
+            "el": "Αίτηση"
+          },
+          "href": {
+            "en": "/task-list/task-list",
+            "el": "/task-list/task-list"
+          }
+        },
+        {
+          "label": {
+            "en": "Authors",
+            "el": "Συγγραφείς"
+          },
+          "href": {
+            "en": "/task-list/authors/",
+            "el": "/task-list/authors/"
+          }
+        },
+        {
+          "label": {
+            "en": "Options",
+            "el": "Επιλογές"
+          },
+          "href": {
+            "en": "/task-list/options",
+            "el": "/task-list/options"
+          }
+        }
+      ]
     },
     "title": {
       "el": "Αίτηση για ISBN (Task List)",
@@ -367,7 +411,7 @@
         ],
         "hasBackLink": true,
         "showSkippedTasks": false,
-        "linkToContinue" : true
+        "linkToContinue": true
       }
     },
     {
