@@ -17,6 +17,19 @@
                 "NODE_ENV": "development",
                 "DEBUG": "true"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch All Features Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/tests/mocks/all-features/allFeaturesStarter.mjs",
+            "env": {
+                "NODE_ENV": "development",
+                "DEBUG": "true"
+            }
         }
     ]
 }

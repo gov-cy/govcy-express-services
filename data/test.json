@@ -211,9 +211,17 @@
         "params": {},
         "response": {
           "errorResponse": {
-            "105": {
-              "error": "user not registration",
-              "page": "/test/user-not-registered"
+            "5202": {
+              "error": "SSMP check SERVICE_DISABLED",
+              "page": "/test/submissions-limit"
+            },
+            "5205": {
+              "error": "SSMP check BEFORE_ALLOWED_PERIOD",
+              "page": "/test/service-not-started"
+            },
+            "5206": {
+              "error": "SSMP check AFTER_ALLOWED_PERIOD",
+              "page": "/test/service-ended"
             }
           }
         }
@@ -303,6 +311,144 @@
     }
   },
   "pages": [
+    {
+      "pageData": {
+        "url": "service-not-started",
+        "title": {
+          "el": "Η υπηρεσία δεν είναι ακόμη διαθέσιμη",
+          "en": "The service is not available yet",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηρεσία δεν είναι ακόμη διαθέσιμη",
+                    "en": "The service is not available yet"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Η υπηρεσία θα είναι διαθέσιμη την Πέμπτη, 1 Ιανουαρίου 2026.</p><h2>Ζητήστε βοήθεια και καθοδήγηση</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Τηλέφωνο: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>",
+                    "en": "<p>The service will be available on Thursday, 1 January 2026.</p><h2>Get help and advice</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Telephone: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "service-ended",
+        "title": {
+          "el": "Η υπηρεσία δεν είναι πλέον διαθέσιμη",
+          "en": "The service is no longer available",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Η υπηρεσία δεν είναι πλέον διαθέσιμη",
+                    "en": "The service is no longer available"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Η υπηρεσία ήταν διαθέσημη μέχρι την Πέμπτη, 15 Ιανουαρίου 2026.</p><h2>Ζητήστε βοήθεια και καθοδήγηση</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Τηλέφωνο: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>",
+                    "en": "<p>The service was available until Thursday, 15 January 2026.</p><h2>Get help and advice</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Telephone: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "pageData": {
+        "url": "submissions-limit",
+        "title": {
+          "el": "Δεν μπορείτε να υποβάλετε ξανά",
+          "en": "You cannot submit again",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third"
+      },
+      "pageTemplate": {
+        "sections": [
+          {
+            "name": "beforeMain",
+            "elements": []
+          },
+          {
+            "name": "main",
+            "elements": [
+              {
+                "element": "textElement",
+                "params": {
+                  "id": "title",
+                  "type": "h1",
+                  "text": {
+                    "el": "Έχετε φτάσει το όριο υποβολών | Έχετε ήδη υποβάλει την αίτησή σας",
+                    "en": "You have reached the submission limit | You have already submitted"
+                  }
+                }
+              },
+              {
+                "element": "htmlElement",
+                "params": {
+                  "id": "body",
+                  "text": {
+                    "el": "<p>Έχετε ήδη υποβάλει τον μέγιστο αριθμό αιτήσεων για την υπηρεσία | Έχουμε ήδη λάβει την αίτησή σας για την υπηρεσία.</p><p>Δεν μπορείτε να υποβάλετε άλλη αίτηση μέσω αυτής της υπηρεσίας | Δεν χρειάζεται να την υποβάλετε ξανά.</p><h2>Ζητήστε βοήθεια και καθοδήγηση</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Τηλέφωνο: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>",
+                    "en": "<p>You have already submitted the maximum number of applications for the service | We have already received your application for the service.</p><p>You cannot submit another application using this service | You do not need to submit it again.</p><h2>Get help and advice</h2><ul><li>Email: <a href=\"mailto:gtheophanous@da.moa.gov.cy\" target=\"_blank\">gtheophanous@da.moa.gov.cy</a></li><li>Telephone: <a href=\"tel:+35722760196\">22 760196</a>, Δευτέρα–Παρασκευή, 08:00–15:00</li></ul>"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "pageData": {
         "url": "privacy-statement",

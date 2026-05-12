@@ -425,6 +425,31 @@ app.get("/:key", (req, res) => {
             ErrorMessage: null,
             Data: null
         });
+    } else if (key === "childrenData") {
+        return res.status(200).json({
+            Succeeded: true,
+            ErrorCode: 0,
+            ErrorMessage: null,
+            Data: {
+                options: [
+                    {
+                        fullName: "CHILD ONE",
+                        dob: "2000-01-01",
+                        value: "0000766588"
+                    },
+                    {
+                        fullName: "CHILD TWO",
+                        dob: "2001-01-01",
+                        value: "0000766589"
+                    },
+                    {
+                        fullName: "CHILD THREE",
+                        dob: "2002-01-01",
+                        value: "0000766590"
+                    }
+                ]
+            }
+        });
     } else {
         return res.status(400).json({
             Succeeded: false,
