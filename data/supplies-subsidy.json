@@ -738,7 +738,7 @@
         "url": "index",
         "layout": "layouts/govcyBase.njk",
         "mainLayout": "two-third",
-        "nextPage": "farmer-registration"
+        "nextPage": "options-custom"
       },
       "updateMyDetails": {
         "topElements": [

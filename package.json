@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -42,6 +42,7 @@
   "scripts": {
     "dev": "nodemon src/standalone.mjs",
     "start": "node src/standalone.mjs",
+    "start:all-features": "node tests/mocks/all-features/allFeaturesStarter.mjs",
     "start:mock": "node tests/mocks/mockApiServer.mjs",
     "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
     "test:report": "mocha --timeout 60000 --reporter mochawesome tests/**/*.test.mjs --exit",
