@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.11.3] - 2026-05-21
+### Added
+- Added canonical validation rule names `textWide_EL_Latin` and `textWide_EL_Latin_TR`.
+
+### Changed
+- Kept `textWide_EL_Latn` and `textWide_EL_Latn_TR` as backward-compatible aliases of the canonical `Latin` rule names.
+- Updated README validation docs to prefer `Latin` names and mark `Latn` names as deprecated aliases.
+
+### Security
+- Updated vulnerable **development-only dependencies** (`devDependencies`).
+- No production/runtime dependency changes.
+- **Impact:** npm package consumers are **not affected**.
+
 ## [v1.11.2] - 2026-05-12
 ### Changed
 - Fixed vulnerabilities
