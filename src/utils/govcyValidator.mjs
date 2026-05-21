@@ -30,6 +30,9 @@ function validateValue(value, rules) {
     noSpecialChars: (val) => /^([0-9]|[A-Z]|[a-z]|[α-ω]|[Α-Ω]|[,]|[.]|[-]|[(]|[)]|[?]|[!]|[;]|[:]|[\n]|[\r]|[ _]|[\u0370-\u03ff\u1f00-\u1fff])+$/.test(val),
     noSpecialCharsEl: (val) => /^([0-9]|[α-ω]|[Α-Ω]|[,]|[.]|[-]|[(]|[)]|[?]|[!]|[;]|[:]|[\n]|[\r]|[ _]|[\u0370-\u03ff\u1f00-\u1fff])+$/.test(val),
     textWide_EL: (val) => /^([0-9Α-Ωα-ω\u0370-\u03FF\u1F00-\u1FFF\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),
+    textWide_EL_Latin: (val) => /^([A-Za-zΑ-Ωα-ω\u0370-\u03FF\u1F00-\u1FFF0-9\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),
+    textWide_EL_Latin_TR: (val) => /^([A-Za-zğĞıİşŞöÖüÜçÇΑ-Ωα-ω\u0370-\u03FF\u1F00-\u1FFF0-9\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),
+    // Backward-compatible aliases with previous misspelling
     textWide_EL_Latn: (val) => /^([A-Za-zΑ-Ωα-ω\u0370-\u03FF\u1F00-\u1FFF0-9\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),
     textWide_EL_Latn_TR: (val) => /^([A-Za-zğĞıİşŞöÖüÜçÇΑ-Ωα-ω\u0370-\u03FF\u1F00-\u1FFF0-9\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),
     textWide_UTF: (val) => /^([\p{L}\p{M}\p{N}\s\n\r,.\-–—·'’‘"“”«»!?;:\/\\(){}\[\]<>*&@#$£€%+=_|])+$/u.test(val),

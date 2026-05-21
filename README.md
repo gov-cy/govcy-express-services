@@ -1905,8 +1905,10 @@ The validation rules for each element are defined in the `"validations` array fo
     - `noSpecialChars`: Consists only of letters, numbers and some other characters
     - `noSpecialCharsEl`: Consists only of Greek letters, numbers and some other characters
     - `textWide_EL`: Consists of Greek Letters and a wider range of characters
-    - `textWide_EL_Latn`: Consists of Greek Letters, Latin letters, numbers and a wider range of characters
-    - `textWide_EL_Latn_TR`: Consists of Greek Letters, Latin letters, Turkish letters, numbers and a wider range of characters
+    - `textWide_EL_Latin`: Consists of Greek Letters, Latin letters, numbers and a wider range of characters
+    - `textWide_EL_Latin_TR`: Consists of Greek Letters, Latin letters, Turkish letters, numbers and a wider range of characters
+    - `textWide_EL_Latn`: Deprecated alias of `textWide_EL_Latin` (still supported for backward compatibility)
+    - `textWide_EL_Latn_TR`: Deprecated alias of `textWide_EL_Latin_TR` (still supported for backward compatibility)
     - `textWide_UTF`: Consists of any letters, numbers and a wider range of characters
     - `numeric`: Numeric input
     - `numDecimal`: Numeric decimal input

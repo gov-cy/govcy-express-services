@@ -2592,6 +2592,124 @@ describe('govcyValidator', () => {
         expect(conditionalResult).to.deep.equal({});
     });
 
+    it('50a. should validate `textWide_EL_Latin` fields correctly (canonical name)', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_EL_Latin', message: 'Contains invalid characters (textWide_EL_Latin)' } },
+                ],
+            },
+        ];
+
+        const validInputs = ['Athens Αθήνα', 'Value: 100€', 'Line1\nLine2'];
+        validInputs.forEach((val) => {
+            const result = validateFormElements(elements, { field1: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        const invalidInputs = ['Иван', 'Backtick ` here', 'Hello 😊'];
+        invalidInputs.forEach((val) => {
+            const errors = validateFormElements(elements, { field1: val }, 'page1');
+            expect(errors, `Expected invalid for: "${val}"`).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_EL_Latin)',
+                    pageUrl: 'page1'
+                },
+            });
+        });
+    });
+
+    it('50b. should validate `textWide_EL_Latin_TR` fields correctly (canonical name)', () => {
+        const elements = [
+            {
+                element: 'textInput',
+                params: { name: 'field1', id: 'field1' },
+                validations: [
+                    { check: 'valid', params: { checkValue: 'textWide_EL_Latin_TR', message: 'Contains invalid characters (textWide_EL_Latin_TR)' } },
+                ],
+            },
+        ];
+
+        const validInputs = ['Çağdaş Αθήνα Example', 'MİHRİBAN ŞEMİ', 'Symbols *&@# ok'];
+        validInputs.forEach((val) => {
+            const result = validateFormElements(elements, { field1: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        const invalidInputs = ['Иван', 'Tilde ~ here', 'Test 😀'];
+        invalidInputs.forEach((val) => {
+            const errors = validateFormElements(elements, { field1: val }, 'page1');
+            expect(errors, `Expected invalid for: "${val}"`).to.deep.equal({
+                page1field1: {
+                    id: 'field1',
+                    message: 'Contains invalid characters (textWide_EL_Latin_TR)',
+                    pageUrl: 'page1'
+                },
+            });
+        });
+    });
+
+    it('50c. should keep `Latn` and `Latin` validators behaviorally equivalent', () => {
+        const candidateValues = [
+            'Athens Αθήνα',
+            'Çağdaş Αθήνα',
+            'Value: 100€',
+            'Иван',
+            'Hello 😊',
+            'Backtick ` here',
+        ];
+
+        candidateValues.forEach((val) => {
+            const latnElements = [
+                {
+                    element: 'textInput',
+                    params: { name: 'field1', id: 'field1' },
+                    validations: [
+                        { check: 'valid', params: { checkValue: 'textWide_EL_Latn', message: 'x' } },
+                    ],
+                },
+            ];
+            const latinElements = [
+                {
+                    element: 'textInput',
+                    params: { name: 'field1', id: 'field1' },
+                    validations: [
+                        { check: 'valid', params: { checkValue: 'textWide_EL_Latin', message: 'x' } },
+                    ],
+                },
+            ];
+            const latnTrElements = [
+                {
+                    element: 'textInput',
+                    params: { name: 'field1', id: 'field1' },
+                    validations: [
+                        { check: 'valid', params: { checkValue: 'textWide_EL_Latn_TR', message: 'x' } },
+                    ],
+                },
+            ];
+            const latinTrElements = [
+                {
+                    element: 'textInput',
+                    params: { name: 'field1', id: 'field1' },
+                    validations: [
+                        { check: 'valid', params: { checkValue: 'textWide_EL_Latin_TR', message: 'x' } },
+                    ],
+                },
+            ];
+
+            const latnResult = validateFormElements(latnElements, { field1: val }, 'page1');
+            const latinResult = validateFormElements(latinElements, { field1: val }, 'page1');
+            const latnTrResult = validateFormElements(latnTrElements, { field1: val }, 'page1');
+            const latinTrResult = validateFormElements(latinTrElements, { field1: val }, 'page1');
+
+            expect(latnResult, `Latn vs Latin mismatch for: "${val}"`).to.deep.equal(latinResult);
+            expect(latnTrResult, `Latn_TR vs Latin_TR mismatch for: "${val}"`).to.deep.equal(latinTrResult);
+        });
+    });
+
     it('51. should validate `textWide_UTF` fields correctly (all Unicode letters + numbers + wide punctuation)', () => {
 
         const elements = [
