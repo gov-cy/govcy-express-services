@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.11.4] - 2026-05-27
+### Changed
+- Updated `@gov-cy/govcy-frontend-renderer`
+
+### Security
+- Updated vulnerable **development dependencies** 
+- **Impact:** npm package consumers **are affected**.
+
 ## [v1.11.3] - 2026-05-21
 ### Added
 - Added canonical validation rule names `textWide_EL_Latin` and `textWide_EL_Latin_TR`.
