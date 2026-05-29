@@ -1926,7 +1926,10 @@ The validation rules for each element are defined in the `"validations` array fo
     - `date`: Date input (DD/MM/YYYY)
     - `dateISO`: ISO date input `YYYY-M-D`
     - `dateDMY`: European/Common Format date input `D/M/YYYY`
-    - `maxCurrentYear`: Maximum current year input
+    - `maxCurrentYear`: Maximum current year input. Use it for year-only inputs e.g. `2026` or formats that start with year e.g. `YYYY-M-D` (which works well with `dateInput` component). Do not use it with `D/M/YYYY` values (e.g. datePicker values); use date-based checks instead (`minCurrentDate`, `maxCurrentDate`, `withinDaysBeforeToday`, `withinDaysAfterToday`).
+    - `minCurrentYear`: Minimum current year input. Use it for year-only inputs e.g. `2026` or formats that start with year e.g. `YYYY-M-D` (which works well with `dateInput` component). Do not use it with `D/M/YYYY` values (e.g. datePicker values); use date-based checks instead (`minCurrentDate`, `maxCurrentDate`, `withinDaysBeforeToday`, `withinDaysAfterToday`).
+    - `minCurrentDate`: Checks if the value is greater than or equal to the current date.
+    - `maxCurrentDate`: Checks if the value is less than or equal to the current date.
 - `required`: Checks if the value is not null, undefined, or an empty string (after trimming).
 - `length`: Checks if the value has a maximum length passed in the `checkValue` parameter.
 - `regCheck`: Checks if the value matches the specified regular expression passed in the `checkValue` parameter.
@@ -1934,7 +1937,11 @@ The validation rules for each element are defined in the `"validations` array fo
 - `maxValue`: Checks if the value is less than or equal to the specified maximum value passed in the `checkValue` parameter.
 - `minValueDate`: Checks if the value is greater than or equal to the specified minimum date passed in the `checkValue` parameter.
 - `maxValueDate`: Checks if the value is less than or equal to the specified maximum date passed in the `checkValue` parameter.
+- `withinDaysBeforeToday`: Checks if the value is within the last `N` days (between `today - N` and `today`), where `N` is passed in `checkValue`.
+- `withinDaysAfterToday`: Checks if the value is within the next `N` days (between `today` and `today + N`), where `N` is passed in `checkValue`.
 - `minLength`: Checks if the value has a minimum length passed in the `checkValue` parameter.
+
+For `withinDaysBeforeToday` and `withinDaysAfterToday`, validation compares calendar dates only (local server timezone), not time-of-day. Supported input date formats are `YYYY-M-D` / `YYYY-MM-DD` and `D/M/YYYY` / `DD/MM/YYYY`.
 
 Example:
 

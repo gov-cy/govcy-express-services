@@ -2194,6 +2194,230 @@ describe('govcyValidator', () => {
         expect(validationErrors).to.deep.equal({});
     });
 
+    //------------- withinDaysBeforeToday validation ---------------------
+    it('46a. should allow only dates within N days before today (date picker + date input, all supported formats)', () => {
+        const daysBeforeToday = 60;
+        const today = new Date();
+        const threshold = new Date(today);
+        threshold.setDate(today.getDate() - daysBeforeToday);
+        const oneDayBeforeThreshold = new Date(threshold);
+        oneDayBeforeThreshold.setDate(threshold.getDate() - 1);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const isoVariants = [
+            `${threshold.getFullYear()}-${threshold.getMonth() + 1}-${threshold.getDate()}`,
+            `${threshold.getFullYear()}-${String(threshold.getMonth() + 1).padStart(2, '0')}-${threshold.getDate()}`,
+            `${threshold.getFullYear()}-${threshold.getMonth() + 1}-${String(threshold.getDate()).padStart(2, '0')}`,
+            `${threshold.getFullYear()}-${String(threshold.getMonth() + 1).padStart(2, '0')}-${String(threshold.getDate()).padStart(2, '0')}`,
+        ];
+
+        const dmyVariants = [
+            `${threshold.getDate()}/${threshold.getMonth() + 1}/${threshold.getFullYear()}`,
+            `${String(threshold.getDate()).padStart(2, '0')}/${threshold.getMonth() + 1}/${threshold.getFullYear()}`,
+            `${threshold.getDate()}/${String(threshold.getMonth() + 1).padStart(2, '0')}/${threshold.getFullYear()}`,
+            `${String(threshold.getDate()).padStart(2, '0')}/${String(threshold.getMonth() + 1).padStart(2, '0')}/${threshold.getFullYear()}`,
+        ];
+
+        const datePickerElements = [
+            {
+                element: 'textInput',
+                params: { name: 'dateField', id: 'dateField' },
+                validations: [
+                    { check: 'withinDaysBeforeToday', params: { checkValue: String(daysBeforeToday), message: 'Date is too early' } },
+                ],
+            },
+        ];
+
+        // ✅ all supported text date formats should pass when exactly on the threshold date
+        [...isoVariants, ...dmyVariants].forEach((val) => {
+            const result = validateFormElements(datePickerElements, { dateField: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        // ❌ non-date text should fail
+        let result = validateFormElements(datePickerElements, { dateField: 'sometext' }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too early', pageUrl: 'page1' },
+        });
+
+        // ✅ empty value should pass when field is not required
+        result = validateFormElements(datePickerElements, { dateField: '' }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ one day before threshold should fail
+        result = validateFormElements(datePickerElements, {
+            dateField: `${oneDayBeforeThreshold.getFullYear()}-${String(oneDayBeforeThreshold.getMonth() + 1).padStart(2, '0')}-${String(oneDayBeforeThreshold.getDate()).padStart(2, '0')}`
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too early', pageUrl: 'page1' },
+        });
+
+        // ✅ today should pass (inside the last N days window)
+        result = validateFormElements(datePickerElements, {
+            dateField: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ tomorrow should fail (future date)
+        result = validateFormElements(datePickerElements, {
+            dateField: `${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}`
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too early', pageUrl: 'page1' },
+        });
+
+        const dateInputElements = [
+            {
+                element: 'dateInput',
+                params: { name: 'appointment', id: 'appointment' },
+                validations: [
+                    { check: 'withinDaysBeforeToday', params: { checkValue: String(daysBeforeToday), message: 'Date is too early' } },
+                ],
+            },
+        ];
+
+        // ✅ dateInput should also pass when exactly on threshold
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(threshold.getFullYear()),
+            appointment_month: String(threshold.getMonth() + 1),
+            appointment_day: String(threshold.getDate()),
+        }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ dateInput should fail when one day before threshold
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(oneDayBeforeThreshold.getFullYear()),
+            appointment_month: String(oneDayBeforeThreshold.getMonth() + 1),
+            appointment_day: String(oneDayBeforeThreshold.getDate()),
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1appointment: { id: 'appointment', message: 'Date is too early', pageUrl: 'page1' },
+        });
+
+        // ❌ partially filled dateInput should fail
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(threshold.getFullYear()),
+            appointment_month: String(threshold.getMonth() + 1),
+            appointment_day: '',
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1appointment: { id: 'appointment', message: 'Date is too early', pageUrl: 'page1' },
+        });
+    });
+
+    //------------- withinDaysAfterToday validation ---------------------
+    it('46b. should allow only dates within N days after today (date picker + date input, all supported formats)', () => {
+        const daysAfterToday = 60;
+        const today = new Date();
+        const threshold = new Date(today);
+        threshold.setDate(today.getDate() + daysAfterToday);
+        const oneDayAfterThreshold = new Date(threshold);
+        oneDayAfterThreshold.setDate(threshold.getDate() + 1);
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const isoVariants = [
+            `${threshold.getFullYear()}-${threshold.getMonth() + 1}-${threshold.getDate()}`,
+            `${threshold.getFullYear()}-${String(threshold.getMonth() + 1).padStart(2, '0')}-${threshold.getDate()}`,
+            `${threshold.getFullYear()}-${threshold.getMonth() + 1}-${String(threshold.getDate()).padStart(2, '0')}`,
+            `${threshold.getFullYear()}-${String(threshold.getMonth() + 1).padStart(2, '0')}-${String(threshold.getDate()).padStart(2, '0')}`,
+        ];
+
+        const dmyVariants = [
+            `${threshold.getDate()}/${threshold.getMonth() + 1}/${threshold.getFullYear()}`,
+            `${String(threshold.getDate()).padStart(2, '0')}/${threshold.getMonth() + 1}/${threshold.getFullYear()}`,
+            `${threshold.getDate()}/${String(threshold.getMonth() + 1).padStart(2, '0')}/${threshold.getFullYear()}`,
+            `${String(threshold.getDate()).padStart(2, '0')}/${String(threshold.getMonth() + 1).padStart(2, '0')}/${threshold.getFullYear()}`,
+        ];
+
+        const datePickerElements = [
+            {
+                element: 'textInput',
+                params: { name: 'dateField', id: 'dateField' },
+                validations: [
+                    { check: 'withinDaysAfterToday', params: { checkValue: String(daysAfterToday), message: 'Date is too late' } },
+                ],
+            },
+        ];
+
+        // ✅ all supported text date formats should pass when exactly on the threshold date
+        [...isoVariants, ...dmyVariants].forEach((val) => {
+            const result = validateFormElements(datePickerElements, { dateField: val }, 'page1');
+            expect(result, `Expected valid for: "${val}"`).to.deep.equal({});
+        });
+
+        // ❌ non-date text should fail
+        let result = validateFormElements(datePickerElements, { dateField: 'sometext' }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too late', pageUrl: 'page1' },
+        });
+
+        // ✅ empty value should pass when field is not required
+        result = validateFormElements(datePickerElements, { dateField: '' }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ one day after threshold should fail
+        result = validateFormElements(datePickerElements, {
+            dateField: `${oneDayAfterThreshold.getFullYear()}-${String(oneDayAfterThreshold.getMonth() + 1).padStart(2, '0')}-${String(oneDayAfterThreshold.getDate()).padStart(2, '0')}`
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too late', pageUrl: 'page1' },
+        });
+
+        // ✅ today should pass (inside the next N days window)
+        result = validateFormElements(datePickerElements, {
+            dateField: `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ yesterday should fail (past date)
+        result = validateFormElements(datePickerElements, {
+            dateField: `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1dateField: { id: 'dateField', message: 'Date is too late', pageUrl: 'page1' },
+        });
+
+        const dateInputElements = [
+            {
+                element: 'dateInput',
+                params: { name: 'appointment', id: 'appointment' },
+                validations: [
+                    { check: 'withinDaysAfterToday', params: { checkValue: String(daysAfterToday), message: 'Date is too late' } },
+                ],
+            },
+        ];
+
+        // ✅ dateInput should also pass when exactly on threshold
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(threshold.getFullYear()),
+            appointment_month: String(threshold.getMonth() + 1),
+            appointment_day: String(threshold.getDate()),
+        }, 'page1');
+        expect(result).to.deep.equal({});
+
+        // ❌ dateInput should fail when one day after threshold
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(oneDayAfterThreshold.getFullYear()),
+            appointment_month: String(oneDayAfterThreshold.getMonth() + 1),
+            appointment_day: String(oneDayAfterThreshold.getDate()),
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1appointment: { id: 'appointment', message: 'Date is too late', pageUrl: 'page1' },
+        });
+
+        // ❌ partially filled dateInput should fail
+        result = validateFormElements(dateInputElements, {
+            appointment_year: String(threshold.getFullYear()),
+            appointment_month: String(threshold.getMonth() + 1),
+            appointment_day: '',
+        }, 'page1');
+        expect(result).to.deep.equal({
+            page1appointment: { id: 'appointment', message: 'Date is too late', pageUrl: 'page1' },
+        });
+    });
+
     //------------- valid noSpecialCharsEl validation ---------------------
     it('47. should validate `noSpecialCharsEl` fields correctly (Greek and Latin text)', () => {
         const elements = [

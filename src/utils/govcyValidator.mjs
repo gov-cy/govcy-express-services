@@ -154,6 +154,32 @@ function validateValue(value, rules) {
       }
       return valueDate <= max;
     },
+    withinDaysBeforeToday: (val, daysBeforeToday) => {
+      const valueDate = parseDate(val);
+      const days = Number.parseInt(daysBeforeToday, 10);
+      if (isNaN(valueDate) || Number.isNaN(days)) return false;
+
+      const today = new Date();
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const minAllowedDate = new Date(todayOnly);
+      minAllowedDate.setDate(minAllowedDate.getDate() - days);
+
+      return valueOnly >= minAllowedDate && valueOnly <= todayOnly;
+    },
+    withinDaysAfterToday: (val, daysAfterToday) => {
+      const valueDate = parseDate(val);
+      const days = Number.parseInt(daysAfterToday, 10);
+      if (isNaN(valueDate) || Number.isNaN(days)) return false;
+
+      const today = new Date();
+      const valueOnly = new Date(valueDate.getFullYear(), valueDate.getMonth(), valueDate.getDate());
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const maxAllowedDate = new Date(todayOnly);
+      maxAllowedDate.setDate(maxAllowedDate.getDate() + days);
+
+      return valueOnly >= todayOnly && valueOnly <= maxAllowedDate;
+    },
     minLength: (val, min) => val.length >= min
   };
 
@@ -221,6 +247,16 @@ function validateValue(value, rules) {
 
     // Check for "minLength"
     if (check === 'minLength' && !validationRules.minLength(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "withinDaysBeforeToday"
+    if (check === 'withinDaysBeforeToday' && !validationRules.withinDaysBeforeToday(value, checkValue)) {
+      return message;
+    }
+
+    // Check for "withinDaysAfterToday"
+    if (check === 'withinDaysAfterToday' && !validationRules.withinDaysAfterToday(value, checkValue)) {
       return message;
     }
 
