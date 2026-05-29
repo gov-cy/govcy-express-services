@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.12.0] - 2026-05-29
+### Added
+- Added new date validation checks:
+  - `withinDaysBeforeToday` to require a date to be within the last N days (`today - N` to `today`).
+  - `withinDaysAfterToday` to require a date to be within the next N days (`today` to `today + N`).
+- Both checks reuse shared date parsing and support both date input styles accepted by the validator (`YYYY-M-D`/`YYYY-MM-DD` and `D/M/YYYY`).
+
 ## [v1.11.4] - 2026-05-27
 ### Changed
 - Updated `@gov-cy/govcy-frontend-renderer`
