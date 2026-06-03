@@ -95,51 +95,6 @@
       "en": "Menu",
       "tr": "Menu"
     },
-    "menuHideLabelVisibility": true,
-    "navigation": {
-      "items": [
-        {
-          "label": {
-            "en": "Home",
-            "el": "Αρχική"
-          },
-          "href": {
-            "en": "/task-list/",
-            "el": "/task-list/"
-          }
-        },
-        {
-          "label": {
-            "en": "The application",
-            "el": "Αίτηση"
-          },
-          "href": {
-            "en": "/task-list/task-list",
-            "el": "/task-list/task-list"
-          }
-        },
-        {
-          "label": {
-            "en": "Authors",
-            "el": "Συγγραφείς"
-          },
-          "href": {
-            "en": "/task-list/authors/",
-            "el": "/task-list/authors/"
-          }
-        },
-        {
-          "label": {
-            "en": "Options",
-            "el": "Επιλογές"
-          },
-          "href": {
-            "en": "/task-list/options",
-            "el": "/task-list/options"
-          }
-        }
-      ]
-    },
     "title": {
       "el": "Αίτηση για ISBN (Task List)",
       "en": "Apply for an ISBN (Task List)",
@@ -169,6 +124,59 @@
       "cssIntegrity": "sha384-qjx16YXHG+Vq/NVtwU2aDTc7DoLOyaVNuOHrwA3aTrckpM/ycxZoR5dx7ezNJ/Lv",
       "jsIntegrity": "sha384-tqEyCdi3GS4uDXctplAd7ODjiK5fo2Xlqv65e8w/cVvrcBf89tsxXFHXXNiUDyM7"
     },
+    "navigation": {
+      "items": [
+        {
+          "label": {
+            "el": "Αρχική",
+            "en": "Home",
+            "tr": "Home"
+          },
+          "href": {
+            "el": "/task-list/",
+            "en": "/task-list/",
+            "tr": "/task-list/"
+          }
+        },
+        {
+          "label": {
+            "el": "Αίτηση",
+            "en": "The application",
+            "tr": "The application"
+          },
+          "href": {
+            "el": "/task-list/task-list",
+            "en": "/task-list/task-list",
+            "tr": "/task-list/task-list"
+          }
+        },
+        {
+          "label": {
+            "el": "Συγγραφείς",
+            "en": "Authors",
+            "tr": "Authors"
+          },
+          "href": {
+            "el": "/task-list/authors/",
+            "en": "/task-list/authors/",
+            "tr": "/task-list/authors/"
+          }
+        },
+        {
+          "label": {
+            "el": "Επιλογές",
+            "en": "Options",
+            "tr": "Options"
+          },
+          "href": {
+            "el": "/task-list/options",
+            "en": "/task-list/options",
+            "tr": "/task-list/options"
+          }
+        }
+      ]
+    },
+    "menuHideLabelVisibility": true,
     "usesDSFSubmissionPlatform": true,
     "cyLoginPolicies": [
       "naturalPerson",
@@ -292,128 +300,6 @@
     }
   },
   "pages": [
-    {
-      "pageData": {
-        "url": "task-list",
-        "title": {
-          "el": "Αίτηση",
-          "en": "The application",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
-        "nextPage": "options"
-      },
-      "taskList": {
-        "topElements": [
-          {
-            "element": "progressList",
-            "params": {
-              "id": "steps",
-              "current": "2",
-              "total": "3",
-              "showSteps": true,
-              "steps": [
-                {
-                  "id": "step1",
-                  "text": {
-                    "el": "Στοιχεία επικοινωνίας ",
-                    "en": "Contact details",
-                    "tr": ""
-                  }
-                },
-                {
-                  "id": "step3",
-                  "text": {
-                    "el": "Αίτηση",
-                    "en": "The application",
-                    "tr": ""
-                  }
-                },
-                {
-                  "id": "step5",
-                  "text": {
-                    "el": "Επιλογές",
-                    "en": "Options",
-                    "tr": ""
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "element": "textElement",
-            "params": {
-              "type": "h1",
-              "text": {
-                "el": "Αίτηση για ISBN (Task List)",
-                "en": "Apply for an ISBN (Task List)"
-              }
-            }
-          },
-          {
-            "element": "textElement",
-            "params": {
-              "type": "p",
-              "text": {
-                "el": "Πρέπει να ολοκληρώσετε όλες τις εργασίες για να υποβάλετε την αίτησή σας. Οι εργασίες σας αποθνητοποιούνται καθώς τις ολοκληρώνετε.",
-                "en": "You need to complete all tasks to submit your application. Your tasks are saved as you complete them."
-              }
-            }
-          }
-        ],
-        "taskPages": [
-          "index",
-          "book-title",
-          "publishing-details",
-          "authors",
-          "book-theme",
-          "book-series",
-          "reprint",
-          "translation",
-          "book-form",
-          "physical-description",
-          "collaborators"
-        ],
-        "hasBackLink": true,
-        "showSkippedTasks": false
-      }
-    },
-    
-    {
-      "pageData": {
-        "url": "collaborators",
-        "title": {
-          "el": "Συνεργάτες",
-          "en": "Collaborators",
-          "tr": ""
-        },
-        "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
-        "nextPage": "task-list"
-      },
-      "taskList": {
-        "topElements": [
-          {
-            "element": "textElement",
-            "params": {
-              "type": "h1",
-              "text": {
-                "el": "Συνεργάτες (Task List)",
-                "en": "Collaborators (Task List)"
-              }
-            }
-          }
-        ],
-        "taskPages": [
-          "editors",
-          "illustrators"
-        ],
-        "hasBackLink": true,
-        "showSkippedTasks": false,
-        "linkToContinue": true
-      }
-    },
     {
       "pageData": {
         "url": "identifier-not-found",
@@ -796,7 +682,7 @@
             "params": {
               "id": "progress",
               "current": "1",
-              "total": "2",
+              "total": "3",
               "showSteps": true,
               "steps": [
                 {
@@ -842,6 +728,95 @@
           "serviceId": "DSF_API_GTW_SERVICE_ID",
           "dsfgtwApiKey": "DSF_API_GTW_SECRET"
         }
+      }
+    },
+    {
+      "pageData": {
+        "url": "task-list",
+        "title": {
+          "el": "Αίτηση",
+          "en": "The application",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "options"
+      },
+      "taskList": {
+        "topElements": [
+          {
+            "element": "progressList",
+            "params": {
+              "id": "progress",
+              "current": "2",
+              "total": "3",
+              "showSteps": true,
+              "steps": [
+                {
+                  "id": "step1",
+                  "text": {
+                    "el": "Στοιχεία επικοινωνίας ",
+                    "en": "Contact details",
+                    "tr": ""
+                  }
+                },
+                {
+                  "id": "step3",
+                  "text": {
+                    "el": "Αίτηση",
+                    "en": "The application",
+                    "tr": ""
+                  }
+                },
+                {
+                  "id": "step5",
+                  "text": {
+                    "el": "Επιλογές",
+                    "en": "Options",
+                    "tr": ""
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "element": "textElement",
+            "params": {
+              "id": "header",
+              "type": "h1",
+              "text": {
+                "el": "Αίτηση για ISBN (Task List)",
+                "en": "Apply for an ISBN (Task List)"
+              }
+            }
+          },
+          {
+            "element": "htmlElement",
+            "params": {
+              "id": "p",
+              "text": {
+                "el": "<p>Πρέπει να ολοκληρώσετε όλες τις εργασίες για να υποβάλετε την αίτησή σας. Οι εργασίες σας αποθνητοποιούνται καθώς τις ολοκληρώνετε.</p>",
+                "en": "<p>You need to complete all tasks to submit your application. Your tasks are saved as you complete them.</p>"
+              }
+            }
+          }
+        ],
+        "taskPages": [
+          "index",
+          "book-title",
+          "publishing-details",
+          "authors",
+          "book-theme",
+          "book-series",
+          "reprint",
+          "translation",
+          "book-form",
+          "physical-description",
+          "collaborators"
+        ],
+        "hasBackLink": true,
+        "showSkippedTasks": true,
+        "linkToContinue": true
       }
     },
     {
@@ -1615,14 +1590,6 @@
                                     "en": "Country of citizenship"
                                   },
                                   "items": [
-                                    {
-                                      "value": "",
-                                      "text": {
-                                        "el": "",
-                                        "en": "",
-                                        "tr": ""
-                                      }
-                                    },
                                     {
                                       "value": "AW",
                                       "text": {
@@ -3760,6 +3727,41 @@
     },
     {
       "pageData": {
+        "url": "collaborators",
+        "title": {
+          "el": "Συνεργάτες (Task List)",
+          "en": "Collaborators (Task List)",
+          "tr": ""
+        },
+        "layout": "layouts/govcyBase.njk",
+        "mainLayout": "two-third",
+        "nextPage": "task-list"
+      },
+      "taskList": {
+        "topElements": [
+          {
+            "element": "textElement",
+            "params": {
+              "id": "header",
+              "type": "h1",
+              "text": {
+                "el": "Συνεργάτες (Task List)",
+                "en": "Collaborators (Task List)"
+              }
+            }
+          }
+        ],
+        "taskPages": [
+          "editors",
+          "illustrators"
+        ],
+        "hasBackLink": true,
+        "showSkippedTasks": false,
+        "linkToContinue": true
+      }
+    },
+    {
+      "pageData": {
         "url": "editors",
         "title": {
           "el": "Επιμελητής βιβλίου",
@@ -3928,14 +3930,6 @@
                           "en": "Country of citizenship"
                         },
                         "items": [
-                          {
-                            "value": "",
-                            "text": {
-                              "el": "",
-                              "en": "",
-                              "tr": ""
-                            }
-                          },
                           {
                             "value": "AW",
                             "text": {
@@ -4353,14 +4347,6 @@
                           "en": "Country of citizenship"
                         },
                         "items": [
-                          {
-                            "value": "",
-                            "text": {
-                              "el": "",
-                              "en": "",
-                              "tr": ""
-                            }
-                          },
                           {
                             "value": "AW",
                             "text": {
@@ -4815,8 +4801,8 @@
                           "params": {
                             "checkValue": "",
                             "message": {
-                              "el": "Επιλέξετε εάν θέλετε τα στοιχεία σας να είναι διαθέσιμα δημόσια στο GRP (Global Register of Publishers)",
-                              "en": "Select if you want your details to be publicly available in GRP (Global Register of Publishers)",
+                              "el": "Επιλέξετε εάν θέλετε τα στοιχεία σας να είναι διαθέσιμα δημόσια στο GRP (Global Register of Publishers)",
+                              "en": "Select if you want your details to be publicly available in GRP (Global Register of Publishers)",
                               "tr": ""
                             }
                           }
@@ -4883,8 +4869,8 @@
                 "params": {
                   "id": "instructions",
                   "text": {
-                    "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς η Κυπριακή Βιβλιοθήκη χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>περιγραφή βιλίου</li><li>λεπτομέρειες εκδότη (όνομα, διεύθυνση, email, αριθμός τηλεφώνου)</li><li>συγγραφείς βιβλίου (όνομα ατόμου ή συγγραφικής ομάδας, ψευδώνυμο, έτος γέννησης, αριθμός ταυτότητας ή ARC, χώρα υπηκοότητας, διεύθυνση, email, αριθμός τηλεφώνου)</li><li>θεματικές κατηγορίες του βιβλίου</li><li>πληροφορίες σειράς βιβλίου (τίτλος σειράς, αριθμός σειράς, υπεύθυνος σειράς βιβλίου)</li><li>πληροφορίες ανατύπωσης (έτος, τίτλος και όνομα εκδότη προηγούμενης έκδοσης)</li><li>πληροφορίες μετάφρασης (όνομα μεταφραστή, τίτλος, όνομα συγγραφέα, γλώσσα και έτος έκδοσης του αρχικού βιβλίου)</li><li>μορφή του βιβλίου</li><li>φυσική περιγραφή του βιβλίου (είδος εκτύπωσης, διαστάσεις, αριθμό σελιδών, αριθμός τόμων, συνοδευτικά υλικα και τιμές πώλησης έντυπου βιβλίου)</li><li>επιμελητές του βιβλίου (όνομα, έτος γέννησης, υπηκοότητα, διεύθυνση, αριθμός τηλεφώνου)</li><li>εικονογράφοι του βιβλίου (όνομα, έτος γέννησης, υπηκοότητα, διεύθυνση, αριθμός τηλεφώνου)</li><li>επιλογές αν θα δοθούν γραμμοκώδικας (barcode) και CIP (Cataloguing in Publication)</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>διεύθυνση επικοινωνίας και email</li><li>αριθμός τηλεφώνου</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την επεξεργασία της αίτησης σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να να επεξεργαστούμε την αίτησή σας.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
-                    "en": "<p>This privacy policy explains how the Cyprus Library uses information about you, in order to process your application.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>book description </li><li>publisher details (name, address, email, telephone number)</li><li>book authors (name of writer or publishing team, pen name, year of birth, ID or ARC, country of citizenship, address, email, phone number)</li><li>book subject categories</li><li>information about the book series (book series title, number in series, person responsible for the book series)</li><li>information about reprint (year, title and publisher name of the previous publication)</li><li>information about translation (translator’s name, title, author, language and year of publication of the original book)</li><li>book format</li><li>book physical description (print format, dimensions, number of pages, number of volumes,  accompanying material and prices of printed book)</li><li>book editors (name, year of birth, citizenship, address, phone number)</li><li>book illustrators (name, year of birth, citizenship, address, phone number)</li><li>options if a barcode and CIP (Cataloguing in Publication) will be assigned</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>postal and email address</li><li>phone number</li></ul><h2>Why we use your information</h2><p>We collect and use this information to process your application.</p><p>Without access to this information, we cannot process your application.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
+                    "el": "<p>Αυτή η πολιτική απορρήτου εξηγεί πώς η Κυπριακή Βιβλιοθήκη χρησιμοποιεί πληροφορίες σχετικά με εσάς, για να διεκπεραιώσει την αίτησή σας.</p><h2>Τύποι πληροφοριών που συλλέγουμε και χρησιμοποιούμε</h2><p>Συλλέγουμε τις ακόλουθες πληροφορίες απευθείας από εσάς:</p><ul><li>περιγραφή βιλίου</li><li>λεπτομέρειες εκδότη (όνομα, διεύθυνση, email, αριθμός τηλεφώνου)</li><li>συγγραφείς βιβλίου (όνομα ατόμου ή συγγραφικής ομάδας, ψευδώνυμο, έτος γέννησης, αριθμός ταυτότητας ή ARC, χώρα υπηκοότητας, διεύθυνση, email, αριθμός τηλεφώνου)</li><li>θεματικές κατηγορίες του βιβλίου</li><li>πληροφορίες σειράς βιβλίου (τίτλος σειράς, αριθμός σειράς, υπεύθυνος σειράς βιβλίου)</li><li>πληροφορίες ανατύπωσης (έτος, τίτλος και όνομα εκδότη προηγούμενης έκδοσης)</li><li>πληροφορίες μετάφρασης (όνομα μεταφραστή, τίτλος, όνομα συγγραφέα, γλώσσα και έτος έκδοσης του αρχικού βιβλίου)</li><li>μορφή του βιβλίου</li><li>φυσική περιγραφή του βιβλίου (είδος εκτύπωσης, διαστάσεις, αριθμό σελιδών, αριθμός τόμων, συνοδευτικά υλικα και τιμές πώλησης έντυπου βιβλίου)</li><li>επιμελητές του βιβλίου (όνομα, έτος γέννησης, υπηκοότητα, διεύθυνση, αριθμός τηλεφώνου)</li><li>εικονογράφοι του βιβλίου (όνομα, έτος γέννησης, υπηκοότητα, διεύθυνση, αριθμός τηλεφώνου)</li><li>επιλογές αν θα δοθούν γραμμοκώδικας (barcode) και CIP (Cataloguing in Publication)</li></ul><p>Συλλέγουμε τις ακόλουθες πληροφορίες για εσάς από το CY Login:</p><ul><li>όνομα χρήστη στο Cy Login\r</li><li>διεύθυνση email</li><li>αριθμός ταυτότητας ή ARC</li></ul><p>Χρησιμοποιούμε τις ακόλουθες πληροφορίες για εσάς από τα δικά μας αρχεία:</p><ul><li>ονοματεπώνυμο\r</li><li>διεύθυνση επικοινωνίας και email</li><li>αριθμός τηλεφώνου</li></ul><h2>Γιατί χρησιμοποιούμε τις πληροφορίες σας</h2><p>Συλλέγουμε και χρησιμοποιούμε τις πληροφορίες αυτές για την επεξεργασία της αίτησης σας.</p><p>Χωρίς πρόσβαση στις πληροφορίες αυτές, δεν μπορούμε να να επεξεργαστούμε την αίτησή σας.</p><h2>Πώς αποθηκεύονται οι προσωπικές σας πληροφορίες</h2><p>Οι πληροφορίες σας αποθηκεύονται με ασφάλεια σε διακομιστές με έδρα την Κύπρο.</p><h2>Τα δικαιώματά σας</h2><p>Επικοινωνήστε στο <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a> εάν θέλετε:</p><ul><li>να λάβετε αντίγραφο των πληροφοριών που διατηρούνται για εσάς </li><li>να περιορίσετε την επεξεργασία των δεδομένων σας </li><li>να διορθώσετε ή να ενημερώσετε τις προσωπικές σας πληροφορίες </li><li>να υποβάλετε ένσταση για την επεξεργασία των προσωπικών σας πληροφοριών </li><li>να μεταφερθούν τα στοιχεία σας σε άλλο οργανισμό ή σε εσάς.</li></ul><h2>Παράπονα</h2><p>Μπορείτε να υποβάλετε παράπονο για τον τρόπο με τον οποίο χρησιμοποιήθηκαν οι προσωπικές σας πληροφορίες <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_gr/page1i_gr?opendocument\" target=\"_blank\">επικοινωνώντας με το Γραφείο του Επιτρόπου Προστασίας Δεδομένων Προσωπικού Χαρακτήρα</a>.</p>",
+                    "en": "<p>This privacy policy explains how the Cyprus Library uses information about you, in order to process your application.</p><h2>Types of information we collect and use</h2><p>We collect the following information from you directly:</p><ul><li>book description </li><li>publisher details (name, address, email, telephone number)</li><li>book authors (name of writer or publishing team, pen name, year of birth, ID or ARC, country of citizenship, address, email, phone number)</li><li>book subject categories</li><li>information about the book series (book series title, number in series, person responsible for the book series)</li><li>information about reprint (year, title and publisher name of the previous publication)</li><li>information about translation (translator’s name, title, author, language and year of publication of the original book)</li><li>book format</li><li>book physical description (print format, dimensions, number of pages, number of volumes,  accompanying material and prices of printed book)</li><li>book editors (name, year of birth, citizenship, address, phone number)</li><li>book illustrators (name, year of birth, citizenship, address, phone number)</li><li>options if a barcode and CIP (Cataloguing in Publication) will be assigned</li></ul><p>We collect the following information about you from CY Login:</p><ul><li>CY Login user name</li><li>email address</li><li>ID or ARC number</li></ul><p>We use the following information about you from our own records:</p><ul><li>full name\r</li><li>postal and email address</li><li>phone number</li></ul><h2>Why we use your information</h2><p>We collect and use this information to process your application.</p><p>Without access to this information, we cannot process your application.</p><h2>How your personal information is stored</h2><p>Your information is stored securely on servers based in Cyprus.</p><h2>Your rights</h2><p>Contact <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a> if you want to:</p><ul><li>get a copy of the information held about you </li><li>restrict the processing of your data</li><li>correct or update your personal information </li><li>object to the processing of your personal information</li><li>have your information transferred to another organisation or to you.</li></ul><h2>Complaints</h2><p>You can complain about the way your personal information has been used by <a href=\"https://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/page1i_en/page1i_en?opendocument\" target=\"_blank\">contacting the Office of the Commissioner for Personal Data Protection</a>.</p>"
                   }
                 }
               }
@@ -4954,8 +4940,8 @@
                 "params": {
                   "id": "instructions",
                   "text": {
-                    "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a></li></ul>",
-                    "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a></li></ul>"
+                    "el": "<h2>Χρήση του CY Login</h2><p>Όταν συνδέεστε χρησιμοποιώντας το CY Login για πρόσβαση στην υπηρεσία, θα αποθηκεύονται <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">επιπλέον cookies στη συσκευή σας</a>.</p><h2>Πώς να ελέγχετε τα cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Μάθετε πώς να ελέγχετε και να διαγράφετε τα cookies στη συσκευή σας</a>.</p><p>Μπορείτε να διαγράψετε όλα τα cookies που υπάρχουν ήδη στον υπολογιστή σας και μπορείτε να ρυθμίσετε τους περισσότερους φυλλομετρητές (browsers) ώστε να αποτρέπουν την τοποθέτησή τους. Εάν το κάνετε αυτό, ωστόσο, ίσως χρειαστεί να προσαρμόζετε με μη αυτόματο τρόπο ορισμένες επιλογές κάθε φορά που επισκέπτεστε έναν διαδικτυακό τόπο και ορισμένες υπηρεσίες και λειτουργίες ενδέχεται να μην λειτουργούν.</p><h2>Έλεγχος πολιτικής</h2><p>Η πολιτική cookie θα ελέγχεται όταν υπάρξουν σημαντικές αλλαγές σε αυτήν.</p><h2>Πώς να επικοινωνήσετε μαζί μας σχετικά με αυτήν την πολιτική</h2><p>Μπορείτε να επικοινωνήσετε με τον υπεύθυνο προστασίας δεδομένων στη διεύθυνση:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a></li></ul>",
+                    "en": "<h2>Using CY Login</h2><p>When you sign in using CY Login to use the service, it will save <a href=\"https://cge.cyprus.gov.cy/cyloginregistration/knowledgebase/privacy\" target=\"_blank\">additional cookies on your device</a>.</p><h2>How to control cookies</h2><p><a href=\"https://www.aboutcookies.org/how-to-manage-and-delete-cookies\" target=\"_blank\">Find out how to control and delete cookies on your device</a>.</p><p>You can delete all cookies that are already on your device and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.</p><h2>Review of policy</h2><p>The cookie policy will be reviewed when there are significant changes to it.</p><h2>How to contact us regarding this policy</h2><p>You can contact our data protection officer at:</p><ul class=\"govcy-list-unstyled\"><li>Email: <a href=\"mailto:zpolyviou@culture.gov.cy \" target=\"_blank\">zpolyviou@culture.gov.cy </a></li></ul>"
                   }
                 }
               }
@@ -4968,7 +4954,7 @@
       "pageData": {
         "url": "accessibility-statement",
         "title": {
-          "el": "Δήλωση προσβασιμότητας ",
+          "el": "Δήλωση προσβασιμότητας",
           "en": "Accessibility statement",
           "tr": ""
         },
@@ -4995,7 +4981,7 @@
                   "id": "title",
                   "type": "h1",
                   "text": {
-                    "el": "Δήλωση προσβασιμότητας ",
+                    "el": "Δήλωση προσβασιμότητας ",
                     "en": "Accessibility statement"
                   }
                 }
