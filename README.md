@@ -320,6 +320,35 @@ Here is an example JSON config:
       "en": "Menu",
       "tr": "Menu"
     },
+    "navigation": {  //<-- Navigation menu items
+      "items": [
+        {
+          "label": {
+            "el": "Αρχική",
+            "en": "Home",
+            "tr": "Home"
+          },
+          "href": {
+            "el": "/test/",
+            "en": "/test/",
+            "tr": "/test/"
+          }
+        },
+        {
+          "label": {
+            "el": "Αίτηση",
+            "en": "The application",
+            "tr": "The application"
+          },
+          "href": {
+            "el": "/test/task-list",
+            "en": "/test/task-list",
+            "tr": "/test/task-list"
+          }
+        }
+      ]
+    },
+    "menuHideLabelVisibility": true,
     "title": {  //<-- Service title (meta)
       "el": "Υπηρεσία τεστ",
       "en": "Test service",
@@ -789,6 +818,37 @@ Here are some details explaining the JSON structure:
   - `submissionDataVersion` : The submission data version,
   - `rendererVersion` : The govcy-frontend-renderer version,
   - `designSystemsVersion` : The govcy-design-system version,
+  - <span id="site-navigation"></span>`navigation`: Optional menu navigation items. Example:
+  ```json 
+  "navigation": {  
+    "items": [
+      {
+        "label": {
+          "el": "Αρχική",
+          "en": "Home",
+          "tr": "Home"
+        },
+        "href": {
+          "el": "/test/",
+          "en": "/test/",
+          "tr": "/test/"
+        }
+      },
+      {
+        "label": {
+          "el": "Αίτηση",
+          "en": "The application",
+          "tr": "The application"
+        },
+        "href": {
+          "el": "/test/task-list",
+          "en": "/test/task-list",
+          "tr": "/test/task-list"
+        }
+      }
+    ]
+  }
+  ```
   - `homeRedirectPage`: An object mapping language codes to URLs. When a user visits the root route (e.g., `https://whatever-your-service-is.service.gov.cy/`), the system redirects to the URL for the user's language. If the user's language is not found, it falls back to `"el"` or the first available URL. If not provided, a list of available sites is shown. Example:
   ```json 
   "homeRedirectPage": {
