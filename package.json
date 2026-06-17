@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -45,7 +45,6 @@
     "start:all-features": "node tests/mocks/all-features/allFeaturesStarter.mjs",
     "start:mock": "node tests/mocks/mockApiServer.mjs",
     "test": "mocha --timeout 60000 tests/**/*.test.mjs --exit",
-    "test:report": "mocha --timeout 60000 --reporter mochawesome tests/**/*.test.mjs --exit",
     "test:unit": "mocha --recursive tests/unit/**/*.test.mjs",
     "test:integration": "mocha --recursive tests/integration/**/*.test.mjs",
     "test:package": "mocha --recursive tests/package/**/*.test.mjs",
@@ -58,7 +57,7 @@
   },
   "dependencies": {
     "@gov-cy/dsf-email-templates": "^2.1.15",
-    "@gov-cy/govcy-frontend-renderer": "^1.28.1",
+    "@gov-cy/govcy-frontend-renderer": "^1.29.0",
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.3.1",
@@ -75,7 +74,6 @@
     "chai-http": "^5.1.1",
     "coverage-badges-cli": "^2.2.0",
     "mocha": "^11.7.5",
-    "mochawesome": "^7.1.4",
     "nodemon": "^3.0.2",
     "pa11y": "^9.1.0",
     "patch-package": "^8.0.1",
