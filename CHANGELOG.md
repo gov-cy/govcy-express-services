@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.12.2] - 2026-06-17
+### Changed
+- Updated `@gov-cy/govcy-frontend-renderer`
+
+### Removed
+- Removed `mochawesome` dependency
+
+### Security
+- Updated vulnerable **production/runtime dependencies** (`dependencies`).
+- **Impact:** npm package consumers **are affected**.
+
 ## [v1.12.1] - 2026-06-03
 ### Changed
 - Updated readme with menu navigation functionality
@@ -21,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `@gov-cy/govcy-frontend-renderer`
 
 ### Security
-- Updated vulnerable **development dependencies** 
+- Updated vulnerable **production/runtime dependencies** (`dependencies`).
 - **Impact:** npm package consumers **are affected**.
 
 ## [v1.11.3] - 2026-05-21

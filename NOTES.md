@@ -570,7 +570,6 @@ To run tests, use the `npm test` command. This will run all the tests. To run al
 - `npm run test:integration`: Runs integration tests. Needs mockAPI to be started.
 - `npm run test:package`: Runs package tests and checks the intallability.
 - `npm run test:functional`: Runs functional tests with puppeteer. Needs the server to be started.
-- `npm run test:report`: Runs all tests and generates a mochawesome report.
 - `npm run coverage`: Runs all tests and generates a coverage report.
 - `npm run coverage:report`: Generates a coverage report.
 - `npm run coverage:badge`: Generates a coverage badge.

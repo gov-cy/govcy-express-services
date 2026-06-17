@@ -44,50 +44,14 @@
     ],
     "footerIcons": [
       {
-        "target": "_blank",
-        "src": {
-          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EL.png",
-          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png",
-          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/FundedbyEU_NextGeneration_H53-EN.png"
-        },
-        "alt": {
-          "el": "Χρηματοδοτείται από την ΕΕ Next Generation EU",
-          "en": "Funded by the EU Next Generation EU",
-          "tr": "Funded by the EU Next Generation EU"
-        },
-        "href": {
-          "el": "https://europa.eu/",
-          "en": "https://europa.eu/",
-          "tr": "https://europa.eu/"
-        },
-        "title": {
-          "el": "Μετάβαση στην ιστοσελίδα της ΕΕ",
-          "en": "Go to EU website",
-          "tr": "Go to EU website"
-        }
+        "preset": "dsf-badge",
+        "badgeId": "DSF-water-aerators"
       },
       {
-        "target": "_blank",
-        "src": {
-          "el": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EL.png",
-          "en": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png",
-          "tr": "https://cdn.jsdelivr.net/gh/gov-cy/govdesign@main/CYpros%20to%20aurio%20logo%20eng_H53_EN.png"
-        },
-        "alt": {
-          "el": "Κύπρος το Αύριο, σχέδιο ανάκαμψης και ανθεντικότητας",
-          "en": "Cyprus tomorrow, recovery and resilience plan",
-          "tr": "Cyprus tomorrow, recovery and resilience plan"
-        },
-        "href": {
-          "el": "http://www.cyprus-tomorrow.gov.cy/",
-          "en": "http://www.cyprus-tomorrow.gov.cy/",
-          "tr": "http://www.cyprus-tomorrow.gov.cy/"
-        },
-        "title": {
-          "el": "Μετάβαση στην ιστοσελίδα Κύπρος το Αύριο",
-          "en": "Go to Cyprus Tomorrow website",
-          "tr": "Go to Cyprus Tomorrow website"
-        }
+        "preset": "eu-next-generation"
+      },
+      {
+        "preset": "cyprus-tomorrow"
       }
     ],
     "menu": {
