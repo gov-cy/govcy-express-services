@@ -1,6 +1,6 @@
 {
   "name": "@gov-cy/govcy-express-services",
-  "version": "1.12.2",
+  "version": "1.12.3",
   "description": "An Express-based system that dynamically renders services using @gov-cy/govcy-frontend-renderer and posts data to a submission API.",
   "author": "DMRID - DSF Team",
   "license": "MIT",
@@ -89,5 +89,8 @@
     "minimatch": "^10.2.1",
     "serialize-javascript": "^7.0.3",
     "yauzl": "^3.2.1"
+  },
+  "allowScripts": {
+    "puppeteer@24.37.4": true
   }
 }
