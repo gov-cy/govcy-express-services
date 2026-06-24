@@ -28,6 +28,38 @@ describe('govcyLoadConfigData - getServiceConfigData', () => {
         const service = getServiceConfigData('test', 'fr'); // Unsupported language
         expect(service.site.lang).to.equal('el'); // Default to 'el'
     });
+    it('6. should set Matomo userId when userSub is provided', () => {
+        const service = getServiceConfigData('test', 'en', 'abc');
+
+        expect(service.site.matomo).to.have.property('userId');
+        expect(service.site.matomo.userId).to.be.a('string');
+        expect(service.site.matomo.userId).to.not.equal('');
+    });
+    it('7. should generate a stable Matomo userId and not expose the raw userSub', () => {
+        const serviceA = getServiceConfigData('test', 'en', 'abc');
+        const serviceB = getServiceConfigData('test', 'en', 'abc');
+
+        expect(serviceA.site.matomo.userId).to.equal(serviceB.site.matomo.userId);
+        expect(serviceA.site.matomo.userId).to.not.equal('abc');
+        expect(serviceA.site.matomo.userId).to.not.include('abc');
+    });
+    it('8. should not set Matomo userId when userSub is not provided', () => {
+        const service = getServiceConfigData('test', 'en');
+
+        expect(service.site.matomo).to.not.have.property('userId');
+    });
+
+    it('9. should not set Matomo userId when userSub is empty after trimming', () => {
+        const service = getServiceConfigData('test', 'en', '   ');
+
+        expect(service.site.matomo).to.not.have.property('userId');
+    });
+
+    it('10. should not set Matomo userId when userSub is not a string', () => {
+        const service = getServiceConfigData('test', 'en', 12345);
+
+        expect(service.site.matomo).to.not.have.property('userId');
+    });
 });
 
 describe('govcyLoadConfigData - getPageConfigData', () => {
@@ -42,5 +74,5 @@ describe('govcyLoadConfigData - getPageConfigData', () => {
         const service = getServiceConfigData('test', 'en');
         expect(() => getPageConfigData(service, 'nonexistent')).to.throw('Page not found');
     });
-    
+
 });

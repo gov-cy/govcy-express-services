@@ -132,9 +132,9 @@
         "tr": "Header title"
       },
       "href": {
-        "el": "/service-id",
-        "en": "/service-id",
-        "tr": "/service-id"
+        "el": "/test",
+        "en": "/test",
+        "tr": "/test"
       }
     },
     "reviewPageHeader": {
@@ -269,6 +269,35 @@
             "107": {
               "error": "DRMD check is16AndOver",
               "page": "/test/under-16"
+            }
+          }
+        }
+      },
+      {
+        "url": "SSMP_ELIGIBILITY_API_URL",
+        "method": "GET",
+        "clientKey": "TEST_SUBMISSION_API_CLIENT_KEY",
+        "serviceId": "TEST_SUBMISSION_API_SERVIVE_ID",
+        "cashingTimeoutMinutes": "0",
+        "dsfgtwApiKey": "DSF_API_GTW_SECRET",
+        "params": {},
+        "response": {
+          "errorResponse": {
+            "5202": {
+              "error": "SSMP check SERVICE_DISABLED",
+              "page": "/test/service-disabled"
+            },
+            "5203": {
+              "error": "SSMP check BEFORE_ALLOWED_PERIOD",
+              "page": "/test/service-not-started"
+            },
+            "5204": {
+              "error": "SSMP check AFTER_ALLOWED_PERIOD",
+              "page": "/test/service-ended"
+            },
+            "5206": {
+              "error": "SSMP check SUBMISSION_COUNT_EXCEEDED",
+              "page": "/test/submissions-limit"
             }
           }
         }

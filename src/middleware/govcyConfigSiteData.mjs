@@ -1,4 +1,5 @@
 import { getServiceConfigData } from "../utils/govcyLoadConfigData.mjs";
+import { getUser } from "../utils/govcyDataLayer.mjs";
 
 /**
  * Middleware to load service configuration data based on siteId and language.
@@ -11,7 +12,10 @@ import { getServiceConfigData } from "../utils/govcyLoadConfigData.mjs";
 export async function serviceConfigDataMiddleware(req, res, next) {
     try {
         const { siteId } = req.params;
-        req.serviceData = await getServiceConfigData(siteId, req.globalLang);
+        // get User sub
+        const user = getUser(req.session);
+        const userSub = typeof user?.sub === "string" ? user.sub.trim() : "";
+        req.serviceData = await getServiceConfigData(siteId, req.globalLang, userSub);
 
         // Store current service 
         if (siteId) {

@@ -8,6 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { whatsIsMyEnvironment, getEnvVariable} from './govcyEnvVariables.mjs';
 import { logger } from "./govcyLogger.mjs";
+import crypto from "crypto";
+
+function hashMatomoUserId(userSub) {
+  return crypto
+    .createHmac("sha256", getEnvVariable('SESSION_SECRET', 'default_secret_key_for_HMAC')) // Use SESSION_SECRET or a default value
+    .update(String(userSub))
+    .digest("base64");
+}
 
 
 /**
@@ -42,9 +50,10 @@ function loadConfigDataById(siteId) {
  * 
  * @param {string} siteId The siteId
  * @param {string} lang The desired language
+ * @param {string|null} userSub The user's sub (optional)
  * @returns {Array} services - Array of JSON data
  */
-export function getServiceConfigData(siteId,lang) {
+export function getServiceConfigData(siteId,lang, userSub = null) {
     //Load data from source
     const service = loadConfigDataById(siteId);
     if (!service) {
@@ -81,6 +90,13 @@ export function getServiceConfigData(siteId,lang) {
         url: getEnvVariable('MATOMO_URL', 'https://wp.matomo.dits.dmrid.gov.cy/'),
         siteId: getEnvVariable('MATOMO_SITE_ID', '50')
     };
+
+    //Handle userSub: Set userId if provided
+    const normalizedUserSub = typeof userSub === "string" ? userSub.trim() : "";
+
+    if (normalizedUserSub) {
+        serviceCopy.site.matomo.userId = hashMatomoUserId(normalizedUserSub);
+    }
     // Add manifest path
     serviceCopy.site.manifest = `/${siteId}/manifest.json`;
 
