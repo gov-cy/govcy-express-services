@@ -3,7 +3,7 @@ import * as govcyResources from "../resources/govcyResources.mjs";
 import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import {logger} from "../utils/govcyLogger.mjs";
 import {listAvailableSiteConfigs, getServiceConfigData} from "../utils/govcyLoadConfigData.mjs";
-import { whatsIsMyEnvironment } from '../utils/govcyEnvVariables.mjs';
+import { whatsIsMyEnvironment, isProd } from '../utils/govcyEnvVariables.mjs';
 
 /**
  * Middleware function to handle the route page.
@@ -21,7 +21,7 @@ export function govcyRoutePageHandler(req, res, next) {
         catch (e) {
             logger.debug('Could not read data from cookie:', e.message);
         }
-        if (serviceData.site && serviceData.site.homeRedirectPage) {
+        if (serviceData.site && serviceData.site.homeRedirectPage && isProd()) {
             const homeRedirectPage = serviceData.site.homeRedirectPage;
             const lang = req.globalLang || 'el'; // fallback to 'en' if not set
 

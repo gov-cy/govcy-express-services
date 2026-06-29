@@ -3,6 +3,7 @@ import { govcyRoutePageHandler } from "../../src/middleware/govcyRoutePageHandle
 
 describe("govcyRoutePageHandler", () => {
     let req, res, next;
+    const originalNodeEnv = process.env.NODE_ENV;
 
     beforeEach(() => {
         req = {
@@ -30,7 +31,13 @@ describe("govcyRoutePageHandler", () => {
         };
     });
 
-    it("1. should redirect to homeRedirectPage if cs cookie exists", () => {
+    afterEach(() => {
+        process.env.NODE_ENV = originalNodeEnv;
+    });
+
+    it("1. should redirect to homeRedirectPage if cs cookie exists in production", () => {
+        process.env.NODE_ENV = "production";
+
         govcyRoutePageHandler(req, res, next);
 
         expect(res.redirectUrl).to.be.a("string");
@@ -99,7 +106,8 @@ describe("govcyRoutePageHandler", () => {
         expect(sentHtml).to.include("Available Services"); // govcyResources.availableServicesPageTemplate includes this
     });
 
-    it("5. should fallback to el or first available language if lang is missing", () => {
+    it("5. should fallback to el or first available language if lang is missing in production", () => {
+        process.env.NODE_ENV = "production";
         req.cookies = { cs: "test" };
         req.globalLang = "fr"; // unsupported
 
@@ -133,7 +141,8 @@ describe("govcyRoutePageHandler", () => {
         expect(sentHtml).to.include("Available Services"); // govcyResources.availableServicesPageTemplate includes this
     });
 
-    it("7. should redirect using root-level homeRedirectPage string", () => {
+    it("7. should redirect using root-level homeRedirectPage string in production", () => {
+        process.env.NODE_ENV = "production";
         req.cookies = { cs: "test" };
         req.globalLang = "en"; 
 
@@ -145,6 +154,25 @@ describe("govcyRoutePageHandler", () => {
         govcyRoutePageHandler(req, res, next);
 
         expect(redirectedTo).to.equal("https://www.gov.cy/en/service/issue-an-id-card/");
+    });
+
+    it("8. should render available services page instead of redirecting in non-production", () => {
+        process.env.NODE_ENV = "staging";
+
+        let redirectedTo = "";
+        let sentHtml = "";
+        res.redirect = (url) => {
+            redirectedTo = url;
+        };
+        res.send = (html) => {
+            sentHtml = html;
+        };
+
+        govcyRoutePageHandler(req, res, next);
+
+        expect(redirectedTo).to.equal("");
+        expect(sentHtml).to.include("govcy-service-name");
+        expect(sentHtml).to.include("Available Services");
     });
 
 
