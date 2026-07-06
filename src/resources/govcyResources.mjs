@@ -381,7 +381,7 @@ export const staticResources = {
                     type: "p",
                     text: {
                         el: "Για να επεξεργαστούμε την αίτησή σας, θα χρησιμοποιήσουμε τα στοιχεία σας από το Αρχείο Πληθυσμού",
-                        en: "In order to process your application, we’ll your details in the Civil Registry:"
+                        en: "In order to process your application, we’ll use your details from the Civil Registry"
                     }
                 }
             },
