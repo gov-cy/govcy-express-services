@@ -107,7 +107,7 @@ export function govcyTaskListHandler(req, res, next, page, service) {
                 pageData: {
                     title: page?.pageData?.title,
                     layout: page?.pageData?.layout || "layouts/govcyBase.njk",
-                    mainLayout: page?.pageData?.mainLayout || "two-third"
+                    mainLayout: page?.pageData?.mainLayout || "two-thirds"
                 }
             },
             pageTemplate

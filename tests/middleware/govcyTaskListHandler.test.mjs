@@ -26,7 +26,7 @@ describe("govcyTaskListHandler", () => {
                 url: "task-overview",
                 title: { en: "Overview" },
                 layout: "layouts/govcyBase.njk",
-                mainLayout: "two-third"
+                mainLayout: "two-thirds"
             },
             taskList: {
                 taskPages: ["book-title", "authors", "illustrators"],
@@ -119,7 +119,7 @@ function buildService() {
             url,
             title: { en: title },
             layout: "layouts/govcyBase.njk",
-            mainLayout: "two-third"
+            mainLayout: "two-thirds"
         },
         pageTemplate: {
             sections: [

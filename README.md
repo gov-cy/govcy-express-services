@@ -453,7 +453,7 @@ Here is an example JSON config:
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",  // Page layout
-        "mainLayout": "two-third",          // Page main layout
+        "mainLayout": "two-thirds",          // Page main layout
         "nextPage": "data-entry-radios"     // The next page's URL
       },
       "pageTemplate": {         //<-- Page template
@@ -561,7 +561,7 @@ Here is an example JSON config:
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "review"
       },
       "pageTemplate": {
@@ -686,7 +686,7 @@ Here is an example JSON config:
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -732,7 +732,7 @@ Here is an example JSON config:
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -868,7 +868,7 @@ Here's an example of a page defined in the JSON file:
       "en": "Το email σας"
     },
     "layout": "layouts/govcyBase.njk",
-    "mainLayout": "two-third",
+    "mainLayout": "two-thirds",
     "nextPage": "telephone-number",
     "conditions": [
       {
@@ -967,7 +967,7 @@ Lets break down the JSON config for this page:
   - `pageData.url` is the URL of the page, in this case it's `:siteId/index`
   - `pageData.title` is the title of the page, in this case it's `Your email`. This will be used in the `review`, `success` pages, the PDF, the email, and the submission platform. 
   - `pageData.layout` is the layout used to render the page. The project only supports the default layout `layouts/govcyBase.njk`
-  - `pageData.mainLayout` is the layout of the `main` section of the page, in this case it's `two-third`. It can be either `two-third` or `max-width`,
+  - `pageData.mainLayout` is the layout of the `main` section of the page, in this case it's `two-thirds`. It can be either `two-thirds` or `max-width`,
   - `pageData.nextPage` is the next page to redirect to when the user clicks the `continue` button and all validations pass, in this case it will redirect to `/:siteId/telephone-number`
   - `pageData.conditions` is the array that defines the [conditional logic](#-conditional-logic)
 - **pageTemplate** is the page's template, which is a JSON object that contains the sections and elements of the page. Check out the [govcy-frontend-renderer's documentation](https://github.com/gov-cy/govcy-frontend-renderer/blob/main/README.md) for more details.
@@ -991,7 +991,7 @@ Task lists act as navigation hubs that show the completion state of one or more 
       "en": "Your application"
     },
     "layout": "layouts/govcyBase.njk",
-    "mainLayout": "two-third",
+    "mainLayout": "two-thirds",
     "nextPage": "options"
   },
   "taskList": {
@@ -1101,7 +1101,7 @@ If the `scope` also includes the `email` element, the system will also use that 
   "pageData": {
     "url": "index",     // Page URL
     "layout": "layouts/govcyBase.njk",
-    "mainLayout": "two-third",
+    "mainLayout": "two-thirds",
     "nextPage": "next-page" 
   },
   "updateMyDetails": {
@@ -1257,7 +1257,7 @@ Here’s how to define a page that collects multiple academic qualifications:
       "tr": ""
     },
     "layout": "layouts/govcyBase.njk",  // Page layout for all pages (add, edit, hub page)
-    "mainLayout": "two-third",          // Page main layout for all pages (add, edit, hub page)
+    "mainLayout": "two-thirds",          // Page main layout for all pages (add, edit, hub page)
     "nextPage": "memberships"           // The next page's URL
   },
   "pageTemplate" : {  // Page template for the input pages (add, edit)
@@ -2043,7 +2043,7 @@ Here is the same example as part of the page config:
       "tr": ""
     },
     "layout": "layouts/govcyBase.njk",
-    "mainLayout": "two-third",
+    "mainLayout": "two-thirds",
     "conditions": [     //---- conditionals start here
       {
         "expression": "dataLayer['my-service.inputData.step1.formData.showExtra'] == 'no'",
@@ -2475,7 +2475,7 @@ Here is a sample code section of a page definition with a file input field:
       "en": "Utility bill"
     },
     "layout": "layouts/govcyBase.njk",
-    "mainLayout": "two-third",
+    "mainLayout": "two-thirds",
     "nextPage": "data-entry-all"
   },
   "pageTemplate": {

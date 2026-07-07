@@ -45,7 +45,7 @@ describe("govcyReviewPostHandler", () => {
                                 en: "Test Page"
                             },
                             layout: "layouts/govcyBase.njk",
-                            mainLayout: "two-third",
+                            mainLayout: "two-thirds",
                             nextPage: "review"
                         },
                         pageTemplate: {
