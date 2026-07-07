@@ -189,7 +189,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -242,7 +242,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -315,7 +315,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -363,7 +363,7 @@
       "pageData": {
         "url": "index",
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "qualifications"
       },
       "updateMyDetails": {
@@ -405,7 +405,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "memberships"
       },
       "multipleThings": {
@@ -685,7 +685,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "experience"
       },
       "multipleThings": {
@@ -941,7 +941,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "council-of-ministers-organisations"
       },
       "multipleThings": {
@@ -1297,7 +1297,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "other-organisations"
       },
       "multipleThings": {
@@ -1651,7 +1651,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "additional-info"
       }, 
 	    "multipleThings": {
@@ -2023,7 +2023,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "interest"
       },
       "pageTemplate": {
@@ -2136,7 +2136,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "personal-positions"
       },
       "pageTemplate": {
@@ -2253,7 +2253,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "declarations"
       },
       "pageTemplate": {
@@ -2482,7 +2482,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "review"
       },
       "pageTemplate": {

@@ -239,7 +239,7 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
                 pageData: {
                     title: govcyResources.staticResources.text.updateMyDetailsTitle,
                     layout: page?.pageData?.layout || "layouts/govcyBase.njk",
-                    mainLayout: page?.pageData?.mainLayout || "two-third"
+                    mainLayout: page?.pageData?.mainLayout || "two-thirds"
                 }
             },
             pageTemplate: pageTemplateCopy

@@ -404,7 +404,7 @@ function buildTaskListPages() {
             url,
             title: { en: title },
             layout: "layouts/govcyBase.njk",
-            mainLayout: "two-third"
+            mainLayout: "two-thirds"
         },
         pageTemplate: {
             sections: [
@@ -448,7 +448,7 @@ function buildTaskListPages() {
                 url: "task-list-overview",
                 title: { en: "Overview" },
                 layout: "layouts/govcyBase.njk",
-                mainLayout: "two-third"
+                mainLayout: "two-thirds"
             },
             taskList: {
                 taskPages: ["book-title", "authors"],

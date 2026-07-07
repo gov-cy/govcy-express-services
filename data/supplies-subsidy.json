@@ -282,7 +282,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -328,7 +328,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -374,7 +374,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -420,7 +420,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -466,7 +466,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -512,7 +512,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -558,7 +558,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -604,7 +604,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -650,7 +650,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -696,7 +696,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -737,7 +737,7 @@
       "pageData": {
         "url": "index",
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "options-custom"
       },
       "updateMyDetails": {
@@ -812,7 +812,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "fertilizer-invoices"
       },
       "pageTemplate": {
@@ -989,7 +989,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "declarations"
       },
       "pageTemplate": {
@@ -1458,7 +1458,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "next-steps"
       },
       "pageTemplate": {
@@ -1607,7 +1607,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "review"
       },
       "pageTemplate": {
@@ -1728,7 +1728,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1779,7 +1779,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1850,7 +1850,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [

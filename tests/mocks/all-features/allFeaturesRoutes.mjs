@@ -22,7 +22,7 @@ const CUSTOM_PAGE_CONFIG = {
     taskStatus: "NOT_STARTED",
     layout: {
         pageLayout: "layouts/govcyBase.njk",
-        mainLayout: "two-third"
+        mainLayout: "two-thirds"
     },
     api: {
         optionsUrl: "http://localhost:3002/childrenData"

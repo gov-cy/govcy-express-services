@@ -273,7 +273,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -319,7 +319,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -365,7 +365,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -411,7 +411,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -457,7 +457,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -503,7 +503,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -549,7 +549,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -595,7 +595,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -636,7 +636,7 @@
       "pageData": {
         "url": "index",
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "updateMyDetails": {
@@ -703,7 +703,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "options"
       },
       "taskList": {
@@ -792,7 +792,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -954,7 +954,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -1264,7 +1264,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -1950,7 +1950,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -2239,7 +2239,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -2478,7 +2478,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -2699,7 +2699,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -3038,7 +3038,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "pageTemplate": {
@@ -3279,7 +3279,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list",
         "conditions": [
           {
@@ -3698,7 +3698,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "task-list"
       },
       "taskList": {
@@ -3733,7 +3733,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "collaborators"
       },
       "pageTemplate": {
@@ -4150,7 +4150,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "collaborators"
       },
       "pageTemplate": {
@@ -4567,7 +4567,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "review"
       },
       "pageTemplate": {
@@ -4801,7 +4801,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -4852,7 +4852,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -4923,7 +4923,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [

@@ -245,7 +245,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "data-entry-radios"
       },
       "pageTemplate": {
@@ -360,7 +360,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "data-entry-file"
       },
       "pageTemplate": {
@@ -488,7 +488,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "data-entry-all"
       },
       "pageTemplate": {
@@ -571,7 +571,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "nextPage": "radios-conditions"
       },
       "pageTemplate": {
@@ -796,7 +796,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third",
+        "mainLayout": "two-thirds",
         "conditions": [
           {
             "expression": "[].concat(dataLayer['test-files.inputData.index.formData.certificate_select'] || []).includes('birth')",
@@ -1126,7 +1126,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1179,7 +1179,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1252,7 +1252,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1305,7 +1305,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [
@@ -1353,7 +1353,7 @@
           "tr": ""
         },
         "layout": "layouts/govcyBase.njk",
-        "mainLayout": "two-third"
+        "mainLayout": "two-thirds"
       },
       "pageTemplate": {
         "sections": [

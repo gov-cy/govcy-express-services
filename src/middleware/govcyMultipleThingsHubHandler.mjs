@@ -232,7 +232,7 @@ export function govcyMultipleThingsHubHandler(req, res, next, page, serviceCopy)
                 pageData: {
                     title: mtConfig.listPage.title,
                     layout: page?.pageData?.layout || "layouts/govcyBase.njk",
-                    mainLayout: page?.pageData?.mainLayout || "two-third"
+                    mainLayout: page?.pageData?.mainLayout || "two-thirds"
                 }
             },
             pageTemplate: hubTemplate

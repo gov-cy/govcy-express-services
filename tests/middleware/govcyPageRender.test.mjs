@@ -94,7 +94,7 @@ describe("renderGovcyPage", () => {
                     pageData: {
                         title: { el: "Καλώς Ήρθατε", en: "Welcome" },
                         layout: "layouts/govcyBase.njk",
-                        mainLayout: "two-third"
+                        mainLayout: "two-thirds"
                     }
                 },
                 pageTemplate: {
