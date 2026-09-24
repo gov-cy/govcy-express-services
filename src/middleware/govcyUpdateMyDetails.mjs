@@ -16,7 +16,7 @@ import * as dataLayer from "../utils/govcyDataLayer.mjs";
 import { logger } from '../utils/govcyLogger.mjs';
 import { handleMiddlewareError, dateStringISOtoDMY } from "../utils/govcyUtils.mjs";
 import { govcyApiRequest } from "../utils/govcyApiRequest.mjs";
-import { isAgeUnder, isValidCypriotCitizen, validateFormElements } from "../utils/govcyValidator.mjs";
+import { isAgeUnder, isValidCypriotCitizen, isValidForeignResident, validateFormElements } from "../utils/govcyValidator.mjs";
 import { populateFormData, getFormData } from "../utils/govcyFormHandling.mjs";
 import { evaluatePageConditions } from "../utils/govcyExpressions.mjs";
 import { tempSaveIfConfigured } from "../utils/govcyTempSave.mjs";
@@ -68,7 +68,7 @@ export async function govcyUpdateMyDetailsHandler(req, res, next, page, serviceC
         let pageVariant = 0;
 
         // Check if the user is a cypriot
-        if (!isValidCypriotCitizen(user)) {
+        if (!(isValidCypriotCitizen(user) || isValidForeignResident(user))) {
             // --------------- Not eligible for Update my details ---------------
             // --------------- Page variant 1
             pageVariant = 1;
@@ -329,7 +329,7 @@ export function govcyUpdateMyDetailsPostHandler() {
             let pageVariant = 0;
 
             // Check if the user is a cypriot
-            if (!isValidCypriotCitizen(user)) {
+            if (!(isValidCypriotCitizen(user) || isValidForeignResident(user))) {
                 // --------------- Not eligible for Update my details ---------------
                 // --------------- Page variant 1:Manual form for non-eligible users
                 pageVariant = 1;
