@@ -14,6 +14,14 @@ fileInputs.forEach(function (input) {
   input.addEventListener('change', _uploadFileEventHandler);
 });
 
+// When the browser restores the page from the back/forward cache (bfcache), the submit
+// button is still disabled and the data may be stale, so show the spinner and reload.
+window.addEventListener('pageshow', function (e) {
+  if (!e.persisted) return;
+  if (_govcyOverlay) showLoadingSpinner();
+  window.location.reload();
+});
+
 /**
  * Disables all focusable elements within a given root element
  * @param {*} root  The root element whose focusable children will be disabled
