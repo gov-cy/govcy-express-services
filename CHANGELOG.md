@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.2] - 2026-10-16
+### Security
+- Updated vulnerable **production/runtime dependencies** (`dependencies`).
+- **Impact:** npm package consumers **are affected**.
+- Updated vulnerable **development dependencies** (`devDependencies`).
+- **Impact:** npm package consumers **are not affected**.
+
+### Changed
+- Updated `@gov-cy/govcy-frontend-renderer`
+- Updated `@gov-cy/dsf-email-templates`
+- Replaced `nodemon` with Node's built-in `node --watch` for `npm run dev`
+- Removed unused `patch-package` dev dependency
+
 ## [v1.14.1] - 2026-09-24
 ### Added
 - Added Update My Details eligibility for foreign residents with ARC identifiers beginning with `05`.
