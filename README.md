@@ -1171,8 +1171,8 @@ The update my details behaves like a normal page and it is accessed through the 
 **Variant 1: Manual form for non-eligible users (no access to UMD)**
 
 When a user is either: 
-- Not a Cypriot citizen 
-- Or Cypriot citizen under 18 
+- Not an eligible natural person with a Cypriot (`00`) or ARC (`05`) identifier
+- Does not pass the Update My Details API's age or eligibility checks
 
 The user gets a data entry page.
 
@@ -1181,8 +1181,9 @@ The user gets a data entry page.
 **Variant 2: Eligible users (access to UMD) with existing details**
 
 When a user is : 
-- A Cypriot citizen over 18  
-- AND has data in Update my Details 
+- An eligible natural person with either a Cypriot (`00`) or ARC (`05`) identifier
+- Passes the Update My Details API's age and eligibility checks
+- AND has data in Update my Details
 
 The users get a page with the data from UMD and asks if its ok to use those data.
 
@@ -1195,7 +1196,8 @@ If the user selects:
 **Variant 3: Eligible users (access to UMD) without existing details** 
 
 When a user is : 
-- A Cypriot citizen over 18  
+- An eligible natural person with either a Cypriot (`00`) or ARC (`05`) identifier
+- Passes the Update My Details API's age and eligibility checks
 - AND has no data in Update my Details
 
 The users get a continue button that redirects to the Update my details service in seamless mode. 

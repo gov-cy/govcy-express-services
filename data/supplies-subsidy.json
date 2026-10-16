@@ -193,10 +193,10 @@
         "method": "GET",
         "clientKey": "DSF_API_GTW_CLIENT_ID",
         "serviceId": "DSF_API_GTW_SERVICE_ID",
-        "cashingTimeoutMinutes": "0",
+        "cashingTimeoutMinutes": "100",
         "dsfgtwApiKey": "DSF_API_GTW_SECRET",
         "params": {
-          "checkFor": "isIdentifierFound,isAlive,isCypriot"
+          "checkFor": "isIdentifierFound,isAlive"
         },
         "response": {
           "errorResponse": {
@@ -790,7 +790,8 @@
           "fullName",
           "email",
           "mobile",
-          "address"
+          "address",
+          "dob"
         ],
         "hasBackLink": false,
         "updateMyDetailsURL": "UPDATE_MY_DETAILS_URL",

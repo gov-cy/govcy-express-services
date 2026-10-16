@@ -210,6 +210,25 @@ describe("govcyUpdateMyDetailsHandler() and govcyUpdateMyDetailsPostHandler()", 
         expect(hasInput).to.be.false;
     });
 
+    it("should treat an ARC user as eligible for Update My Details", async () => {
+        req.session.user.unique_identifier = "0512345678";
+        process.env.CIVIL_REGISTRY_CONTACT_API_URL = "http://localhost:3002/umdCitizenNotUpdated";
+
+        req.protocol = "https";
+        req.get = (header) => (header === "host" ? "localhost:44319" : "");
+        req.originalUrl = `/service/${siteId}/${page.pageData.url}`;
+
+        await govcyUpdateMyDetailsHandler(req, res, next, page, service);
+
+        expect(next.calledOnce).to.be.true;
+        expect(req.processedPage).to.be.an("object");
+        const form = req.processedPage.pageTemplate.sections[0].elements
+            .find(el => el.element === "form");
+        expect(form).to.exist;
+        expect(form.params.elements.some(el => el.element === "htmlElement" &&
+            String(el.params?.text?.en || el.params?.text).includes("update-my-details"))).to.be.true;
+    });
+
     it("3. should build confirmation radio page (variant 2) for eligible user with existing data", async () => {
         // ✅ Eligible Cypriot citizen
         req.session.user.unique_identifier = "0012345678";
@@ -574,11 +593,11 @@ describe("govcyUpdateMyDetailsHandler() and govcyUpdateMyDetailsPostHandler()", 
     });
 
 
-    it("13. should store registry data and return success when user selects Yes (variant 2 POST)", async () => {
+    it("13. should store registry data and return success for an ARC user when selecting Yes (variant 2 POST)", async () => {
         const postHandler = govcyUpdateMyDetailsPostHandler();
 
         // ✅ Eligible user
-        req.session.user.unique_identifier = "0012345678";
+        req.session.user.unique_identifier = "0512345678";
 
         // ✅ Minimal service/page config for variant 2
         req.serviceData = {
