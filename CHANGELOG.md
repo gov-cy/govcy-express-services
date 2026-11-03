@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.4] - 2026-11-03
+### Security
+- Updated vulnerable **production/runtime dependencies** (`dependencies`).
+  - **Impact:** npm package consumers **are affected**.
+- Updated vulnerable development dependency resolutions for `glob` and `minimatch`.
+  - **Impact:** npm package consumers **are not affected**.
+
+### Changed
+- Updated `@gov-cy/govcy-frontend-renderer`
+- Updated `@gov-cy/dsf-email-templates`
+- Updated `express` to `4.22.3`
+- Updated `multer` to `2.5.0`
+- Updated `puppeteer` to `25.16.0`
+
 ## [v1.14.3] - 2026-10-16
 ### Fixed
 - Fixed pages restored from the browser back/forward cache (bfcache) showing a disabled submit button. The page now shows the loading spinner and reloads when restored from bfcache.
